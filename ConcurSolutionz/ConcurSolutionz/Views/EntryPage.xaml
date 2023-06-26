@@ -2,11 +2,178 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.EntryPage"
-             Title="EntryPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="Entry">
+    <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
+        <HorizontalStackLayout>
+            <Label
+                FontSize="Title"
+                FontAttributes="Bold"
+                Text="Entry: Elements of Software Construction"/>
+            <Button
+                Text="Rename"
+                WidthRequest="20"/>
+        </HorizontalStackLayout>
+
+        <Grid ColumnDefinitions="2*, *, *">
+            <Label
+                FontSize="Subtitle"
+                Text="Concur:"
+                VerticalOptions="Center"/>
+
+            <Button Text="Transfer to concur"
+                    Grid.Column="1"
+                    Margin="10"/>
+
+            <Button Text="Delete Entry"
+                    Grid.Column="2"
+                    Margin="10"/>
+
+        </Grid>
+
+        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                Stroke="#D3D3D3"
+                BackgroundColor="LavenderBlush"
+                Padding="16,8"
+                StrokeThickness="2"
+                HeightRequest="300">
+
+            <Grid ColumnDefinitions="*,*">
+                <Grid RowDefinitions="*,*,*,*,*"
+                      ColumnDefinitions="*,2*"
+                      ColumnSpacing="10">
+
+                    <Label Text="Policy:"
+                           VerticalOptions="Center"
+                           FontSize="Body"
+                           Margin="60,0,0,0"/>
+                    <Editor Placeholder="Policy"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+
+                    <Label Text="Claim Name:"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="60,0,0,0"/>
+                    <Editor Placeholder="Claim Name"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+
+                    <Label Text="Claim Date:"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="60,0,0,0"/>
+                    <Editor Placeholder="Claim Date"
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+
+                    <Label Text="Project/Club:"
+                           Grid.Column="0"
+                           Grid.Row="3"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="60,0,0,0"/>
+                    <Editor Placeholder="Project/Club"
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+
+                    <Label Text="Team Name:"
+                           Grid.Column="0"
+                           Grid.Row="4"
+                           VerticalOptions="Center"
+                           FontSize="Body"
+                           Margin="60,0,0,0"/>
+                    <Editor Placeholder="Team Name"
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+                   
+                </Grid>
+
+                <Image Source="ketty.jpeg"
+                       Grid.Column="1"
+                       WidthRequest="600"/>
+
+            </Grid>
+           
+
+        </Border>
+            
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Entry Budget: $"
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <Border Stroke="#D3D3D3"
+                    StrokeThickness="4"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    Background="#FFFFFF"
+                    Grid.Column="1"
+                    WidthRequest="500"
+                    HorizontalOptions="Start">
+                <Editor
+                    Placeholder="Enter your budget"
+                    HorizontalTextAlignment="Start"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"
+                    FontSize="Body"/>
+
+            </Border>
+            
+            <Label Grid.Row="1"
+                   Text="Current Expenditure: "
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   Text="$10"
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+
+            <Label Grid.Row="2"
+                   Text="Remaining Budget: "
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   Text="$100"
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+
+        </Grid>
+
+        <Grid ColumnDefinitions="*,*,*">
+            <Button Text="New Record"
+                    Margin="10"/>
+            <Button Grid.Column="1"
+                    Text="Edit Record"
+                    Margin="10"/>
+            <Button Text="Delete Record"
+                    Grid.Column="2"
+                    Margin="10"/>
+        </Grid>
+        
+        
     </VerticalStackLayout>
 </ContentPage>

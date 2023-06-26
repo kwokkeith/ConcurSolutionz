@@ -57,4 +57,10 @@
 	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Resources\Images\ketty.jpeg" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\ketty.jpeg" />
+	</ItemGroup>
 </Project>
