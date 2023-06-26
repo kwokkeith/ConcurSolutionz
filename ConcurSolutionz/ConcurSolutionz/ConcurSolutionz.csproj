@@ -62,8 +62,10 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\ketty.jpeg" />
+	  <None Remove="Resources\Images\photo_2023-06-26 20.53.07.jpeg" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\ketty.jpeg" />
+	  <BundleResource Include="Resources\Images\receipt.jpeg" />
 	</ItemGroup>
 </Project>
