@@ -53,7 +53,7 @@ namespace ConcurSolutionz.Database
         }
 
         public ClaimMetaData build(){
-            return ClaimMetaData(this);
+            return new ClaimMetaData(this);
         }
     }
 }
