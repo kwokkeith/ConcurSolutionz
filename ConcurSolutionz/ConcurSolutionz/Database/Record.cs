@@ -3,7 +3,7 @@ namespace ConcurSolutionz.Database
 {
     public abstract class Record
     {
-        protected int recordID;
+        protected int RecordID;
         
         abstract public void AssignRecordID();  
         // Calculate RecordID later

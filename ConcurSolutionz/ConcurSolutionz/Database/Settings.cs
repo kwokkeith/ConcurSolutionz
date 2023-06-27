@@ -1,12 +1,12 @@
 
 namespace ConcurSolutionz.Database
 {
-    public sealed class Settings
+    public class Settings
     {
         private string rootDirectory = Environment.CurrentDirectory;
         private static readonly Settings instance = new Settings();
         static Settings(){}
-        private Settings(){}
+        public Settings(){}
 
         public static Settings getInstance(){
             return instance;
