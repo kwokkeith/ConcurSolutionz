@@ -1,5 +1,5 @@
 using System;
-using 
+using Receipt = ConcurSolutionz.Database.Receipt
 
 class ReceiptBuilder  
 {
