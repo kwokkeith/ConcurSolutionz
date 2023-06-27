@@ -19,14 +19,14 @@ namespace ConcurSolutionz.Database
 
         public ClaimMetaData(ClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
-            CustomUtility.checkNull(claimMDBuilder.entryName);
-            CustomUtility.checkNull(ClaimMDBuilder.entryBudget);
-            CustomUtility.checkNull(claimMDBuilder.policy);
-            CustomUtility.checkNull(claimMDBuilder.claimName);
-            CustomUtility.checkNull(claimMDBuilder.claimDate);
-            CustomUtility.checkNull(claimMDBuilder.purpose);
-            CustomUtility.checkNull(claimMDBuilder.teamName);
-            CustomUtility.checkNull(claimMDBuilder.projectClub);
+            Utilities.checkNull(claimMDBuilder.entryName);
+            Utilities.checkNull(ClaimMDBuilder.entryBudget);
+            Utilities.checkNull(claimMDBuilder.policy);
+            Utilities.checkNull(claimMDBuilder.claimName);
+            Utilities.checkNull(claimMDBuilder.claimDate);
+            Utilities.checkNull(claimMDBuilder.purpose);
+            Utilities.checkNull(claimMDBuilder.teamName);
+            Utilities.checkNull(claimMDBuilder.projectClub);
 
             // If all variables are declared then create ClaimMetaData
             this.entryName = claimMDBuilder.entryName;
