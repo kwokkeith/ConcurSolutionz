@@ -1,42 +1,35 @@
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Globalization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
     public class ClaimMetaData : MetaData
     {
-        private string policy { get; set; } 
-        private string claimName { get; set; }
-        private DateTime claimDate { get; set; }
-        private string purpose { get; set; }
-        private string teamName { get; set; }
-        private string projectClub { get; set; }
+        public string Policy { get; set; } 
+        public string ClaimName { get; set; }
+        public DateTime ClaimDate { get; set; }
+        public string Purpose { get; set; }
+        public string TeamName { get; set; }
+        public string ProjectClub { get; set; }
 
         public ClaimMetaData(ClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
-            Utilities.checkNull(claimMDBuilder.entryName);
-            Utilities.checkNull(claimMDBuilder.entryBudget);
-            Utilities.checkNull(claimMDBuilder.policy);
-            Utilities.checkNull(claimMDBuilder.claimName);
-            Utilities.checkNull(claimMDBuilder.claimDate);
-            Utilities.checkNull(claimMDBuilder.purpose);
-            Utilities.checkNull(claimMDBuilder.teamName);
-            Utilities.checkNull(claimMDBuilder.projectClub);
+            Utilities.CheckNull(claimMDBuilder.EntryName);
+            Utilities.CheckNull(claimMDBuilder.EntryBudget);
+            Utilities.CheckNull(claimMDBuilder.Policy);
+            Utilities.CheckNull(claimMDBuilder.ClaimName);
+            Utilities.CheckNull(claimMDBuilder.ClaimDate);
+            Utilities.CheckNull(claimMDBuilder.Purpose);
+            Utilities.CheckNull(claimMDBuilder.TeamName);
+            Utilities.CheckNull(claimMDBuilder.ProjectClub);
 
             // If all variables are declared then create ClaimMetaData
-            this.entryName = claimMDBuilder.entryName;
-            this.entryBudget = claimMDBuilder.entryBudget;
-            this.policy = claimMDBuilder.policy;
-            this.claimName = claimMDBuilder.claimName;
-            this.claimDate = claimMDBuilder.claimDate;
-            this.purpose = claimMDBuilder.purpose;
-            this.teamName = claimMDBuilder.teamName;
-            this.projectClub = claimMDBuilder.projectClub;
+            this.EntryName = claimMDBuilder.EntryName;
+            this.EntryBudget = claimMDBuilder.EntryBudget;
+            this.Policy = claimMDBuilder.Policy;
+            this.ClaimName = claimMDBuilder.ClaimName;
+            this.ClaimDate = claimMDBuilder.ClaimDate;
+            this.Purpose = claimMDBuilder.Purpose;
+            this.TeamName = claimMDBuilder.TeamName;
+            this.ProjectClub = claimMDBuilder.ProjectClub;
         }
     }
 }

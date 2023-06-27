@@ -1,5 +1,4 @@
-using System;
-using System.IO;
+using System.Dynamic;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
@@ -7,20 +6,11 @@ namespace ConcurSolutionz.Database
     public class CookieStorage
     {
         
-        private Cookie Cookie;
+        public Cookie Cookie {get; set;}
 
-        private void setCookie(Cookie cookie){
-            this.Cookie = cookie;
-        }
-
-
-        private Cookie getCookie(){
-            return(this.Cookie);
-        }
-
-        private String storeCookie(Cookie cookie){
+        public static string StoreCookie(Cookie cookie){
             try{
-                String json = JsonSerializer.Serialize(cookie);
+                string json = JsonSerializer.Serialize(cookie);
                 return(json);
             }
             catch (Exception e){
@@ -29,12 +19,12 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        private Cookie retrieveCookie(String json){
+        public static Cookie RetrieveCookie(string json){
             return(System.Text.Json.JsonSerializer.Deserialize<Cookie>(json));
         }
 
-        private void clearCookies(){
-            setCookie(null);
+        public void ClearCookies(){
+            Cookie = null;
         }        
     }
 }

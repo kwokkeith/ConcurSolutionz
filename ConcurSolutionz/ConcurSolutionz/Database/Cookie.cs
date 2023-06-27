@@ -1,11 +1,9 @@
-using System;
-using System.IO;
 
 namespace ConcurSolutionz.Database
 {
     public class Cookie
     {
-        public DateTime expiryDate {get; private set;}
+        public DateTime ExpiryDate {get; private set;}
         public string bm_sz {get; private set;}
         public string TAsessionID {get; private set;}
         public string ak_bmsc {get; private set;}
@@ -15,16 +13,16 @@ namespace ConcurSolutionz.Database
         public string bm_sv {get; private set;}
         
         private Cookie(CookieBuilder cookieBuilder) {
-            Utilities.checkNull(cookieBuilder.expiryDate);
-            Utilities.checkNull(cookieBuilder.bm_sz);
-            Utilities.checkNull(cookieBuilder.TAsessionID);
-            Utilities.checkNull(cookieBuilder.ak_bmsc);
-            Utilities.checkNull(cookieBuilder._abck);
-            Utilities.checkNull(cookieBuilder.OTSESSIONAABQRD);
-            Utilities.checkNull(cookieBuilder.JWT);
-            Utilities.checkNull(cookieBuilder.bm_sv);
+            Utilities.CheckNull(cookieBuilder.ExpiryDate);
+            Utilities.CheckNull(cookieBuilder.bm_sz);
+            Utilities.CheckNull(cookieBuilder.TAsessionID);
+            Utilities.CheckNull(cookieBuilder.ak_bmsc);
+            Utilities.CheckNull(cookieBuilder._abck);
+            Utilities.CheckNull(cookieBuilder.OTSESSIONAABQRD);
+            Utilities.CheckNull(cookieBuilder.JWT);
+            Utilities.CheckNull(cookieBuilder.bm_sv);
 
-            this.expiryDate = cookieBuilder.expiryDate;
+            this.ExpiryDate = cookieBuilder.ExpiryDate;
             this.bm_sz = cookieBuilder.bm_sz;
             this.TAsessionID = cookieBuilder.TAsessionID;
             this.ak_bmsc = cookieBuilder.ak_bmsc;
@@ -36,56 +34,62 @@ namespace ConcurSolutionz.Database
 
         public class CookieBuilder
         {
-            public DateTime expiryDate {get; set;}
-            public string bm_sz {get; set;}
-            public string TAsessionID {get; set;}
-            public string ak_bmsc {get; set;}
-            public string _abck {get; set;}
-            public string OTSESSIONAABQRD {get; set;}
-            public string JWT {get; set;}
-            public string bm_sv {get; set;}
+            public DateTime ExpiryDate {get; private set;}
+            public string bm_sz {get; private set;}
+            public string TAsessionID {get; private set;}
+            public string ak_bmsc {get; private set;}
+            public string _abck {get; private set;}
+            public string OTSESSIONAABQRD {get; private set;}
+            public string JWT {get; private set;}
+            public string bm_sv {get; private set;}
 
             CookieBuilder(){
                 // default values
             }
             
-            public void setExpiryDate(DateTime expiryDate){
-            this.expiryDate = expiryDate;
-        }
+            public CookieBuilder SetExpiryDate(DateTime expiryDate){
+                this.ExpiryDate = expiryDate;
+                return this;
+            }
 
-        public void setBm_sz(string bm_sz){
-            this.bm_sz = bm_sz;
-        }
+            public CookieBuilder SetBm_sz(string bm_sz){
+                this.bm_sz = bm_sz;
+                return this;
+            }
 
-        public void setTAsessionID(string TAsessionID){
-            this.TAsessionID = TAsessionID;
-        }
+            public CookieBuilder SetTAsessionID(string TAsessionID){
+                this.TAsessionID = TAsessionID;
+                return this;
+            }
 
-        public void setAk_bmsc(string ak_bmsc){
-            this.ak_bmsc = ak_bmsc;
-        }
+            public CookieBuilder SetAk_bmsc(string ak_bmsc){
+                this.ak_bmsc = ak_bmsc;
+                return this;
+            }
 
-        public void set_abck(string _abck){
-            this._abck = _abck;
-        }
+            public CookieBuilder Set_abck(string _abck){
+                this._abck = _abck;
+                return this;
+            }
 
-        public void setOTSESSIONAABQRD(string OTSESSIONAABQRD){
-            this.OTSESSIONAABQRD = OTSESSIONAABQRD;
-        }
+            public CookieBuilder SetOTSESSIONAABQRD(string OTSESSIONAABQRD){
+                this.OTSESSIONAABQRD = OTSESSIONAABQRD;
+                return this;
+            }
 
-        public void setJWT(string JWT){
-            this.JWT = JWT;
-        }
+            public CookieBuilder SetJWT(string JWT){
+                this.JWT = JWT;
+                return this;
+            }
 
-        public void setBm_sv(string bm_sv){
-            this.bm_sv = bm_sv;
-        }
-
-    protected Cookie Build()
-    {
-        return new Cookie(this);
+            public CookieBuilder SetBm_sv(string bm_sv){
+                this.bm_sv = bm_sv;
+                return this;
+            }
+        
+            public Cookie Build(){
+                return new Cookie(this);
+            }
+        }    
     }
-
-        }
-    }    
 }

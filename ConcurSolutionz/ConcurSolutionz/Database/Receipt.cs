@@ -1,67 +1,62 @@
-using System.Reflection.Metadata;
-using System.Collections.Immutable;
-using System;
-using System.IO;
-using Record = ConcurSolutionz.Database.Record;
 
 namespace ConcurSolutionz.Database
 {
     public class Receipt : Record
     {
-        public string paymentType { get; set; }        
-        public string expenseType { get; set; }
-        public DateTime transactionDate { get; set; }
-        public string description { get; set; }
-        public string supplierName { get; set; }
-        public string cityOfPurchase { get; set; }
-        public decimal reqAmount { get; set; }
-        public decimal conversionRate { get; set; }
-        public decimal currencyAmountSGD { get; set; }
-        public string receiptNumber { get; set; }
-        public string receiptStatus { get; set; }
-        public Boolean isBillable { get; set; }
-        public Boolean isPersonalExpense { get; set; }
-        public string comment { get; set; }
-        public string imgPath { get; set; }
+        public string PaymentType { get; set; }        
+        public string ExpenseType { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public string Description { get; set; }
+        public string SupplierName { get; set; }
+        public string CityOfPurchase { get; set; }
+        public decimal ReqAmount { get; set; }
+        public decimal ConversionRate { get; set; }
+        public decimal CurrencyAmountSGD { get; set; }
+        public string ReceiptNumber { get; set; }
+        public string ReceiptStatus { get; set; }
+        public bool IsBillable { get; set; }
+        public bool IsPersonalExpense { get; set; }
+        public string Comment { get; set; }
+        public string ImgPath { get; set; }
     
         private Receipt(ReceiptBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
-            Utilities.checkNull(builder.paymentType);
-            Utilities.checkNull(builder.expenseType);
-            Utilities.checkNull(builder.transactionDate);
-            Utilities.checkNull(builder.description);
-            Utilities.checkNull(builder.supplierName);
-            Utilities.checkNull(builder.cityOfPurchase);
-            Utilities.checkNull(builder.reqAmount);
-            Utilities.checkNull(builder.conversionRate);
-            Utilities.checkNull(builder.currencyAmountSGD);
-            Utilities.checkNull(builder.receiptNumber);
-            Utilities.checkNull(builder.receiptStatus);
-            Utilities.checkNull(builder.isBillable);
-            Utilities.checkNull(builder.isPersonalExpense);
-            Utilities.checkNull(builder.comment);
-            Utilities.checkNull(builder.imgPath);
+            Utilities.CheckNull(builder.PaymentType);
+            Utilities.CheckNull(builder.ExpenseType);
+            Utilities.CheckNull(builder.TransactionDate);
+            Utilities.CheckNull(builder.Description);
+            Utilities.CheckNull(builder.SupplierName);
+            Utilities.CheckNull(builder.CityOfPurchase);
+            Utilities.CheckNull(builder.ReqAmount);
+            Utilities.CheckNull(builder.ConversionRate);
+            Utilities.CheckNull(builder.CurrencyAmountSGD);
+            Utilities.CheckNull(builder.ReceiptNumber);
+            Utilities.CheckNull(builder.ReceiptStatus);
+            Utilities.CheckNull(builder.IsBillable);
+            Utilities.CheckNull(builder.IsPersonalExpense);
+            Utilities.CheckNull(builder.Comment);
+            Utilities.CheckNull(builder.ImgPath);
             
             // Set the attributes
-            paymentType = builder.paymentType;
-            expenseType = builder.expenseType;
-            transactionDate = builder.transactionDate;
-            description = builder.description;
-            supplierName = builder.supplierName;
-            cityOfPurchase = builder.cityOfPurchase;
-            reqAmount = builder.reqAmount;
-            conversionRate = builder.conversionRate;
-            currencyAmountSGD = builder.currencyAmountSGD;
-            receiptNumber = builder.receiptNumber;
-            receiptStatus = builder.receiptStatus;
-            isBillable = builder.isBillable;
-            isPersonalExpense = builder.isPersonalExpense;
-            comment = builder.comment;
-            imgPath = builder.imgPath;
+            PaymentType = builder.PaymentType;
+            ExpenseType = builder.ExpenseType;
+            TransactionDate = builder.TransactionDate;
+            Description = builder.Description;
+            SupplierName = builder.SupplierName;
+            CityOfPurchase = builder.CityOfPurchase;
+            ReqAmount = builder.ReqAmount;
+            ConversionRate = builder.ConversionRate;
+            CurrencyAmountSGD = builder.CurrencyAmountSGD;
+            ReceiptNumber = builder.ReceiptNumber;
+            ReceiptStatus = builder.ReceiptStatus;
+            IsBillable = builder.IsBillable;
+            IsPersonalExpense = builder.IsPersonalExpense;
+            Comment = builder.Comment;
+            ImgPath = builder.ImgPath;
         }
 
-        public override void assignRecordID()
+        public override void AssignRecordID()
         {
             // Relook at this calculation of RecordID later
             int recordID = 1;
@@ -71,17 +66,17 @@ namespace ConcurSolutionz.Database
                 recordID++;
             }
 
-            this.recordID = recordID;
+            this.RecordID = recordID;
         }
 
-        public override int getRecordID()
+        public override int GetRecordID()
         {
-            return recordID;
+            return RecordID;
         }
 
-        public override void delRecord()
+        public override void DelRecord()
         {
-            string fileName = "receipt " + recordID + ".jpg";
+            string fileName = "receipt " + RecordID + ".jpg";
             try
             {
                 File.Delete(fileName);
@@ -103,109 +98,109 @@ namespace ConcurSolutionz.Database
         // Builder for the Receipt class
         public class ReceiptBuilder  
         {
-            public string paymentType { get; private set; }
-            public string expenseType { get; private set; }
-            public DateTime transactionDate { get; private set; }
-            public string description { get; private set; }
-            public string supplierName { get; private set; }
-            public string cityOfPurchase { get; private set; }
-            public Decimal reqAmount { get; private set; }
-            public Decimal conversionRate { get; private set; }
-            public Decimal currencyAmountSGD { get; private set; }
-            public string receiptNumber { get; private set; }
-            public string receiptStatus { get; private set; }
-            public bool isBillable { get; private set; }
-            public bool isPersonalExpense { get; private set; }
-            public string comment { get; private set; }
-            public string imgPath { get; private set; }
+            public string PaymentType { get; private set; }
+            public string ExpenseType { get; private set; }
+            public DateTime TransactionDate { get; private set; }
+            public string Description { get; private set; }
+            public string SupplierName { get; private set; }
+            public string CityOfPurchase { get; private set; }
+            public Decimal ReqAmount { get; private set; }
+            public Decimal ConversionRate { get; private set; }
+            public Decimal CurrencyAmountSGD { get; private set; }
+            public string ReceiptNumber { get; private set; }
+            public string ReceiptStatus { get; private set; }
+            public bool IsBillable { get; private set; }
+            public bool IsPersonalExpense { get; private set; }
+            public string Comment { get; private set; }
+            public string ImgPath { get; private set; }
             
-            ReceiptBuilder(){
+            public ReceiptBuilder(){
                 // Input any default values
             }
             
-            public ReceiptBuilder setPaymentType(string paymentType)  
+            public ReceiptBuilder SetPaymentType(string PaymentType)  
             {
-                this.paymentType = paymentType;
+                this.PaymentType = PaymentType;
                 return this;
             }
             
-            public ReceiptBuilder setExpenseType(string expenseType) 
+            public ReceiptBuilder SetExpenseType(string ExpenseType) 
             {
-                this.expenseType = expenseType;
+                this.ExpenseType = ExpenseType;
                 return this;    
             }
             
-            public ReceiptBuilder setTransactionDate(DateTime transactionDate) 
+            public ReceiptBuilder SetTransactionDate(DateTime TransactionDate) 
             {
-                this.transactionDate = transactionDate;  
+                this.TransactionDate = TransactionDate;  
                 return this;   
             }
             
-            public ReceiptBuilder setDescription (string description)   
+            public ReceiptBuilder SetDescription (string Description)   
             {
-                this.description = description;
+                this.Description = Description;
                 return this;
             }  
             
-            public ReceiptBuilder setSupplierName(string supplierName) 
+            public ReceiptBuilder SetSupplierName(string SupplierName) 
             {
-                this.supplierName = supplierName;
+                this.SupplierName = SupplierName;
                 return this;
             }
             
-            public ReceiptBuilder setCityOfPurchase(string cityOfPurchase) 
+            public ReceiptBuilder SetCityOfPurchase(string CityOfPurchase) 
             {
-                this.cityOfPurchase = cityOfPurchase;
+                this.CityOfPurchase = CityOfPurchase;
                 return this;
             }
             
-            public ReceiptBuilder setReqAmount(decimal reqAmount)
+            public ReceiptBuilder SetReqAmount(decimal ReqAmount)
             {
-                this.reqAmount = reqAmount;
+                this.ReqAmount = ReqAmount;
                 return this;
             }
             
-            public ReceiptBuilder setConversionRate(decimal conversionRate)
+            public ReceiptBuilder SetConversionRate(decimal ConversionRate)
             {
-                this.conversionRate = conversionRate;
+                this.ConversionRate = ConversionRate;
                 return this;
             }
 
-            public ReceiptBuilder setCurrencyAmountSGD(decimal currencyAmountSGD)
+            public ReceiptBuilder SetCurrencyAmountSGD(decimal CurrencyAmountSGD)
             {
-                this.currencyAmountSGD = currencyAmountSGD;
+                this.CurrencyAmountSGD = CurrencyAmountSGD;
                 return this;
             }
 
-            public ReceiptBuilder setReceiptNumber(string receiptNumber)
+            public ReceiptBuilder SetReceiptNumber(string ReceiptNumber)
             {
-                this.receiptNumber = receiptNumber;
+                this.ReceiptNumber = ReceiptNumber;
                 return this;
             }
 
-            public ReceiptBuilder setReceiptStatus(string receiptStatus)
+            public ReceiptBuilder SetReceiptStatus(string ReceiptStatus)
             {
-                this.receiptStatus = receiptStatus;
+                this.ReceiptStatus = ReceiptStatus;
                 return this;
             }
-            public ReceiptBuilder setIsBillable(Boolean isBillable)
+            public ReceiptBuilder SetIsBillable(bool IsBillable)
             {
-                this.isBillable = isBillable;
+                this.IsBillable = IsBillable;
                 return this;
             }
-            public ReceiptBuilder setIsPersonalExpense(Boolean isPersonalExpense)
+            public ReceiptBuilder SetIsPersonalExpense(bool IsPersonalExpense)
             {
-                this.isPersonalExpense = isPersonalExpense;
+                this.IsPersonalExpense = IsPersonalExpense;
                 return this;
             }
-            public ReceiptBuilder setComment(string comment)
+            public ReceiptBuilder SetComment(string Comment)
             {
-                this.comment = comment;
+                this.Comment = Comment;
                 return this;
             }
-            public ReceiptBuilder setImgPath(string imgPath)
+            public ReceiptBuilder SetImgPath(string ImgPath)
             {
-                this.imgPath = imgPath;
+                this.ImgPath = ImgPath;
                 return this;
             }
 

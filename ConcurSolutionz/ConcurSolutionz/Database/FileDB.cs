@@ -1,25 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
     public abstract class FileDB
     {
-        private string fileName { get; set; };
-        private DateTime creationDate { get; set; }
-        private DateTime lastModifiedDate { get; set; }
-        private String filePath { get; set; }
-        private bool folder;
+        public string FileName { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public string FilePath { get; set; }
+        public bool Folder;
 
-        private abstract void setFolder();
+        protected abstract void SetFolder();
 
-        public bool isFolder(){
-            Utilities.checkNull(folder); // Check if folder has been set
-            return folder;  
+        public bool IsFolder(){
+            Utilities.CheckNull(Folder); // Check if folder has been set
+            return Folder;  
         }
 
-        public abstract void selectedAction();
+        public abstract void SelectedAction();
     }
 }
