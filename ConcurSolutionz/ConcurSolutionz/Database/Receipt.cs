@@ -104,9 +104,9 @@ namespace ConcurSolutionz.Database
             public string Description { get; private set; }
             public string SupplierName { get; private set; }
             public string CityOfPurchase { get; private set; }
-            public Decimal ReqAmount { get; private set; }
-            public Decimal ConversionRate { get; private set; }
-            public Decimal CurrencyAmountSGD { get; private set; }
+            public decimal ReqAmount { get; private set; }
+            public decimal ConversionRate { get; private set; }
+            public decimal CurrencyAmountSGD { get; private set; }
             public string ReceiptNumber { get; private set; }
             public string ReceiptStatus { get; private set; }
             public bool IsBillable { get; private set; }
