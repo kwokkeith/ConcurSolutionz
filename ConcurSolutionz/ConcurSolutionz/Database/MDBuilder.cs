@@ -3,17 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SystemAcl.Decimal;
 
 namespace ConcurSolutionz.Database
 {
     public class MDBuilder
     {
-        private string entryName;
-        private Decimal entryBudget;
+        public string entryName {get; private set;}
+        public Decimal entryBudget {get; private set;}
 
 
-        private MDBuilder(){};
+        public MDBuilder(){}
 
 
         public MDBuilder setEntryName(string entryName){

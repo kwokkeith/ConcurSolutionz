@@ -13,7 +13,7 @@ namespace ConcurSolutionz.Database
         /// <exception cref="ArgumentNullException">Thrown when the argument is null.</exception>
         public static void checkNull<T>(T arg){
             if (arg == null){
-                throw new ArgumentNullException(Message="This " + nameof(arg) + "is null!");
+                throw new ArgumentNullException("This " + nameof(arg) + "is null!");
             }
         }
     }

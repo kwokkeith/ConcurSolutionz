@@ -12,14 +12,14 @@ namespace ConcurSolutionz.Database
 {
     public class ClaimMDBuilder :  MDBuilder
     {
-        private string policy;
-        private string claimName;
-        private string claimDate;
-        private string purpose;
-        private string teamName;
-        private string projectClub;
+        public string policy {get; private set;}
+        public string claimName {get; private set;}
+        public DateTime claimDate {get; private set;}
+        public string purpose {get; private set;}
+        public string teamName {get; private set;}
+        public string projectClub {get; private set;}
         
-        public ClaimMDBuilder(){
+        private ClaimMDBuilder(){
         }
 
         public ClaimMDBuilder setPolicy(string policy){
@@ -52,7 +52,7 @@ namespace ConcurSolutionz.Database
             return this;
         }
 
-        public ClaimMetaData build(){
+        protected ClaimMetaData build(){
             return new ClaimMetaData(this);
         }
     }

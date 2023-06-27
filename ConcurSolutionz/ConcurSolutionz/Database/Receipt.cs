@@ -6,23 +6,23 @@ using Record = ConcurSolutionz.Database.Record;
 
 namespace ConcurSolutionz.Database
 {
-    class Receipt : Record
+    public class Receipt : Record
     {
-        private string paymentType { get; set; }        
-        private string expenseType { get; set; }
-        private DateTime transactionDate { get; set; }
-        private string description { get; set; }
-        private string supplierName { get; set; }
-        private string cityOfPurchase { get; set; }
-        private decimal reqAmount { get; set; }
-        private decimal conversionRate { get; set; }
-        private decimal currencyAmountSGD { get; set; }
-        private string receiptNumber { get; set; }
-        private string receiptStatus { get; set; }
-        private Boolean isBillable { get; set; }
-        private Boolean isPersonalExpense { get; set; }
-        private string comment { get; set; }
-        private string imgPath { get; set; }
+        public string paymentType { get; set; }        
+        public string expenseType { get; set; }
+        public DateTime transactionDate { get; set; }
+        public string description { get; set; }
+        public string supplierName { get; set; }
+        public string cityOfPurchase { get; set; }
+        public decimal reqAmount { get; set; }
+        public decimal conversionRate { get; set; }
+        public decimal currencyAmountSGD { get; set; }
+        public string receiptNumber { get; set; }
+        public string receiptStatus { get; set; }
+        public Boolean isBillable { get; set; }
+        public Boolean isPersonalExpense { get; set; }
+        public string comment { get; set; }
+        public string imgPath { get; set; }
     
         private Receipt(ReceiptBuilder builder)
         {
@@ -42,7 +42,7 @@ namespace ConcurSolutionz.Database
             Utilities.checkNull(builder.isPersonalExpense);
             Utilities.checkNull(builder.comment);
             Utilities.checkNull(builder.imgPath);
-
+            
             // Set the attributes
             paymentType = builder.paymentType;
             expenseType = builder.expenseType;
@@ -101,23 +101,23 @@ namespace ConcurSolutionz.Database
         }
 
         // Builder for the Receipt class
-        static class ReceiptBuilder  
+        public class ReceiptBuilder  
         {
-            private string paymentType;
-            private string expenseType;
-            private DateTime transactionDate;
-            private string description;
-            private string supplierName;
-            private string cityOfPurchase;
-            private Decimal reqAmount;
-            private Decimal conversionRate;
-            private Decimal currencyAmountSGD;
-            private string receiptNumber;
-            private string receiptStatus;
-            private bool isBillable;
-            private bool isPersonalExpense;
-            private string comment;
-            private string imgPath;
+            public string paymentType { get; private set; }
+            public string expenseType { get; private set; }
+            public DateTime transactionDate { get; private set; }
+            public string description { get; private set; }
+            public string supplierName { get; private set; }
+            public string cityOfPurchase { get; private set; }
+            public Decimal reqAmount { get; private set; }
+            public Decimal conversionRate { get; private set; }
+            public Decimal currencyAmountSGD { get; private set; }
+            public string receiptNumber { get; private set; }
+            public string receiptStatus { get; private set; }
+            public bool isBillable { get; private set; }
+            public bool isPersonalExpense { get; private set; }
+            public string comment { get; private set; }
+            public string imgPath { get; private set; }
             
             ReceiptBuilder(){
                 // Input any default values
@@ -155,7 +155,7 @@ namespace ConcurSolutionz.Database
             
             public ReceiptBuilder setCityOfPurchase(string cityOfPurchase) 
             {
-                this.cityofPurchase = cityOfPurchase;
+                this.cityOfPurchase = cityOfPurchase;
                 return this;
             }
             
@@ -188,12 +188,12 @@ namespace ConcurSolutionz.Database
                 this.receiptStatus = receiptStatus;
                 return this;
             }
-            public ReceiptBuilder setIsBillable(boolean isBillable)
+            public ReceiptBuilder setIsBillable(Boolean isBillable)
             {
                 this.isBillable = isBillable;
                 return this;
             }
-            public ReceiptBuilder setIsPersonalExpense(boolean isPersonalExpense)
+            public ReceiptBuilder setIsPersonalExpense(Boolean isPersonalExpense)
             {
                 this.isPersonalExpense = isPersonalExpense;
                 return this;

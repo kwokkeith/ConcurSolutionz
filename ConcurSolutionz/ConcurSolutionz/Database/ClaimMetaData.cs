@@ -20,7 +20,7 @@ namespace ConcurSolutionz.Database
         public ClaimMetaData(ClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
             Utilities.checkNull(claimMDBuilder.entryName);
-            Utilities.checkNull(ClaimMDBuilder.entryBudget);
+            Utilities.checkNull(claimMDBuilder.entryBudget);
             Utilities.checkNull(claimMDBuilder.policy);
             Utilities.checkNull(claimMDBuilder.claimName);
             Utilities.checkNull(claimMDBuilder.claimDate);
