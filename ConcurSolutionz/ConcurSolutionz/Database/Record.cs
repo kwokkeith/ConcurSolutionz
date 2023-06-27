@@ -5,8 +5,13 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public class Record
+    public abstract class Record
     {
+        private int recordID;
         
+        abstract public void assignRecordID();  
+        // Calculate RecordID later
+        abstract public int getRecordID();
+        abstract public void delRecord();   
     }
 }
