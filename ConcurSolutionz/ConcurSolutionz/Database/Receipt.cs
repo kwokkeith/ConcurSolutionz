@@ -27,7 +27,22 @@ namespace ConcurSolutionz.Database
         private Receipt(ReceiptBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
-
+            Utilities.checkNull(builder.paymentType);
+            Utilities.checkNull(builder.expenseType);
+            Utilities.checkNull(builder.transactionDate);
+            Utilities.checkNull(builder.description);
+            Utilities.checkNull(builder.supplierName);
+            Utilities.checkNull(builder.cityOfPurchase);
+            Utilities.checkNull(builder.reqAmount);
+            Utilities.checkNull(builder.conversionRate);
+            Utilities.checkNull(builder.currencyAmountSGD);
+            Utilities.checkNull(builder.receiptNumber);
+            Utilities.checkNull(builder.receiptStatus);
+            Utilities.checkNull(builder.isBillable);
+            Utilities.checkNull(builder.isPersonalExpense);
+            Utilities.checkNull(builder.comment);
+            Utilities.checkNull(builder.imgPath);
+            
             // Set the attributes
             paymentType = builder.paymentType;
             expenseType = builder.expenseType;
@@ -44,23 +59,6 @@ namespace ConcurSolutionz.Database
             isPersonalExpense = builder.isPersonalExpense;
             comment = builder.comment;
             imgPath = builder.imgPath;
-
-            Utilities.checkNull(this.paymentType);
-            Utilities.checkNull(this.expenseType);
-            Utilities.checkNull(this.transactionDate);
-            Utilities.checkNull(this.description);
-            Utilities.checkNull(this.supplierName);
-            Utilities.checkNull(this.cityOfPurchase);
-            Utilities.checkNull(this.reqAmount);
-            Utilities.checkNull(this.conversionRate);
-            Utilities.checkNull(this.currencyAmountSGD);
-            Utilities.checkNull(this.receiptNumber);
-            Utilities.checkNull(this.receiptStatus);
-            Utilities.checkNull(this.isBillable);
-            Utilities.checkNull(this.isPersonalExpense);
-            Utilities.checkNull(this.comment);
-            Utilities.checkNull(this.imgPath);
-
         }
 
         public override void assignRecordID()
