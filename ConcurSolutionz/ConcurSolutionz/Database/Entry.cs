@@ -44,7 +44,7 @@ namespace ConcurSolutionz.Database
 
 
         // Set mandatory boolean of File Instance
-        private override void setFolder(){
+        protected override void setFolder(){
             this.folder = false;
         }
 
@@ -58,13 +58,13 @@ namespace ConcurSolutionz.Database
         /// <summary>Deletes a record from the list of records.</summary>
         /// <param name="record">The record to be deleted.</param>
         public void delRecord(Record record){
-            records.remove(record);
+            records.Remove(record);
         }
 
         /// <summary>Deletes a record from the list of records by its ID.</summary>
         /// <param name="ID">The ID of the record to be deleted.</param>
         public void delRecordByID(int ID){
-            records.RemoveAll(record => record.ID == ID)
+            records.RemoveAll(record => record.getRecordID() == ID);
         }
 
         /// <summary>Returns a list of records.</summary>
@@ -79,12 +79,12 @@ namespace ConcurSolutionz.Database
         /// <returns>The record with the specified ID.</returns>
         /// <exception cref="InvalidOperationException">Thrown when no record with the specified ID is found.</exception>
         public Record getRecord(int ID){
-            foreach (record in records){
-                if (record.ID == ID){
+            foreach (Record record in records){
+                if (record.getRecordID() == ID){
                     return record;
                 }
             }
-            return Null;
+            return null;
         }
 
 
@@ -95,19 +95,19 @@ namespace ConcurSolutionz.Database
 
 
         // Builder Class for Entry
-        static class EntryBuilder
+        public class EntryBuilder
         {
-            private string fileName;
-            private DateTime creationDate;
-            private DateTime lastModifiedDate;
-            private string filePath;
-            private MetaData metaData;
-            private List<Record> records;    
+            public string fileName { get; set; }
+            public DateTime creationDate { get; set; }
+            public DateTime lastModifiedDate { get; set; }
+            public string filePath { get; set; }
+            public MetaData metaData { get; set; }
+            public List<Record> records { get; set; }    
 
             EntryBuilder(MetaData metaData){
                 // Set Default Values
                 records = new List<Record>();
-            };
+            }
 
             public EntryBuilder setFileName(string fileName){
                 this.fileName = fileName;

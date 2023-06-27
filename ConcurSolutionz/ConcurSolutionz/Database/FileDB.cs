@@ -7,13 +7,13 @@ namespace ConcurSolutionz.Database
 {
     public abstract class FileDB
     {
-        private string fileName { get; set; };
-        private DateTime creationDate { get; set; }
-        private DateTime lastModifiedDate { get; set; }
-        private String filePath { get; set; }
-        private bool folder;
+        public string fileName { get; set; }
+        public DateTime creationDate { get; set; }
+        public DateTime lastModifiedDate { get; set; }
+        public String filePath { get; set; }
+        public bool folder;
 
-        private abstract void setFolder();
+        protected abstract void setFolder();
 
         public bool isFolder(){
             Utilities.checkNull(folder); // Check if folder has been set
