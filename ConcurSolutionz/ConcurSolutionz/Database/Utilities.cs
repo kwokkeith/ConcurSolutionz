@@ -7,9 +7,9 @@ namespace ConcurSolutionz.Database
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <param name="arg">The argument to check.</param>
         /// <exception cref="ArgumentNullException">Thrown when the argument is null.</exception>
-        public static void checkNull<T>(T arg){
+        public static void CheckNull<T>(T arg){
             if (arg == null){
-                throw new ArgumentNullException("This " + nameof(arg) + "is null!");
+                throw new ArgumentNullException(nameof(arg));
             }
         }
     }

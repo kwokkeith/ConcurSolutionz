@@ -3,19 +3,19 @@ namespace ConcurSolutionz.Database
 {
     public abstract class FileDB
     {
-        public string fileName { get; set; }
-        public DateTime creationDate { get; set; }
-        public DateTime lastModifiedDate { get; set; }
-        public String filePath { get; set; }
-        public bool folder;
+        public string FileName { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public string FilePath { get; set; }
+        public bool Folder;
 
-        protected abstract void setFolder();
+        protected abstract void SetFolder();
 
-        public bool isFolder(){
-            Utilities.checkNull(folder); // Check if folder has been set
-            return folder;  
+        public bool IsFolder(){
+            Utilities.CheckNull(Folder); // Check if folder has been set
+            return Folder;  
         }
 
-        public abstract void selectedAction();
+        public abstract void SelectedAction();
     }
 }
