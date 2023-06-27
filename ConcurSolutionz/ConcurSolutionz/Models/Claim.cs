@@ -11,7 +11,7 @@ namespace ESC_HTTP_Call.Models
         //Id of the claim as reflected on Concur(rptId)
         public string Id { get; set; }
         //Key of the claim as reflected on Concur(rptKey)
-        public string Key { get; set;
+        public string Key { get; set; }
         //Name of the Claim
         public string Name { get; set; }
         public string TeamName { get; set; }

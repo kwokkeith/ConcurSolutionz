@@ -1,44 +1,46 @@
 ﻿using ESC_HTTP_Call.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
-using System.Linq;
-using System.Net;
-using System.Net.Http.Json;
-using System.Net.NetworkInformation;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ESC_HTTP_Call
 {
     internal class ConcurAPI
     {
         public static HttpClient HttpClient { get; private set; }
-        private const string GraphQL = "https://www-us2.api.concursolutions.com/cds/graphql";
         private static string UserID, EMPKey;
 
-        public void Initialize(string CookieToken = "")
+        public ConcurAPI(string cookieToken)
         {
+            UserID = string.Empty;
+            EMPKey = string.Empty;
+
+            //Initialize HttpClient for obj
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Accept.Clear();
-            HttpClient.DefaultRequestHeaders.Add("cookie", CookieToken);
+            HttpClient.DefaultRequestHeaders.Add("cookie", cookieToken);
+        }
+
+        /// <summary>
+        /// Method <c>Initialize</c> retrieves the UserID and EMPKey to run the rest of the API calls
+        /// </summary>
+        public string Initialize()
+        {
+            /* Code "0": Success
+             * Error code "1": Failed to create request | Likely due to expired cookie
+             * Error code "2": Failed to retrieve requestId
+             * Error code "3": Failed to extract userID or EMPkey, delete request */
 
             //First query to create a dummy request to retrieve user ID
             Task<string> CreateReqTask = CreateRequest();
             CreateReqTask.Wait();
             string FirstQuery = CreateReqTask.Result;
-            //Console.WriteLine("First Query: \n" + FirstQuery);
-            if (FirstQuery.Contains("id") == false) throw new Exception("First query failed");
+
+            //Retrieves requestId from response, if requestId not in response then failed to create request: error code 1
+            if (FirstQuery.Contains("id") == false) return "1";
             FirstQuery = FirstQuery.Replace("\"", "");
             string RequestID = "";
             string[] JsonSplit = FirstQuery.Split(new char[] { ',', '{', '}' });
-
             for (int i = 0; i < JsonSplit.Length; i++)
             {
                 if (JsonSplit[i].Contains("id"))
@@ -47,44 +49,40 @@ namespace ESC_HTTP_Call
                     break;
                 }
             }
-            Console.WriteLine("Request ID: \n" + RequestID);
 
-            //Retrieve user ID
+            //If RequestID is empty, error code 2
+            if (string.IsNullOrEmpty(RequestID)) return "2";
+
+            //Retrieve userId and empKey
             Task<string> UserIDTask = GetUserID(RequestID);
             UserIDTask.Wait();
-            //Console.WriteLine("UserID Response: \n" + UserIDTask.Result);
-
             string SecondQuery = UserIDTask.Result;
-            if (SecondQuery.Contains("id") == false) throw new Exception("Second query failed");
+            if (SecondQuery.Contains("id") == false)
+            {
+
+            }
             SecondQuery = SecondQuery.Replace("\"", "");
             JsonSplit = SecondQuery.Split(new char[] { ',', '{', '}' });
             for (int i = 0; i < JsonSplit.Length; i++)
             {
-                //Console.WriteLine(JsonSplit[i]);
-                if (JsonSplit[i].Contains("empUUID"))
-                {
-                    //Console.WriteLine("empUUID Found");
-                    UserID = JsonSplit[i].Split(":")[1];
-                }
-                else if (JsonSplit[i].Contains("empId"))
-                {
-                    //Console.WriteLine("empId Found");
-                    EMPKey = JsonSplit[i].Split(":")[1];
-                }
+                if (JsonSplit[i].Contains("empUUID")) UserID = JsonSplit[i].Split(":")[1];
+                else if (JsonSplit[i].Contains("empId")) EMPKey = JsonSplit[i].Split(":")[1];
             }
-            Console.WriteLine("User ID: " + UserID + "\n");
-            Console.WriteLine("EMP Key: " + EMPKey + "\n");
-
 
             //Delete dummy request
             Task<string> DelReqTask = DeleteRequest(RequestID);
             CreateReqTask.Wait();
-            Console.WriteLine("Del Response: \n" + DelReqTask.Result);
-            Console.WriteLine("End of Init\n\n");
-        }
 
+            //If UserId or EMPKey is empty, error code 3
+            if (string.IsNullOrEmpty(UserID) || string.IsNullOrEmpty(EMPKey)) { return "3"; }
+            else return "0";
+        }
+        /// <summary>
+        /// Method <c>CreateRequest</c> is a helper method for Initialize() to make an API call for making a request to retrieve the userId
+        /// </summary>
         private async Task<string> CreateRequest()
         {
+            string requestURL = "https://www-us2.api.concursolutions.com/cds/graphql";
             string content = @"{
                 ""operationName"": ""CreateRequestHeader"",
                 ""variables"": {
@@ -107,13 +105,15 @@ namespace ESC_HTTP_Call
             }";
 
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(GraphQL, HttpContent);
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
-
+        /// <summary>
+        /// Method <c>GetUserID</c> is a helper method for Initialize() to retrieve the UserID and EMPKey from the request made
+        /// </summary>
         private async Task<string> GetUserID(string RequestID = "")
         {
-            const string RequestURL = "https://www-us2.api.concursolutions.com/travelrequest/graphql";
+            const string requestURL = "https://www-us2.api.concursolutions.com/travelrequest/graphql";
             string content = @"{
                 ""operationName"": ""requestDetailsQuery"",
                 ""variables"": {
@@ -126,13 +126,15 @@ namespace ESC_HTTP_Call
             }".Replace("<REQUESTID>", RequestID);
 
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
-
+        /// <summary>
+        /// Method <c>DeleteRequest</c> is a helper method for Initialize() to clean up the request made earlier
+        /// </summary>
         private async Task<string> DeleteRequest(string RequestID = "")
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/cds/graphql";
+            string requestURL = "https://www-us2.api.concursolutions.com/cds/graphql";
             string content = @"{
                 ""operationName"": ""deleteRequest"",
                 ""variables"": {
@@ -142,13 +144,15 @@ namespace ESC_HTTP_Call
             }".Replace("<REQUESTID>", RequestID);
 
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
-
-        public async Task<string> GetAllClaims()
+        /// <summary>
+        /// Method <c>GetAllClaims</c> retrieves all of the current user's claims and returns it as a list of Models.Claim
+        /// </summary>
+        public async Task<List<Models.Claim>> GetAllClaims()
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
+            string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
             string content = @"{
                 ""operationName"": ""GetReportsForUser"",
                 ""variables"": {
@@ -167,15 +171,39 @@ namespace ESC_HTTP_Call
             }".Replace("<userId>", UserID);
 
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
-            return await response.Content.ReadAsStringAsync();
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
+            Models.Claim tempClaim = new Models.Claim();
+            string jsonString = await response.Content.ReadAsStringAsync();
+            try
+            {
+                JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+                JsonArray jsonArr = jsonObject!["data"]!["employee"]!["reportsForUser"]!["reports"]!.AsArray();
 
-            //TODO: Parse data into individual claim classes
+                //If no user created claims are found
+                if (jsonArr.Count == 0) return new List<Models.Claim>();
+                List<Models.Claim> Claims = new List<Models.Claim>();
+                for (int i = 0; i < jsonArr.Count; i++)
+                {
+                    tempClaim.Id = jsonArr[i]!["reportId"]!.ToString();
+                    tempClaim.Key = jsonArr[i]!["rptKey"]!.ToString();
+                    tempClaim.Name = jsonArr[i]!["name"]!.ToString();
+                    tempClaim.Date = jsonArr[i]!["reportDate"]!.ToString();
+                    Claims.Add(tempClaim);
+                }
+                return Claims;
+            }
+            catch (Exception ex)
+            {
+                //Returns an empty list in the case of an error
+                return new List<Models.Claim>();
+            }
         }
-
+        /// <summary>
+        /// Method <c>ClaimCreateDD</c> retrieves all possible claim policies for the user to select when creating a new claim
+        /// </summary>
         public async Task<List<ClaimPolicy>> ClaimCreateDD()
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
+            string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
             string content = @"{
             ""operationName"": ""GetFormListItems"",
              ""variables"": {
@@ -191,22 +219,27 @@ namespace ESC_HTTP_Call
             }
             ";
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
-            string JsonString = await response.Content.ReadAsStringAsync();
-
-            JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(JsonString);
-            JsonArray jsonArr = jsonObject!["data"]!["CDS_spend"]!["list"]!["items"]!.AsArray();
-            List<ClaimPolicy> Policies = new List<ClaimPolicy>();
-            for (int i = 0; i < jsonArr.Count; i++)
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            try
             {
-                Policies.Add(item: jsonArr[i].Deserialize<ClaimPolicy>());
+                JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+                JsonArray jsonArr = jsonObject!["data"]!["CDS_spend"]!["list"]!["items"]!.AsArray();
+                List<ClaimPolicy> Policies = new List<ClaimPolicy>();
+                for (int i = 0; i < jsonArr.Count; i++)
+                {
+                    Policies.Add(item: jsonArr[i].Deserialize<ClaimPolicy>()!);
+                }
+                return Policies;
             }
-            return Policies;
-
-
-            //TODO: Parse data into individual dropdown classes
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve policy claims");
+            }
         }
-
+        /// <summary>
+        /// Method <c>CreateClaim</c> creates a claim using the object Models.CLaim
+        /// </summary>
         public async Task<string> CreateClaim(Models.Claim claim)
         {
             string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
@@ -295,76 +328,121 @@ namespace ESC_HTTP_Call
             }".Replace("<userId>", UserID).Replace("<teamName>", claim.TeamName).Replace("<claimName>", claim.Name).Replace("<Policy>", claim.Policy).Replace("<Purpose>", claim.Purpose).Replace("<Date>", claim.Date);
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync(requestURL, HttpContent);
-            return await response.Content.ReadAsStringAsync();
+            string jsonString = await response.Content.ReadAsStringAsync();
+            if (jsonString.Contains("COMPLETED"))
+            {
+                JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+                return jsonObject["data"]!["CDS_expense"]!["report"]!["create"]!["response"]!["id"]!.ToString();
+            }
+            else throw new Exception("Failed to create claim");
         }
-
-        public async Task<String> CreateExpense(Expense expense)
+        /// <summary>
+        /// Method <c>CreateExpense</c> create an expense under a claim, taking in a expense and a claim that the expense belongs under as arguments
+        /// </summary>
+        public async Task<String> CreateExpense(Expense expense, Models.Claim claim)
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/nui-expense/graphql";
-            //TODO: Find rptKey based on reportId
-            string reportKey = await GetReportKey(expense.ReportId);
+            string requestURL = "https://www-us2.api.concursolutions.com/nui-expense/graphql";
             string content = @"{""query"":""\n      mutation saveExpense {\n        saveExpense (\n          payload: \""{\\\""foreignOrDomestic\\\"":\\\""HOME\\\"",\\\""hasVat\\\"":\\\""N\\\"",\\\""exceptionCount\\\"":0,\\\""receiptRequired\\\"":\\\""N\\\"",\\\""receiptReceived\\\"":\\\""N\\\"",\\\""lnKey\\\"":22895,\\\""locationName\\\"":\\\""Singapore, SINGAPORE\\\"",\\\""isPersonal\\\"":\\\""N\\\"",\\\""isClearedExceptions\\\"":\\\""N\\\"",\\\""imageRequired\\\"":\\\""N\\\"",\\\""hasExceptions\\\"":\\\""N\\\"",\\\""hasMobileReceipt\\\"":\\\""N\\\"",\\\""locName\\\"":\\\""Singapore, SINGAPORE\\\"",\\\""ccLocationResolved\\\"":\\\""Y\\\"",\\\""exceptionMaxLevel\\\"":0,\\\""exchangeRate\\\"":1,\\\""receiptType\\\"":\\\""T\\\"",\\\""travelAllowance\\\"":\\\""N\\\"",\\\""isBillable\\\"":\\\""N\\\"",\\\""hasTimestamp\\\"":\\\""N\\\"",\\\""allocationState\\\"":\\\""N\\\"",\\\""claimedAmount\\\"":0,\\\""exchangeRateDirection\\\"":\\\""M\\\"",\\\""expKey\\\"":\\\""01128\\\"",\\\""expName\\\"":\\\""Student Project-Material & Supplies\\\"",\\\""formKey\\\"":1228,\\\""patKey\\\"":\\\""CASH\\\"",\\\""transactionCurrencyName\\\"":\\\""SGD\\\"",\\\""rejected\\\"":\\\""N\\\"",\\\""description\\\"":\\\""<Description>\\\"",\\\""transactionDate\\\"":\\\""<Date>\\\"",\\\""hotelCheckoutDate\\\"":\\\""<Date>\\\"",\\\""undefined\\\"":\\\""<Date>\\\"",\\\""vendorDescription\\\"":\\\""<Supplier>\\\"",\\\""transactionAmount\\\"":<Cost>,\\\""postedAmount\\\"":<Cost>,\\\""custom1\\\"":\\\""<ReceiptNo>\\\"",\\\""comment\\\"":\\\""<Comment>\\\"",\\\""parRpeKey\\\"":\\\""\\\"",\\\""empKey\\\"":\\\""<empKey>\\\"",\\\""polKey\\\"":\\\""1056\\\"",\\\""rptKey\\\"":\\\""<rptKey>\\\"",\\\""crnKey\\\"":129,\\\""reportEntryTaxes\\\"":[{\\\""taxAuthKey\\\"":\\\""2045\\\"",\\\""taxFormKey\\\"":\\\""1314\\\"",\\\""custom1\\\"":\\\""103427\\\""}],\\\""hasAttendees\\\"":\\\""N\\\"",\\\""attendees\\\"":{\\\""clearExisting\\\"":\\\""Y\\\"",\\\""list\\\"":[]}}\"",\n          mrusToSave: \""\"",\n          patKey: \""\"",\n          pctKey: \""\"",\n          parRpeKey: \""\"",\n          reportId: \""<reportId>\"",\n          expenseId: \""null\"",\n          shouldRecalculateActualsVsLimitsAllowances: false,\n          userId: \""<userId>\"",\n          contextRole: \""TRAVELER\""\n        ) {\n          status,\n          expense {\n            rptKey\n            rpeKey\n            expenseId\n          }\n        }\n      }\n    ""}"
-            .Replace("<userId>", UserID).Replace("<empKey>", EMPKey).Replace("<reportId>", expense.ReportId).Replace("<rptKey>", reportKey).Replace("<Description>", expense.Description).Replace("<Date>", expense.Date).Replace("<Supplier>", expense.Supplier).Replace("<Cost>", expense.Cost.ToString()).Replace("<ReceiptNo>", expense.ReceiptNo).Replace("<Comment>", expense.Comment);
-            //string content = @"{""query"":""\n      mutation saveExpense {\n        saveExpense (\n          payload: \""{\\\""foreignOrDomestic\\\"":\\\""HOME\\\"",\\\""hasVat\\\"":\\\""N\\\"",\\\""exceptionCount\\\"":0,\\\""receiptRequired\\\"":\\\""N\\\"",\\\""receiptReceived\\\"":\\\""N\\\"",\\\""lnKey\\\"":22895,\\\""locationName\\\"":\\\""Singapore, SINGAPORE\\\"",\\\""isPersonal\\\"":\\\""N\\\"",\\\""isClearedExceptions\\\"":\\\""N\\\"",\\\""imageRequired\\\"":\\\""N\\\"",\\\""hasExceptions\\\"":\\\""N\\\"",\\\""hasMobileReceipt\\\"":\\\""N\\\"",\\\""locName\\\"":\\\""Singapore, SINGAPORE\\\"",\\\""ccLocationResolved\\\"":\\\""Y\\\"",\\\""exceptionMaxLevel\\\"":0,\\\""exchangeRate\\\"":1,\\\""receiptType\\\"":\\\""T\\\"",\\\""travelAllowance\\\"":\\\""N\\\"",\\\""isBillable\\\"":\\\""N\\\"",\\\""hasTimestamp\\\"":\\\""N\\\"",\\\""allocationState\\\"":\\\""N\\\"",\\\""claimedAmount\\\"":0,\\\""exchangeRateDirection\\\"":\\\""M\\\"",\\\""expKey\\\"":\\\""01128\\\"",\\\""expName\\\"":\\\""Student Project-Material & Supplies\\\"",\\\""formKey\\\"":1228,\\\""patKey\\\"":\\\""CASH\\\"",\\\""transactionCurrencyName\\\"":\\\""SGD\\\"",\\\""rejected\\\"":\\\""N\\\"",\\\""description\\\"":\\\""testdesc\\\"",\\\""transactionDate\\\"":\\\""2023-04-06\\\"",\\\""hotelCheckoutDate\\\"":\\\""2023-04-06\\\"",\\\""undefined\\\"":\\\""2023-04-06\\\"",\\\""vendorDescription\\\"":\\\""testsupp\\\"",\\\""transactionAmount\\\"":420,\\\""postedAmount\\\"":420,\\\""custom1\\\"":\\\""testreceiptno\\\"",\\\""comment\\\"":\\\""testcomment\\\"",\\\""parRpeKey\\\"":\\\""\\\"",\\\""empKey\\\"":\\\""gWgMdOIxPStLIMTLxuhKY9Vukxi1a\\\"",\\\""polKey\\\"":\\\""1056\\\"",\\\""rptKey\\\"":\\\""gWlZecK$s2NkK5ZklflHv7MO$pslFQSUQ\\\"",\\\""crnKey\\\"":129,\\\""reportEntryTaxes\\\"":[{\\\""taxAuthKey\\\"":\\\""2045\\\"",\\\""taxFormKey\\\"":\\\""1314\\\"",\\\""custom1\\\"":\\\""103427\\\""}],\\\""hasAttendees\\\"":\\\""N\\\"",\\\""attendees\\\"":{\\\""clearExisting\\\"":\\\""Y\\\"",\\\""list\\\"":[]}}\"",\n          mrusToSave: \""\"",\n          patKey: \""\"",\n          pctKey: \""\"",\n          parRpeKey: \""\"",\n          reportId: \""79589DD75811429E8F07\"",\n          expenseId: \""null\"",\n          shouldRecalculateActualsVsLimitsAllowances: false,\n          userId: \""\"",\n          contextRole: \""TRAVELER\""\n        ) {\n          status,\n          expense {\n            rptKey\n            rpeKey\n            expenseId\n          }\n        }\n      }\n    ""}";
-            StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");//
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
-            return await response.Content.ReadAsStringAsync();
-        }
+            .Replace("<userId>", UserID).Replace("<empKey>", EMPKey).Replace("<reportId>", expense.ReportId).Replace("<rptKey>", claim.Key).Replace("<Description>", expense.Description).Replace("<Date>", expense.Date).Replace("<Supplier>", expense.Supplier).Replace("<Cost>", expense.Cost.ToString()).Replace("<ReceiptNo>", expense.ReceiptNo).Replace("<Comment>", expense.Comment);
+            StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            if (jsonString.Contains("SUCCESS!"))
+            {
+                JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+                return jsonObject!["data"]!["saveExpense"]!["expense"]!["rpeKey"]!.ToString();
+            }
+            else throw new Exception("Failed to create new expense");
 
+        }
+        /// <summary>
+        /// Method <c>GetReportKey</c> retrieves the key value for a claim
+        /// </summary>
         public async Task<String> GetReportKey(string reportId)
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
+            string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
             string content = @"{""operationName"":""GetReportIdAndKey"",""variables"":{""userId"":""<userId>"",""contextRole"":""TRAVELER"",""rptKey"":null,""reportId"":""<reportId>""},""query"":""query GetReportIdAndKey($userId: String, $contextRole: ContextRoleType, $rptKey: String, $reportId: String) {\n  employee(userId: $userId, contextRole: $contextRole) {\n    userId\n    contextRole\n    expenseReport(reportId: $reportId, rptKey: $rptKey) {\n      reportId\n      rptKey\n      __typename\n    }\n    __typename\n  }\n}\n""}"
             .Replace("<userId>", UserID).Replace("<reportId>", reportId);
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
-
-            string JsonString = await response.Content.ReadAsStringAsync();
-            JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(JsonString);
-            Console.WriteLine(jsonObject!["data"]!["employee"]!["expenseReport"]!["rptKey"]!);
-            return jsonObject.ToString();
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            if (!jsonString.Contains("data")) throw new Exception("Unable to retrieve report key");
+            JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+            return jsonObject!["data"]!["employee"]!["expenseReport"]!["rptKey"]!.ToString();
         }
-
-        public async Task<string> UploadImage(string ImagePath)
+        /// <summary>
+        /// Method <c>UploadImage</c> uploads an image under the user's account
+        /// </summary>
+        public async Task<string> UploadImage(string ImagePath, string filename)
         {
             string RequestUrl = "https://us2.concursolutions.com/expense/expenseDotNet/Receipts/UploadLineItemImage.ashx?empKey=" + EMPKey + "&role=TRAVELER";
             byte[] ImageBinary = File.ReadAllBytes(ImagePath);
             ByteArrayContent ImageContent = new ByteArrayContent(ImageBinary);
             MultipartFormDataContent HttpContent = new MultipartFormDataContent();
-            HttpContent.Add(ImageContent, "File", "Playmaker.png");
+            HttpContent.Add(ImageContent, "File", filename);
             var response = await HttpClient.PostAsync(RequestUrl, HttpContent);
-            return await response.Content.ReadAsStringAsync();
+            string jsonString = await response.Content.ReadAsStringAsync();
+            if (!jsonString.Contains("SUCCESS")) throw new Exception("Fail to upload image");
+            string imageId = jsonString.Split(',')[1].Split('\'')[1];
+            return imageId;
+            //JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+            //return jsonObject!["imageId"]!.ToString();
         }
-
-        public async Task<String> LinkClaimToRequest(Expense expense)
+        /// <summary>
+        /// Method <c>GetAllExpenses</c> Gets all the expenses under a claim, also used to retrieve the expense IDs for the expense
+        /// </summary>
+        public async Task<List<Expense>> GetAllExpenses(Models.Claim claim)
         {
-            string RequestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
+            string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
+            string content = @"{
+              ""operationName"": ""GetEntriesAndColumns"",
+              ""variables"": {
+                ""reportId"": ""<reportId>"",
+                ""userId"": ""<userId>"",
+                ""contextRole"": ""TRAVELER"",
+                ""expenseListDetailFormId"": null,
+                ""includeDetailItemizations"": true
+              },
+              ""query"": ""query GetEntriesAndColumns($reportId: String!, $contextRole: ContextRoleType!, $userId: String!, $expenseListDetailFormId: String, $includeDetailItemizations: Boolean) {\n  reportEntriesDetails(\n    userId: $userId\n    reportId: $reportId\n    contextRole: $contextRole\n    expenseListDetailFormId: $expenseListDetailFormId\n    includeDetailItemizations: $includeDetailItemizations\n  ) {\n    reportId\n    columns {\n      formFieldId\n      dataType\n      fieldName\n      __typename\n    }\n    entries {\n      expenseId\n      summary {\n        attendeeCount\n        id\n        expenseType {\n          id\n          code\n          name\n          meta {\n            isJapanPublicTransportation\n            __typename\n          }\n          __typename\n        }\n        meta {\n          canDelete\n          hasAffidavit\n          hasAllocation\n          hasAttendees\n          hasBlockingExceptions\n          hasComments\n          hasExceptions\n          hasItemizations\n          hasReceiptImage\n          hasSource\n          hasSourceCreditCard\n          hasSourceEReceipt\n          hasSourceItinerary\n          hasSourceMobile\n          hasSourcePersonalCard\n          hasValidEbunshoImage\n          __typename\n        }\n        parentExpenseId\n        paymentType {\n          id\n          code\n          name\n          __typename\n        }\n        transactionAmount {\n          value\n          currencyCode\n          __typename\n        }\n        approvedAmount {\n          value\n          currencyCode\n          __typename\n        }\n        claimedAmount {\n          value\n          currencyCode\n          __typename\n        }\n        vendor {\n          id\n          description\n          name\n          __typename\n        }\n        receiptImageId\n        eReceiptImageId\n        isImageRequired\n        isPaperReceiptRequired\n        expenseSourceIdentifiers {\n          creditCardTransactionId\n          eReceiptId\n          expenseCaptureImageId\n          personalCardTransactionId\n          quickExpenseId\n          segmentId\n          segmentTypeId\n          tripId\n          jptRouteId\n          __typename\n        }\n        isPersonalExpense\n        transactionDate\n        location {\n          id\n          name\n          city\n          countrySubDivisionCode\n          __typename\n        }\n        rpeKey\n        __typename\n      }\n      values {\n        fieldName\n        formFieldId\n        value {\n          ... on StringValue {\n            stringValue: value\n            __typename\n          }\n          ... on IntegerValue {\n            integerValue: value\n            __typename\n          }\n          ... on BooleanValue {\n            booleanValue: value\n            __typename\n          }\n          ... on ListValue {\n            listValue: value {\n              code\n              id\n              value\n              __typename\n            }\n            __typename\n          }\n          ... on ListItemValue {\n            code\n            id\n            listItemValue: value\n            __typename\n          }\n          ... on AmountValue {\n            amountValue: value {\n              value\n              currency {\n                code\n                name\n                __typename\n              }\n              __typename\n            }\n            __typename\n          }\n          ... on FloatValue {\n            floatValue: value\n            __typename\n          }\n          ... on DateValue {\n            dateValue: value\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  reportExceptions(\n    reportId: $reportId\n    userId: $userId\n    contextRole: $contextRole\n  ) {\n    ...ExceptionsFragment\n    __typename\n  }\n}\n\nfragment ExceptionsFragment on ReportExceptions {\n  countOfExceptions\n  hasBlockingExceptions\n  reportExceptions {\n    allocationId\n    exceptionCode\n    expenseId\n    parentExpenseId\n    isBlocking\n    message\n    parameters {\n      missingFields {\n        missingSpecialParentField\n        fields\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  entryExceptions {\n    ...entryExceptionsFragment\n    __typename\n  }\n  __typename\n}\n\nfragment entryExceptionsFragment on EntryExceptions {\n  reportId\n  expenseId\n  attendeesExceptionLevel\n  countOfExceptions\n  transactionAmount {\n    value\n    currencyCode\n    __typename\n  }\n  transactionDate\n  expenseType {\n    id\n    code\n    name\n    meta {\n      isJapanPublicTransportation\n      __typename\n    }\n    __typename\n  }\n  entryExceptions {\n    ...entryExceptionFragment\n    __typename\n  }\n  itemizations {\n    reportId\n    expenseId\n    attendeesExceptionLevel\n    countOfExceptions\n    transactionAmount {\n      value\n      currencyCode\n      __typename\n    }\n    transactionDate\n    expenseType {\n      id\n      code\n      name\n      meta {\n        isJapanPublicTransportation\n        __typename\n      }\n      __typename\n    }\n    entryExceptions {\n      ...entryExceptionFragment\n      __typename\n    }\n    itemizations {\n      expenseId\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment entryExceptionFragment on ExpenseEntryException {\n  allocationId\n  exceptionCode\n  expenseId\n  isBlocking\n  message\n  parentExpenseId\n  parameters {\n    missingFields {\n      fields\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n""
+            }".Replace("<userId>", UserID).Replace("<reportId>", claim.Id);
+            StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            try
+            {
+                JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+                JsonArray jsonArr = jsonObject!["data"]!["reportEntriesDetails"]!["entries"]!.AsArray();
+                List<Expense> Expenses = new List<Expense>();
+                for (int i = 0; i < jsonArr.Count; i++)
+                {
+                    Expense expense = new Expense();
+                    expense.Id = jsonArr[i]!["expenseId"]!.ToString();
+                    expense.Cost = Convert.ToDouble(jsonArr[i]!["summary"]!["transactionAmount"]!["value"]!.ToString());
+                    expense.Supplier = jsonArr[i]!["summary"]!["vendor"]!["description"]!.ToString();
+                    expense.Date = jsonArr[i]!["summary"]!["transactionDate"]!.ToString();
+                    expense.RPEKey = jsonArr[i]!["summary"]!["rpeKey"]!.ToString();
+                    Expenses.Add(expense);
+                }
+                return Expenses;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to retrieve expenses");
+            }
+        }
+        /// <summary>
+        /// Method <c>LinkImageToRequest</c> Links the uploaded image to the expense it is assigned under
+        /// </summary>
+        public async Task<String> LinkImageToRequest(Expense expense)
+        {
+            string requestURL = "https://www-us2.api.concursolutions.com/spend-graphql/graphql";
             string content = @"{""operationName"":""AttachImageMutation"",""variables"":{""userId"":""<userId>"",""contextRole"":""TRAVELER"",""reportId"":""<reportId>"",""expenseId"":""<expenseId>"",""imageId"":""<imageId>""},""query"":""mutation AttachImageMutation($userId: String!, $contextRole: ContextRoleType!, $reportId: String!, $expenseId: String!, $imageId: String!) {\n  employee(userId: $userId, contextRole: $contextRole) {\n    expenseReport(reportId: $reportId) {\n      entry(expenseId: $expenseId) {\n        attachImage(imageId: $imageId) {\n          id\n          receiptImageId\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n""}"
             .Replace("<userId>", UserID).Replace("<reportId>", expense.ReportId).Replace("<expenseId>", expense.Id).Replace("<imageId>", expense.ImageId);
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync(RequestURL, HttpContent);
+            var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
 
 
     }
 }
-
-
-/*          Dynamic Obj Ref
-          
-            //dynamic payload = new JObject();
-            //payload.operationName = "GetReportsForUser";
-            //payload.variables = new JObject();
-            //payload.variables.dateRange = null;
-            //payload.variables.filterByStatus = "ACTIVE";
-            //payload.variables.paging = new JObject();
-            //payload.variables.paging.page = 1;
-            //payload.variables.paging.size = 100;
-            //payload.variables.sortBy = null;
-            //payload.variables.sortDirection = null;
-            //payload.variables.userId = "ff242cd1-57c7-47fb-bb33-9ad1edb131c0";
-            //payload.variables.contextRole = "TRAVELER";
-            //payload.query = @"query GetReportsForUser($contextRole: ContextRoleType!, $dateRange: InputDateRange, $filterByStatus: InputFilterBy, $paging: InputPagination, $sortBy: InputSortBy, $sortDirection: InputSortDirection, $userId: String!) {  employee(contextRole: $contextRole, userId: $userId) {    userId    contextRole    reportsForUser(      input: {dateRange: $dateRange, filterByStatus: $filterByStatus, paging: $paging, sortBy: $sortBy, sortDirection: $sortDirection}    ) {      reports: list {        reportId: id        approvedAmount {          currencyCode          value          __typename        }        approvalStatus        approver {          firstName: first          lastName: last          __typename        }        canAddExpense        claimedAmount {          currencyCode          value          __typename        }        endDate        exceptionLevel        isMarkedForReviewByDelegate        isApproved        isPendingApproval        isSentBack        wasSentForPayment: isSentForPayment        isSubmitted        isReopened        name        paymentStatus        reportNumber        reportDate        reportTotal {          currencyCode          value          __typename        }        reportType        sentBackDate        startDate        submitDate        rptKey        totalAmountDueEmployee {          currencyCode          value          __typename        }        __typename      }      pagination {        ...PaginationFragment        __typename      }      __typename    }    __typename  }}fragment PaginationFragment on PaginationResponse {  number  size  totalElements  totalPages  __typename}";
-            //string content = JsonConvert.SerializeObject(payload)
-*/
