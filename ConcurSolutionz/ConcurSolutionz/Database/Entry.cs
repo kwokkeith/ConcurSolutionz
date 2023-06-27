@@ -1,19 +1,3 @@
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Reflection.Emit;
-using System.Reflection.Metadata;
-using System.Collections.Immutable;
-using System.Globalization;
-using System.Resources;
-using System.Reflection.Metadata.Ecma335;
-using System.Data.Common;
-using System.ComponentModel;
-using System.Data;
-using System.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
