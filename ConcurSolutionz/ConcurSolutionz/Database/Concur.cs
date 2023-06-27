@@ -5,19 +5,19 @@ namespace ConcurSolutionz.Database
     {
         private string CookieStoragePath;
 
-        public void setCookieStoragePath(string path)
+        public void SetCookieStoragePath(string path)
         {
             CookieStoragePath = path;
         }
     
-        public string getCookieStoragePath()    
+        public string GetCookieStoragePath()    
         {
             return CookieStoragePath;    
         }
 
         public Cookie RequestCookieHandler()
         {
-            string CookiePath = getCookieStoragePath();
+            string CookiePath = GetCookieStoragePath();
             if (File.Exists(CookiePath))
             {
                 try

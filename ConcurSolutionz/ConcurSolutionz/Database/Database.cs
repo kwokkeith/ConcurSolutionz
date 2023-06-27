@@ -3,56 +3,56 @@ namespace ConcurSolutionz.Database
 {
     public sealed class Database
     {   
-        private string workingDirectory = Environment.CurrentDirectory;
-        private List<FileDB> files = new List<FileDB>();
-        private Settings settings;
-        private static readonly Database instance = new Database();
-        static Database(){}
-        private Database(){}
+        private string WorkingDirectory { get; set;}
+        public List<FileDB> Files { get; private set; }
+        public Settings Settings { get; set; }
 
-
-        public static Database getInstance(){
-            return instance;
+        private static Database _instance;
+        
+        // Explicit static constructor to tell C# compiler
+        // not to mark type as beforefieldinit
+        private Database(){
+            WorkingDirectory = Environment.CurrentDirectory; // Root directory
         }
-
-        public Settings getSettings(){
-            return settings;
-        }
-
-        public void setSetting(Settings settings){
-            this.settings = settings;
-        }
-
-        public String getwd(){
-            return workingDirectory;
-        }
-
-        public void setwd(string wd){
-            workingDirectory = wd;
-        }
-
-        public class FileDB
-        {
-            internal string filePath;
-        }
-
-        public void createFile(){
-            FileDB file = new FileDB();
-            files.Add(file);
-            File.Create(file.filePath);
-        }
-
-        public void deleteFile(FileDB file){
-            files.Remove(file);
-            File.Delete(file.filePath);
-        }
-
-        public static Database Instance
-        {
-            get
-            {
-                return instance;
+        
+        public static Database Instance{
+            get {
+                if (_instance == null){
+                    _instance = new Database();
+                }
+                return _instance;
             }
+        }
+
+        public Settings GetSettings(){
+            return Settings;
+        }
+
+        public void SetSetting(Settings settings){
+            this.Settings = settings;
+        }
+
+        public string Getwd(){
+            return WorkingDirectory;
+        }
+
+        public void Setwd(string wd){
+            WorkingDirectory = wd;
+        }
+
+        public void CreateFile(FileDB file){
+            // Append to file local storage
+            Files.Add(file);
+            
+            // Create a file using FilePath (Physical file management system)
+            File.Create(file.FilePath);
+        }
+
+        public void DeleteFile(FileDB file){
+            Files.Remove(file);
+
+            // Delete a file using FilePath (Physical file management system)
+            File.Delete(file.FilePath);
         }
     }
 }

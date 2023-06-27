@@ -12,24 +12,24 @@ namespace ConcurSolutionz.Database
 
         public ClaimMetaData(ClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
-            Utilities.CheckNull(claimMDBuilder.entryName);
-            Utilities.CheckNull(claimMDBuilder.entryBudget);
-            Utilities.CheckNull(claimMDBuilder.policy);
-            Utilities.CheckNull(claimMDBuilder.claimName);
-            Utilities.CheckNull(claimMDBuilder.claimDate);
-            Utilities.CheckNull(claimMDBuilder.purpose);
-            Utilities.CheckNull(claimMDBuilder.teamName);
-            Utilities.CheckNull(claimMDBuilder.projectClub);
+            Utilities.CheckNull(claimMDBuilder.EntryName);
+            Utilities.CheckNull(claimMDBuilder.EntryBudget);
+            Utilities.CheckNull(claimMDBuilder.Policy);
+            Utilities.CheckNull(claimMDBuilder.ClaimName);
+            Utilities.CheckNull(claimMDBuilder.ClaimDate);
+            Utilities.CheckNull(claimMDBuilder.Purpose);
+            Utilities.CheckNull(claimMDBuilder.TeamName);
+            Utilities.CheckNull(claimMDBuilder.ProjectClub);
 
             // If all variables are declared then create ClaimMetaData
-            this.entryName = claimMDBuilder.entryName;
-            this.entryBudget = claimMDBuilder.entryBudget;
-            this.Policy = claimMDBuilder.policy;
-            this.ClaimName = claimMDBuilder.claimName;
-            this.ClaimDate = claimMDBuilder.claimDate;
-            this.Purpose = claimMDBuilder.purpose;
-            this.TeamName = claimMDBuilder.teamName;
-            this.ProjectClub = claimMDBuilder.projectClub;
+            this.EntryName = claimMDBuilder.EntryName;
+            this.EntryBudget = claimMDBuilder.EntryBudget;
+            this.Policy = claimMDBuilder.Policy;
+            this.ClaimName = claimMDBuilder.ClaimName;
+            this.ClaimDate = claimMDBuilder.ClaimDate;
+            this.Purpose = claimMDBuilder.Purpose;
+            this.TeamName = claimMDBuilder.TeamName;
+            this.ProjectClub = claimMDBuilder.ProjectClub;
         }
     }
 }
