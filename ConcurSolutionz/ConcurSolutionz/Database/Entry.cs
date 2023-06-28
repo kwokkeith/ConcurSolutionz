@@ -151,7 +151,7 @@ namespace ConcurSolutionz.Database
             public MetaData MetaData { get; private set; }
             public List<Record> Records { get; private set; }    
 
-            EntryBuilder(){
+            public EntryBuilder(){
                 // Set Default Values
                 Records = new List<Record>();
             }

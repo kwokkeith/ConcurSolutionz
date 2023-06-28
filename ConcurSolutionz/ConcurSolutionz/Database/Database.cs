@@ -132,6 +132,27 @@ namespace ConcurSolutionz.Database
             // Delete a file using FilePath (Physical file management system)
             File.Delete(filePath);
         }
+        
+        /// <summary>Navigates back to the previous directory.</summary>
+        /// <remarks>
+        /// This method updates the working directory by removing the last directory from the path.
+        /// If the working directory is already at the root directory, no action is taken.
+        /// </remarks>
+        public void FileGoBack(){
+            // Set working directory one path back
+            string rootDirectory = Settings.GetRootDirectory();
+            string[] rootDirectoryArray = rootDirectory.Split("\\");
+            string[] workingDirectoryArray = WorkingDirectory.Split("\\");
+
+            // Check if RootDirectory == WorkingDirectory
+            if (workingDirectoryArray.Equals(rootDirectoryArray)){
+                return;
+            }
+            else{
+                workingDirectoryArray = workingDirectoryArray.SkipLast(1).ToArray();
+                WorkingDirectory = string.Join("\\", workingDirectoryArray);
+            }
+        }
 
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@

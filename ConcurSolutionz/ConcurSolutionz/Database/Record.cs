@@ -5,6 +5,9 @@ namespace ConcurSolutionz.Database
     {
         public int RecordID {get; set; }
 
+        public string RecordSubclass {get; set;}
+
         abstract public void DelRecord();   
+        abstract protected void AddSubClassRecord();
     }
 }

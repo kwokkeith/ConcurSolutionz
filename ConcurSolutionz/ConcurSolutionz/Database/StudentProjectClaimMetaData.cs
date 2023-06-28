@@ -1,7 +1,7 @@
 
 namespace ConcurSolutionz.Database
 {
-    public class ClaimMetaData : MetaData
+    public class StudentProjectClaimMetaData : MetaData
     {
         public string Policy { get; set; } 
         public string ClaimName { get; set; }
@@ -10,7 +10,7 @@ namespace ConcurSolutionz.Database
         public string TeamName { get; set; }
         public string ProjectClub { get; set; }
 
-        public ClaimMetaData(ClaimMDBuilder claimMDBuilder){
+        public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(claimMDBuilder.EntryName);
             Utilities.CheckNull(claimMDBuilder.EntryBudget);

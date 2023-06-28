@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
@@ -81,10 +82,29 @@ namespace ConcurSolutionz.Database
         public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
             foreach( Receipt record in entry.GetRecords().Cast<Receipt>())
                 {
+                    // @@@@@@@@@@@@@@@@@@@@@@
+                    // FOR RECEIPT PICTURE 
                     // Store pictures
                     string imgPath = record.ImgPath;
                     receiptFolderPath += Convert.ToString(record.RecordID);
+                    
+                    // Clear all receipt images from receipt folder directory
+                    string[] filePaths = Directory.GetFiles(receiptFolderPath);
+                    foreach(string filePath in filePaths){
+                        File.Delete(filePath);
+                    }
+
+                    // Add receipt images into receipt folder directory
                     CopyFile(imgPath, receiptFolderPath);
+
+
+                    // @@@@@@@@@@@@@@@@@@@@@@
+                    // FOR RECEIPT METADATA
+                    // Clear Receipt Metadta
+                    filePaths = Directory.GetFiles(receiptJSONFolder);
+                    foreach(string filePath in filePaths){
+                        File.Delete(filePath);
+                    }
 
                     // Store Receipt Metadata
                     try{
@@ -111,10 +131,14 @@ namespace ConcurSolutionz.Database
         /// </remarks>
         private static void CopyFiles(string sourcePath, string destinationPath){
             string[] files = Directory.GetFiles(sourcePath);
-
-            foreach(string file in files)
-            {
-                File.Copy(sourcePath,destinationPath);  
+            try{
+                foreach(string file in files)
+                {
+                    File.Copy(sourcePath,destinationPath);  
+                }
+            }
+            catch(Exception e){
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -123,7 +147,12 @@ namespace ConcurSolutionz.Database
         /// <param name="destinationPath">The path where the file will be copied to.</param>
         /// <remarks>If a file with the same name already exists at the destination path, it will be overwritten.</remarks>
         private static void CopyFile(string sourcePath, string destinationPath){
-            File.Copy(sourcePath, destinationPath, true);
+            try{
+                File.Copy(sourcePath, destinationPath, true);
+            }
+            catch(Exception e){
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
