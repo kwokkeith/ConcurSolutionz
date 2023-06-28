@@ -6,8 +6,8 @@ namespace ConcurSolutionz.Database
 {
     public class Settings
     {
-        private static readonly string WindowSettingsPath = "%userprofile%\\documents";
-        private static readonly string MacSettingsPath = "";
+        private static readonly string WindowSettingsPath = "%userprofile%\\documents\\ConcurSolutionz\\Settings";
+        private static readonly string MacSettingsPath = "$HOME\\Library\\ConcurSolutionz\\Settings";
         private string settingsPath;
 
         public Settings(){
