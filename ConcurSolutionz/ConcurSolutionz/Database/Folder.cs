@@ -48,7 +48,7 @@ namespace ConcurSolutionz.Database
             public DateTime LastModifiedDate { get; private set; }
             public string FilePath { get; private set; }
 
-            FolderBuilder(){
+            public FolderBuilder(){
                 // Set Default Values
             }
 
