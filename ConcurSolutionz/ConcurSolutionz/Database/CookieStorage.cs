@@ -5,7 +5,7 @@ namespace ConcurSolutionz.Database
 {
     public class CookieStorage
     {
-        
+
         public string CookieStoragePath { get; set; }
 
         /// <summary>Stores a cookie object as JSON in a file.</summary>

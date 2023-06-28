@@ -6,8 +6,8 @@ namespace ConcurSolutionz.Database
 {
     public class Settings
     {
-        private static readonly string WindowSettingsPath = "%userprofile%\\documents";
-        private static readonly string MacSettingsPath = "";
+        private static readonly string WindowSettingsPath = "%userprofile%\\documents\\ConcurSolutionz\\Settings";
+        private static readonly string MacSettingsPath = "$HOME\\Library\\ConcurSolutionz\\Settings";
         private string settingsPath;
 
         public Settings(){
@@ -27,6 +27,11 @@ namespace ConcurSolutionz.Database
                     // Extract JSON properties
                     JsonDocument jsonDocument = JsonDocument.Parse(json);
                     RootDirectoryData rootDirectory = JsonSerializer.Deserialize<RootDirectoryData>(json);
+
+                    // Create root folder if it does not exist
+                    if (!File.Exists(rootDirectory.RootDirectory)){
+                        Directory.CreateDirectory(rootDirectory.RootDirectory);
+                    }
 
                     return rootDirectory.RootDirectory;
                 }
