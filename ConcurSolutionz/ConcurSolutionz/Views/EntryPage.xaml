@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.EntryPage"
              Title="Entry">
-    <ScrollView>
-        <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
+    <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
             <Label
                 FontSize="Title"
@@ -214,10 +213,48 @@
                     Grid.Column="2"
                     Margin="10"/>
         </Grid>
+
+
+        <CollectionView SelectionMode="Single" x:Name="recordCollection" EmptyView="No data available" Margin="20,0,20,0">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="4"
+                                 HorizontalItemSpacing="40"
+                                 VerticalItemSpacing="20"/>
+
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" BorderColor="Grey" CornerRadius="5" Padding="8" VerticalOptions="Center" HorizontalOptions="Center">
+                        <StackLayout>
+                            <Label Text="{Binding RecordName}"
+                                   FontSize="Large"
+                                   FontAttributes="Bold"/>
+                            <BoxView Color="Grey"
+                                     HeightRequest="2"
+                                     HorizontalOptions="Fill"/>
+                            <Label Text="{Binding Amount}" Grid.Column="1" FontSize="Large" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+
+                        </StackLayout>
+    
+
+                    </Frame>
+
+
+                </DataTemplate>
+
+
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
         
         
     </VerticalStackLayout>
 
-    </ScrollView>
+    
+
+        
+
     
 </ContentPage>

@@ -7,11 +7,13 @@
         <VerticalStackLayout>
         <Grid ColumnDefinitions="*,*"
               ColumnSpacing="10">
-            <Grid RowDefinitions="*,2*">
-                <Image Source="receipt.jpeg"
+            <Grid RowDefinitions="50,2*">
+                <Image x:Name="ReceiptImage"
                        Grid.Row="1"/>
-                <Button Text="Upload receipt"
-                        Grid.Row="0"/>
+                <Button x:Name="FilePickerBtn"
+                        Text="Upload receipt"
+                        Grid.Row="0"
+                        Clicked="OnFilePickerClicked"/>
             </Grid>
 
             <Border Grid.Column="1"
@@ -19,6 +21,7 @@
                     StrokeShape="RoundRectangle 5,5,5,5"
                     Padding="16,8"
                     BackgroundColor="AliceBlue">
+
                 <VerticalStackLayout>
 
                 <Label Text="Edit receipt details below"
