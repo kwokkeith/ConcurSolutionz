@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Globalization;
 
 namespace ConcurSolutionz.Database
@@ -48,6 +49,9 @@ namespace ConcurSolutionz.Database
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             FileCreator.PopulateReceiptFolder(this, receiptFolderPath, receiptJSONPath);
+
+            // Update last modified date of Entry
+            UpdateModifiedDate();
         }
 
         /// <summary>Deletes a record from the database.</summary>
@@ -68,13 +72,32 @@ namespace ConcurSolutionz.Database
 
             Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
             Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+
+            // Update last modified date of Entry
+            UpdateModifiedDate();
         }
 
 
         /// <summary>Deletes a record from the list of Records by its ID.</summary>
         /// <param name="ID">The ID of the record to be deleted.</param>
-        public void DelRecordByID(int ID){
-            Records.RemoveAll(record => record.RecordID == ID);
+        public void DelRecordByID(int ID){  
+            
+            // Remove paths associated to this record
+            // Paths required as arguments to populate receipt folder (Update it with new receipt)
+            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            
+            foreach (Record record in Records){
+                if (record.RecordID == ID){
+                    Records.Remove(record);
+                    Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
+                    Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID);         // Del Receipt Image
+                }
+            }
+            
+            // Update last modified date of Entry
+            UpdateModifiedDate();
+            
         }
 
         /// <summary>Returns a list of Records.</summary>
