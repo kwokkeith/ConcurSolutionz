@@ -7,6 +7,6 @@ namespace ConcurSolutionz.Database
 {
     public abstract class OCR
     {
-        public int RecordID { get; set; };
+        public int RecordID { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace ConcurSolutionz.Database
     public class Entry: FileDB
     {
         public MetaData MetaData { get; set; }
-        private  List<Record> Records { get; set; }
+        public List<Record> Records { get; set; }
 
 
         private Entry(EntryBuilder builder){
@@ -95,7 +95,7 @@ namespace ConcurSolutionz.Database
             }
 
             public EntryBuilder SetFileName(string FileName){
-                this.FileName = FileName;
+                this.FileName = FileName + ".entry";
                 return this;
             }
 
@@ -109,8 +109,14 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
+            /// <summary>Sets the file path for the entry being built.</summary>
+            /// <param name="FilePath">The file path to set (working directory).</param>
+            /// <returns>The updated EntryBuilder instance.</returns>
+            /// <exception cref="ArgumentNullException">Thrown when the FileName is null.</exception>
             public EntryBuilder SetFilePath(string FilePath){
-                this.FilePath = FilePath;
+                // Makes use of working directory of database to create a file
+                Utilities.CheckNull(FileName);
+                this.FilePath = FilePath + "\\" + FileName;
                 return this;
             }
 
