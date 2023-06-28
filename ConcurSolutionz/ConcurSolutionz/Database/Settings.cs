@@ -28,6 +28,11 @@ namespace ConcurSolutionz.Database
                     JsonDocument jsonDocument = JsonDocument.Parse(json);
                     RootDirectoryData rootDirectory = JsonSerializer.Deserialize<RootDirectoryData>(json);
 
+                    // Create root folder if it does not exist
+                    if (!File.Exists(rootDirectory.RootDirectory)){
+                        Directory.CreateDirectory(rootDirectory.RootDirectory);
+                    }
+
                     return rootDirectory.RootDirectory;
                 }
                 catch (Exception e)
