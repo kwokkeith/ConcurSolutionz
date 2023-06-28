@@ -9,4 +9,3 @@ namespace ConcurSolutionz
         void DelRecord();
     }
 }
-
