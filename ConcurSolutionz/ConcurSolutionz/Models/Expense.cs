@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ESC_HTTP_Call.Models
+﻿namespace ESC_HTTP_Call.Models
 {
     internal class Expense
     {
         //Id of the expense reflected on Concur (ExpenseId)
         public string Id { get; set; }
         //ReportId of the claim that the expense is under
-        public string ReportId { get; set; } 
+        public string ReportId { get; set; }
+        //Key assigned to expense upon creation used to identify the expense
+        public string RPEKey { get; set; }
         //Id of the image that should be attached to the expense
-        public string ImageId { get; set; } 
+        public string ImageId { get; set; }
         public string Date { get; set; }
         public string Description { get; set; }
         public double Cost { get; set; }
