@@ -9,9 +9,41 @@ namespace ConcurSolutionz.Database
         public string Description { get; set; }
         public string SupplierName { get; set; }
         public string CityOfPurchase { get; set; }
-        public decimal ReqAmount { get; set; }
-        public decimal ConversionRate { get; set; }
-        public decimal CurrencyAmountSGD { get; set; }
+        private decimal reqAmount;
+        public decimal ReqAmount
+        {
+            get { return reqAmount; }
+            set
+            {
+                Utilities.CheckIfNegative(value);
+                reqAmount = value;
+            }
+        }
+        private decimal conversionRate;
+        public decimal ConversionRate {
+            get
+            {
+                return conversionRate;
+            }
+            set
+            {
+                Utilities.CheckIfNegative(value);
+                conversionRate = value;
+            } }
+        private decimal currencyAmountSGD;
+        public decimal CurrencyAmountSGD
+        {
+            get
+            {
+                return currencyAmountSGD;
+            }
+            set
+            {
+                Utilities.CheckIfNegative(value);
+                currencyAmountSGD = value;
+            }
+        }
+        public string Currency { get; set; }
         public string ReceiptNumber { get; set; }
         public string ReceiptStatus { get; set; }
         public bool IsBillable { get; set; }
@@ -37,6 +69,7 @@ namespace ConcurSolutionz.Database
             Utilities.CheckNull(builder.IsPersonalExpense);
             Utilities.CheckNull(builder.Comment);
             Utilities.CheckNull(builder.ImgPath);
+            Utilities.CheckNull(builder.Currency);
             
             // Set the attributes
             PaymentType = builder.PaymentType;
@@ -54,32 +87,7 @@ namespace ConcurSolutionz.Database
             IsPersonalExpense = builder.IsPersonalExpense;
             Comment = builder.Comment;
             ImgPath = builder.ImgPath;
-        }
-
-        /// <summary>Assigns a unique record ID to the object.</summary>
-        /// <remarks>
-        /// The method checks for the existence of files with names in the format "receipt {recordID}".
-        /// If a file with the current record ID already exists, it increments the record ID until a unique ID is found.
-        /// The unique ID is then assigned to the object's RecordID property.
-        /// </remarks>
-        public override void AssignRecordID()
-        {
-            // Relook at this calculation of RecordID later
-            int recordID = 1;
-
-            while (File.Exists("receipt " + recordID))
-            {
-                recordID++;
-            }
-
-            this.RecordID = recordID;
-        }
-
-        /// <summary>Returns the record ID.</summary>
-        /// <returns>The record ID.</returns>
-        public override int GetRecordID()
-        {
-            return RecordID;
+            Currency = builder.Currency;
         }
 
         /// <summary>Deletes a record and its associated image file.</summary>
@@ -127,9 +135,28 @@ namespace ConcurSolutionz.Database
             public bool IsPersonalExpense { get; private set; }
             public string Comment { get; private set; }
             public string ImgPath { get; private set; }
-            
+            public string Currency { get; private set; }
+
+            public const string SINGAPORE_CURRENCY = "Singapore, Dollar";
+            public const string SINGAPORE_CITY = "Singapore, SINGAPORE";
+            public const string DEFAULT_PAYMENT = "Cash";
+            public const string DEFAULT_RECEIPT_STATUS = "Tax Receipt";
+
             public ReceiptBuilder(){
-                // Input any default values
+                // Input any default values (Non-compulsory fields)
+                SupplierName = "";
+                Comment = "";
+                IsBillable = false;
+                IsPersonalExpense = false;
+                PaymentType = DEFAULT_PAYMENT;
+                CityOfPurchase = SINGAPORE_CITY;
+                Currency = SINGAPORE_CURRENCY;
+                ReceiptStatus = DEFAULT_RECEIPT_STATUS;
+                // Default Value (Only matters when City of Purchase
+                // is not Singapore)
+                ReqAmount = 0m;
+                CurrencyAmountSGD = 0m; 
+                ConversionRate = 0m;   
             }
             
             public ReceiptBuilder SetPaymentType(string PaymentType)  
@@ -170,19 +197,30 @@ namespace ConcurSolutionz.Database
             
             public ReceiptBuilder SetReqAmount(decimal ReqAmount)
             {
+                Utilities.CheckIfNegative(ReqAmount);
                 this.ReqAmount = ReqAmount;
-                return this;
+                return SetCurrencyAmountSGD();
             }
             
             public ReceiptBuilder SetConversionRate(decimal ConversionRate)
             {
+                Utilities.CheckIfNegative(ConversionRate);
                 this.ConversionRate = ConversionRate;
+                return SetCurrencyAmountSGD();
+            }
+
+            public ReceiptBuilder SetCurrency(string currency)
+            {
+                this.Currency = currency;
                 return this;
             }
 
-            public ReceiptBuilder SetCurrencyAmountSGD(decimal CurrencyAmountSGD)
+            private ReceiptBuilder SetCurrencyAmountSGD()
             {
-                this.CurrencyAmountSGD = CurrencyAmountSGD;
+                if (ReqAmount != 0m || ConversionRate != 0)
+                {
+                    CurrencyAmountSGD = ReqAmount * ConversionRate;
+                }
                 return this;
             }
 
@@ -220,6 +258,14 @@ namespace ConcurSolutionz.Database
 
             public Receipt Build()   
             {
+                if (Currency != SINGAPORE_CURRENCY)
+                {
+                    if (CurrencyAmountSGD == 0m || ConversionRate == 0) 
+                    {
+                        throw new ArgumentException("If currency set is " +
+                            "not Singapore SGD, please set ConversionRate.");
+                    }
+                }
                 return new Receipt(this);   
             }
         }

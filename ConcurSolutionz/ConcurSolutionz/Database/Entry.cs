@@ -1,3 +1,4 @@
+using System.Globalization;
 
 namespace ConcurSolutionz.Database
 {
@@ -35,20 +36,45 @@ namespace ConcurSolutionz.Database
         /// <summary>Adds a record to the list of Records.</summary>
         /// <param name="record">The record to be added.</param>
         public void AddRecord(Record record){
+            // Update the RecordID
+            int nextID = AssignRecordID();
+            record.RecordID = nextID;
+
+            // Add record object to list of records for Entry
             Records.Add(record);
+
+            // Paths required as arguments to populate receipt folder (Update it with new receipt)
+            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+
+            FileCreator.PopulateReceiptFolder(this, receiptFolderPath, receiptJSONPath);
         }
 
-
-        /// <summary>Deletes a record from the list of Records.</summary>
+        /// <summary>Deletes a record from the database.</summary>
         /// <param name="record">The record to be deleted.</param>
+        /// <remarks>
+        /// This method removes the specified record from the database. It also deletes the corresponding JSON file
+        /// containing the record's metadata and the folder containing the record's receipt.
+        /// </remarks>
         public void DelRecord(Record record){
+            
+            // Remove record object from list of records for Entry
             Records.Remove(record);
+
+            // Remove paths associated to this record
+            // Paths required as arguments to populate receipt folder (Update it with new receipt)
+            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+
+            Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
+            Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
         }
+
 
         /// <summary>Deletes a record from the list of Records by its ID.</summary>
         /// <param name="ID">The ID of the record to be deleted.</param>
         public void DelRecordByID(int ID){
-            Records.RemoveAll(record => record.GetRecordID() == ID);
+            Records.RemoveAll(record => record.RecordID == ID);
         }
 
         /// <summary>Returns a list of Records.</summary>
@@ -64,7 +90,7 @@ namespace ConcurSolutionz.Database
         /// <exception cref="InvalidOperationException">Thrown when no record with the specified ID is found.</exception>
         public Record GetRecord(int ID){
             foreach (Record record in Records){
-                if (record.GetRecordID() == ID){
+                if (record.RecordID == ID){
                     return record;
                 }
             }
@@ -76,6 +102,19 @@ namespace ConcurSolutionz.Database
         public override void SelectedAction(){
             // TODO: Call EntrySubSystem to add entry
             return;
+        }
+
+
+        /// <summary>Returns a unique record ID for a receipt (Particular Entry).</summary>
+        /// <returns>The assigned record ID.</returns>
+        private int AssignRecordID(){
+            string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            string[] ReceiptMetaDatas = Directory.GetFiles(ReceiptMetaDataPath + "\\", "*.json");
+            int assignedIndex = 0;
+            while (ReceiptMetaDatas.Contains(Convert.ToString(assignedIndex) + ".json")){
+                assignedIndex++;
+            }
+            return assignedIndex;
         }
 
 

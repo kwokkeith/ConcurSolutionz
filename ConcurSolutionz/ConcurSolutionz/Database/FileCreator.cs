@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
-using CloudKit;
 
 namespace ConcurSolutionz.Database
 {
@@ -68,20 +63,35 @@ namespace ConcurSolutionz.Database
                 catch (Exception e){
                     Console.WriteLine("Error: " + e);
                 }
-                
+                PopulateReceiptFolder(entry, receiptFolderPath, receiptJSONFolder);
 
-                // Populate Receipt Folder
-                foreach( Receipt record in entry.GetRecords().Cast<Receipt>())
+                Console.WriteLine(entry.FileName + " Folder Created");
+            }
+        }
+
+
+        /// <summary>Populates the receipt folder with the image and metadata of each receipt in an entry.</summary>
+        /// <param name="entry">The entry containing the receipts.</param>
+        /// <param name="receiptFolderPath">The path to the folder where the receipt images will be copied.</param>
+        /// <param name="receiptJSONFolder">The path to the folder where the receipt metadata JSON files will be saved.</param>
+        /// <remarks>
+        /// This method iterates through each receipt in the entry and performs the following steps:
+        /// 1. Copies the receipt image to the specified receipt folder path.
+        /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
+        /// If
+        public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
+            foreach( Receipt record in entry.GetRecords().Cast<Receipt>())
                 {
                     // Store pictures
                     string imgPath = record.ImgPath;
+                    receiptFolderPath += Convert.ToString(record.RecordID);
                     File.Copy(imgPath, receiptFolderPath);
 
                     // Store Receipt Metadata
                     try{
                         // Generate unique metaData filepath name
                         string receiptMetaDataPath = receiptJSONFolder + "\\"
-                                                    + record.GetRecordID() + ".json"; 
+                                                    + Convert.ToString(record.RecordID) + ".json"; 
 
                         // Serialise record object and write it to the unique metadata location above
                         string json = JsonSerializer.Serialize(record);
@@ -91,10 +101,7 @@ namespace ConcurSolutionz.Database
                         Console.WriteLine("Error: " + e);
                     }
                 }
-                Console.WriteLine(entry.FileName + " Folder Created");
-            }
         }
-
 
         /// <summary>Copies files from a source directory to a destination directory.</summary>
         /// <param name="sourcePath">The path of the source directory.</param>

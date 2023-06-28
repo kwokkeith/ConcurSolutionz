@@ -194,7 +194,7 @@ namespace ESC_HTTP_Call
             }
             catch (Exception ex)
             {
-                //Returns an empty list in the case of an error
+               //Returns an empty list in the case of an error
                 return new List<Models.Claim>();
             }
         }
