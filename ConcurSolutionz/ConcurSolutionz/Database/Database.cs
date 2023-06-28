@@ -1,6 +1,5 @@
 using System.Security.AccessControl;
 using System.Text.Json;
-using AuthenticationServices;
 
 namespace ConcurSolutionz.Database
 {
@@ -116,6 +115,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        // @@@@@@@@@@@@@@@@@@@@@@@@@
+        // DATABASE UTILITY METHODS
+        // @@@@@@@@@@@@@@@@@@@@@@@@@
         private static MetaData ExtractEntryMetaData(string MetaDataPath){
             if (File.Exists(MetaDataPath))
             {
