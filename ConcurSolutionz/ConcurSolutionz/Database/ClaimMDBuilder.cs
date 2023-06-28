@@ -1,49 +1,56 @@
+using System.Web;
+using System.Net;
+using System.Xml.Xsl;
+using System.Security.Claims;
+using System.Security.AccessControl;
+using System;
+using System.Collections.Generic;
 
 namespace ConcurSolutionz.Database
 {
     public class ClaimMDBuilder :  MDBuilder
     {
-        public string policy {get; private set;}
-        public string claimName {get; private set;}
-        public DateTime claimDate {get; private set;}
-        public string purpose {get; private set;}
-        public string teamName {get; private set;}
-        public string projectClub {get; private set;}
+        public string Policy {get; private set;}
+        public string ClaimName {get; private set;}
+        public DateTime ClaimDate {get; private set;}
+        public string Purpose {get; private set;}
+        public string TeamName {get; private set;}
+        public string ProjectClub {get; private set;}
         
         private ClaimMDBuilder(){
         }
 
-        public ClaimMDBuilder setPolicy(string policy){
-            this.policy = policy;
+        public ClaimMDBuilder SetPolicy(string Policy){
+            this.Policy = Policy;
             return this;
         }
 
-        public ClaimMDBuilder setClaimName(string claimName){
-            this.claimName = claimName;
+        public ClaimMDBuilder SetClaimName(string ClaimName){
+            this.ClaimName = ClaimName;
             return this;
         }
 
-        public ClaimMDBuilder setClaimDate(DateTime claimDate){
-            this.claimDate = claimDate;
+        public ClaimMDBuilder SetClaimDate(DateTime ClaimDate){
+            this.ClaimDate = ClaimDate;
             return this;
         }
 
-        public ClaimMDBuilder setPurpose(string purpose){
-            this.purpose = purpose;
+        public ClaimMDBuilder SetPurpose(string Purpose){
+            this.Purpose = Purpose;
             return this;
         }
 
-        public ClaimMDBuilder setTeamName(string teamName){
-            this.teamName = teamName;
+        public ClaimMDBuilder SetTeamName(string TeamName){
+            this.TeamName = TeamName;
             return this;
         }
 
-        public ClaimMDBuilder setProjectClub(string projectClubName){
-            this.projectClub = projectClubName;
+        public ClaimMDBuilder SetProjectClub(string ProjectClubName){
+            this.ProjectClub = ProjectClubName;
             return this;
         }
 
-        protected ClaimMetaData build(){
+        protected ClaimMetaData Build(){
             return new ClaimMetaData(this);
         }
     }
