@@ -17,5 +17,9 @@ namespace ConcurSolutionz.Database
         }
 
         public abstract void SelectedAction();
+
+        public void UpdateModifiedDate(){
+            LastModifiedDate = DateTime.Now;
+        }
     }
 }
