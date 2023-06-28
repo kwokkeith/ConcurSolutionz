@@ -1,5 +1,6 @@
-﻿using ESC_HTTP_Call;
+﻿using ConcurSolutionz.Database;
 using ESC_HTTP_Call.Models;
+using static ConcurSolutionz.Database.Receipt;
 
 namespace ESC_HTTP_Call
 {
@@ -23,15 +24,45 @@ namespace ESC_HTTP_Call
             Expense expense = new Expense();
             expense.Date = "2023-06-21";
             expense.Cost = 69.00;
-            expense.Description = "API Test";
+            expense.Description = "Test Description";
             expense.Supplier = "Test Supplier";
-            expense.ReceiptNo = "TestReceipt";
-            expense.Comment = "API Test";
+            expense.ReceiptNo = "Test Receipt";
+            expense.Comment = "Test Comment";
             expense.ReportId = claim.Id;
             expense.RPEKey = await concur.CreateExpense(expense, claim);
 
             //Upload image and link to expense
             expense.ImageId = await concur.UploadImage(filepath, filename);
+            await concur.LinkImageToRequest(expense);
+
+            //Create new Receipt (Updated expense)
+            ReceiptBuilder rBuilder = new ReceiptBuilder();
+
+            //Convert to Receipt
+            string[] tempDate = expense.Date.Split('-');
+            DateTime dt = new DateTime(Convert.ToInt16(tempDate[0]), Convert.ToInt16(tempDate[1]), Convert.ToInt16(tempDate[2])); //dt.ToString("yyyy-MM-dd")
+            Receipt receipt = new Receipt(new ReceiptBuilder()
+                .SetTransactionDate(dt)
+                .SetCurrencyAmountSGD((decimal)expense.Cost)
+                .SetDescription(expense.Description)
+                .SetSupplierName(expense.Supplier)
+                .SetReceiptNumber(expense.ReceiptNo)
+                .SetComment(expense.Comment)
+                .SetReportId(expense.ReportId)
+                .SetRPEKey(expense.RPEKey));
+
+            
+            //rBuilder = rBuilder.SetTransactionDate(dt);
+            //rBuilder = rBuilder.SetCurrencyAmountSGD((decimal)69.00);
+            //string description = "Test Description";
+            //rBuilder = rBuilder.SetDescription(description);
+            //rBuilder = rBuilder.SetSupplierName("Test Supplier");
+            //rBuilder = rBuilder.SetReceiptNumber("Test Receipt No");
+            //rBuilder = rBuilder.SetComment("Test Comment");
+            //rBuilder = rBuilder.SetId(claim.Id);
+            //Receipt tempReceipt = new Receipt(rBuilder);
+            //rBuilder = rBuilder.SetRPEKey(await concur.CreateExpense(tempReceipt, claim));
+            //rBuilder = rBuilder.SetImgId(await concur.UploadImage(filepath, filename));
         }
     }
 }
