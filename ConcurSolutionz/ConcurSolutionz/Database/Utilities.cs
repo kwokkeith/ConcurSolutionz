@@ -12,5 +12,17 @@ namespace ConcurSolutionz.Database
                 throw new ArgumentNullException(nameof(arg));
             }
         }
+
+        public static string ConstEntryMetaDataPath(string entryPath){
+            return entryPath + "\\" + "EntryMetaData.json";
+        }
+
+        public static string ConstReceiptsFdrPath(string entryPath){
+            return entryPath + "\\Receipts";
+        }
+
+        public static string ConstReceiptMetaDataPath(string entryPath){
+            return entryPath + "\\Receipts\\ReceiptJSON";
+        }
     }
 }

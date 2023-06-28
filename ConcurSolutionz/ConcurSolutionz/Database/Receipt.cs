@@ -56,6 +56,12 @@ namespace ConcurSolutionz.Database
             ImgPath = builder.ImgPath;
         }
 
+        /// <summary>Assigns a unique record ID to the object.</summary>
+        /// <remarks>
+        /// The method checks for the existence of files with names in the format "receipt {recordID}".
+        /// If a file with the current record ID already exists, it increments the record ID until a unique ID is found.
+        /// The unique ID is then assigned to the object's RecordID property.
+        /// </remarks>
         public override void AssignRecordID()
         {
             // Relook at this calculation of RecordID later
@@ -69,11 +75,19 @@ namespace ConcurSolutionz.Database
             this.RecordID = recordID;
         }
 
+        /// <summary>Returns the record ID.</summary>
+        /// <returns>The record ID.</returns>
         public override int GetRecordID()
         {
             return RecordID;
         }
 
+        /// <summary>Deletes a record and its associated image file.</summary>
+        /// <remarks>
+        /// This method deletes the image file associated with the record, identified by the RecordID.
+        /// If the file is successfully deleted, a success message is printed to the console.
+        /// If the file cannot be deleted, an error message is printed to the console along with the exception message.
+        /// </remarks>
         public override void DelRecord()
         {
             string fileName = "receipt " + RecordID + ".jpg";
