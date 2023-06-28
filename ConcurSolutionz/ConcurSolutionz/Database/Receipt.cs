@@ -93,7 +93,7 @@ namespace ConcurSolutionz.Database
 
         protected override void AddSubClassRecord(){
             // To have a record of the subclass to be able to cast later on
-            recordSubclass = this.GetType().Name;
+            RecordSubclass = this.GetType().Name;
         }
 
         /// <summary>Deletes a record and its associated image file.</summary>
