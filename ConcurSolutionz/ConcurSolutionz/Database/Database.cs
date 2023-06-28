@@ -55,6 +55,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Method handles selection of a file by its file name.</summary>
+        /// <param name="fileName">The name of the file to select.</param>
+        /// <exception cref="Exception">Thrown when the specified file name is not found in the Files list of the Database.</exception>
         public void FileSelectByFileName(string fileName){
             // If fileName exist in Files
             if (Files.Contains(fileName)){
@@ -69,6 +72,9 @@ namespace ConcurSolutionz.Database
         }
 
         
+        /// <summary>Method handles selection of a file based on its file path.</summary>
+        /// <param name="filePath">The file path of the file to be selected.</param>
+        /// <exception cref="Exception">Thrown when the file has an invalid extension.</exception>
         public void FileSelectByFilePath(string filePath){
             // Check if File is Folder:
             if(filePath.EndsWith(".fdr")){
@@ -99,16 +105,25 @@ namespace ConcurSolutionz.Database
             }
 
             else{
-            throw new Exception(filePath + " found in Files<List> but of invalid extension!");
+                throw new Exception(filePath + " found in Files<List> but of invalid extension!");
             }
             
         }
 
+
+        /// <summary>Creates a file in the file management system (Either Entry, Folder Type).</summary>
+        /// <param name="file">The file information.</param>
+        /// <remarks>
+        /// This method delegates the file creation process to the <see cref="FileCreator.CreateFile"/> method.
+        /// </remarks>
         public static void CreateFile(FileDB file){
             // Call FileCreator class method to createFile
             FileCreator.CreateFile(file);
         }
 
+
+        /// <summary>Deletes a file from the specified file path.</summary>
+        /// <param name="filePath">The path of the file to be deleted.</param>
         public static void DeleteFile(string filePath){
             // Delete a file using FilePath (Physical file management system)
             File.Delete(filePath);

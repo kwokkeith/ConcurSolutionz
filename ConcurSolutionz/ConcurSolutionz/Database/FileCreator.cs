@@ -78,14 +78,13 @@ namespace ConcurSolutionz.Database
         /// This method iterates through each receipt in the entry and performs the following steps:
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
-        /// If
         public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
             foreach( Receipt record in entry.GetRecords().Cast<Receipt>())
                 {
                     // Store pictures
                     string imgPath = record.ImgPath;
                     receiptFolderPath += Convert.ToString(record.RecordID);
-                    File.Copy(imgPath, receiptFolderPath);
+                    CopyFile(imgPath, receiptFolderPath);
 
                     // Store Receipt Metadata
                     try{

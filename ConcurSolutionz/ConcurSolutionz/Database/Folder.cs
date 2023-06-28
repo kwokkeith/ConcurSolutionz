@@ -31,7 +31,7 @@ namespace ConcurSolutionz.Database
         private void StepIntoFolder(){
             // TODO: Step into folder
             try{
-                Database.Instance.Setwd(this.FilePath);
+                Database.Instance.Setwd(FilePath);
 
             }
             catch(Exception ex){
