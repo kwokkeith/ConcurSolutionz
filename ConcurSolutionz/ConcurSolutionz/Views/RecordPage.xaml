@@ -13,7 +13,9 @@
                 <Button x:Name="FilePickerBtn"
                         Text="Upload receipt"
                         Grid.Row="0"
-                        Clicked="OnFilePickerClicked"/>
+                        Clicked="OnFilePickerClicked"
+                        Margin="10"
+                        HeightRequest="50"/>
             </Grid>
 
             <Border Grid.Column="1"
@@ -94,12 +96,6 @@
             </VerticalStackLayout>
 
             </Border>
-
-
-            
-                
-
-
         </Grid>
     </VerticalStackLayout>
 

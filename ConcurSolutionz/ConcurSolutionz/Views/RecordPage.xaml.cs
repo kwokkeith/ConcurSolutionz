@@ -57,7 +57,7 @@
         }
 
         // Event handler for the FilePicker button click event
-        private async void OnFilePickerClicked(object sender, EventArgs e)
+        public async void OnFilePickerClicked(object sender, EventArgs e)
         {
             // Call the PickAndShow method with the options for picking an image file
             await PickAndShow(new PickOptions
@@ -72,5 +72,9 @@
                 PickerTitle = "Select an image"
             });
         }
+
+
     }
+
+
 }
