@@ -50,7 +50,17 @@ namespace ConcurSolutionz.Database
             return this;
         }
 
-        public StudentProjectClaimMetaData Build(){
+        public override StudentProjectClaimMDBuilder SetEntryName(string EntryName){ 
+            this.EntryName = EntryName;
+            return this;
+        }
+
+        public override StudentProjectClaimMDBuilder SetEntryBudget(decimal EntryBudget) {
+            this.EntryBudget = EntryBudget;
+            return this;
+        }
+
+            public StudentProjectClaimMetaData Build(){
             return new StudentProjectClaimMetaData(this);
         }
     }
