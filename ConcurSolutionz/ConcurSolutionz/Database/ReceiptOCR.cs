@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +9,10 @@ namespace ConcurSolutionz.Database
 {
     public class ReceiptOCR : OCR
     {
-        public string ReceiptNumber { get; set; }
-        public Decimal ReqAmount { get; set; }
+        // Possible to be empty (i.e. OCR fails to retrieve information)
+
+        public string? ReceiptNumber { get; set; }
+        public decimal? ReqAmount { get; set; }
 
     }
 }

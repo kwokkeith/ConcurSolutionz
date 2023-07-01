@@ -1,4 +1,10 @@
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Collections.Specialized;
+using System.Text;
+using System;
+
 namespace ConcurSolutionz.Database
 {
     public static class Utilities
@@ -25,7 +31,6 @@ namespace ConcurSolutionz.Database
             }
         }
 
-
         public static bool IsNumericType(this object o)
         {
             switch (Type.GetTypeCode(o.GetType()))
@@ -47,17 +52,36 @@ namespace ConcurSolutionz.Database
             }
         }
 
+        public static void CheckIfEmptyString(string value){
+            if (string.IsNullOrEmpty(value)){
+                throw new ArgumentException("Empty string passed!");
+            }
+        }
+
+        public static void CheckDateTimeAheadOfNow(DateTime date){
+            CheckNull(date);
+            int res = DateTime.Compare(date, DateTime.Now);
+            if (res > 0) // Date passed is more than current date
+            {
+                throw new ArgumentException("Date passed is ahead of current date!");
+            }
+        }
 
         public static string ConstEntryMetaDataPath(string entryPath){
+            CheckIfEmptyString(entryPath);
             return entryPath + "\\" + "EntryMetaData.json";
         }
 
         public static string ConstReceiptsFdrPath(string entryPath){
+            CheckIfEmptyString (entryPath);
             return entryPath + "\\Receipts";
         }
 
         public static string ConstReceiptMetaDataPath(string entryPath){
+            CheckIfEmptyString(entryPath);
             return entryPath + "\\Receipts\\ReceiptJSON";
         }
+
+
     }
 }
