@@ -6,8 +6,18 @@ public partial class EntryPage : ContentPage
 	{
 		InitializeComponent();
 
-		//recordCollection.ItemsSource = GetRecords();
+        //recordCollection.ItemsSource = GetRecords();
+        BindingContext = new Models.Entry();
 	}
+
+    private async void EditEntryName_Clicked(object sender, EventArgs e)
+    {
+        string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard:Keyboard.Text);
+        if(result != null)
+        {
+            EntryName.Text = result;
+        }
+    }
 
 	private async void EditRecord_Clicked(object sender, EventArgs e)
 	{

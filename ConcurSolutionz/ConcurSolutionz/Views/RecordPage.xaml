@@ -87,7 +87,7 @@
 
                 </Grid>
 
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,20">
                         <Button Text="Edit incorrect scans"
                             Grid.Column="0"
                             HeightRequest="50"/>
