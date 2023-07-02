@@ -32,6 +32,7 @@ namespace ConcurSolutionz.Database
 
         public StudentProjectClaimMDBuilder SetClaimDate(DateTime ClaimDate){
             this.ClaimDate = ClaimDate;
+            Utilities.CheckDateTimeAheadOfNow(ClaimDate);
             return this;
         }
 

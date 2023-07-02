@@ -8,10 +8,13 @@ namespace ConcurSolutionz.Database
     {
         private static readonly string WindowSettingsPath = "%userprofile%\\documents\\ConcurSolutionz\\Settings";
         private static readonly string MacSettingsPath = "$HOME\\Library\\ConcurSolutionz\\Settings";
-        private string settingsPath;
+        public string settingsPath { get; private set; }
 
         public Settings(){
             SetSettingsPath();
+
+            // Create Settings folder of Concur based on Settings Path
+            Directory.CreateDirectory(settingsPath);
         }
 
         /// <summary>Fetches the JSON file from settings path containing the root directory
@@ -19,7 +22,8 @@ namespace ConcurSolutionz.Database
         /// <returns>The root directory of the application.</returns>
         public string GetRootDirectory(){
             // Get all text from Path
-            if (File.Exists(settingsPath))
+            // Check if Settings Directory exists
+            if (Directory.Exists(settingsPath))
             {
                 try{
                     string json = File.ReadAllText(settingsPath); 
