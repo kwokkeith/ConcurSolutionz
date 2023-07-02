@@ -53,8 +53,18 @@ namespace ConcurSolutionz.Database
         public bool IsPersonalExpense { get; set; }
         public string Comment { get; set; }
         public string ImgPath { get; set; }
-    
-        private Receipt(ReceiptBuilder builder)
+
+        //Concur Identifiers
+        //Id of the expense reflected on Concur (ExpenseId)
+        private string Id;
+        //ReportId of the claim that this expense(parent) is under
+        private string ReportId;
+        //Key assigned to expense upon creation used to identify the expense
+        private string RPEKey;
+        //Id of the image that should be attached to the expense
+        private string ImgId;
+
+        public Receipt(ReceiptBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(builder.PaymentType);
@@ -90,6 +100,10 @@ namespace ConcurSolutionz.Database
             IsPersonalExpense = builder.IsPersonalExpense;
             Comment = builder.Comment;
             ImgPath = builder.ImgPath;
+            Id = builder.Id;
+            ReportId = builder.ReportId;
+            RPEKey = builder.RPEKey;
+            ImgId = builder.ImgId;
             Currency = builder.Currency;
             AddSubClassRecord();
         }
@@ -144,6 +158,15 @@ namespace ConcurSolutionz.Database
             public bool IsPersonalExpense { get; private set; }
             public string Comment { get; private set; }
             public string ImgPath { get; private set; }
+
+            //Id of the image that should be attached to the expense
+            public string ImgId { get; set; }
+            //Id of the claim as reflected on Concur(rptId)
+            public string Id { get; set; }
+            //ReportId of the claim that this expense(parent) is under
+            public string ReportId { get; set; }
+            //Key of the claim as reflected on Concur(rptKey)
+            public string RPEKey { get; set; }
             public string Currency { get; private set; }
 
             public const string SINGAPORE_CURRENCY = "Singapore, Dollar";
@@ -262,6 +285,29 @@ namespace ConcurSolutionz.Database
             public ReceiptBuilder SetImgPath(string ImgPath)
             {
                 this.ImgPath = ImgPath;
+                return this;
+            }
+            public ReceiptBuilder SetImgId(string imgId)
+            {
+                ImgId = imgId;
+                return this;
+            }
+
+            public ReceiptBuilder SetId(string id)
+            {
+                Id = id;
+                return this;
+            }
+
+            public ReceiptBuilder SetReportId(string id)
+            {
+                ReportId = id;
+                return this;
+            }
+
+            public ReceiptBuilder SetRPEKey(string rpeKey)
+            {
+                RPEKey = rpeKey;
                 return this;
             }
 
