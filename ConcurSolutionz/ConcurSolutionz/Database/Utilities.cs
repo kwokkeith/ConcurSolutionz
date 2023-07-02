@@ -74,12 +74,12 @@ namespace ConcurSolutionz.Database
 
         public static string ConstReceiptsFdrPath(string entryPath){
             CheckIfEmptyString (entryPath);
-            return entryPath + "\\Receipts";
+            return entryPath + "\\Receipts.fdr";
         }
 
         public static string ConstReceiptMetaDataPath(string entryPath){
             CheckIfEmptyString(entryPath);
-            return entryPath + "\\Receipts\\ReceiptJSON";
+            return entryPath + "\\Receipts.fdr\\ReceiptJSON.fdr";
         }
 
 
