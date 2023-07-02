@@ -24,7 +24,7 @@ namespace ESC_HTTP_Call
         /// <summary>
         /// Method <c>Initialize</c> retrieves the UserID and EMPKey to run the rest of the API calls
         /// </summary>
-        public string Initialize()
+        public async Task<string> Initialize()
         {
             /* Code "0": Success
              * Error code "1": Failed to create request | Likely due to expired cookie
@@ -32,9 +32,7 @@ namespace ESC_HTTP_Call
              * Error code "3": Failed to extract userID or EMPkey, delete request */
 
             //First query to create a dummy request to retrieve user ID
-            Task<string> CreateReqTask = CreateRequest();
-            CreateReqTask.Wait();
-            string FirstQuery = CreateReqTask.Result;
+            string FirstQuery = await CreateRequest();
 
             //Retrieves requestId from response, if requestId not in response then failed to create request: error code 1
             if (FirstQuery.Contains("id") == false) return "1";
@@ -54,9 +52,7 @@ namespace ESC_HTTP_Call
             if (string.IsNullOrEmpty(RequestID)) return "2";
 
             //Retrieve userId and empKey
-            Task<string> UserIDTask = GetUserID(RequestID);
-            UserIDTask.Wait();
-            string SecondQuery = UserIDTask.Result;
+            string SecondQuery = await GetUserID(RequestID);
             if (SecondQuery.Contains("id") == false)
             {
 
@@ -70,8 +66,7 @@ namespace ESC_HTTP_Call
             }
 
             //Delete dummy request
-            Task<string> DelReqTask = DeleteRequest(RequestID);
-            CreateReqTask.Wait();
+            await DeleteRequest(RequestID);
 
             //If UserId or EMPKey is empty, error code 3
             if (string.IsNullOrEmpty(UserID) || string.IsNullOrEmpty(EMPKey)) { return "3"; }
@@ -385,8 +380,6 @@ namespace ESC_HTTP_Call
             if (!jsonString.Contains("SUCCESS")) throw new Exception("Fail to upload image");
             string imageId = jsonString.Split(',')[1].Split('\'')[1];
             return imageId;
-            //JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
-            //return jsonObject!["imageId"]!.ToString();
         }
         /// <summary>
         /// Method <c>GetAllExpenses</c> Gets all the expenses under a claim, also used to retrieve the expense IDs for the expense

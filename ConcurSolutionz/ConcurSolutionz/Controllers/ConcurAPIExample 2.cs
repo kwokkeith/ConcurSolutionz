@@ -9,7 +9,7 @@ namespace ESC_HTTP_Call
         {
             //Initialize API caller
             ConcurAPI concur = new ConcurAPI(cookie);
-            string init = concur.Initialize(); // Returns 0 is successful, 1-3 are errors
+            string init = await concur.Initialize(); // Returns 0 is successful, 1-3 are errors
 
             //Create new claim
             Claim claim = new Claim();
