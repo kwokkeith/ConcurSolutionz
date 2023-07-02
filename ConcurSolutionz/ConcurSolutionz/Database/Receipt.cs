@@ -105,26 +105,26 @@ namespace ConcurSolutionz.Database
         /// If the file is successfully deleted, a success message is printed to the console.
         /// If the file cannot be deleted, an error message is printed to the console along with the exception message.
         /// </remarks>
-        public override void DelRecord()
-        {
-            string fileName = "receipt " + RecordID + ".jpg";
-            try
-            {
-                File.Delete(fileName);
-                if (!File.Exists(fileName))
-                {
-                Console.WriteLine($"File {fileName} successfully deleted");
-                }
-            }
+        //public override void DelRecord()
+        //{
+        //    string fileName = "receipt " + RecordID + ".jpg";
+        //    try
+        //    {
+        //        File.Delete(fileName);
+        //        if (!File.Exists(fileName))
+        //        {
+        //        Console.WriteLine($"File {fileName} successfully deleted");
+        //        }
+        //    }
 
             
 
-            catch (IOException e)
-            {
-                Console.WriteLine($"File {fileName} could not be deleted");
-                Console.WriteLine(e.Message);
-            }
-        }
+        //    catch (IOException e)
+        //    {
+        //        Console.WriteLine($"File {fileName} could not be deleted");
+        //        Console.WriteLine(e.Message);
+        //    }
+        //}
 
         // Builder for the Receipt class
         public class ReceiptBuilder  

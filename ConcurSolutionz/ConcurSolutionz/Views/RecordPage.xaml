@@ -30,8 +30,8 @@
                        FontSize="Large"
                        HorizontalOptions="CenterAndExpand"
                        Margin="0,30,0,0"/>
-                <Grid RowDefinitions="100,100,100,100,100,200"
-                      ColumnDefinitions="*,*"
+                <Grid RowDefinitions="100,100,100,100,100"
+                      ColumnDefinitions=".3*,.7*"
                       ColumnSpacing="10"
                       Margin="0,50,0,0">
                     <Label Text="Type"
@@ -83,16 +83,21 @@
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
-                    <Button Text="Edit incorrect scans"
-                            Grid.Column="0"
-                            Grid.Row="5"
-                            HeightRequest="50"/>
-                    <Button Text="Save details"
-                            Grid.Column="1"
-                            Grid.Row="5"
-                            HeightRequest="50"/>
+                    
 
                 </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button Text="Edit incorrect scans"
+                            Grid.Column="0"
+                            HeightRequest="50"/>
+                        <Button Text="Save details"
+                            Grid.Column="1"
+                            HeightRequest="50"/>
+
+                    </Grid>
+
+                    
             </VerticalStackLayout>
 
             </Border>
