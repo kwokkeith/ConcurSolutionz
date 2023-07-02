@@ -62,8 +62,18 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\ketty.jpeg" />
+	  <None Remove="Resources\Images\photo_2023-06-26 20.53.07.jpeg" />
+	  <None Remove="Resources\Images\receipt.jpeg" />
+	  <None Remove="Resources\Images\edit_modify_icon-icons.com_72390.png" />
+	  <None Remove="Resources\Images\edit_modify_icon-icons.com_72390.svg" />
+	  <None Remove="Resources\Images\icons8-edit-32.png" />
+	  <None Remove="Resources\Images\icons8-edit-64.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\ketty.jpeg" />
+	  <BundleResource Include="Resources\Images\receipt.jpeg" />
+	  <BundleResource Include="Resources\Images\receipt.jpeg" />
+	  <BundleResource Include="Resources\Images\edit_32.png" />
+	  <BundleResource Include="Resources\Images\edit_64.png" />
 	</ItemGroup>
 </Project>
