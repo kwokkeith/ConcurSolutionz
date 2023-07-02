@@ -1,9 +1,11 @@
-﻿namespace ConcurSolutionz.Models;
-
-internal class Record
+﻿using System;
+namespace ConcurSolutionz
 {
-    public string RecordName { get; set; }
-    public string CreationDate { get; set; }
-    public double Amount { get; set; }
+    public interface Record
+    {
+        int RecordId { get; }
+        void AssignRecordId();
+        int GetRecordId();
+        void DelRecord();
+    }
 }
-

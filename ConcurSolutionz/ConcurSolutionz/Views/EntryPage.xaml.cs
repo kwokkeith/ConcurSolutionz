@@ -6,7 +6,7 @@ public partial class EntryPage : ContentPage
 	{
 		InitializeComponent();
 
-		recordCollection.ItemsSource = GetRecords();
+		//recordCollection.ItemsSource = GetRecords();
 	}
 
 	private async void EditRecord_Clicked(object sender, EventArgs e)
@@ -14,14 +14,18 @@ public partial class EntryPage : ContentPage
 		await Shell.Current.GoToAsync(nameof(RecordPage));
 	}
 
-	private List<Models.Record> GetRecords()
-	{
-		return new List<Models.Record>
-		{
-			new Models.Record {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
-			new Models.Record {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
-		};
-	}
+	//private List<Models.Receipt> GetRecords()
+	//{
+ //       //return new List<Models.Receipt>
+ //       //{
+ //       //	new Models.Receipt {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
+ //       //	new Models.Receipt {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
+ //       //};
+        
+	//}
+
+    private void GetRecords() { }
+
 
 
 	private async void AddRecord_Clicked(object sender, EventArgs e)
