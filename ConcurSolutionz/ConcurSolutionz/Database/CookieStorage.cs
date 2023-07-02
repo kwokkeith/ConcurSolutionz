@@ -13,7 +13,14 @@ namespace ConcurSolutionz.Database
         /// <exception cref="Exception">Thrown when an error occurs during the serialization process.</exception>
         public void StoreCookie(Cookie cookie){
             try{
-                string CookiePath = GetCookiePath();
+                // Check if CookieStorage folder exist, if not the create
+                if (!File.Exists(CookieStoragePath))
+                {
+                    // Create CookieStorage directory if it does not exist.
+                    Directory.CreateDirectory(CookieStoragePath);
+                }
+
+                string CookiePath = GetCookiePath(); // <CookieStoragePath> + "\\cookie.json" 
                 string json = JsonSerializer.Serialize(cookie);
                 File.WriteAllText(CookiePath, json);
             }
@@ -26,11 +33,19 @@ namespace ConcurSolutionz.Database
         /// <returns>The retrieved cookie, or null if the cookie doesn't exist or has expired.</returns>
         /// <exception cref="Exception">Thrown when an error occurs during the retrieval process.</exception>
         public Cookie RetrieveCookie(){
-            if (File.Exists(CookieStoragePath))
+            if (Directory.Exists(CookieStoragePath))
             {
                 try
                 {
                     string CookiePath = GetCookiePath();
+
+                    // Check if Cookie Exist
+                    if (!File.Exists(CookiePath))
+                    {
+                        Console.WriteLine("No cookie found in CookieStorage of " + CookiePath);
+                        return null;
+                    }
+
                     string json = File.ReadAllText(CookiePath);
                     Cookie cookie = JsonSerializer.Deserialize<Cookie>(json);
                     if (cookie.ExpiryDate < DateTime.Now)
@@ -51,7 +66,7 @@ namespace ConcurSolutionz.Database
             }
             else
             {
-                Console.WriteLine("Cookie file does not exist.");
+                Console.WriteLine("CookieStorage Folder does not exist.");
                 return null;
             }
         }
@@ -61,7 +76,7 @@ namespace ConcurSolutionz.Database
                 return CookieStoragePath + "\\cookie.json";
             }
             catch{
-                Console.WriteLine("Failed to write to " + CookieStoragePath + "\\cookie.json");
+                Console.WriteLine("Failed to retrieve " + CookieStoragePath + "\\cookie.json");
                 return null;
             }
         }

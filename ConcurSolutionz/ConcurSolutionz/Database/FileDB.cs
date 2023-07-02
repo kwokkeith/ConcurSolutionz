@@ -4,8 +4,26 @@ namespace ConcurSolutionz.Database
     public abstract class FileDB
     {
         public string FileName { get; set; }
-        public DateTime CreationDate { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        private DateTime creationDate;
+        public DateTime CreationDate
+        {
+            get { return creationDate; }
+            set
+            {
+                Utilities.CheckDateTimeAheadOfNow(value);
+                creationDate = value;
+            }
+        }
+        private DateTime lastModifiedDate;
+        public DateTime LastModifiedDate
+        {
+            get { return lastModifiedDate; }
+            set
+            {
+                Utilities.CheckDateTimeAheadOfNow(value);
+                lastModifiedDate = value;
+            }
+        }
         public string FilePath { get; set; }
         public bool Folder;
 
