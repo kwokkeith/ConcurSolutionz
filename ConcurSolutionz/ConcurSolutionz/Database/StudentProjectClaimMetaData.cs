@@ -5,7 +5,14 @@ namespace ConcurSolutionz.Database
     {
         public string Policy { get; set; } 
         public string ClaimName { get; set; }
-        public DateTime ClaimDate { get; set; }
+        private DateTime claimDate;
+        public DateTime ClaimDate {
+            get{ return claimDate; }
+            set {
+                Utilities.CheckDateTimeAheadOfNow(value);
+                claimDate = value;
+            }
+        }
         public string Purpose { get; set; }
         public string TeamName { get; set; }
         public string ProjectClub { get; set; }

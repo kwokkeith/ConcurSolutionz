@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public abstract class OCR
+    public class OCR
     {
-        public int RecordID { get; set; }
+        public int? RecordID { get; set; }
     }
 }

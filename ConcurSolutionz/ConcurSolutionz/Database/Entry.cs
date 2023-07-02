@@ -54,6 +54,7 @@ namespace ConcurSolutionz.Database
             UpdateModifiedDate();
         }
 
+
         /// <summary>Deletes a record from the database.</summary>
         /// <param name="record">The record to be deleted.</param>
         /// <remarks>
@@ -61,7 +62,13 @@ namespace ConcurSolutionz.Database
         /// containing the record's metadata and the folder containing the record's receipt.
         /// </remarks>
         public void DelRecord(Record record){
-            
+            // Check if record exist in Records List of Entry
+            if (!Records.Contains(record))
+            {
+                throw new ArgumentException("While attempting to delete record from Entry," +
+                    "the record argument does not exist in the Records List!");
+            }
+
             // Remove record object from list of records for Entry
             Records.Remove(record);
 
@@ -80,8 +87,7 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Deletes a record from the list of Records by its ID.</summary>
         /// <param name="ID">The ID of the record to be deleted.</param>
-        public void DelRecordByID(int ID){  
-            
+        public void DelRecordByID(int ID){
             // Remove paths associated to this record
             // Paths required as arguments to populate receipt folder (Update it with new receipt)
             string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
@@ -91,13 +97,17 @@ namespace ConcurSolutionz.Database
                 if (record.RecordID == ID){
                     Records.Remove(record);
                     Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
-                    Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID);         // Del Receipt Image
+                    Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+
+                    // Update last modified date of Entry
+                    UpdateModifiedDate();
+                    
+                    return; // Assume there is only one instance UNIQUE RecordID 
                 }
             }
-            
-            // Update last modified date of Entry
-            UpdateModifiedDate();
-            
+            // If method reaches here, means we have not found any record of ID passed
+            throw new ArgumentException("While attempting to delete record from Entry using an ID," +
+                   "the record (Based on RecordID) does not exist in the Records List!");
         }
 
         /// <summary>Returns a list of Records.</summary>
@@ -109,8 +119,7 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Retrieves a record with the specified ID.</summary>
         /// <param name="ID">The ID of the record to retrieve.</param>
-        /// <returns>The record with the specified ID.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when no record with the specified ID is found.</exception>
+        /// <returns>The record with the specified ID. (Null if no record found in Entry Instance)</returns>
         public Record GetRecord(int ID){
             foreach (Record record in Records){
                 if (record.RecordID == ID){
@@ -123,7 +132,9 @@ namespace ConcurSolutionz.Database
 
         // Calls EntrySubsystem
         public override void SelectedAction(){
-            // TODO: Call EntrySubSystem to add entry
+            // TODO: Call EntrySubSystem to add records (FOR EXISTING ENTRY)
+            // I.e. when Entry exist in File Management already... Then we want to
+            // edit or modify it.
             return;
         }
 
@@ -132,8 +143,13 @@ namespace ConcurSolutionz.Database
         /// <returns>The assigned record ID.</returns>
         private int AssignRecordID(){
             string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+
+            // Get all files with .json file extension in the ReceiptMetaData Folder.
             string[] ReceiptMetaDatas = Directory.GetFiles(ReceiptMetaDataPath + "\\", "*.json");
             int assignedIndex = 0;
+
+            // Increment assignedIndex and check for each iteration if number has been used
+            // If "<assignedIndex>.json" exist in the list of receipt metadata files.
             while (ReceiptMetaDatas.Contains(Convert.ToString(assignedIndex) + ".json")){
                 assignedIndex++;
             }

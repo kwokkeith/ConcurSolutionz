@@ -7,7 +7,6 @@ namespace ConcurSolutionz.Database
 
         public string RecordSubclass {get; set;}
 
-        abstract public void DelRecord();   
         abstract protected void AddSubClassRecord();
     }
 }

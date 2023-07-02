@@ -1,23 +1,16 @@
 
 namespace ConcurSolutionz.Database
 {
-    public class MDBuilder
+    public abstract class MDBuilder
     {
-        public string EntryName {get; private set;}
-        public decimal EntryBudget {get; private set;}
+        public string EntryName {get; protected set;}
+        public decimal EntryBudget {get; protected set;}
 
 
         public MDBuilder(){}
 
 
-        public MDBuilder SetEntryName(string entryName){
-            this.EntryName = entryName;
-            return this;
-        }
-
-        public MDBuilder SetEntryBudget(decimal entryBudget){
-            this.EntryBudget = entryBudget;
-            return this;
-        }
+        public abstract MDBuilder SetEntryName(string entryName);
+        public abstract MDBuilder SetEntryBudget(decimal entryBudget);
     }
 }

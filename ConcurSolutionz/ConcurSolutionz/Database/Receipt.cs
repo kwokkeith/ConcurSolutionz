@@ -15,6 +15,7 @@ namespace ConcurSolutionz.Database
             get { return reqAmount; }
             set
             {
+                Utilities.CheckNull(value);
                 Utilities.CheckIfNegative(value);
                 reqAmount = value;
             }
@@ -27,6 +28,7 @@ namespace ConcurSolutionz.Database
             }
             set
             {
+                Utilities.CheckNull(value);
                 Utilities.CheckIfNegative(value);
                 conversionRate = value;
             } }
@@ -39,6 +41,7 @@ namespace ConcurSolutionz.Database
             }
             set
             {
+                Utilities.CheckNull(value);
                 Utilities.CheckIfNegative(value);
                 currencyAmountSGD = value;
             }
