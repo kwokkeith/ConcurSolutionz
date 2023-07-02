@@ -73,10 +73,10 @@ namespace ConcurSolutionz.Database
 
         private string GetCookiePath(){
             try{
-                return CookieStoragePath + "\\cookie.json";
+                return Path.Combine(CookieStoragePath + @"\cookie.json");
             }
             catch{
-                Console.WriteLine("Failed to retrieve " + CookieStoragePath + "\\cookie.json");
+                Console.WriteLine("Failed to write to " + CookieStoragePath + @"\cookie.json");
                 return null;
             }
         }

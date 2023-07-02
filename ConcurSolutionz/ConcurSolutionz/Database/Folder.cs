@@ -76,7 +76,7 @@ namespace ConcurSolutionz.Database
             /// <exception cref="ArgumentNullException">Thrown when the FileName is null.</exception>
             public FolderBuilder SetFilePath(string FilePath){
                 Utilities.CheckNull(FileName);
-                this.FilePath = FilePath + "\\" + FileName;
+                this.FilePath = Path.Combine(FilePath, FileName);
                 return this;
             }
 

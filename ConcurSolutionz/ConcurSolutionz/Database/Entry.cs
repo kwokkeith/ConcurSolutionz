@@ -77,8 +77,8 @@ namespace ConcurSolutionz.Database
             string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
-            Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
-            Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+            Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
 
             // Update last modified date of Entry
             UpdateModifiedDate();
@@ -96,8 +96,8 @@ namespace ConcurSolutionz.Database
             foreach (Record record in Records){
                 if (record.RecordID == ID){
                     Records.Remove(record);
-                    Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
-                    Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
@@ -194,7 +194,7 @@ namespace ConcurSolutionz.Database
             public EntryBuilder SetFilePath(string FilePath){
                 // Makes use of working directory of database to create a file
                 Utilities.CheckNull(FileName);
-                this.FilePath = FilePath + "\\" + FileName;
+                this.FilePath = Path.Combine(FilePath, FileName);
                 return this;
             }
 

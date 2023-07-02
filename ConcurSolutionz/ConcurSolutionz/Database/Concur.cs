@@ -9,7 +9,7 @@ namespace ConcurSolutionz.Database
             get { return cookieStorage; } 
             set{
                 cookieStorage = value;
-                cookieStorage.CookieStoragePath = GetRootDirectory() + "\\CookieStorage";
+                cookieStorage.CookieStoragePath = Path.Combine(GetRootDirectory(), "CookieStorage");
             } }
     }
 

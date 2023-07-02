@@ -68,18 +68,16 @@ namespace ConcurSolutionz.Database
         }
 
         public static string ConstEntryMetaDataPath(string entryPath){
-            CheckIfEmptyString(entryPath);
-            return entryPath + "\\" + "EntryMetaData.json";
+            return Path.Combine(entryPath, "EntryMetaData.json");
         }
 
+        // Creating Receipt MetaData path creates Receipts folder as well
         public static string ConstReceiptsFdrPath(string entryPath){
-            CheckIfEmptyString (entryPath);
-            return entryPath + "\\Receipts.fdr";
+            return Path.Combine(entryPath, "Receipts");
         }
 
         public static string ConstReceiptMetaDataPath(string entryPath){
-            CheckIfEmptyString(entryPath);
-            return entryPath + "\\Receipts.fdr\\ReceiptJSON.fdr";
+            return Path.Combine(entryPath, "Receipts", "ReceiptJSON");
         }
 
 

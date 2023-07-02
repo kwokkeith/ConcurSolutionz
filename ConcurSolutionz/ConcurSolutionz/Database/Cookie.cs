@@ -43,7 +43,7 @@ namespace ConcurSolutionz.Database
             public string JWT {get; private set;}
             public string bm_sv {get; private set;}
 
-            CookieBuilder(){
+            public CookieBuilder(){
                 // default values
             }
             
