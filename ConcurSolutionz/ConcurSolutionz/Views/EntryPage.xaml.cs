@@ -23,6 +23,7 @@ public partial class EntryPage : ContentPage
 		};
 	}
 
+
 	private async void AddRecord_Clicked(object sender, EventArgs e)
 	{
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
