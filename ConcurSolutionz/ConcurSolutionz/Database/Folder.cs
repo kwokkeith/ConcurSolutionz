@@ -59,11 +59,13 @@ namespace ConcurSolutionz.Database
             }
 
             public FolderBuilder SetCreationDate(DateTime CreationDate){
+                Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.CreationDate = CreationDate;
                 return this;
             }
 
             public FolderBuilder SetLastModifiedDate(DateTime LastModifiedDate){
+                Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }

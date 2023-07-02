@@ -2,11 +2,260 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.EntryPage"
-             Title="EntryPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="Entry">
+    <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
+        <HorizontalStackLayout>
+            <Label
+                FontSize="Title"
+                FontAttributes="Bold"
+                Text="Elements of Software Construction"
+                VerticalOptions="Center"/>
+            <ImageButton Source="edit_32.png"/>
+        </HorizontalStackLayout>
+
+        <Grid ColumnDefinitions="*, *"
+              ColumnSpacing="20">
+
+            <Button Text="Transfer to concur"
+                    Grid.Column="0"
+                    Margin="10"/>
+
+            <Button Text="Delete Entry"
+                    Grid.Column="1"
+                    Margin="10"
+                    BackgroundColor="IndianRed"/>
+
+        </Grid>
+
+        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                Stroke="#D3D3D3"
+                BackgroundColor="AliceBlue"
+                Padding="20,10"
+                StrokeThickness="2"
+                HeightRequest="400">
+
+            <Grid ColumnDefinitions="*,*">
+                <Grid RowDefinitions="*,*,*,*,*"
+                      ColumnDefinitions="*,2*"
+                      ColumnSpacing="20">
+
+                    <Label Text="Policy:"
+                           VerticalOptions="Center"
+                           FontSize="Body"
+                           Margin="40,0,0,0"/>
+
+                    <Picker Title="Choose policy"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="Body"
+                            HeightRequest="50">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Student Project Claim</x:String>
+                                <x:String>Other Student Claim</x:String>
+                                <x:String>Student Part-time Work Claim</x:String>
+                                <x:String>Student Organisation Claim</x:String>
+                                <x:String>Student Research Project Claim</x:String>
+                            </x:Array>
+
+                        </Picker.ItemsSource>
+
+                    </Picker>
+
+
+                    <Label Text="Claim Name:"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="40,0,0,0"/>
+                    <Entry Placeholder="Claim Name"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                           FontSize="Body"
+                           HeightRequest="50"/>
+
+                    <Label Text="Claim Date:"
+                           Grid.Column="0"
+                           Grid.Row="2"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="40,0,0,0"/>
+                    <Border VerticalOptions="Center"
+                            Padding="10,20,0,0"
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            HeightRequest="50"
+                            StrokeShape="RoundRectangle 5,5,5,5">
+
+                        <DatePicker Grid.Column="1"
+                                Grid.Row="2"
+                                VerticalOptions="Center"/>
+                    </Border>
+                    
+                    <Label Text="Project/Club:"
+                           Grid.Column="0"
+                           Grid.Row="3"
+                           FontSize="Body"
+                           VerticalOptions="Center"
+                           Margin="40,0,0,0"/>
+                    <Entry Placeholder="Project/Club"
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                           FontSize="Body"
+                           HeightRequest="50"/>
+
+                    <Label Text="Team Name:"
+                           Grid.Column="0"
+                           Grid.Row="4"
+                           VerticalOptions="Center"
+                           FontSize="Body"
+                           Margin="40,0,0,0"/>
+                    <Entry Placeholder="Team Name"
+                            Grid.Column="1"
+                            Grid.Row="4"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                           FontSize="Body"
+                           HeightRequest="50"/>
+                   
+                </Grid>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Margin="20,0,0,0">
+                    <Label Text="Purpose:"
+                           FontSize="Body"
+                           Margin="0,20,0,10"/>
+                    <Border StrokeShape="RoundRectangle 5,5,5,5"
+                            HeightRequest="300"
+                            StrokeThickness="2">
+                        <Editor Placeholder="Enter purpose"
+                                FontSize="Body"/>
+
+                    </Border>
+
+
+
+                </VerticalStackLayout>
+
+            </Grid>
+           
+
+        </Border>
+            
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Entry Budget:"
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <HorizontalStackLayout Grid.Column="1">
+                <Label Text="$"
+                       VerticalOptions="Center"
+                       FontSize="Body"/>
+                
+                <Entry
+                    x:Name="BudgetEditor"
+                    Placeholder="Enter your budget"
+                    HorizontalTextAlignment="Start"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"
+                    FontSize="Body"/>
+
+
+            </HorizontalStackLayout>
+           
+            
+            <Label Grid.Row="1"
+                   Text="Current Expenditure: "
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <Label Grid.Row="1"
+                   Grid.Column="1"
+                   Text="$10"
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+
+            <Label Grid.Row="2"
+                   Text="Remaining Budget: "
+                   FontSize="Body"
+                   VerticalOptions="Center"/>
+            <Label Grid.Row="2"
+                   Grid.Column="1"
+                   Text="$100"
+                   FontSize="Body"
+                   VerticalOptions="Center"
+                   x:Name="Remaining"/>
+
+        </Grid>
+
+        <Grid ColumnDefinitions="*,*,*">
+            <Button Text="New Record"
+                    Margin="10"
+                    Clicked="AddRecord_Clicked"/>
+            <Button Grid.Column="1"
+                    Text="Edit Record"
+                    Margin="10"
+                    Clicked="EditRecord_Clicked"/>
+            <Button Text="Delete Record"
+                    Grid.Column="2"
+                    Margin="10"/>
+        </Grid>
+
+
+        <CollectionView SelectionMode="Single" x:Name="recordCollection" EmptyView="No data available" Margin="20,0,20,0">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="4"
+                                 HorizontalItemSpacing="40"
+                                 VerticalItemSpacing="20"/>
+
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" BorderColor="Grey" CornerRadius="5" Padding="8" VerticalOptions="Center" HorizontalOptions="Center">
+                        <StackLayout>
+                            <Label Text="{Binding RecordName}"
+                                   FontSize="Large"
+                                   FontAttributes="Bold"/>
+                            <BoxView Color="Grey"
+                                     HeightRequest="2"
+                                     HorizontalOptions="Fill"/>
+                            <Label Text="{Binding Amount}" Grid.Column="1" FontSize="Large" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+
+                        </StackLayout>
+    
+
+                    </Frame>
+
+
+                </DataTemplate>
+
+
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+        
+        
     </VerticalStackLayout>
+
+    
+
+        
+
+    
 </ContentPage>
