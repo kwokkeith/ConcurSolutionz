@@ -38,36 +38,36 @@ namespace ConcurSolutionz.Database
             public class CookieConverter : JsonConverter<Cookie>
             {
                 public override void Write(Utf8JsonWriter writer, Cookie value, JsonSerializerOptions options)
-            {
+                {
                     // Write JSON
                 }
 
-            public override Cookie Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                JsonDocument doc = JsonDocument.ParseValue(ref reader); 
-                string expiryDate = doc.RootElement.GetProperty("ExpiryDate").GetString();
-                string bmSz = doc.RootElement.GetProperty("bm_sz").GetString();
-                string TAsessionID = doc.RootElement.GetProperty("TAsessionID").GetString();
-                string akBmsc = doc.RootElement.GetProperty("ak_bmsc").GetString();
-                string _abck = doc.RootElement.GetProperty("_abck").GetString();
-                string OTSESSIONAABQRD = doc.RootElement.GetProperty("OTSESSIONAABQRD").GetString();
-                string JWT = doc.RootElement.GetProperty("JWT").GetString();
-                string bmSv = doc.RootElement.GetProperty("bm_sv").GetString();
+                public override Cookie Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+                {
+                    JsonDocument doc = JsonDocument.ParseValue(ref reader); 
+                    string expiryDate = doc.RootElement.GetProperty("ExpiryDate").GetString();
+                    string bmSz = doc.RootElement.GetProperty("bm_sz").GetString();
+                    string TAsessionID = doc.RootElement.GetProperty("TAsessionID").GetString();
+                    string akBmsc = doc.RootElement.GetProperty("ak_bmsc").GetString();
+                    string _abck = doc.RootElement.GetProperty("_abck").GetString();
+                    string OTSESSIONAABQRD = doc.RootElement.GetProperty("OTSESSIONAABQRD").GetString();
+                    string JWT = doc.RootElement.GetProperty("JWT").GetString();
+                    string bmSv = doc.RootElement.GetProperty("bm_sv").GetString();
 
-                CookieBuilder builder = new CookieBuilder();
+                    CookieBuilder builder = new CookieBuilder();
 
-                builder.SetExpiryDate(DateTime.Parse(expiryDate));
-                builder.SetBm_sz(bmSz);
-                builder.SetTAsessionID(TAsessionID);
-                builder.SetAk_bmsc(akBmsc);
-                builder.Set_abck(_abck);
-                builder.SetOTSESSIONAABQRD(OTSESSIONAABQRD);
-                builder.SetJWT(JWT);
-                builder.SetBm_sv(bmSv);
+                    builder.SetExpiryDate(DateTime.Parse(expiryDate));
+                    builder.SetBm_sz(bmSz);
+                    builder.SetTAsessionID(TAsessionID);
+                    builder.SetAk_bmsc(akBmsc);
+                    builder.Set_abck(_abck);
+                    builder.SetOTSESSIONAABQRD(OTSESSIONAABQRD);
+                    builder.SetJWT(JWT);
+                    builder.SetBm_sv(bmSv);
 
-                return builder.Build();
+                    return builder.Build();
+                }
             }
-        }
 
             public class CookieBuilder
             {
