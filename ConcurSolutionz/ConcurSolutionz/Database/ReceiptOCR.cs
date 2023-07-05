@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public class ReceiptOCR : OCR
+    public class ReceiptOCR
     {
         // Possible to be empty (i.e. OCR fails to retrieve information)
 
