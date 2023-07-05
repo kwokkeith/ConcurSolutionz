@@ -1,7 +1,39 @@
-﻿namespace ConcurSolutionz.Views
+﻿using System;
+using System.IO;
+
+namespace ConcurSolutionz.Views
 {
+    [QueryProperty(nameof(ImageFile), "file")]
     public partial class RecordPage : ContentPage
     {
+        public string ImageFile
+        {
+            set
+            {
+                LoadImage(value);
+            }
+
+        }
+
+        private async void LoadImage(string filePath)
+        {
+            try
+            {
+                //using (var stream = File.OpenWrite(filePath))
+                //{
+                //    if(stream != null)
+                //    {
+                //        ReceiptImage.Source = ImageSource.FromStream(() => stream);
+                //    }
+                //}
+                ReceiptImage.Source = ImageSource.FromFile(filePath);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "An error occurred while loading the image: " + ex.Message, "OK");
+            }
+        }
+
         // Constructor
         public RecordPage()
         {

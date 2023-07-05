@@ -46,11 +46,11 @@ public partial class EntryPage : ContentPage
             await PickAndShow(new PickOptions
             {
                 FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-                    { DevicePlatform.iOS, new[] { ".jpg", ".jpeg", ".png" } },
-                    { DevicePlatform.macOS, new[] { ".jpg", "jpeg", ".png" } },
-                    { DevicePlatform.MacCatalyst, new[] { ".jpg", "jpeg", ".png" } },
+                    { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
+                    { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
+                    { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
                     { DevicePlatform.Android, new[] { "image/*" } },
-                    { DevicePlatform.WinUI, new[] { ".jpg", "jpeg", ".png" } }
+                    { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
                 }),
                 PickerTitle = "Select an image"
             });
@@ -74,12 +74,8 @@ public partial class EntryPage : ContentPage
                     result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
                     result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Open a stream to the file
-                    var stream = await result.OpenReadAsync();
-
-                    // Set the ReceiptImage's source to the picked image
-                    //ReceiptImage.Source = ImageSource.FromStream(() => stream);
-                    await Shell.Current.GoToAsync(nameof(RecordPage));
+                    // pass the file over to the record page
+                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
                 }
                 else
                 {
@@ -105,23 +101,4 @@ public partial class EntryPage : ContentPage
             return null;
         }
     }
-
-    //// Event handler for the FilePicker button click event
-    //public async void OnFilePickerClicked(object sender, EventArgs e)
-    //{
-    //    // Call the PickAndShow method with the options for picking an image file
-    //    await PickAndShow(new PickOptions
-    //    {
-    //        FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-    //                { DevicePlatform.iOS, new[] { ".jpg", ".jpeg", ".png" } },
-    //                { DevicePlatform.macOS, new[] { ".jpg", "jpeg", ".png" } },
-    //                { DevicePlatform.MacCatalyst, new[] { ".jpg", "jpeg", ".png" } },
-    //                { DevicePlatform.Android, new[] { "image/*" } },
-    //                { DevicePlatform.WinUI, new[] { ".jpg", "jpeg", ".png" } }
-    //            }),
-    //        PickerTitle = "Select an image"
-    //    });
-    //}
-
-
 }
