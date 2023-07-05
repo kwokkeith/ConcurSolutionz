@@ -31,6 +31,9 @@ namespace ConcurSolutionz.Database
                 Utilities.CheckNull(value);
                 Utilities.CheckIfNegative(value);
                 conversionRate = value;
+
+                // Calculate new Currency Amount
+                CurrencyAmountSGD = ReqAmount * ConversionRate;
             } }
         private decimal currencyAmountSGD;
         public decimal CurrencyAmountSGD
