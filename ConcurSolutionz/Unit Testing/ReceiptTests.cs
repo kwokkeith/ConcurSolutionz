@@ -218,7 +218,7 @@ namespace Unit_Testing
             receipt.ReqAmount = reqAmount;
 
             // Assert
-            Assert.Equal(receipt.ReqAmount, reqAmount);
+            Assert.Equal(reqAmount, receipt.ReqAmount);
         }
 
         [Fact]
@@ -276,7 +276,7 @@ namespace Unit_Testing
             receipt.ConversionRate = conversionRate;
 
             // Assert
-            Assert.Equal(receipt.ConversionRate, conversionRate);
+            Assert.Equal(conversionRate, receipt.ConversionRate);
         }
 
         [Fact]
@@ -368,7 +368,7 @@ namespace Unit_Testing
             receipt.CurrencyAmountSGD = currencyAmount;
 
             // Assert
-            Assert.Equal(receipt.CurrencyAmountSGD, currencyAmount);
+            Assert.Equal(currencyAmount, receipt.CurrencyAmountSGD);
         }
 
         [Fact]
