@@ -33,6 +33,11 @@ namespace ConcurSolutionz.Database
 
         public static bool IsNumericType(this object o)
         {
+            if (o == null)
+            {
+                return false;
+            }
+
             switch (Type.GetTypeCode(o.GetType()))
             {
                 case TypeCode.Byte:
@@ -73,11 +78,11 @@ namespace ConcurSolutionz.Database
 
         // Creating Receipt MetaData path creates Receipts folder as well
         public static string ConstReceiptsFdrPath(string entryPath){
-            return Path.Combine(entryPath, "Receipts");
+            return Path.Combine(entryPath, "Receipts.fdr");
         }
 
         public static string ConstReceiptMetaDataPath(string entryPath){
-            return Path.Combine(entryPath, "Receipts", "ReceiptJSON");
+            return Path.Combine(entryPath, "Receipts.fdr", "ReceiptJSON.fdr");
         }
 
 
