@@ -6,6 +6,8 @@ namespace Unit_Testing
 	{
 		[Theory]
 		[InlineData("QWERTY123", "2343.23")]
+		[InlineData(null, "233.42")]
+		[InlineData("Qresd231", null)]
 		public void ReceiptOCRTest_ShouldReturnValidReceiptOCR(
 			string? ReceiptNumber, string? ReqAmount)
 		{
