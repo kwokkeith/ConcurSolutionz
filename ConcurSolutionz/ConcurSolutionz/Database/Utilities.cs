@@ -72,6 +72,17 @@ namespace ConcurSolutionz.Database
             }
         }
 
+        public static void CheckLastModifiedAheadOfCreation(DateTime lastModified, DateTime creation)
+        {
+            CheckNull(lastModified);
+            CheckNull(creation);
+            int res = DateTime.Compare(creation, lastModified);
+            if (res > 0) // Creation date is more than last modified date
+            {
+                throw new ArgumentException("Creation date is more than last modified date!");
+            }
+        }
+
         public static string ConstEntryMetaDataPath(string entryPath){
             return Path.Combine(entryPath, "EntryMetaData.json");
         }

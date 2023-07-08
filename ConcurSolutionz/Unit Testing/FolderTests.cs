@@ -16,7 +16,7 @@ namespace Unit_Testing
             // Act
             folder = folderBuilder.SetFileName("Folder 1")
                 .SetCreationDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetLastModifiedDate(DateTime.ParseExact("14/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetLastModifiedDate(DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetFilePath("D:")
                 .Build();
 
@@ -29,7 +29,7 @@ namespace Unit_Testing
             DateTime Expected2 = DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture);
             Assert.Equal(Expected2, folder.CreationDate);
 
-            DateTime Expected3 = DateTime.ParseExact("14/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime Expected3 = DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
             Assert.Equal(Expected3, folder.LastModifiedDate);
 
             string Expected4 = @"D:\Folder 1.fdr";
@@ -46,8 +46,19 @@ namespace Unit_Testing
             // Act & Assert
             Assert.Throws<IOException>(() => folderBuilder.SetFileName("Folder 1")
                 .SetCreationDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetLastModifiedDate(DateTime.ParseExact("14/11/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetLastModifiedDate(DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetFilePath("D:"));
+        }
+
+
+        [Fact]
+        public void BuildFolder_ShouldThrowException_ForEmptyFolder()
+        {
+            // Arrange
+            Folder.FolderBuilder folderBuilder = new();
+
+            // Act & Assert
+            Assert.ThrowsAny<ArgumentException>(() => folderBuilder.SetFileName(""));
         }
 
         [Fact]
@@ -57,7 +68,30 @@ namespace Unit_Testing
             Folder.FolderBuilder folderBuilder = new();
 
             // Act & Assert
-            Assert.ThrowsAny<ArgumentException>(() => folderBuilder.SetFileName(null));
+            Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(null));
         }
+
+        [Fact]
+        public void BuildFolder_ShouldThrowException_ForDateTimeAheadOfNow()
+        {
+            // Arrange
+            Folder.FolderBuilder folderBuilder = new();
+
+            // Act & Assert
+            Assert.ThrowsAny<ArgumentException>(() => folderBuilder.SetFileName("Folder 1")
+                .SetCreationDate(DateTime.ParseExact("24/01/2099", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+        }
+
+        [Fact]
+        public void BuildFolder_ShouldThrowException_ForCreationDateAheadOfLastModifiedDate()
+            {
+                // Arrange
+                Folder.FolderBuilder folderBuilder = new();
+
+                // Act & Assert
+                Assert.ThrowsAny<ArgumentException>(() => folderBuilder.SetFileName("Folder 1")
+                               .SetCreationDate(DateTime.ParseExact("24/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                                              .SetLastModifiedDate(DateTime.ParseExact("14/11/2020", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
+            }
     }
 }

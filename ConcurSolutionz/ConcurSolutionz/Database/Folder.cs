@@ -53,7 +53,7 @@ namespace ConcurSolutionz.Database
             }
 
             public FolderBuilder SetFileName(string FileName){
-                Utilities.CheckNull(FileName);
+                Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".fdr";
                 return this;
             }
@@ -66,6 +66,7 @@ namespace ConcurSolutionz.Database
 
             public FolderBuilder SetLastModifiedDate(DateTime LastModifiedDate){
                 Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
+                Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
