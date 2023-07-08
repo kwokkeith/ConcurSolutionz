@@ -83,7 +83,6 @@ namespace ConcurSolutionz.Database
                     throw new IOException("Folder already exists");
                 }
                 else{
-                    Directory.CreateDirectory(this.FilePath);
                     return this;
                 }
             }

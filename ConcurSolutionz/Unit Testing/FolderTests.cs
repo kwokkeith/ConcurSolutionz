@@ -19,6 +19,7 @@ namespace Unit_Testing
                 .SetLastModifiedDate(DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetFilePath("D:")
                 .Build();
+            FileCreator.CreateFile(folder);
 
             // Assert
             Assert.True(Directory.Exists(Path.Combine(folder.FileName, folder.FilePath)));
