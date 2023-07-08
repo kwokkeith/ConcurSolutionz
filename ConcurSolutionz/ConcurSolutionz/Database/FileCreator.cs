@@ -52,12 +52,24 @@ namespace ConcurSolutionz.Database
                 // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
                 string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
 
+                // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
+//                Directory.CreateDirectory(receiptFolderPath);
                 Directory.CreateDirectory(receiptJSONFolder);
 
                 // Create Entry MetaData
+                string json;
                 try{
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
-                    string json = JsonSerializer.Serialize(entry.MetaData);
+                    switch (entry.MetaData.SubType){
+                        case "StudentProjectClaimMetaData":
+                            json = JsonSerializer.Serialize((StudentProjectClaimMetaData)entry.MetaData);
+                            break;
+
+                        default:
+                            json = JsonSerializer.Serialize(entry.MetaData);
+                            break;
+                    }
+                    
                     File.WriteAllText(entryMetaDataPath, json);
                 }
                 catch (Exception e){
@@ -85,8 +97,8 @@ namespace ConcurSolutionz.Database
                     // FOR RECEIPT PICTURE 
                     // Store pictures
                     string imgPath = record.ImgPath;
-                    receiptFolderPath += Convert.ToString(record.RecordID);
-                    
+                    string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + Utilities.GetFileExtension(imgPath));   
+
                     // Clear all receipt images from receipt folder directory
                     string[] filePaths = Directory.GetFiles(receiptFolderPath);
                     foreach(string filePath in filePaths){
@@ -94,7 +106,7 @@ namespace ConcurSolutionz.Database
                     }
 
                     // Add receipt images into receipt folder directory
-                    CopyFile(imgPath, receiptFolderPath);
+                    CopyFile(imgPath, receiptPath);
 
 
                     // @@@@@@@@@@@@@@@@@@@@@@
@@ -147,6 +159,10 @@ namespace ConcurSolutionz.Database
         /// <remarks>If a file with the same name already exists at the destination path, it will be overwritten.</remarks>
         private static void CopyFile(string sourcePath, string destinationPath){
             try{
+                if (!File.Exists(destinationPath))
+                {
+                    File.Create(destinationPath);
+                }
                 File.Copy(sourcePath, destinationPath, true);
             }
             catch(Exception e){
