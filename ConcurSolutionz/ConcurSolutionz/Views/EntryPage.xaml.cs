@@ -4,22 +4,25 @@ namespace ConcurSolutionz.Views;
 
 public partial class EntryPage : ContentPage
 {
-    public ObservableCollection<Record> Records { get; set; }
+    public ObservableCollection<Models.Receipt> Receipts { get; set; } // Creation of the Receipts observable collection 
 
     public EntryPage()
 	{
 		InitializeComponent();
 
+        // Instantiate the Receipts collection
+        Receipts = new ObservableCollection<Models.Receipt> 
+        {
+            // Add some test data
+            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
+            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
+        };
 
-        //// Add data to the Records collection
-        //Records = new ObservableCollection<Record>
-        //{
-        //    new Record { RecordName = "Record 1", Amount = "100" },
-        //    new Record { RecordName = "Record 2", Amount = "200" }
-        //    // add more records as needed...
-        //};
+        // Set the BindingContext of the CollectionView
+        recordCollection.BindingContext = this;
 
-
+        // Set the ItemsSource of the CollectionView
+        recordCollection.ItemsSource = Receipts;
     }
 
     private async void EditEntryName_Clicked(object sender, EventArgs e)

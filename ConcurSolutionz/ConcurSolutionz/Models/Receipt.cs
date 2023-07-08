@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace ConcurSolutionz.Models
 {
-    public class Receipt : Record
+    public class Receipt : Record, INotifyPropertyChanged
     {
         //Attributes
         private string paymentType;
@@ -21,6 +22,56 @@ namespace ConcurSolutionz.Models
         private string comment;
         private string imgPath;
         private int recordID;
+
+        // Property change event
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Implementing INotifyPropertyChanged
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public string PaymentType
+        {
+            get => paymentType;
+            set
+            {
+                if (paymentType != value)
+                {
+                    paymentType = value;
+                    OnPropertyChanged(nameof(PaymentType));
+                }
+            }
+        }
+
+        public string ExpenseType
+        {
+            get => expenseType;
+            set
+            {
+                if (expenseType != value)
+                {
+                    expenseType = value;
+                    OnPropertyChanged(nameof(ExpenseType));
+                }
+            }
+        }
+
+        public DateTime TransactionDate
+        {
+            get => transactionDate;
+            set
+            {
+                if (transactionDate != value)
+                {
+                    transactionDate = value;
+                    OnPropertyChanged(nameof(TransactionDate));
+                }
+            }
+
+            // Implement the remaining properties similarly... 
+        }
 
 
         //Id of the expense reflected on Concur (ExpenseId)
