@@ -10,6 +10,12 @@ namespace Unit_Testing
         public void BuildFolder_ShouldBuild_UsingBuilder()
         {
             // Arrange
+            if (Directory.Exists(@"D:\ConcurTests\FolderTest.fdr"))
+            {
+                Directory.Delete(@"D:\ConcurTests\FolderTest.fdr", true);
+            }
+            Directory.CreateDirectory(@"D:\ConcurTests\FolderTest.fdr");
+
             Folder.FolderBuilder folderBuilder = new();
             Folder folder;
 
@@ -17,7 +23,7 @@ namespace Unit_Testing
             folder = folderBuilder.SetFileName("Folder 1")
                 .SetCreationDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetLastModifiedDate(DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetFilePath("D:")
+                .SetFilePath(@"D:\ConcurTests\FolderTest.fdr")
                 .Build();
             FileCreator.CreateFile(folder);
 
@@ -33,7 +39,7 @@ namespace Unit_Testing
             DateTime Expected3 = DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture);
             Assert.Equal(Expected3, folder.LastModifiedDate);
 
-            string Expected4 = @"D:\Folder 1.fdr";
+            string Expected4 = @"D:\ConcurTests\FolderTest.fdr\Folder 1.fdr";
             Assert.Equal(Expected4, folder.FilePath);
 
         }
@@ -48,7 +54,7 @@ namespace Unit_Testing
             Assert.Throws<IOException>(() => folderBuilder.SetFileName("Folder 1")
                 .SetCreationDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetLastModifiedDate(DateTime.ParseExact("30/01/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetFilePath("D:"));
+                .SetFilePath(@"D:\ConcurTests\FolderTest.fdr"));
         }
 
 
