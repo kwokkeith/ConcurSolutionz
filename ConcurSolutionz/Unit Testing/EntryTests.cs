@@ -20,14 +20,14 @@ namespace Unit_Testing
         public void BuildEntry_ShouldBuild_UsingBuilder()
         {
             // Arrange
-            if (Directory.Exists(@"D:\ConcurTests\EntryTest.fdr\File 1.entry"))
+            if (Directory.Exists("D:/ConcurTests/EntryTest.fdr/File 1.entry"))
             {
-                Directory.Delete(@"D:\ConcurTests\EntryTest.fdr\File 1.entry", true);
+                Directory.Delete("D:/ConcurTests/EntryTest.fdr/File 1.entry", true);
             }
 
-            if (!Directory.Exists(@"D:\ConcurTests\EntryTest.fdr"))
+            if (!Directory.Exists("D:/ConcurTests/EntryTest.fdr"))
             {
-                Directory.CreateDirectory(@"D:\ConcurTests\EntryTest.fdr");
+                Directory.CreateDirectory("D:/ConcurTests/EntryTest.fdr");
             }
 
             Entry.EntryBuilder entryBuilder = new();
@@ -42,7 +42,7 @@ namespace Unit_Testing
                 .SetReqAmount(104.5m)
                 .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
                 .SetReceiptStatus("Tax Receipt")
-                .SetImgPath(@"D:\IMG_5669.jpg")
+                .SetImgPath("D:/IMG_5669.jpg")
                 .Build();
 
             records.Add(receipt1);
@@ -59,7 +59,7 @@ namespace Unit_Testing
 
             entry = entryBuilder.SetFileName("File 1")
                 .SetCreationDate(DateTime.Now)
-                .SetFilePath(@"D:\ConcurTests\EntryTest.fdr")
+                .SetFilePath("D:/ConcurTests/EntryTest.fdr")
                 .SetMetaData(md)
                 .SetRecords(records)
                 .Build();
@@ -91,7 +91,7 @@ namespace Unit_Testing
             // Act & Assert
             Assert.Throws<IOException>(() => entryBuilder.SetFileName("File 1")
                 .SetCreationDate(DateTime.Now)
-                .SetFilePath(@"D:\Folder 1.fdr"));
+                .SetFilePath("D:/Folder 1.fdr"));
         }
 
    
@@ -124,7 +124,7 @@ namespace Unit_Testing
 
             // Act & Assert
             Assert.Throws<IOException>(() => entryBuilder.SetFileName("File 3")
-                .SetFilePath(@"D:\abc"));
+                .SetFilePath("D:/abc"));
         }
 
     }

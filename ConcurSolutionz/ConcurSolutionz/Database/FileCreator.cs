@@ -120,8 +120,7 @@ namespace ConcurSolutionz.Database
                     // Store Receipt Metadata
                     try{
                         // Generate unique metaData filepath name
-                        string receiptMetaDataPath = receiptJSONFolder + "\\"
-                                                    + Convert.ToString(record.RecordID) + ".json"; 
+                        string receiptMetaDataPath = Path.Combine(receiptJSONFolder, record.RecordID + ".json");       
 
                         // Serialise record object and write it to the unique metadata location above
                         string json = JsonSerializer.Serialize(record);
