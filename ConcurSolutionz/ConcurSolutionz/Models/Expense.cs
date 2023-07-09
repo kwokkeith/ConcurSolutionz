@@ -1,6 +1,6 @@
-﻿namespace ESC_HTTP_Call.Models
+﻿namespace ConcurSolutionz.Models
 {
-    internal class Expense
+    public class Expense
     {
         //Id of the expense reflected on Concur (ExpenseId)
         public string Id { get; set; }

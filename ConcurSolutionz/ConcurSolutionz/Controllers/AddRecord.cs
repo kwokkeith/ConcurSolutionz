@@ -1,4 +1,4 @@
-using ConcurSolutionz.Database
+using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Controllers {
 

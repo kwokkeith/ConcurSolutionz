@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ESC_HTTP_Call.Models
+namespace ConcurSolutionz.Models
 {
-    internal class Claim
+    public class Claim
     {
         //Id of the claim as reflected on Concur(rptId)
         public string Id { get; set; }
