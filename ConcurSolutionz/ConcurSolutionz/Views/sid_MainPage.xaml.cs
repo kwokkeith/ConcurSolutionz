@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -14,14 +15,16 @@ namespace FirstApp
         public string Icon { get; set; }
         public bool IsFolder { get; set; }
         public DateTime CreationDateTime { get; set; }
+        public ObservableCollection<FileItem> Children { get; set; }
 
         public FileItem(string fileName, bool isFolder)
         {
             FileName = fileName;
             IsFolder = isFolder;
-            if (isFolder == true)
+            if (isFolder)
             {
                 Icon = "file_icon.png";
+                Children = new ObservableCollection<FileItem>();
             }
             else
             {
@@ -37,17 +40,87 @@ namespace FirstApp
         public FileItem SelectedFile { get; set; }
         public SortOption CurrentSortOption { get; set; }
 
+        private string rootDirectoryPath = "/Users/sid/My Drive/SUTD/Class/Term_5/Elements of Software Construction/1D/ConcurSolutionz/ConcurSolutionz/ConcurSolutionz";
+        private string currentDirectoryPath;
+
         public MainPage()
         {
             InitializeComponent();
-            Files = new ObservableCollection<FileItem>
-            {
-                new FileItem("Document1.txt", false), // Set icon for non-folder item
-                new FileItem("Document2.txt", false), // Set icon for non-folder item
-                new FileItem("Folder1", true) // Set icon for folder item
-            };
+            Files = new ObservableCollection<FileItem>();
             CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
             BindingContext = this;
+
+            LoadFiles(rootDirectoryPath);
+        }
+
+        private void LoadFiles(string directoryPath)
+        {
+            currentDirectoryPath = directoryPath;
+
+            if (Directory.Exists(currentDirectoryPath))
+            {
+                Files.Clear();
+
+                // Load files and folders from the current directory
+                string[] fileEntries = Directory.GetFileSystemEntries(currentDirectoryPath);
+
+                foreach (string entryPath in fileEntries)
+                {
+                    string fileName = Path.GetFileName(entryPath);
+                    bool isFolder = Directory.Exists(entryPath);
+                    Files.Add(new FileItem(fileName, isFolder));
+                }
+            }
+        }
+
+        private void OnFileTapped(object sender, EventArgs e)
+        {
+            var tappedFile = (sender as View)?.BindingContext as FileItem;
+            if (tappedFile != null)
+            {
+                if (tappedFile.IsFolder)
+                {
+                    // Open the tapped folder and display its contents
+                    string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
+                    LoadFiles(folderPath);
+                    SelectedFile = null;
+                }
+                else
+                {
+                    // Handle file selection logic
+                    // You can implement your custom logic here
+                    DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
+                }
+            }
+        }
+
+        private async void OnFileDoubleTapped(object sender, EventArgs e)
+        {
+            // Handle file/folder double tap event
+            var tappedFile = (sender as View)?.BindingContext as FileItem;
+            if (tappedFile != null && tappedFile.IsFolder)
+            {
+                // Open the tapped folder and display its contents
+                string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
+                LoadFiles(folderPath);
+                SelectedFile = null;
+
+                // Delay the selection to avoid immediate reselection due to double-tap gesture
+                await Task.Delay(200);
+            }
+        }
+
+        private void OnBackClicked(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(currentDirectoryPath))
+            {
+                string parentDirectoryPath = Directory.GetParent(currentDirectoryPath)?.FullName;
+                if (parentDirectoryPath != null)
+                {
+                    LoadFiles(parentDirectoryPath);
+                    SelectedFile = null;
+                }
+            }
         }
 
         private async void OnNewFolderClicked(object sender, EventArgs e)
@@ -57,14 +130,26 @@ namespace FirstApp
 
             if (!string.IsNullOrWhiteSpace(newName))
             {
-                // Create a new folder item with the entered name
-                FileItem newFolder = new FileItem(newName, true);
+                try
+                {
+                    // Create a new folder in the target directory
+                    string newFolderPath = Path.Combine(currentDirectoryPath, newName);
+                    Directory.CreateDirectory(newFolderPath);
 
-                // Add the new folder to the collection
-                Files.Add(newFolder);
+                    // Create a new folder item with the entered name
+                    FileItem newFolder = new FileItem(newName, true);
 
-                // Select the new folder
-                SelectedFile = newFolder;
+                    // Add the new folder to the collection
+                    Files.Add(newFolder);
+
+                    // Select the new folder
+                    SelectedFile = newFolder;
+                }
+                catch (Exception ex)
+                {
+                    // Handle any potential errors
+                    Console.WriteLine($"Failed to create folder: {ex.Message}");
+                }
             }
         }
 
@@ -75,14 +160,26 @@ namespace FirstApp
 
             if (!string.IsNullOrWhiteSpace(newName))
             {
-                // Create a new entry item with the entered name
-                FileItem newEntry = new FileItem(newName, false);
+                try
+                {
+                    // Create a new file in the target directory
+                    string newFilePath = Path.Combine(currentDirectoryPath, newName);
+                    File.Create(newFilePath).Dispose();
 
-                // Add the new entry to the collection
-                Files.Add(newEntry);
+                    // Create a new entry item with the entered name
+                    FileItem newEntry = new FileItem(newName, false);
 
-                // Select the new entry
-                SelectedFile = newEntry;
+                    // Add the new entry to the collection
+                    Files.Add(newEntry);
+
+                    // Select the new entry
+                    SelectedFile = newEntry;
+                }
+                catch (Exception ex)
+                {
+                    // Handle any potential errors
+                    Console.WriteLine($"Failed to create file: {ex.Message}");
+                }
             }
         }
 
@@ -91,7 +188,7 @@ namespace FirstApp
             // Handle Rename button click
             if (SelectedFile != null)
             {
-                // Prompt for renaming the selected file
+                // Prompt for renaming the selected file/folder
                 await RenameSelectedFile(SelectedFile.FileName, "Enter a new name");
             }
         }
@@ -103,16 +200,37 @@ namespace FirstApp
 
             if (!string.IsNullOrWhiteSpace(newName))
             {
-                // Create a new FileItem with the updated file name and other properties
-                FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
-                renamedFile.CreationDateTime = DateTime.Now;
+                try
+                {
+                    string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
+                    string newFilePath = Path.Combine(currentDirectoryPath, newName);
 
-                // Replace the selected file with the renamed file in the collection
-                int selectedIndex = Files.IndexOf(SelectedFile);
-                Files[selectedIndex] = renamedFile;
+                    // Rename the selected file/folder in the target directory
+                    if (SelectedFile.IsFolder)
+                    {
+                        Directory.Move(filePath, newFilePath);
+                    }
+                    else
+                    {
+                        File.Move(filePath, newFilePath);
+                    }
 
-                // Update the SelectedFile property with the renamed file
-                SelectedFile = renamedFile;
+                    // Create a new FileItem with the updated file name and other properties
+                    FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
+                    renamedFile.CreationDateTime = DateTime.Now;
+
+                    // Replace the selected file with the renamed file in the collection
+                    int selectedIndex = Files.IndexOf(SelectedFile);
+                    Files[selectedIndex] = renamedFile;
+
+                    // Update the SelectedFile property with the renamed file
+                    SelectedFile = renamedFile;
+                }
+                catch (Exception ex)
+                {
+                    // Handle any potential errors
+                    Console.WriteLine($"Failed to rename file/folder: {ex.Message}");
+                }
             }
         }
 
@@ -121,34 +239,51 @@ namespace FirstApp
             // Handle Delete button click
             if (SelectedFile != null)
             {
-                // Get the index of the selected file
-                int selectedIndex = Files.IndexOf(SelectedFile);
+                try
+                {
+                    string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
 
-                // Delete the selected file
-                Files.Remove(SelectedFile);
+                    // Delete the selected file/folder from the target directory
+                    if (SelectedFile.IsFolder)
+                    {
+                        Directory.Delete(filePath, true);
+                    }
+                    else
+                    {
+                        File.Delete(filePath);
+                    }
 
-                // Select the previous file if it exists
-                if (selectedIndex > 0 && selectedIndex < Files.Count)
-                {
-                    SelectedFile = Files[selectedIndex];
-                    ScrollToSelectedItem();
+                    // Get the index of the selected file
+                    int selectedIndex = Files.IndexOf(SelectedFile);
+
+                    // Remove the selected file from the collection
+                    Files.Remove(SelectedFile);
+
+                    // Select the previous file if it exists
+                    if (selectedIndex > 0 && selectedIndex < Files.Count)
+                    {
+                        SelectedFile = Files[selectedIndex];
+                        ScrollToSelectedItem();
+                    }
+                    else if (selectedIndex > 0 && selectedIndex == Files.Count)
+                    {
+                        SelectedFile = Files[selectedIndex - 1];
+                        ScrollToSelectedItem();
+                    }
+                    else if (selectedIndex == 0 && Files.Count > 0)
+                    {
+                        SelectedFile = Files[0];
+                        ScrollToSelectedItem();
+                    }
+                    else
+                    {
+                        SelectedFile = null;
+                    }
                 }
-                else if (selectedIndex > 0 && selectedIndex == Files.Count)
+                catch (Exception ex)
                 {
-                    // If the last file was deleted, select the previous file
-                    SelectedFile = Files[selectedIndex - 1];
-                    ScrollToSelectedItem();
-                }
-                else if (selectedIndex == 0 && Files.Count > 0)
-                {
-                    // If the first file was deleted, select the first file
-                    SelectedFile = Files[0];
-                    ScrollToSelectedItem();
-                }
-                else
-                {
-                    // If there are no files left, clear the selection
-                    SelectedFile = null;
+                    // Handle any potential errors
+                    Console.WriteLine($"Failed to deletefile/folder: {ex.Message}");
                 }
             }
         }
@@ -185,33 +320,20 @@ namespace FirstApp
             switch (CurrentSortOption)
             {
                 case SortOption.Alphabetical:
-                    Files = new ObservableCollection<FileItem>(Files.OrderBy(f => f.FileName));
+                    Files = new ObservableCollection<FileItem>(Files.OrderBy(file => file.FileName));
                     break;
                 case SortOption.Date:
-                    Files = new ObservableCollection<FileItem>(Files.OrderBy(f => f.CreationDateTime));
-                    break;
-                default:
+                    Files = new ObservableCollection<FileItem>(Files.OrderByDescending(file => file.CreationDateTime));
                     break;
             }
         }
 
         private void ScrollToSelectedItem()
         {
-            if (SelectedFile != null)
+            if (fileListView.SelectedItem != null)
             {
-                // Scroll the ListView to the selected item
-                fileListView.ScrollTo(SelectedFile, ScrollToPosition.MakeVisible, true);
-            }
-        }
-
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName == nameof(SelectedFile))
-            {
-                // Update the selected item visual state after selection changes
-                fileListView.SelectedItem = SelectedFile;
+                // Scroll to the selected item in the ListView
+                fileListView.ScrollTo(fileListView.SelectedItem, ScrollToPosition.MakeVisible, animated: true);
             }
         }
     }
