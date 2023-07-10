@@ -9,6 +9,19 @@
             InitializeComponent();
         }
 
+		public List<string> getData() {
+            string expenseType = Type.Text;
+            string transactionDate = Date.Text;
+            string description = Description.Text;
+
+            List<string> data = new List<string>();
+            data.Add(expenseType);
+            data.Add(transactionDate);
+            data.Add(description);
+
+            return data;
+        }
+
         // Method to pick and show image file
         public async Task<FileResult> PickAndShow(PickOptions options)
         {
@@ -72,6 +85,8 @@
                 PickerTitle = "Select an image"
             });
         }
+
+
 
 
     }

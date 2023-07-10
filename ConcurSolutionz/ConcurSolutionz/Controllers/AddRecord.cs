@@ -1,4 +1,5 @@
 using ConcurSolutionz.Database;
+using ConcurSolutionz.Views;
 
 namespace ConcurSolutionz.Controllers {
 
@@ -8,31 +9,64 @@ namespace ConcurSolutionz.Controllers {
             
             // Data to get from OCR
             ReceiptOCR receiptData = new();
-            string ReceiptNumber = receiptData.get();
-            decimal ReqAmount = receiptData.get();
-            int RecordID = receiptData.get();
+            string ReceiptNumber = receiptData.receiptNumber;
+            decimal ReqAmount = receiptData.reqAmount;
+            // int RecordID = receiptData.get();
+            string imgPath = receiptData.imgPath;
 
-            // Remaining data need to get from frontend
-            // Possibly through an Entry class
+            // Data from RecordPage
+            List<string> data = recordPage.getData();
+            string expenseType = data[0];
+            string transactionDate = data[1];
+            string description = data[2];
+
+            // string expenseType = "Hello";
+            // string transactionDate = "10/07/2023";
+            // string description = "Trial Claim";
 
             Receipt.ReceiptBuilder ReceiptBuilder = new();
             Receipt receipt;
 
-            receipt = ReceiptBuilder.SetExpenseType().
-                      .SetTransactionDate()
-                      .SetDescription()
-                      .SetSupplierName()
-                      .SetCityOfPurchase()
+            receipt = ReceiptBuilder.SetExpenseType(expenseType).
+                      .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                      .SetDescription(description)
+                      .SetSupplierName("")
+                      .SetCityOfPurchase("Singapore, SINGAPORE")
                       .SetReqAmount(ReqAmount)
                       .SetReceiptNumber(ReceiptNumber)
-                      .SetReceiptStatus()
-                      .SetImgPath()
+                      .SetReceiptStatus("")
+                      .SetImgPath(imgPath)
                       .Build();
-            
-            // Get an Entry object from frontend
+
+            // Creating an Entry
+            StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
+            StudentProjectClaimMetaData md;
+
+            md = studentProjMDBuilder
+                .SetEntryName("Entry 1")
+                .SetEntryBudget(100)
+                .SetClaimName("Claim 1")
+                .SetClaimDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetPurpose("Purpose 1")
+                .SetTeamName("Team 1")
+                .SetProjectClub("Project Club 1")
+                .Build();
+
+            Entry.EntryBuilder entryBuilder = new();
             Entry entry;
+
+            List<ConcurSolutionz.Database.Record> records = new List<ConcurSolutionz.Database.Record>();
+
+            entry = entryBuilder.SetFileName("File 1")
+                .SetCreationDate(DateTime.Now)
+                .SetFilePath("C:/ConcurTests/EntryTest.fdr")
+                .SetMetaData(md)
+                .SetRecords(records)
+                .Build();
+            FileCreator.CreateFile(entry);
+
             entry.AddRecord(receipt);
 
         }
-    }   
+    } 
 }
