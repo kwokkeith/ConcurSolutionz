@@ -53,8 +53,8 @@ namespace ConcurSolutionz.Database
             }
 
             public FolderBuilder SetFileName(string FileName){
+                Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".fdr";
-
                 return this;
             }
 
@@ -65,7 +65,8 @@ namespace ConcurSolutionz.Database
             }
 
             public FolderBuilder SetLastModifiedDate(DateTime LastModifiedDate){
-                Utilities.CheckDateTimeAheadOfNow(CreationDate);
+                Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
+                Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
@@ -77,7 +78,13 @@ namespace ConcurSolutionz.Database
             public FolderBuilder SetFilePath(string FilePath){
                 Utilities.CheckNull(FileName);
                 this.FilePath = Path.Combine(FilePath, FileName);
-                return this;
+
+                if (Directory.Exists(this.FilePath)){
+                    throw new IOException("Folder already exists");
+                }
+                else{
+                    return this;
+                }
             }
 
             public Folder Build(){

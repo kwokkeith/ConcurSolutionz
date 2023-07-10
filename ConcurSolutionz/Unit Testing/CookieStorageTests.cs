@@ -15,6 +15,13 @@ namespace Unit_Testing
         public void StoreCookie_StoresValidCookie_AndCookieFileExists()
         {
             // Arrange
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry"))
+            {
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry", true);
+            }
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry");
+
+
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                     .SetBm_sz("abc")
                     .SetTAsessionID("123")
@@ -25,7 +32,7 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
-            string path = @"D:\Folder 1.fdr";
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 1.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
 
             // Act
@@ -39,6 +46,13 @@ namespace Unit_Testing
         public void RetrieveCookie_StoresAndRetrievesCookie()
         {
             // Arrange
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry"))
+            {
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry", true);
+            }
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry");
+
+
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                     .SetBm_sz("abc")
                     .SetTAsessionID("123")
@@ -49,7 +63,7 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
-            string path = @"D:\Folder 1.fdr\File 1.entry";
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 2.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
             storage.StoreCookie(cookie);
 
@@ -73,7 +87,13 @@ namespace Unit_Testing
         public void RetrieveCookie_ReturnsNull_IfCookieFileDoesNotExist()
         {
             // Arrange
-            string path = @"D:\Folder 1.fdr\File 1.entry\Receipts";
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry"))
+            {
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry", true);
+            }
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry");
+
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 3.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
 
             // Act
@@ -87,6 +107,12 @@ namespace Unit_Testing
         public void RetrieveCookie_ReturnsNull_IfCookieExpired()
         {
             // Arrange
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry"))
+            {
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry", true);
+            }
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry");
+
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/1994", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetBm_sz("abc")
                 .SetTAsessionID("123")
@@ -97,7 +123,7 @@ namespace Unit_Testing
                 .SetBm_sv("jkl")
                 .Build();
 
-            string path = @"D:\";
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 4.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
             storage.StoreCookie(cookie);
 
@@ -110,7 +136,7 @@ namespace Unit_Testing
         }
 
         [Fact]
-        public void ClearCookies_DeletesCookieFile()
+        public void Z_ClearCookies_DeletesCookieFile()
         {
             // Arrange
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture))
@@ -123,7 +149,7 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
-            string path = @"D:";
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 4.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
 
             // Act

@@ -173,16 +173,20 @@ namespace ConcurSolutionz.Database
             }
 
             public EntryBuilder SetFileName(string FileName){
+                Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".entry";
                 return this;
             }
 
             public EntryBuilder SetCreationDate(DateTime CreationDate){
+                Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.CreationDate = CreationDate;
                 return this;
             }
 
             public EntryBuilder SetLastModifiedDate(DateTime LastModifiedDate){
+                Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
+                Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
@@ -194,8 +198,21 @@ namespace ConcurSolutionz.Database
             public EntryBuilder SetFilePath(string FilePath){
                 // Makes use of working directory of database to create a file
                 Utilities.CheckNull(FileName);
+                if (!Directory.Exists(FilePath))
+                {
+                    throw new IOException("Directory does not exist");
+                }
+
                 this.FilePath = Path.Combine(FilePath, FileName);
-                return this;
+
+                if (Directory.Exists(this.FilePath))
+                {
+                    throw new IOException("File already exists");
+                }
+                else
+                {
+                    return this;
+                }
             }
 
             public EntryBuilder SetMetaData(MetaData MetaData){

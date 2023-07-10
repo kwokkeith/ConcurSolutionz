@@ -56,7 +56,6 @@ namespace Unit_Testing
         {
             // Arrange
             Cookie.CookieBuilder cookieBuilder = new();
-            Cookie cookie;
 
             // Assert
             Assert.Throws<ArgumentNullException>(() => cookieBuilder.Build());

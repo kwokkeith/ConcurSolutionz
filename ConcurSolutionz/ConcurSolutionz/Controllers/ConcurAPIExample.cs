@@ -1,8 +1,9 @@
+using ConcurSolutionz;
 using ConcurSolutionz.Database;
-using ESC_HTTP_Call.Models;
+using ConcurSolutionz.Models;
 using static ConcurSolutionz.Database.Receipt;
 
-  namespace ESC_HTTP_Call
+  namespace ConcurSolutionz
   {
       internal class Flow_Example
       {
@@ -12,7 +13,7 @@ using static ConcurSolutionz.Database.Receipt;
               ConcurAPI concur = new ConcurAPI(cookie);
               string init = concur.Initialize(); // Returns 0 is successful, 1-3 are errors
 
-//            //Create new claim
+              //Create new claim
               Claim claim = new Claim();
               claim.Name = "Testing Claim";
               claim.Date = "2023-06-";
@@ -43,7 +44,7 @@ using static ConcurSolutionz.Database.Receipt;
             DateTime dt = new DateTime(Convert.ToInt16(tempDate[0]), Convert.ToInt16(tempDate[1]), Convert.ToInt16(tempDate[2])); //dt.ToString("yyyy-MM-dd")
             Receipt receipt = new Receipt(new ReceiptBuilder()
                 .SetTransactionDate(dt)
-                .SetCurrencyAmountSGD((decimal)expense.Cost)
+                //.SetCurrencyAmountSGD((decimal)expense.Cost)
                 .SetDescription(expense.Description)
                 .SetSupplierName(expense.Supplier)
                 .SetReceiptNumber(expense.ReceiptNo)

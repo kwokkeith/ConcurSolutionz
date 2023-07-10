@@ -1,11 +1,11 @@
-﻿using ESC_HTTP_Call.Models;
+﻿using ConcurSolutionz.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace ESC_HTTP_Call
+namespace ConcurSolutionz
 {
-    internal class ConcurAPI
+    public class ConcurAPI
     {
         public static HttpClient HttpClient { get; private set; }
         private static string UserID, EMPKey;

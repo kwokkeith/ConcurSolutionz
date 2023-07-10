@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ESC_HTTP_Call.Models
+namespace ConcurSolutionz.Models
 {
     //Object to deserialize the different possible claim policies
-    internal class ClaimPolicy
+    public class ClaimPolicy
     {
         public string code { get; set; }
         public string id { get; set; }

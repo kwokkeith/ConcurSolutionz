@@ -215,8 +215,7 @@ namespace ConcurSolutionz.Database
                 try
                 {
                     List<Record> Records = new();
-                    string[] ReceiptMetaDatas = Directory.GetFiles(RecordsMetaDataPath + "\\", "*.json");
-
+                    string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
                     foreach(string fileName in ReceiptMetaDatas){
                         string path = RecordsMetaDataPath + fileName;
 

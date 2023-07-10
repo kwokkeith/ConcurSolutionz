@@ -6,15 +6,20 @@ namespace ConcurSolutionz.Database
 {
     public class Settings
     {
-        private static readonly string WindowSettingsPath = "%userprofile%\\documents\\ConcurSolutionz\\Settings";
-        private static readonly string MacSettingsPath = "$HOME\\Library\\ConcurSolutionz\\Settings";
-        public string settingsPath { get; private set; }
+        private string settingsfilePath;
+        private string settingsdirectoryPath;
 
         public Settings(){
             SetSettingsPath();
+            if (!Directory.Exists(settingsdirectoryPath))
+            {
+                Directory.CreateDirectory(settingsdirectoryPath);
+            }
 
-            // Create Settings folder of Concur based on Settings Path
-            Directory.CreateDirectory(settingsPath);
+            if (!File.Exists(settingsfilePath))
+            {
+                File.Create(settingsfilePath).Close();
+            }
         }
 
         /// <summary>Fetches the JSON file from settings path containing the root directory
@@ -22,19 +27,23 @@ namespace ConcurSolutionz.Database
         /// <returns>The root directory of the application.</returns>
         public string GetRootDirectory(){
             // Get all text from Path
-            // Check if Settings Directory exists
-            if (Directory.Exists(settingsPath))
+            if (File.Exists(settingsfilePath))
             {
-                try{
-                    string json = File.ReadAllText(settingsPath); 
-                
+                try
+                {
+                    string json = File.ReadAllText(settingsfilePath);
+
                     // Extract JSON properties
                     JsonDocument jsonDocument = JsonDocument.Parse(json);
                     RootDirectoryData rootDirectory = JsonSerializer.Deserialize<RootDirectoryData>(json);
 
                     // Create root folder if it does not exist
-                    if (!File.Exists(rootDirectory.RootDirectory)){
+                    if (!File.Exists(rootDirectory.RootDirectory))
+                    {
                         Directory.CreateDirectory(rootDirectory.RootDirectory);
+                        string rtdir = "D:";
+                        Directory.CreateDirectory(Path.Combine(rtdir, "ConcurOCRsystem"));
+
                     }
 
                     return rootDirectory.RootDirectory;
@@ -46,6 +55,14 @@ namespace ConcurSolutionz.Database
                 }
             }
 
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(settingsfilePath))
+                {
+                    writer.Write("");
+                }
+                return null;
+            }
             // If the file with root directory does not exist, prompt user to create root directory
 
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -54,7 +71,6 @@ namespace ConcurSolutionz.Database
             // Possibly a method to call a simple UI to key in root directory
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            return "-1";
         }
 
 
@@ -65,7 +81,7 @@ namespace ConcurSolutionz.Database
                 RootDirectory = path
             };
             string json = JsonSerializer.Serialize(rootDirectory);
-            File.WriteAllText(settingsPath, json);
+            File.WriteAllText(settingsfilePath, json);
         }
 
         // Wrapper class for JSON
@@ -75,16 +91,21 @@ namespace ConcurSolutionz.Database
         }
 
         private void SetSettingsPath(){
+            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
             // Windows OS
-            settingsPath = WindowSettingsPath;
+            settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
+            settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
             // MAC OS
-            settingsPath = MacSettingsPath;
+            settingsdirectoryPath = Path.Combine(userProfile, "Library", "ConcurSolutionz");
+            settingsfilePath = Path.Combine(userProfile, "Library", "ConcurSolutionz", "settings.json");
             }
+
             else {
                 throw new Exception("OS Unsupported");
             }

@@ -16,13 +16,16 @@ namespace ConcurSolutionz.Database
         public string Purpose {get; private set;}
         public string TeamName {get; private set;}
         public string ProjectClub {get; private set;}
-        
-        public StudentProjectClaimMDBuilder(){
-        }
+        public string SubType { get; private set; }
+        private const string POLICY = "Student Project Claim";
+        private const string SUBTYPE = "StudentProjectClaimMetaData";
 
-        public StudentProjectClaimMDBuilder SetPolicy(string Policy){
-            this.Policy = Policy;
-            return this;
+
+        public StudentProjectClaimMDBuilder(){
+            Policy = POLICY;
+            SubType = SUBTYPE;
+            EntryBudget = DEFAULT_BUDGET;
+            EntryName = DEFAULT_ENTRYNAME;
         }
 
         public StudentProjectClaimMDBuilder SetClaimName(string ClaimName){
@@ -31,8 +34,8 @@ namespace ConcurSolutionz.Database
         }
 
         public StudentProjectClaimMDBuilder SetClaimDate(DateTime ClaimDate){
-            this.ClaimDate = ClaimDate;
             Utilities.CheckDateTimeAheadOfNow(ClaimDate);
+            this.ClaimDate = ClaimDate;
             return this;
         }
 
@@ -57,6 +60,7 @@ namespace ConcurSolutionz.Database
         }
 
         public override StudentProjectClaimMDBuilder SetEntryBudget(decimal EntryBudget) {
+            Utilities.CheckIfNegative(EntryBudget);
             this.EntryBudget = EntryBudget;
             return this;
         }
