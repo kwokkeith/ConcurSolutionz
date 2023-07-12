@@ -12,10 +12,11 @@
         public string ImageId { get; set; }
         public string Date { get; set; }
         public string Description { get; set; }
-        public double Cost { get; set; }
+        public decimal Cost { get; set; }
         public string ReceiptNo { get; set; }
         public string Supplier { get; set; }
         public string Comment { get; set; }
+        public string FilePath { get; set; }
 
     }
 }
