@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ESC_HTTP_Call.Models
+namespace ConcurSolutionz.Models
 {
     public sealed class Cookie
     {

@@ -4,14 +4,14 @@ using ConcurSolutionz.Database;
 
 namespace Unit_Testing
 {
-	public class ReceiptTests
-	{
+    public class ReceiptTests
+    {
 
-		[Fact]
-		public void Build_ReceiptShouldBuildUsingBuilder()
-		{
-			// Arrange
-			Receipt.ReceiptBuilder receiptBuilder = new();
+        [Fact]
+        public void Build_ReceiptShouldBuildUsingBuilder()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
             Receipt receipt;
 
             // Act
@@ -72,12 +72,12 @@ namespace Unit_Testing
         }
 
 
-        [Theory] 
+        [Theory]
         [InlineData("US, Dollar", "104.5", "1.38085", "144.3")]
         [InlineData("US, Dollar", "299.77", "1.38085", "413.94")]
         [InlineData("Ukraine, Hryvnia", "23499.14", "0.0466524385", "1096.29")]
-        [InlineData("China, Yuan Renminbi", "43343.39", "0.00991526", "429.76")]
-        [InlineData("Malaysia, Ringgit", "39383.43", "0.31697", "12483.37")] 
+        [InlineData("China, Yuan Renminbi", "43343.39", "0.20892", "9055.30")]
+        [InlineData("Malaysia, Ringgit", "39383.43", "0.31697", "12483.37")]
         public void SetCurrencyAmountSGD_ConvertedCurrencyShouldCalculate(
             string Currency, string ReqAmount,
             string ConversionRate, string Expected)
@@ -96,7 +96,7 @@ namespace Unit_Testing
             Console.WriteLine(receiptBuilder.CurrencyAmountSGD);
 
             // Assert
-            Assert.InRange(receiptBuilder.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M );
+            Assert.InRange(receiptBuilder.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M);
         }
 
 
@@ -170,6 +170,232 @@ namespace Unit_Testing
             // Assert
             Assert.Throws<ArgumentNullException>(() => receiptBuilder.Build());
         }
+
+        [Fact]
+        public void ReceiptConstructor_ShouldThrowErrorFromEmptyCompulsoryValue()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+
+            // Act
+            receiptBuilder = receiptBuilder
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(104.5m)
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG");
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(() => receiptBuilder.Build());
+        }
+
+        [Theory]
+        [InlineData("56.2")]
+        [InlineData("120.34")]
+        [InlineData("200.4")]
+        [InlineData("100000002.3")]
+        public void ReceiptSetReqAmount_ShouldReturnNewSetValue(String ReqAmount)
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+            decimal reqAmount = Convert.ToDecimal(ReqAmount);
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(104.5m)
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            receipt.ReqAmount = reqAmount;
+
+            // Assert
+            Assert.Equal(reqAmount, receipt.ReqAmount);
+        }
+
+        [Fact]
+        public void ReceiptSetReqAmount_ShouldThrowErrorForNegValue()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(104.5m)
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => receipt.ReqAmount = -100m);
+        }
+
+        [Theory]
+        [InlineData("56.2")]
+        [InlineData("120.34")]
+        [InlineData("200.4")]
+        [InlineData("100000002.3")]
+        public void ReceiptSetConversionRate_ShouldReturnNewSetValue(String ConversionRate)
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+            decimal conversionRate = Convert.ToDecimal(ConversionRate);
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetCurrency("US, Dollar")
+                .SetReqAmount(104.5m)
+                .SetCurrency("1.38085")
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+
+            receipt.ConversionRate = conversionRate;
+
+            // Assert
+            Assert.Equal(conversionRate, receipt.ConversionRate);
+        }
+
+        [Fact]
+        public void ReceiptSetConversionRate_ShouldThrowErrorForNegValue()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetCurrency("US, Dollar")
+                .SetReqAmount(104.5m)
+                .SetCurrency("1.38085")
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => receipt.ConversionRate = -1.5m);
+        }
+
+
+        [Theory]
+        [InlineData("US, Dollar", "1.38085", "144.3")]
+        [InlineData("Ukraine, Hryvnia", "0.0466524385", "4.88")]
+        [InlineData("China, Yuan Renminbi", "0.20892", "21.83")]
+        [InlineData("Malaysia, Ringgit", "0.31697", "33.12")]
+        [InlineData("UK, Pound Sterling", "1.72916", "180.70")]
+        public void ReceiptSetConversionRate_ConvertedCurrencyShouldCalculate(
+        string Currency,
+        string ConversionRate, string Expected)
+        {
+            // Arrange
+            decimal conversionRate = Convert.ToDecimal(ConversionRate);
+            decimal expected = Convert.ToDecimal(Expected);
+
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(104.5m)
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            // Assert
+            receipt.Currency = Currency;
+            receipt.ConversionRate = conversionRate;
+            Assert.InRange(receiptBuilder.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M);
+        }
+
+        [Theory]
+        [InlineData("102.34")]
+        [InlineData("6443.2")]
+        [InlineData("20032.4")]
+        [InlineData("10000240002.3")]
+        public void ReceiptSetCurrencyAmountSGD_ShouldReturnNewSetValue(string CurrencyAmount)
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+            decimal currencyAmount = Convert.ToDecimal(CurrencyAmount);
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetCurrency("US, Dollar")
+                .SetReqAmount(104.5m)
+                .SetCurrency("1.38085")
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+            receipt.CurrencyAmountSGD = currencyAmount;
+
+            // Assert
+            Assert.Equal(currencyAmount, receipt.CurrencyAmountSGD);
+        }
+
+        [Fact]
+        public void ReceiptSetCurrencyAmountSGD_ShouldThrowErrorForNegValue()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetCurrency("US, Dollar")
+                .SetReqAmount(104.5m)
+                .SetCurrency("1.38085")
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => receipt.CurrencyAmountSGD = -1242.52m);
+        }
+
+
     }
 }
-

@@ -14,7 +14,6 @@ namespace ConcurSolutionz.Database
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
         private Database(){
-            WorkingDirectory = Environment.CurrentDirectory; // Root directory
         }
         
         public static Database Instance{
@@ -46,11 +45,41 @@ namespace ConcurSolutionz.Database
             // Make use of working directory to retrieve files
             string[] folderPaths = Directory.GetFiles(@WorkingDirectory, "*.fdr");
             string[] entryPaths = Directory.GetFiles(@WorkingDirectory, "*.entry");
-            
-            Array.Resize(ref folderPaths, folderPaths.Length + entryPaths.Length);
-            Array.Copy(entryPaths, 0, folderPaths, folderPaths.Length - entryPaths.Length, entryPaths.Length);
-            
-            List<string> files = folderPaths.ToList();
+            List<string> files;
+            if (folderPaths == null || folderPaths.Length == 0)
+            {
+                // Working directory has no folders
+                if (entryPaths == null || folderPaths.Length == 0)
+                {
+                    // Working directory has no files
+                    files = new List<string>();
+                }
+                else
+                {
+                    files = entryPaths.ToList();
+                }
+            }
+            else if (entryPaths == null || entryPaths.Length == 0)
+            {
+                // Working Directory has no Entry files
+                if (folderPaths == null || folderPaths.Length == 0)
+                {
+                    // No folder as well
+                    files = new List<String>();
+                }
+                else
+                {
+                    files = folderPaths.ToList();
+                }
+            }
+            else
+            {
+                // Have both folders and files
+                Array.Resize(ref folderPaths, folderPaths.Length + entryPaths.Length);
+                Array.Copy(entryPaths, 0, folderPaths, folderPaths.Length - entryPaths.Length, entryPaths.Length);
+                files = folderPaths.ToList();
+            }
+
             return files; 
         }
 
@@ -61,7 +90,7 @@ namespace ConcurSolutionz.Database
         public void FileSelectByFileName(string fileName){
             // If fileName exist in Files
             if (Files.Contains(fileName)){
-                string newPath = WorkingDirectory + "\\" + fileName;
+                string newPath = Path.Combine(WorkingDirectory, fileName);
 
                 FileSelectByFilePath(newPath);
             }
@@ -186,8 +215,7 @@ namespace ConcurSolutionz.Database
                 try
                 {
                     List<Record> Records = new();
-                    string[] ReceiptMetaDatas = Directory.GetFiles(RecordsMetaDataPath + "\\", "*.json");
-
+                    string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
                     foreach(string fileName in ReceiptMetaDatas){
                         string path = RecordsMetaDataPath + fileName;
 

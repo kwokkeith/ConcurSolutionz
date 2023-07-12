@@ -253,7 +253,7 @@
                     <Label Text="Expense Type" Grid.Column="2" HorizontalOptions="Center" FontAttributes="Bold"/>
                     <Label Text="Supplier Details" Grid.Column="3" HorizontalOptions="Center" FontAttributes="Bold"/>
                     <Label Text="Date" Grid.Column="4" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold"/> 
+                    <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold"/>
                 </Grid>
 
                 <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available">
@@ -268,7 +268,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="{Binding RecordId}" Grid.Column="0" HorizontalOptions="Center"/>  
+
+                                <Label Text="{Binding RecordId}" Grid.Column="0" HorizontalOptions="Center"/>
                                 <Label Text="{Binding PaymentType}" Grid.Column="1" HorizontalOptions="Center"/>
                                 <Label Text="{Binding ExpenseType}" Grid.Column="2" HorizontalOptions="Center"/>
                                 <Label Text="{Binding SupplierName}" Grid.Column="3" HorizontalOptions="Center"/>
@@ -280,7 +281,6 @@
                 </CollectionView>
             </Grid>
         </Border>
-
     </VerticalStackLayout>
 </ContentPage>
 

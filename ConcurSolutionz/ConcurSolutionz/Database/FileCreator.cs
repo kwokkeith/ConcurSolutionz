@@ -50,15 +50,26 @@ namespace ConcurSolutionz.Database
                 string receiptFolderPath = Utilities.ConstReceiptsFdrPath(entry.FilePath);
                 
                 // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
-                string receiptJSONFolder = Utilities.ConstEntryMetaDataPath(entry.FilePath);
+                string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
 
-                Directory.CreateDirectory(receiptFolderPath);
+                // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
+//                Directory.CreateDirectory(receiptFolderPath);
                 Directory.CreateDirectory(receiptJSONFolder);
 
                 // Create Entry MetaData
+                string json;
                 try{
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
-                    string json = JsonSerializer.Serialize(entry.MetaData);
+                    switch (entry.MetaData.SubType){
+                        case "StudentProjectClaimMetaData":
+                            json = JsonSerializer.Serialize((StudentProjectClaimMetaData)entry.MetaData);
+                            break;
+
+                        default:
+                            json = JsonSerializer.Serialize(entry.MetaData);
+                            break;
+                    }
+                    
                     File.WriteAllText(entryMetaDataPath, json);
                 }
                 catch (Exception e){
@@ -80,14 +91,17 @@ namespace ConcurSolutionz.Database
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
         public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
-            foreach( Receipt record in entry.GetRecords().Cast<Receipt>())
+            foreach( Record record in entry.GetRecords())
                 {
+                    // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
+                    Receipt receipt = RecordAdaptor.ConvertRecord(record);
+
                     // @@@@@@@@@@@@@@@@@@@@@@
                     // FOR RECEIPT PICTURE 
                     // Store pictures
-                    string imgPath = record.ImgPath;
-                    receiptFolderPath += Convert.ToString(record.RecordID);
-                    
+                    string imgPath = receipt.ImgPath;
+                    string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Utilities.GetFileExtension(imgPath));   
+
                     // Clear all receipt images from receipt folder directory
                     string[] filePaths = Directory.GetFiles(receiptFolderPath);
                     foreach(string filePath in filePaths){
@@ -95,8 +109,7 @@ namespace ConcurSolutionz.Database
                     }
 
                     // Add receipt images into receipt folder directory
-                    CopyFile(imgPath, receiptFolderPath);
-
+                    CopyFile(imgPath, receiptPath);
 
                     // @@@@@@@@@@@@@@@@@@@@@@
                     // FOR RECEIPT METADATA
@@ -109,11 +122,10 @@ namespace ConcurSolutionz.Database
                     // Store Receipt Metadata
                     try{
                         // Generate unique metaData filepath name
-                        string receiptMetaDataPath = receiptJSONFolder + "\\"
-                                                    + Convert.ToString(record.RecordID) + ".json"; 
+                        string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");       
 
                         // Serialise record object and write it to the unique metadata location above
-                        string json = JsonSerializer.Serialize(record);
+                        string json = JsonSerializer.Serialize(receipt);
                         File.WriteAllText(receiptMetaDataPath, json);
                     }
                     catch (Exception e){
@@ -148,6 +160,10 @@ namespace ConcurSolutionz.Database
         /// <remarks>If a file with the same name already exists at the destination path, it will be overwritten.</remarks>
         private static void CopyFile(string sourcePath, string destinationPath){
             try{
+                if (!File.Exists(destinationPath))
+                {
+                    File.Create(destinationPath);
+                }
                 File.Copy(sourcePath, destinationPath, true);
             }
             catch(Exception e){

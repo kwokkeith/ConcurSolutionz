@@ -5,6 +5,7 @@ namespace ConcurSolutionz.Database
     {
         public string FileName { get; set; }
         private DateTime creationDate;
+        public string FileType { get; set; }
         public DateTime CreationDate
         {
             get { return creationDate; }

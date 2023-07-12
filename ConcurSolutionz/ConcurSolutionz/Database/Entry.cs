@@ -25,6 +25,7 @@ namespace ConcurSolutionz.Database
             FilePath = builder.FilePath;
             MetaData = builder.MetaData;
             Records = builder.Records;
+            FileType = builder.FileType;
             SetFolder();
         }
 
@@ -77,8 +78,8 @@ namespace ConcurSolutionz.Database
             string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
-            Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
-            Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+            Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
 
             // Update last modified date of Entry
             UpdateModifiedDate();
@@ -96,8 +97,8 @@ namespace ConcurSolutionz.Database
             foreach (Record record in Records){
                 if (record.RecordID == ID){
                     Records.Remove(record);
-                    Database.DeleteFile(receiptJSONPath + "\\" + record.RecordID + ".json"); // Del Metadata
-                    Database.DeleteFile(receiptFolderPath + "\\" + record.RecordID); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
@@ -107,7 +108,7 @@ namespace ConcurSolutionz.Database
             }
             // If method reaches here, means we have not found any record of ID passed
             throw new ArgumentException("While attempting to delete record from Entry using an ID," +
-                   "the record (Based on RecordID) does not exist in the Records List!");
+                    "the record (Based on RecordID) does not exist in the Records List!");
         }
 
         /// <summary>Returns a list of Records.</summary>
@@ -166,23 +167,31 @@ namespace ConcurSolutionz.Database
             public string FilePath { get; private set; }
             public MetaData MetaData { get; private set; }
             public List<Record> Records { get; private set; }    
+            public string FileType { get; private set; }
 
             public EntryBuilder(){
                 // Set Default Values
                 Records = new List<Record>();
+
+                // Set FileType (to be used by adaptor)
+                FileType = "Entry";
             }
 
             public EntryBuilder SetFileName(string FileName){
+                Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".entry";
                 return this;
             }
 
             public EntryBuilder SetCreationDate(DateTime CreationDate){
+                Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.CreationDate = CreationDate;
                 return this;
             }
 
             public EntryBuilder SetLastModifiedDate(DateTime LastModifiedDate){
+                Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
+                Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
@@ -194,8 +203,21 @@ namespace ConcurSolutionz.Database
             public EntryBuilder SetFilePath(string FilePath){
                 // Makes use of working directory of database to create a file
                 Utilities.CheckNull(FileName);
-                this.FilePath = FilePath + "\\" + FileName;
-                return this;
+                if (!Directory.Exists(FilePath))
+                {
+                    throw new IOException("Directory does not exist");
+                }
+
+                this.FilePath = Path.Combine(FilePath, FileName);
+
+                if (Directory.Exists(this.FilePath))
+                {
+                    throw new IOException("File already exists");
+                }
+                else
+                {
+                    return this;
+                }
             }
 
             public EntryBuilder SetMetaData(MetaData MetaData){
