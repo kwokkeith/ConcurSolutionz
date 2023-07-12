@@ -3,23 +3,23 @@ using ConcurSolutionz.Database;
 using ConcurSolutionz.Models;
 using static ConcurSolutionz.Database.Receipt;
 
-  namespace ConcurSolutionz
-  {
-      internal class Flow_Example
-      {
-          public static async void Example(string cookie, string filepath, string filename)
-          {
-              //Initialize API caller
-              ConcurAPI concur = new ConcurAPI(cookie);
-              string init = concur.Initialize(); // Returns 0 is successful, 1-3 are errors
+namespace ConcurSolutionz
+{
+    internal class Flow_Example
+    {
+        public static async void Example(string cookie, string filepath, string filename)
+        {
+            //Initialize API caller
+            ConcurAPI concur = new ConcurAPI(cookie);
+            string init = concur.Initialize(); // Returns 0 is successful, 1-3 are errors
 
-              //Create new claim
-              Claim claim = new Claim();
-              claim.Name = "Testing Claim";
-              claim.Date = "2023-06-";
-              claim.Policy = "5d5d08a511f98e4ab32f28ba68a86350"; //Policy codes can be obtained from concur.ClaimCreateDD();
-              claim.TeamName = "Test Team";
-              claim.Id = await concur.CreateClaim(claim); //Create a claim on concur and obtain the id
+            //Create new claim
+            Claim claim = new Claim();
+            claim.Name = "Testing Claim";
+            claim.Date = "2023-06-";
+            claim.Policy = "5d5d08a511f98e4ab32f28ba68a86350"; //Policy codes can be obtained from concur.ClaimCreateDD();
+            claim.TeamName = "Test Team";
+            claim.Id = await concur.CreateClaim(claim); //Create a claim on concur and obtain the id
 
             //Create new expense
             Expense expense = new Expense();
@@ -52,7 +52,7 @@ using static ConcurSolutionz.Database.Receipt;
                 .SetReportId(expense.ReportId)
                 .SetRPEKey(expense.RPEKey));
 
-            
+
             //rBuilder = rBuilder.SetTransactionDate(dt);
             //rBuilder = rBuilder.SetCurrencyAmountSGD((decimal)69.00);
             //string description = "Test Description";

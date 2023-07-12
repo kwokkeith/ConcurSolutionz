@@ -1,26 +1,14 @@
-﻿using System.Collections.ObjectModel;
-
-namespace ConcurSolutionz.Views;
+﻿namespace ConcurSolutionz.Views;
 
 public partial class EntryPage : ContentPage
 {
-    public ObservableCollection<Record> Records { get; set; }
-
-    public EntryPage()
+	public EntryPage()
 	{
 		InitializeComponent();
 
-
-        //// Add data to the Records collection
-        //Records = new ObservableCollection<Record>
-        //{
-        //    new Record { RecordName = "Record 1", Amount = "100" },
-        //    new Record { RecordName = "Record 2", Amount = "200" }
-        //    // add more records as needed...
-        //};
-
-
-    }
+        //recordCollection.ItemsSource = GetRecords();
+        BindingContext = new Models.Entry();
+	}
 
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
@@ -36,22 +24,20 @@ public partial class EntryPage : ContentPage
 		await Shell.Current.GoToAsync(nameof(RecordPage));
 	}
 
-    //private List<Models.Receipt> GetRecords() // need the database to build the receipt
+	//private List<Models.Receipt> GetRecords()
+	//{
+ //       //return new List<Models.Receipt>
+ //       //{
+ //       //	new Models.Receipt {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
+ //       //	new Models.Receipt {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
+ //       //};
+        
+	//}
 
-    //{
-    //    //return new List<Models.Receipt>
-    //    //{
-    //    //	new Models.Receipt {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
-    //    //	new Models.Receipt {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
-    //    //};
-
-    //}
-
-
-
+    private void GetRecords() { }
 
 
-    private async void AddRecord_Clicked(object sender, EventArgs e)
+	private async void AddRecord_Clicked(object sender, EventArgs e)
 	{
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
         if(action == "Upload")
