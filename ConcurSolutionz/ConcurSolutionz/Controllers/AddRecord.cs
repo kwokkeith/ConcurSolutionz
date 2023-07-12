@@ -8,17 +8,16 @@ using ConcurSolutionz.OCR;
 namespace ConcurSolutionz.Controllers {
 
     public class AddRecord {
-        public string frontEndExpenseType;
-        public string frontEndPaymentType;
-        public string frontEndSupplierName;
-        public DateTime frontEndTransactionDate;
-        public decimal frontEndReqAmount;
+        //public string frontEndExpenseType;
+        //public string frontEndPaymentType;
+        //public string frontEndSupplierName;
+        //public DateTime frontEndTransactionDate;
+        //public decimal frontEndReqAmount;
 
-        public string ExpenseType { get; internal set; }
-        public string PaymentType { get; internal set; }
-        public string SupplierName { get; internal set; }
-        public DateTime TransactionDate { get; internal set; }
-        public decimal ReqAmount { get; internal set; }
+        //public string ExpenseType { get; internal set; }
+        //public string PaymentType { get; internal set; }
+        //public string SupplierName { get; internal set; }
+        //public DateTime TransactionDate { get; internal set; }
 
         public void addReceipt() {
 
@@ -86,11 +85,11 @@ namespace ConcurSolutionz.Controllers {
 
             entry.AddRecord(receipt);
 
-            frontEndExpenseType = receipt.ExpenseType;
-            frontEndPaymentType = receipt.PaymentType;
-            frontEndSupplierName = receipt.SupplierName;
-            frontEndTransactionDate = receipt.TransactionDate;
-            frontEndReqAmount = receipt.ReqAmount;
+            //frontEndExpenseType = receipt.ExpenseType;
+            //frontEndPaymentType = receipt.PaymentType;
+            //frontEndSupplierName = receipt.SupplierName;
+            //frontEndTransactionDate = receipt.TransactionDate;
+            //frontEndReqAmount = receipt.ReqAmount;
 
         }
     } 

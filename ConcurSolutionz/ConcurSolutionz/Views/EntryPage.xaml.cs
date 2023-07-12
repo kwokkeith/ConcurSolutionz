@@ -1,56 +1,111 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using ConcurSolutionz.Controllers;
+using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views;
 
 public partial class EntryPage : ContentPage
 {
-    public ObservableCollection<Models.Receipt> Receipts { get; set; } // Creation of the Receipts observable collection 
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } // Creation of the Receipts observable collection 
 
-    private string frontEndExpenseType;
-    private string frontEndPaymentType;
-    private string frontEndSupplierName;
-    private DateTime frontEndTransactionDate;
-    private decimal frontEndReqAmount;
+    //private string frontEndExpenseType;
+    //private string frontEndPaymentType;
+    //private string frontEndSupplierName;
+    //private DateTime frontEndTransactionDate;
+    //private decimal frontEndReqAmount;
 
 
     public EntryPage()
 	{
 		InitializeComponent();
 
-        EntryPage.frontEnd();
-        
+        //new EntryPage().frontEnd();
+
+        StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
+        StudentProjectClaimMetaData md;
+
+        md = studentProjMDBuilder
+            .SetEntryName("Entry 1")
+            .SetEntryBudget(100)
+            .SetClaimName("Claim 1")
+            .SetClaimDate(DateTime.ParseExact("12/07/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+            .SetPurpose("Purpose 1")
+            .SetTeamName("Team 1")
+            .SetProjectClub("Project Club 1")
+            .Build();
+
+
+        ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
+        ConcurSolutionz.Database.Entry entry;
+
+        entry = entryBuilder.SetFileName("File 1")
+            .SetCreationDate(DateTime.Now)
+            .SetFilePath("C:/ConcurTests/EntryTest.fdr")
+            .SetMetaData(md)
+            .SetRecords(new List<ConcurSolutionz.Database.Record>())
+            .Build();
+
+        List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
+        List<ConcurSolutionz.Database.Receipt> receipts = new List<ConcurSolutionz.Database.Receipt>();
+
+        for (int i = 0; i < records.Count; i++)
+        {
+            ConcurSolutionz.Database.Receipt receipt = RecordAdaptor.ConvertRecord(records[i]);
+            receipts.Add(receipt);
+        }
+
+        for (int i = 0; i < receipts.Count; i++)
+        {
+            string frontEndExpenseType = receipts[i].ExpenseType;
+            string frontEndPaymentType = receipts[i].PaymentType;
+            string frontEndSupplierName = receipts[i].SupplierName;
+            DateTime frontEndTransactionDate = receipts[i].TransactionDate;
+            decimal frontEndReqAmount = receipts[i].ReqAmount;
+
+            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
+                                                                          .SetExpenseType(frontEndExpenseType)
+                                                                          .SetSupplierName(frontEndSupplierName)
+                                                                          .SetTransactionDate(frontEndTransactionDate)
+                                                                          .SetReqAmount(frontEndReqAmount)
+                                                                          ));
+        }
+
+
         // Instantiate the Receipts collection
-        Receipts = new ObservableCollection<Models.Receipt>
+        ReceiptView = new ObservableCollection<Models.Receipt>
         {
             // Add some test data
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
-                                                          .SetExpenseType(frontEndExpenseType)
-                                                          .SetSupplierName(frontEndSupplierName)
-                                                          .SetTransactionDate(frontEndTransactionDate)
-                                                          .SetReqAmount(frontEndReqAmount)),
-
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
+            //new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
+            //                                              .SetExpenseType(frontEndExpenseType)
+            //                                              .SetSupplierName(frontEndSupplierName)
+            //                                              .SetTransactionDate(frontEndTransactionDate)
+            //                                              .SetReqAmount(frontEndReqAmount)),
+            //new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
+            //new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
         };
+
+        
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
 
         // Set the ItemsSource of the CollectionView
-        recordCollection.ItemsSource = Receipts;
+        recordCollection.ItemsSource = ReceiptView;
     }
 
-    private static void frontEnd()
-    {
-        AddRecord frontEndData = new ConcurSolutionz.Controllers.AddRecord();
-        frontEndData.addReceipt();
-        frontEndExpenseType = frontEndData.ExpenseType;
-        frontEndPaymentType = frontEndData.PaymentType;
-        frontEndSupplierName = frontEndData.SupplierName;
-        frontEndTransactionDate = frontEndData.TransactionDate;
-        frontEndReqAmount = frontEndData.ReqAmount;
-    }
+    //private void frontEnd()
+    //{
+    //    AddRecord frontEndData = new ConcurSolutionz.Controllers.AddRecord();
+    //    frontEndData.addReceipt();
+    //    frontEndExpenseType = frontEndData.frontEndExpenseType;
+    //    frontEndPaymentType = frontEndData.frontEndPaymentType;
+    //    frontEndSupplierName = frontEndData.frontEndSupplierName;
+    //    frontEndTransactionDate = frontEndData.frontEndTransactionDate;
+    //    frontEndTransactionDate = frontEndData.frontEndTransactionDate;
+    //    frontEndReqAmount = frontEndData.frontEndReqAmount;
+    //}
 
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {

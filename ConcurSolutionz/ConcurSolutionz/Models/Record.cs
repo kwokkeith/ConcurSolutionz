@@ -1,11 +1,22 @@
-﻿using System;
-namespace ConcurSolutionz
+﻿//using System;
+//namespace ConcurSolutionz
+//{
+//    public interface Record
+//    {
+//        int RecordId { get; }
+//        void AssignRecordId();
+//        int GetRecordId();
+//        void DelRecord();
+//    }
+//}
+
+namespace ConcurSolutionz.Database
 {
-    public interface Record
+    public abstract class Record
     {
-        int RecordId { get; }
-        void AssignRecordId();
-        int GetRecordId();
-        void DelRecord();
+        public int RecordID { get; set; }
+
+        public string SubType { get; set; }
+
     }
 }
