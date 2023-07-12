@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Views;
+using ConcurSolutionz.OCR;
 
 namespace ConcurSolutionz.Controllers {
 
@@ -11,14 +12,18 @@ namespace ConcurSolutionz.Controllers {
         public void addReceipt() {
 
             // Data to get from OCR
-            ConcurSolutionz.Database.RecieptOCR receiptData = new();
+            string imgPath = "";
+            string tesseractPath = "";
+            ConcurSolutionz.OCR.RecieptOCR receiptData = new(imgPath, tesseractPath);
             string ReceiptNumber = receiptData.receiptNumber;
             decimal ReqAmount = receiptData.reqAmount;
             // int RecordID = receiptData.get();
-            string imgPath = receiptData.imgPath;
+            // string imgPath = receiptData.imgPath;
+            imgPath = receiptData.imgPath;
 
             // Data from RecordPage
-            List<string> data = ConcurSolutionz.Views.RecordPage.getData();
+            RecordPage recordPageData = new ConcurSolutionz.Views.RecordPage();
+            List<string> data = recordPageData.getData();
             string expenseType = data[0];
             string transactionDate = data[1];
             string description = data[2];

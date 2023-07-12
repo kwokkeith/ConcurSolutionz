@@ -42,7 +42,7 @@ namespace ConcurSolutionz.Views
         }
 
 		public List<string> getData() {
-            string expenseType = Type.Text;
+            string expenseType = ExpenseType.Text;
             string transactionDate = Date.Text;
             string description = Description.Text;
 
