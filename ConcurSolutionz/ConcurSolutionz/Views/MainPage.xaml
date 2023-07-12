@@ -1,7 +1,6 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ConcurSolutionz.Views.MainPage"
-             Title="Files">
+             x:Class="ConcurSolutionz.Views.MainPage">
     <ContentPage.Content>
         <StackLayout Padding="10">
             <FlexLayout Direction="Row" JustifyContent="Center" AlignItems="Center" Margin="0,20,0,20">
@@ -14,6 +13,8 @@
                 <Button Text="Delete" Clicked="OnDeleteClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="Sort" Clicked="OnSortClicked" />
+                <BoxView WidthRequest="10" HeightRequest="1" />
+                <Button Text="Back" Clicked="OnBackClicked" />
             </FlexLayout>
 
             <!-- File list placeholder -->
@@ -23,13 +24,21 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Orientation="Horizontal" Padding="10">
-                            <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24" />
-                            <Label Text="{Binding FileName}" Margin="10,0,0,0" />
-                            <Label Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
-                            HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
-                            <Button Text="View" Clicked="OnEntry_Clicked" HeightRequest="25" HorizontalOptions="End"/>
-                            </StackLayout>
+                            <Grid Padding="10">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFileTapped" NumberOfTapsRequired="1" />
+                                    <TapGestureRecognizer Tapped="OnFileDoubleTapped" NumberOfTapsRequired="2" />
+                                </Grid.GestureRecognizers>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24" />
+                                <Label Grid.Column="1" Text="{Binding FileName}" Margin="10,0,0,0" />
+                                <Label Grid.Column="2" Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
+                                    HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
