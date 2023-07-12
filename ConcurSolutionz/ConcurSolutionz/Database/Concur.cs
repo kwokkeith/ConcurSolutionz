@@ -3,6 +3,9 @@ namespace ConcurSolutionz.Database
 {
     public class Concur: Settings
     {
+        public Concur(){
+            SubType = "Concur";
+        }
 
         private CookieStorage cookieStorage;
         public CookieStorage CookieStorage { 

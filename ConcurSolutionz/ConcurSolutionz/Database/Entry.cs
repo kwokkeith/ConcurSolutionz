@@ -25,6 +25,7 @@ namespace ConcurSolutionz.Database
             FilePath = builder.FilePath;
             MetaData = builder.MetaData;
             Records = builder.Records;
+            FileType = builder.FileType;
             SetFolder();
         }
 
@@ -107,7 +108,7 @@ namespace ConcurSolutionz.Database
             }
             // If method reaches here, means we have not found any record of ID passed
             throw new ArgumentException("While attempting to delete record from Entry using an ID," +
-                   "the record (Based on RecordID) does not exist in the Records List!");
+                    "the record (Based on RecordID) does not exist in the Records List!");
         }
 
         /// <summary>Returns a list of Records.</summary>
@@ -166,10 +167,14 @@ namespace ConcurSolutionz.Database
             public string FilePath { get; private set; }
             public MetaData MetaData { get; private set; }
             public List<Record> Records { get; private set; }    
+            public string FileType { get; private set; }
 
             public EntryBuilder(){
                 // Set Default Values
                 Records = new List<Record>();
+
+                // Set FileType (to be used by adaptor)
+                FileType = "Entry";
             }
 
             public EntryBuilder SetFileName(string FileName){
