@@ -105,6 +105,11 @@ namespace ConcurSolutionz.Views
             });
         }
 
+        public async void OnSaveDetails_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("..");
+        }
+
 
     }
 

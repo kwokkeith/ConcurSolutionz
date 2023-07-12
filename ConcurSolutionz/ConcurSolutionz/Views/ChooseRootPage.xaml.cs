@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Storage;
+using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views;
 
@@ -17,7 +18,7 @@ public partial class ChooseRootPage : ContentPage
         //filePath.Text = folder.Folder.Path;
 
         // update root directory in database
-        Database.Settings settings = new();
+        Settings settings = new Settings();
         settings.SetRootDirectory("hi");
 
         filePath.Text = settings.GetRootDirectory();
