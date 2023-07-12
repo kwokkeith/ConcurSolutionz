@@ -10,6 +10,12 @@
                 FontAttributes="Bold"
                 Text="Elements of Software Construction"
                 VerticalOptions="Center"/>
+            <Label
+                FontSize="Title"
+                FontAttributes="Bold"
+                Text="Debug"
+                VerticalOptions="Center"
+                x:Name="debug"/>
             <ImageButton Source="edit_32.png"/>
         </HorizontalStackLayout>
 
@@ -18,8 +24,9 @@
 
             <Button Text="Transfer to concur"
                     Grid.Column="0"
-                    Margin="10"/>
-
+                    Margin="10"
+                    Clicked="Concur_Clicked"/>
+                    
             <Button Text="Delete Entry"
                     Grid.Column="1"
                     Margin="10"
