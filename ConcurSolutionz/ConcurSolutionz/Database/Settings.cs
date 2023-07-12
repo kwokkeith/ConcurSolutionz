@@ -104,8 +104,8 @@ namespace ConcurSolutionz.Database
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
             // MAC OS
-            settingsdirectoryPath = Path.Combine(userProfile, "Library", "ConcurSolutionz");
-            settingsfilePath = Path.Combine(userProfile, "Library", "ConcurSolutionz", "settings.json");
+            settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
+            settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
             }
 
             else {

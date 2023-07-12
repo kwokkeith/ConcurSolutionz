@@ -14,10 +14,14 @@ public partial class ChooseRootPage : ContentPage
     {
         //Display folder picker
         var folder = await FolderPicker.PickAsync(default);
-        filePath.Text = folder.Folder.Path;
+        //filePath.Text = folder.Folder.Path;
 
         // update root directory in database
         Database.Settings settings = new();
-        settings.SetRootDirectory(folder.Folder.Path);
+        settings.SetRootDirectory("hi");
+
+        filePath.Text = settings.GetRootDirectory();
+
+        //await Shell.Current.GoToAsync(nameof(MainPage));
     }
 }
