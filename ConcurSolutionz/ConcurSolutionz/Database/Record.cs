@@ -4,7 +4,7 @@ namespace ConcurSolutionz.Database
     {
         public int RecordID { get; set; }
 
-        public string SubType { get; set; }
+        public string SubType {get; set;}
 
     }
 }

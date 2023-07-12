@@ -1,4 +1,5 @@
 
+using System.Dynamic;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
@@ -8,7 +9,8 @@ namespace ConcurSolutionz.Database
     {
         private string settingsfilePath;
         private string settingsdirectoryPath;
-
+        public string SubType {get; set;}
+        
         public Settings(){
             SetSettingsPath();
             if (!Directory.Exists(settingsdirectoryPath))
