@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.Threading;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Views;
 
@@ -6,16 +9,16 @@ namespace ConcurSolutionz.Controllers {
     public class AddRecord {
 
         public void addReceipt() {
-            
+
             // Data to get from OCR
-            ReceiptOCR receiptData = new();
+            ConcurSolutionz.Database.RecieptOCR receiptData = new();
             string ReceiptNumber = receiptData.receiptNumber;
             decimal ReqAmount = receiptData.reqAmount;
             // int RecordID = receiptData.get();
             string imgPath = receiptData.imgPath;
 
             // Data from RecordPage
-            List<string> data = recordPage.getData();
+            List<string> data = ConcurSolutionz.Views.RecordPage.getData();
             string expenseType = data[0];
             string transactionDate = data[1];
             string description = data[2];
@@ -27,7 +30,7 @@ namespace ConcurSolutionz.Controllers {
             Receipt.ReceiptBuilder ReceiptBuilder = new();
             Receipt receipt;
 
-            receipt = ReceiptBuilder.SetExpenseType(expenseType).
+            receipt = ReceiptBuilder.SetExpenseType(expenseType)
                       .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
                       .SetDescription(description)
                       .SetSupplierName("")
@@ -52,8 +55,8 @@ namespace ConcurSolutionz.Controllers {
                 .SetProjectClub("Project Club 1")
                 .Build();
 
-            Entry.EntryBuilder entryBuilder = new();
-            Entry entry;
+            ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
+            ConcurSolutionz.Database.Entry entry;
 
             List<ConcurSolutionz.Database.Record> records = new List<ConcurSolutionz.Database.Record>();
 
