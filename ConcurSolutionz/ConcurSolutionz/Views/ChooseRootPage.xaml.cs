@@ -19,6 +19,5 @@ public partial class ChooseRootPage : ContentPage
         // update root directory in database
         Database.Settings settings = new();
         settings.SetRootDirectory(folder.Folder.Path);
-
     }
 }
