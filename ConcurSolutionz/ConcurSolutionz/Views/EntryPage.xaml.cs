@@ -7,18 +7,19 @@ public partial class EntryPage : ContentPage
 {
     public ObservableCollection<Models.Receipt> Receipts { get; set; } // Creation of the Receipts observable collection 
 
+    private string frontEndExpenseType;
+    private string frontEndPaymentType;
+    private string frontEndSupplierName;
+    private DateTime frontEndTransactionDate;
+    private decimal frontEndReqAmount;
+
+
     public EntryPage()
 	{
 		InitializeComponent();
-        AddRecord frontEndData = new ConcurSolutionz.Controllers.AddRecord();
-        frontEndData.addReceipt();
-        string frontEndExpenseType = frontEndData.ExpenseType;
-        string frontEndPaymentType = frontEndData.PaymentType;
-        string frontEndSupplierName = frontEndData.SupplierName;
-        DateTime frontEndTransactionDate = frontEndData.TransactionDate;
-        decimal frontEndReqAmount = frontEndData.ReqAmount;
 
-
+        EntryPage.frontEnd();
+        
         // Instantiate the Receipts collection
         Receipts = new ObservableCollection<Models.Receipt>
         {
@@ -38,6 +39,17 @@ public partial class EntryPage : ContentPage
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = Receipts;
+    }
+
+    private static void frontEnd()
+    {
+        AddRecord frontEndData = new ConcurSolutionz.Controllers.AddRecord();
+        frontEndData.addReceipt();
+        frontEndExpenseType = frontEndData.ExpenseType;
+        frontEndPaymentType = frontEndData.PaymentType;
+        frontEndSupplierName = frontEndData.SupplierName;
+        frontEndTransactionDate = frontEndData.TransactionDate;
+        frontEndReqAmount = frontEndData.ReqAmount;
     }
 
     private async void EditEntryName_Clicked(object sender, EventArgs e)
