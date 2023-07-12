@@ -13,9 +13,9 @@ public partial class EntryPage : ContentPage
         // Instantiate the Receipts collection
         Receipts = new ObservableCollection<Models.Receipt> 
         {
-            // Add some test data
+            // Add some test data (hardcoded for now) 
             new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
+            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), 
         };
 
         // Set the BindingContext of the CollectionView
@@ -49,8 +49,6 @@ public partial class EntryPage : ContentPage
     //    //};
 
     //}
-
-
 
 
 

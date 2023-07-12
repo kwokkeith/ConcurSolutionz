@@ -225,7 +225,14 @@
                     Margin="10"/>
         </Grid>
 
-          <ScrollView>
+
+        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                Stroke="#D3D3D3"
+                BackgroundColor="AliceBlue"
+                Padding="20,10"
+                StrokeThickness="2"
+                HeightRequest="400">
+        
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -272,7 +279,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Grid>
-        </ScrollView>
+        </Border>
+
     </VerticalStackLayout>
 </ContentPage>
 
