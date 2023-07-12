@@ -2,25 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.EntryPage"
-             xmlns:models="clr-namespace:ConcurSolutionz.Models"
              Title="Entry">
-    <ContentPage.BindingContext>
-        <models:Entry/>
-
-    </ContentPage.BindingContext>
-    
     <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
             <Label
-                x:Name="EntryName"
                 FontSize="Title"
                 FontAttributes="Bold"
                 Text="Elements of Software Construction"
                 VerticalOptions="Center"/>
-            <ImageButton
-                Source="edit_32.png"
-                x:Name="EditEntryNameButton"
-                Clicked="EditEntryName_Clicked"/>
+            <ImageButton Source="edit_32.png"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
@@ -225,56 +215,47 @@
                     Margin="10"/>
         </Grid>
 
-          <ScrollView>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
 
-                <Grid x:Name="HeaderGrid" Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Index" Grid.Column="0" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Payment Type" Grid.Column="1" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Expense Type" Grid.Column="2" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Supplier Details" Grid.Column="3" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Date" Grid.Column="4" HorizontalOptions="Center" FontAttributes="Bold"/>
-                    <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold"/>
-                </Grid>
+        <CollectionView SelectionMode="Single" x:Name="recordCollection" EmptyView="No data available" Margin="20,0,20,0">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="4"
+                                 HorizontalItemSpacing="40"
+                                 VerticalItemSpacing="20"/>
 
-                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding RecordId}" Grid.Column="0" HorizontalOptions="Center"/>
-                                <Label Text="{Binding PaymentType}" Grid.Column="1" HorizontalOptions="Center"/>
-                                <Label Text="{Binding ExpenseType}" Grid.Column="2" HorizontalOptions="Center"/>
-                                <Label Text="{Binding SupplierName}" Grid.Column="3" HorizontalOptions="Center"/>
-                                <Label Text="{Binding TransactionDate, StringFormat='{0:MM/dd/yyyy}'}" Grid.Column="4" HorizontalOptions="Center"/>
-                                <Label Text="{Binding ReqAmount, StringFormat='C'}" Grid.Column="5" HorizontalOptions="Center"/>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
-        </ScrollView>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" BorderColor="Grey" CornerRadius="5" Padding="8" VerticalOptions="Center" HorizontalOptions="Center">
+                        <StackLayout>
+                            <Label Text="{Binding RecordName}"
+                                   FontSize="Large"
+                                   FontAttributes="Bold"/>
+                            <BoxView Color="Grey"
+                                     HeightRequest="2"
+                                     HorizontalOptions="Fill"/>
+                            <Label Text="{Binding Amount}" Grid.Column="1" FontSize="Large" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+
+                        </StackLayout>
+    
+
+                    </Frame>
+
+
+                </DataTemplate>
+
+
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+        
+        
     </VerticalStackLayout>
+
+    
+
+        
+
+    
 </ContentPage>
-
-
-       
