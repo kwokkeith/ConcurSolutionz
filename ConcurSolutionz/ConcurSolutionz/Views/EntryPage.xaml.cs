@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using ConcurSolutionz.Controllers;
 
 namespace ConcurSolutionz.Views;
 
@@ -9,11 +10,25 @@ public partial class EntryPage : ContentPage
     public EntryPage()
 	{
 		InitializeComponent();
+        AddRecord frontEndData = new ConcurSolutionz.Controllers.AddRecord();
+        frontEndData.addReceipt();
+        string frontEndExpenseType = frontEndData.ExpenseType;
+        string frontEndPaymentType = frontEndData.PaymentType;
+        string frontEndSupplierName = frontEndData.SupplierName;
+        DateTime frontEndTransactionDate = frontEndData.TransactionDate;
+        decimal frontEndReqAmount = frontEndData.ReqAmount;
+
 
         // Instantiate the Receipts collection
-        Receipts = new ObservableCollection<Models.Receipt> 
+        Receipts = new ObservableCollection<Models.Receipt>
         {
             // Add some test data
+            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
+                                                          .SetExpenseType(frontEndExpenseType)
+                                                          .SetSupplierName(frontEndSupplierName)
+                                                          .SetTransactionDate(frontEndTransactionDate)
+                                                          .SetReqAmount(frontEndReqAmount)),
+
             new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
             new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
         };
