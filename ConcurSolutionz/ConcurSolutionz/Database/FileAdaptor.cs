@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public class FileSocket
+    public class FileAdaptor
     {
         public static dynamic ConvertFileType( FileDB file) {
             switch (file.FileType){
