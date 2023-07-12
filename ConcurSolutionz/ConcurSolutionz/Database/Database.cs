@@ -140,7 +140,6 @@ namespace ConcurSolutionz.Database
             else{
                 throw new Exception(filePath + " found in Files<List> but of invalid extension!");
             }
-            
         }
 
 
@@ -170,16 +169,15 @@ namespace ConcurSolutionz.Database
         public void FileGoBack(){
             // Set working directory one path back
             string rootDirectory = Settings.GetRootDirectory();
-            string[] rootDirectoryArray = rootDirectory.Split("\\");
-            string[] workingDirectoryArray = WorkingDirectory.Split("\\");
 
             // Check if RootDirectory == WorkingDirectory
-            if (workingDirectoryArray.Equals(rootDirectoryArray)){
+            if (WorkingDirectory.Equals(rootDirectory))
+            {
                 return;
             }
-            else{
-                workingDirectoryArray = workingDirectoryArray.SkipLast(1).ToArray();
-                WorkingDirectory = string.Join("\\", workingDirectoryArray);
+            else
+            {
+                WorkingDirectory = System.IO.Directory.GetParent(WorkingDirectory).FullName;
             }
         }
 

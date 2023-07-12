@@ -1,11 +1,5 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using ConcurSolutionz.Database;
 
 namespace FirstApp
 {
@@ -43,6 +37,7 @@ namespace FirstApp
         private string rootDirectoryPath = "/Users/sid/My Drive/SUTD/Class/Term_5/Elements of Software Construction/1D/ConcurSolutionz/ConcurSolutionz/ConcurSolutionz";
         private string currentDirectoryPath;
 
+        // On Page load
         public MainPage()
         {
             InitializeComponent();
@@ -50,45 +45,74 @@ namespace FirstApp
             CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
             BindingContext = this;
 
-            LoadFiles(rootDirectoryPath);
+            // Get current working directory from database
+            LoadFilesFromDB();
+
         }
 
-        private void LoadFiles(string directoryPath)
+        // Loads the files using the database's current working directory
+        private void LoadFilesFromDB()
         {
-            currentDirectoryPath = directoryPath;
+            List<string> fileNames = Database.Instance.GetFilesFromWD();
 
-            if (Directory.Exists(currentDirectoryPath))
+            foreach (string fileName in fileNames)
             {
-                Files.Clear();
+                // Check if file is boolean
+                bool isFolder;
 
-                // Load files and folders from the current directory
-                string[] fileEntries = Directory.GetFileSystemEntries(currentDirectoryPath);
-
-                foreach (string entryPath in fileEntries)
+                if (fileName.EndsWith(".fdr"))
+                    isFolder = true;
+                else
                 {
-                    string fileName = Path.GetFileName(entryPath);
-                    bool isFolder = Directory.Exists(entryPath);
-                    Files.Add(new FileItem(fileName, isFolder));
+                    isFolder = false;
                 }
+
+                // Create FileItem instance
+                Files.Add(new FileItem(fileName, isFolder));
             }
+
         }
+
+
+        //private void LoadFiles(string directoryPath)
+        //{
+        //    currentDirectoryPath = directoryPath;
+
+        //    if (Directory.Exists(currentDirectoryPath))
+        //    {
+        //        Files.Clear();
+
+        //        // Load files and folders from the current directory
+        //        string[] fileEntries = Directory.GetFileSystemEntries(currentDirectoryPath);
+
+        //        foreach (string entryPath in fileEntries)
+        //        {
+        //            string fileName = Path.GetFileName(entryPath);
+        //            bool isFolder = Directory.Exists(entryPath);
+        //            Files.Add(new FileItem(fileName, isFolder));
+        //        }
+        //    }
+        //}
 
         private void OnFileTapped(object sender, EventArgs e)
         {
             var tappedFile = (sender as View)?.BindingContext as FileItem;
             if (tappedFile != null)
             {
-                if (tappedFile.IsFolder)
+                if (tappedFile.IsFolder) // if file tapped is a folder
                 {
                     // Open the tapped folder and display its contents
-                    string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
-                    LoadFiles(folderPath);
-                    SelectedFile = null;
+                    Database.Instance.FileSelectByFileName(tappedFile.FileName);
+
+                    // Populate File Management View
+                    
+
                 }
                 else
                 {
                     // Handle file selection logic
                     // You can implement your custom logic here
+                    // LOGIC TO IMPLEMENT ACTION FOR OTHER FILES
                     DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
                 }
             }
@@ -100,10 +124,13 @@ namespace FirstApp
             var tappedFile = (sender as View)?.BindingContext as FileItem;
             if (tappedFile != null && tappedFile.IsFolder)
             {
-                // Open the tapped folder and display its contents
-                string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
-                LoadFiles(folderPath);
-                SelectedFile = null;
+                Database.Instance.FileSelectByFileName(tappedFile.FileName);
+
+
+                //// Open the tapped folder and display its contents
+                //string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
+                //LoadFiles(folderPath);
+                //SelectedFile = null;
 
                 // Delay the selection to avoid immediate reselection due to double-tap gesture
                 await Task.Delay(200);
@@ -112,17 +139,19 @@ namespace FirstApp
 
         private void OnBackClicked(object sender, EventArgs e)
         {
+
             if (!string.IsNullOrEmpty(currentDirectoryPath))
             {
                 string parentDirectoryPath = Directory.GetParent(currentDirectoryPath)?.FullName;
                 if (parentDirectoryPath != null)
                 {
+
                     LoadFiles(parentDirectoryPath);
                     SelectedFile = null;
                 }
             }
         }
-
+        
         private async void OnNewFolderClicked(object sender, EventArgs e)
         {
             // Prompt the user for the new folder name
@@ -335,6 +364,12 @@ namespace FirstApp
                 // Scroll to the selected item in the ListView
                 fileListView.ScrollTo(fileListView.SelectedItem, ScrollToPosition.MakeVisible, animated: true);
             }
+        }
+
+        private void RefreshPage()
+        {
+            Files.Clear(); // Remove all files in the Files list
+            LoadFilesFromDB(); // Reload from current working directory
         }
     }
 
