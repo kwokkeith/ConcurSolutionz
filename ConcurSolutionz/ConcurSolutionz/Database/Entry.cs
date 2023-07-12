@@ -1,11 +1,27 @@
 using System.Security.Cryptography;
 using System.Globalization;
+using System.Text.Json;
 
 namespace ConcurSolutionz.Database
 {
     public class Entry: FileDB
     {
-        public MetaData MetaData { get; set; }
+        private MetaData metaData;
+        public MetaData MetaData { 
+            get{
+                return metaData;
+            } 
+            set{
+                metaData = value;
+
+                // Create Entry MetaData
+                string json;
+                // Write over the current existing metaData JSON file
+                string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(FilePath);
+                json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(value));
+                
+                File.WriteAllText(entryMetaDataPath, json);
+        }}
         public List<Record> Records { get; set; }
 
 
