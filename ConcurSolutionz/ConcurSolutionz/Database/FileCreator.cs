@@ -61,7 +61,6 @@ namespace ConcurSolutionz.Database
                 try{
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
                     json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entry.MetaData));
-                    
                     File.WriteAllText(entryMetaDataPath, json);
                 }
                 catch (Exception e){

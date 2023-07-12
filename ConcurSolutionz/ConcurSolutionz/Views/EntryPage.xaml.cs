@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
+using System.IO;  
 
 namespace ConcurSolutionz.Views;
 
@@ -18,8 +19,10 @@ public partial class EntryPage : ContentPage
 
 
     public EntryPage()
-	{
-		InitializeComponent();
+    {
+        Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
+
+        InitializeComponent();
 
         //new EntryPage().frontEnd();
 
@@ -37,15 +40,56 @@ public partial class EntryPage : ContentPage
             .Build();
 
 
+        Receipt.ReceiptBuilder receiptBuilder = new();
+        Receipt receipt1;
+
+        List<ConcurSolutionz.Database.Record> rec = new List<ConcurSolutionz.Database.Record>();
+      
+        receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription("Pizza Hut for bonding activities")
+                .SetSupplierName("Pizza Hut")
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(104.5m)
+                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+                .SetReceiptStatus("Tax Receipt")
+                .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
+                .Build();
+
+        rec.Add(receipt1);
+
         ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
         ConcurSolutionz.Database.Entry entry;
 
-        entry = entryBuilder.SetFileName("File 1")
-            .SetCreationDate(DateTime.Now)
-            .SetFilePath("C:/ConcurTests/EntryTest.fdr")
-            .SetMetaData(md)
-            .SetRecords(new List<ConcurSolutionz.Database.Record>())
-            .Build();
+        //Directory.CreateDirectory("/Users/hongjing/Downloads/File_1");
+        // .SetMetaData(md)
+
+        try
+        {
+            entry = entryBuilder.SetFileName("File_1")
+                                .SetCreationDate(DateTime.Now)
+                                .SetLastModifiedDate(DateTime.Now)
+                                .SetFilePath("/Users/hongjing/Downloads")
+                                .SetMetaData(md) 
+                                .SetRecords(rec)
+                                .Build();
+            Console.WriteLine("HI1");
+            Console.WriteLine(entry.MetaData); 
+        }
+        catch (Exception ex)
+        {
+            entry = null;
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+
+        Console.WriteLine("HI2");
+
+
+        Database.Database.CreateFile(entry);
+
+        Console.WriteLine("HI3");
+
+        
 
         List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
         List<ConcurSolutionz.Database.Receipt> receipts = new List<ConcurSolutionz.Database.Receipt>();
@@ -86,7 +130,7 @@ public partial class EntryPage : ContentPage
             //new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), // fetch the data somewhere
         };
 
-        
+
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -109,17 +153,17 @@ public partial class EntryPage : ContentPage
 
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
-        string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard:Keyboard.Text);
-        if(result != null)
+        string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard: Keyboard.Text);
+        if (result != null)
         {
             EntryName.Text = result;
         }
     }
 
-	private async void EditRecord_Clicked(object sender, EventArgs e)
-	{
-		await Shell.Current.GoToAsync(nameof(RecordPage));
-	}
+    private async void EditRecord_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(RecordPage));
+    }
 
     //private List<Models.Receipt> GetRecords() // need the database to build the receipt
 
@@ -137,9 +181,9 @@ public partial class EntryPage : ContentPage
 
 
     private async void AddRecord_Clicked(object sender, EventArgs e)
-	{
+    {
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
-        if(action == "Upload")
+        if (action == "Upload")
         {
             // Call the PickAndShow method with the options for picking an image file
             await PickAndShow(new PickOptions
@@ -154,7 +198,7 @@ public partial class EntryPage : ContentPage
                 PickerTitle = "Select an image"
             });
         }
-        
+
     }
 
     // Method to pick and show image file
@@ -200,4 +244,5 @@ public partial class EntryPage : ContentPage
             return null;
         }
     }
+
 }
