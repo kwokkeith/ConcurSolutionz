@@ -1,0 +1,66 @@
+﻿<!--<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ConcurSolutionz"
+             x:Class="ConcurSolutionz.MainPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="SelectedBackgroundColor">#ADD8E6</Color>
+            <local:SelectedItemToBackgroundColorConverter x:Key="SelectedItemBackgroundColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Text="Back" Clicked="OnBackClicked" HorizontalOptions="Start" VerticalOptions="Center" />
+                <StackLayout Grid.Column="1" Orientation="Horizontal" Spacing="10" HorizontalOptions="Center">
+                    <Button Text="New Folder" Clicked="OnNewFolderClicked" />
+                    <Button Text="New Entry" Clicked="OnNewEntryClicked" />
+                    <Button Text="Rename" Clicked="OnRenameClicked" />
+                    <Button Text="Delete" Clicked="OnDeleteClicked" />
+                    <Button Text="Sort" Clicked="OnSortClicked" />
+                </StackLayout>
+            </Grid>
+
+             //File list placeholder 
+            <ListView ItemsSource="{Binding Files}"
+                      SelectedItem="{Binding SelectedFile}"
+                      x:Name="fileListView"
+                      HasUnevenRows="True">
+                <ListView.Resources>
+                    <ResourceDictionary>
+                        <local:SelectedItemToBackgroundColorConverter x:Key="SelectedItemBackgroundColorConverter" />
+                    </ResourceDictionary>
+                </ListView.Resources>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="10"
+                                  BackgroundColor="{Binding IsSelected, Converter={StaticResource SelectedItemBackgroundColorConverter}, ConverterParameter={x:Reference fileListView}}">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference fileListView}, Path=BindingContext.ToggleSelectionCommand}"
+                                                          CommandParameter="{Binding .}" NumberOfTapsRequired="1" />
+                                    <TapGestureRecognizer Tapped="OnFileDoubleTapped" NumberOfTapsRequired="2" />
+                                </Grid.GestureRecognizers>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24" />
+                                <Label Grid.Column="1" Text="{Binding FileName}" Margin="10,0,0,0" />
+                                <Label Grid.Column="2" Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
+                                       HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>-->

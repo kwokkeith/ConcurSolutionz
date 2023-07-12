@@ -9,30 +9,6 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Views;
 
-public class FileItem
-{
-    public string FileName { get; set; }
-    public string Icon { get; set; }
-    public bool IsFolder { get; set; }
-    public DateTime CreationDateTime { get; set; }
-    public ObservableCollection<FileItem> Children { get; set; }
-
-    public FileItem(string fileName, bool isFolder)
-    {
-        FileName = fileName;
-        IsFolder = isFolder;
-        if (isFolder)
-        {
-            Icon = "file_icon.png";
-            Children = new ObservableCollection<FileItem>();
-        }
-        else
-        {
-            Icon = "doc_icon.png";
-        }
-        CreationDateTime = DateTime.Now;
-    }
-}
 
 public partial class MainPage : ContentPage
 {
@@ -59,7 +35,7 @@ public partial class MainPage : ContentPage
 
         if (Directory.Exists(currentDirectoryPath))
         {
-            Files.Clear();
+            var files = new ObservableCollection<FileItem>();
 
             // Load files and folders from the current directory
             string[] fileEntries = Directory.GetFileSystemEntries(currentDirectoryPath);
@@ -68,10 +44,13 @@ public partial class MainPage : ContentPage
             {
                 string fileName = Path.GetFileName(entryPath);
                 bool isFolder = Directory.Exists(entryPath);
-                Files.Add(new FileItem(fileName, isFolder));
+                files.Add(new FileItem(fileName, isFolder));
             }
+
+            Files = files; // Update the Files collection once with the new data
         }
     }
+
 
     private void OnFileTapped(object sender, EventArgs e)
     {
