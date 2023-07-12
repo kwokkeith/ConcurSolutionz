@@ -12,15 +12,23 @@ namespace ConcurSolutionz.Database
                 return metaData;
             } 
             set{
-                metaData = value;
+                if (File.Exists(Utilities.ConstEntryMetaDataPath(this.FilePath)))
+                {
+                    metaData = value;
 
-                // Create Entry MetaData
-                string json;
-                // Write over the current existing metaData JSON file
-                string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(FilePath);
-                json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(value));
-                
-                File.WriteAllText(entryMetaDataPath, json);
+                    // Create Entry MetaData
+                    string json;
+                    // Write over the current existing metaData JSON file
+                    string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(this.FilePath);
+                    json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(metaData));
+
+                    File.WriteAllText(entryMetaDataPath, json);
+                }
+
+                else
+                {
+                    metaData = value;
+                }
         }}
         public List<Record> Records { get; set; }
 
