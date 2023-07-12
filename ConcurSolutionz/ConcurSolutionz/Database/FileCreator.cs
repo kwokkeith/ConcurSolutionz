@@ -94,7 +94,7 @@ namespace ConcurSolutionz.Database
             foreach( Record record in entry.GetRecords())
                 {
                     // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
-                    Receipt receipt = RecordSocket.ConvertRecord(record);
+                    Receipt receipt = RecordAdaptor.ConvertRecord(record);
 
                     // @@@@@@@@@@@@@@@@@@@@@@
                     // FOR RECEIPT PICTURE 

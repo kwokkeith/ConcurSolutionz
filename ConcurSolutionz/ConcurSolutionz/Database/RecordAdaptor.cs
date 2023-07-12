@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public class RecordSocket
+    public class RecordAdaptor
     {
         public static dynamic ConvertRecord( Record record) {
             switch (record.SubType){
