@@ -2,10 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-<<<<<<< HEAD
 using System.IO;
-=======
->>>>>>> AddRecord
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -18,25 +15,16 @@ public class FileItem
     public string Icon { get; set; }
     public bool IsFolder { get; set; }
     public DateTime CreationDateTime { get; set; }
-<<<<<<< HEAD
     public ObservableCollection<FileItem> Children { get; set; }
-=======
->>>>>>> AddRecord
 
     public FileItem(string fileName, bool isFolder)
     {
         FileName = fileName;
         IsFolder = isFolder;
-<<<<<<< HEAD
         if (isFolder)
         {
             Icon = "file_icon.png";
             Children = new ObservableCollection<FileItem>();
-=======
-        if (isFolder == true)
-        {
-            Icon = "file_icon.png";
->>>>>>> AddRecord
         }
         else
         {
@@ -52,7 +40,6 @@ public partial class MainPage : ContentPage
     public FileItem SelectedFile { get; set; }
     public SortOption CurrentSortOption { get; set; }
 
-<<<<<<< HEAD
     private string rootDirectoryPath = "/Users/";
     private string currentDirectoryPath;
 
@@ -134,24 +121,6 @@ public partial class MainPage : ContentPage
                 SelectedFile = null;
             }
         }
-=======
-    public MainPage()
-    {
-        InitializeComponent();
-        Files = new ObservableCollection<FileItem>
-        {
-            new FileItem("Document1.txt", false), // Set icon for non-folder item
-            new FileItem("Document2.txt", false), // Set icon for non-folder item
-            new FileItem("Folder1", true) // Set icon for folder item
-        };
-        CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
-        BindingContext = this;
-    }
-
-    private async void OnEntry_Clicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync(nameof(EntryPage));
->>>>>>> AddRecord
     }
 
     private async void OnNewFolderClicked(object sender, EventArgs e)
@@ -161,7 +130,6 @@ public partial class MainPage : ContentPage
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
-<<<<<<< HEAD
             try
             {
                 // Create a new folder in the target directory
@@ -182,16 +150,6 @@ public partial class MainPage : ContentPage
                 // Handle any potential errors
                 Console.WriteLine($"Failed to create folder: {ex.Message}");
             }
-=======
-            // Create a new folder item with the entered name
-            FileItem newFolder = new FileItem(newName, true);
-
-            // Add the new folder to the collection
-            Files.Add(newFolder);
-
-            // Select the new folder
-            SelectedFile = newFolder;
->>>>>>> AddRecord
         }
     }
 
@@ -202,7 +160,6 @@ public partial class MainPage : ContentPage
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
-<<<<<<< HEAD
             try
             {
                 // Create a new file in the target directory
@@ -223,29 +180,15 @@ public partial class MainPage : ContentPage
                 // Handle any potential errors
                 Console.WriteLine($"Failed to create file: {ex.Message}");
             }
-=======
-            // Create a new entry item with the entered name
-            FileItem newEntry = new FileItem(newName, false);
-
-            // Add the new entry to the collection
-            Files.Add(newEntry);
-
-            // Select the new entry
-            SelectedFile = newEntry;
->>>>>>> AddRecord
         }
     }
+
 
     private async void OnRenameClicked(object sender, EventArgs e)
     {
         // Handle Rename button click
         if (SelectedFile != null)
         {
-<<<<<<< HEAD
-            // Prompt for renaming the selected file/folder
-=======
-            // Prompt for renaming the selected file
->>>>>>> AddRecord
             await RenameSelectedFile(SelectedFile.FileName, "Enter a new name");
         }
     }
@@ -257,7 +200,6 @@ public partial class MainPage : ContentPage
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
-<<<<<<< HEAD
             try
             {
                 string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
@@ -289,18 +231,6 @@ public partial class MainPage : ContentPage
                 // Handle any potential errors
                 Console.WriteLine($"Failed to rename file/folder: {ex.Message}");
             }
-=======
-            // Create a new FileItem with the updated file name and other properties
-            FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
-            renamedFile.CreationDateTime = DateTime.Now;
-
-            // Replace the selected file with the renamed file in the collection
-            int selectedIndex = Files.IndexOf(SelectedFile);
-            Files[selectedIndex] = renamedFile;
-
-            // Update the SelectedFile property with the renamed file
-            SelectedFile = renamedFile;
->>>>>>> AddRecord
         }
     }
 
@@ -309,7 +239,6 @@ public partial class MainPage : ContentPage
         // Handle Delete button click
         if (SelectedFile != null)
         {
-<<<<<<< HEAD
             try
             {
                 string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
@@ -355,36 +284,6 @@ public partial class MainPage : ContentPage
             {
                 // Handle any potential errors
                 Console.WriteLine($"Failed to deletefile/folder: {ex.Message}");
-=======
-            // Get the index of the selected file
-            int selectedIndex = Files.IndexOf(SelectedFile);
-
-            // Delete the selected file
-            Files.Remove(SelectedFile);
-
-            // Select the previous file if it exists
-            if (selectedIndex > 0 && selectedIndex < Files.Count)
-            {
-                SelectedFile = Files[selectedIndex];
-                ScrollToSelectedItem();
-            }
-            else if (selectedIndex > 0 && selectedIndex == Files.Count)
-            {
-                // If the last file was deleted, select the previous file
-                SelectedFile = Files[selectedIndex - 1];
-                ScrollToSelectedItem();
-            }
-            else if (selectedIndex == 0 && Files.Count > 0)
-            {
-                // If the first file was deleted, select the first file
-                SelectedFile = Files[0];
-                ScrollToSelectedItem();
-            }
-            else
-            {
-                // If there are no files left, clear the selection
-                SelectedFile = null;
->>>>>>> AddRecord
             }
         }
     }
@@ -421,47 +320,20 @@ public partial class MainPage : ContentPage
         switch (CurrentSortOption)
         {
             case SortOption.Alphabetical:
-<<<<<<< HEAD
                 Files = new ObservableCollection<FileItem>(Files.OrderBy(file => file.FileName));
                 break;
             case SortOption.Date:
                 Files = new ObservableCollection<FileItem>(Files.OrderByDescending(file => file.CreationDateTime));
-=======
-                Files = new ObservableCollection<FileItem>(Files.OrderBy(f => f.FileName));
-                break;
-            case SortOption.Date:
-                Files = new ObservableCollection<FileItem>(Files.OrderBy(f => f.CreationDateTime));
-                break;
-            default:
->>>>>>> AddRecord
                 break;
         }
     }
 
     private void ScrollToSelectedItem()
     {
-<<<<<<< HEAD
         if (fileListView.SelectedItem != null)
         {
             // Scroll to the selected item in the ListView
             fileListView.ScrollTo(fileListView.SelectedItem, ScrollToPosition.MakeVisible, animated: true);
-=======
-        if (SelectedFile != null)
-        {
-            // Scroll the ListView to the selected item
-            fileListView.ScrollTo(SelectedFile, ScrollToPosition.MakeVisible, true);
-        }
-    }
-
-    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName == nameof(SelectedFile))
-        {
-            // Update the selected item visual state after selection changes
-            fileListView.SelectedItem = SelectedFile;
->>>>>>> AddRecord
         }
     }
 }

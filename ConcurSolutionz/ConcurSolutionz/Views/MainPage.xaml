@@ -1,11 +1,6 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-<<<<<<< HEAD
              x:Class="ConcurSolutionz.Views.MainPage">
-=======
-             x:Class="ConcurSolutionz.Views.MainPage"
-             Title="Files">
->>>>>>> AddRecord
     <ContentPage.Content>
         <StackLayout Padding="10">
             <FlexLayout Direction="Row" JustifyContent="Center" AlignItems="Center" Margin="0,20,0,20">
@@ -18,11 +13,8 @@
                 <Button Text="Delete" Clicked="OnDeleteClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="Sort" Clicked="OnSortClicked" />
-<<<<<<< HEAD
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="Back" Clicked="OnBackClicked" />
-=======
->>>>>>> AddRecord
             </FlexLayout>
 
             <!-- File list placeholder -->
@@ -32,7 +24,6 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-<<<<<<< HEAD
                             <Grid Padding="10">
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnFileTapped" NumberOfTapsRequired="1" />
@@ -48,15 +39,6 @@
                                 <Label Grid.Column="2" Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
                                     HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
                             </Grid>
-=======
-                            <StackLayout Orientation="Horizontal" Padding="10">
-                            <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24" />
-                            <Label Text="{Binding FileName}" Margin="10,0,0,0" />
-                            <Label Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
-                            HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
-                            <Button Text="View" Clicked="OnEntry_Clicked" HeightRequest="25" HorizontalOptions="End"/>
-                            </StackLayout>
->>>>>>> AddRecord
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

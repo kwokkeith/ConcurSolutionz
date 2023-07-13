@@ -1,49 +1,22 @@
-<<<<<<< HEAD
 ﻿using System.Collections.ObjectModel;
-
-namespace ConcurSolutionz.Views;
-
-public partial class EntryPage : ContentPage
-{
-    public ObservableCollection<Models.Receipt> Receipts { get; set; } // Creation of the Receipts observable collection 
-
-=======
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Globalization;
-using ConcurSolutionz.Controllers;
+using ConcurSolutionz.Controllers; 
 using ConcurSolutionz.Database;
-using System.IO;  
+using System.IO;
 
 namespace ConcurSolutionz.Views;
 
 public partial class EntryPage : ContentPage
 {
     // ReceiptView collection for storing and displaying Receipt models
-    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } 
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
 
->>>>>>> AddRecord
     public EntryPage()
     {
         // Set the working directory for the database instance
         Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
 
-<<<<<<< HEAD
-        // Instantiate the Receipts collection
-        Receipts = new ObservableCollection<Models.Receipt> 
-        {
-            // Add some test data (hardcoded for now) 
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Credit").SetExpenseType("Food").SetSupplierName("Restaurant").SetTransactionDate(DateTime.Now).SetReqAmount(100)),
-            new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType("Cash").SetExpenseType("Transport").SetSupplierName("Taxi").SetTransactionDate(DateTime.Now).SetReqAmount(50)), 
-        };
-
-        // Set the BindingContext of the CollectionView
-        recordCollection.BindingContext = this;
-
-        // Set the ItemsSource of the CollectionView
-        recordCollection.ItemsSource = Receipts;
-    }
-=======
         InitializeComponent();
 
         // Instantiate the Receipts collection
@@ -134,49 +107,26 @@ public partial class EntryPage : ContentPage
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = ReceiptView;
-   }
->>>>>>> AddRecord
+    }
+
 
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
+    {
+        string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard: Keyboard.Text);
+        if (result != null)
         {
-            string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard: Keyboard.Text);
-            if (result != null)
-            {
-                EntryName.Text = result;
-            }
+            EntryName.Text = result;
         }
-<<<<<<< HEAD
     }
 
-	private async void EditRecord_Clicked(object sender, EventArgs e)
-	{
-		await Shell.Current.GoToAsync(nameof(RecordPage));
-	}
-
-    //private List<Models.Receipt> GetRecords() // need the database to build the receipt
-
-    //{
-    //    //return new List<Models.Receipt>
-    //    //{
-    //    //	new Models.Receipt {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
-    //    //	new Models.Receipt {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
-    //    //};
-
-    //}
-
-
-
-=======
-
     // Click event handler for editing record
-    async void EditRecord_Clicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync(nameof(RecordPage));
-        }
+    private async void EditRecord_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(RecordPage));
+    }
 
     // Click event handler for adding new record
->>>>>>> AddRecord
     private async void AddRecord_Clicked(object sender, EventArgs e)
     {
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
@@ -242,6 +192,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
-    }
+}
+
 
 

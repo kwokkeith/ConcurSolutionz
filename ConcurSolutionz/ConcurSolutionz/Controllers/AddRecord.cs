@@ -1,30 +1,12 @@
-<<<<<<< HEAD
-//using ConcurSolutionz.Database;
-=======
 using System;
 using System.Globalization;
 using System.Threading;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Views;
 using ConcurSolutionz.OCR;
->>>>>>> AddRecord
 
-//namespace ConcurSolutionz.Controllers {
+namespace ConcurSolutionz.Controllers {
 
-<<<<<<< HEAD
-//    public class AddRecord {
-
-//        public void addReceipt() {
-            
-//            // Data to get from OCR
-//            ReceiptOCR receiptData = new();
-//            string ReceiptNumber = receiptData.get();
-//            decimal ReqAmount = receiptData.get();
-//            int RecordID = receiptData.get();
-
-//            // Remaining data need to get from frontend
-//            // Possibly through an Entry class
-=======
     public class AddRecord {
         //public string frontEndExpenseType;
         //public string frontEndPaymentType;
@@ -59,31 +41,10 @@ using ConcurSolutionz.OCR;
             // string expenseType = "Hello";
             // string transactionDate = "10/07/2023";
             // string description = "Trial Claim";
->>>>>>> AddRecord
 
-//            Receipt.ReceiptBuilder ReceiptBuilder = new();
-//            Receipt receipt;
+            Receipt.ReceiptBuilder ReceiptBuilder = new();
+            Receipt receipt;
 
-<<<<<<< HEAD
-//            receipt = ReceiptBuilder.SetExpenseType().
-//                      .SetTransactionDate()
-//                      .SetDescription()
-//                      .SetSupplierName()
-//                      .SetCityOfPurchase()
-//                      .SetReqAmount(ReqAmount)
-//                      .SetReceiptNumber(ReceiptNumber)
-//                      .SetReceiptStatus()
-//                      .SetImgPath()
-//                      .Build();
-            
-//            // Get an Entry object from frontend
-//            Entry entry;
-//            entry.AddRecord(receipt);
-
-//        }
-//    }   
-//}
-=======
             receipt = ReceiptBuilder.SetExpenseType(expenseType)
                       .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
                       .SetDescription(description)
@@ -123,14 +84,6 @@ using ConcurSolutionz.OCR;
             FileCreator.CreateFile(entry);
 
             entry.AddRecord(receipt);
-
-            //frontEndExpenseType = receipt.ExpenseType;
-            //frontEndPaymentType = receipt.PaymentType;
-            //frontEndSupplierName = receipt.SupplierName;
-            //frontEndTransactionDate = receipt.TransactionDate;
-            //frontEndReqAmount = receipt.ReqAmount;
-
         }
     } 
 }
->>>>>>> AddRecord
