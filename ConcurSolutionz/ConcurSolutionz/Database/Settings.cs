@@ -13,6 +13,7 @@ namespace ConcurSolutionz.Database
         
         public Settings(){
             SetSettingsPath();
+
             if (!Directory.Exists(settingsdirectoryPath))
             {
                 Directory.CreateDirectory(settingsdirectoryPath);
@@ -95,22 +96,9 @@ namespace ConcurSolutionz.Database
         private void SetSettingsPath(){
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-            // Windows OS
             settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
             settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-            // MAC OS
-            settingsdirectoryPath = Path.Combine(userProfile, "Library", "ConcurSolutionz");
-            settingsfilePath = Path.Combine(userProfile, "Library", "ConcurSolutionz", "settings.json");
-            }
 
-            else {
-                throw new Exception("OS Unsupported");
-            }
         }
     }
 }
