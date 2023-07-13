@@ -204,7 +204,8 @@
                         <Button Text="Edit incorrect scans"
                             Grid.Column="0"
                             HeightRequest="50"/>
-                        <Button Text="Save details"
+                        <Button Clicked="RecordClick"
+                            Text="Save details"
                             Grid.Column="1"
                             HeightRequest="50"
                             Clicked="OnSaveDetails_Clicked"/>
