@@ -15,10 +15,12 @@ public partial class EmptyPage : ContentPage
 
 	private async void TogglePage()
 	{
-		Settings settings = new Settings();
-		var result = settings.GetRootDirectory();
+        Concur concur = new Concur();
+        Database db = Database.Instance;
+        db.SetSetting(concur);
+        string rootDir = db.GetSettings().GetRootDirectory();
 
-		if(result == null)
+		if(rootDir is null)
 		{
 			await Shell.Current.GoToAsync(nameof(ChooseRootPage));
 		}
