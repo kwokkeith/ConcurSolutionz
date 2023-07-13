@@ -25,56 +25,66 @@ public partial class EntryPage : ContentPage
         // Creating metadata for student project claim
         StudentProjectClaimMDBuilder studentProjMDBuilder = new();
         StudentProjectClaimMetaData md = studentProjMDBuilder
-            .SetEntryName("Entry 1")
+            .SetEntryName("File_1")
             .SetEntryBudget(100)
-            .SetClaimName("Claim 1")
-            .SetClaimDate(DateTime.ParseExact("12/07/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-            .SetPurpose("Purpose 1")
-            .SetTeamName("Team 1")
-            .SetProjectClub("Project Club 1")
+            .SetClaimName(ClaimName.Text)
+            .SetClaimDate(DateTime.ParseExact(DateTime.Now.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture))
+            .SetPurpose(Purpose.Text)
+            .SetTeamName(TeamName.Text)
+            .SetProjectClub(ProjectClub.Text)
             .Build();
 
         // Building a receipt with specific details
-        Receipt.ReceiptBuilder receiptBuilder = new();
-        Receipt receipt1;
-        List<ConcurSolutionz.Database.Record> rec = new();
+        //Receipt.ReceiptBuilder receiptBuilder = new();
+        //Receipt receipt1;
+        //List<ConcurSolutionz.Database.Record> rec = new();
 
-        receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
-                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetDescription("Pizza Hut for bonding activities")
-                .SetSupplierName("Pizza Hut")
-                .SetCityOfPurchase("Singapore, SINGAPORE")
-                .SetReqAmount(104.5m)
-                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
-                .SetReceiptStatus("Tax Receipt")
-                .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
-                .Build();
+        //receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+        //        .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+        //        .SetDescription("Pizza Hut for bonding activities")
+        //        .SetSupplierName("Pizza Hut")
+        //        .SetCityOfPurchase("Singapore, SINGAPORE")
+        //        .SetReqAmount(104.5m)
+        //        .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+        //        .SetReceiptStatus("Tax Receipt")
+        //        .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
+        //        .Build();
 
-        rec.Add(receipt1);
+        //rec.Add(receipt1);
 
         // Building an Entry instance with specific details
         ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
-        ConcurSolutionz.Database.Entry entry;
+        ConcurSolutionz.Database.Entry entry = GetEntry();
 
-        try
+        if (entry == null)
         {
-            entry = entryBuilder.SetFileName("File_1")
-                                .SetCreationDate(DateTime.Now)
-                                .SetLastModifiedDate(DateTime.Now)
-                                .SetFilePath("/Users/hongjing/Downloads")
-                                .SetMetaData(md)
-                                .SetRecords(rec)
-                                .Build();
-        }
-        catch (Exception ex)
-        {
-            entry = null;
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            try
+            {
+                if (Directory.Exists("/Users/hongjing/Downloads/File_1"))
+                {
+                    Directory.Delete("/Users/hongjing/Downloads/File_1", true);
+                }
+
+                entry = entryBuilder.SetFileName("File_1")
+                                    .SetCreationDate(DateTime.Now)
+                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetFilePath("/Users/hongjing/Downloads")
+                                    .SetMetaData(md)
+                                    .SetRecords(new List<ConcurSolutionz.Database.Record>())
+                                    .Build();
+            }
+
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            // Creating a file in the database
+            Database.Database.CreateFile(entry);
         }
 
-        // Creating a file in the database
-        Database.Database.CreateFile(entry);
-
+        
         // Convert database records into Receipt instances
         List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
         List<ConcurSolutionz.Database.Receipt> receipts = new();
@@ -107,7 +117,14 @@ public partial class EntryPage : ContentPage
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = ReceiptView;
-   }
+    }
+       
+    private ConcurSolutionz.Database.Entry GetEntry()
+    {
+        ConcurSolutionz.Database.Entry entry = null;
+        // replace null with entry object from RecordPage
+        return entry;
+    }
 
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)

@@ -79,7 +79,8 @@
                            FontSize="Body"
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
-                    <Entry Placeholder="Claim Name"
+                    <Entry  x:Name="ClaimName"
+                            Placeholder="Claim Name"
                             Grid.Column="1"
                             Grid.Row="1"
                             VerticalOptions="Center"
@@ -105,7 +106,8 @@
                                 VerticalOptions="Center"/>
                     </Border>
                     
-                    <Label Text="Project/Club:"
+                    <Label x:Name="ProjectClub"
+                           Text="Project/Club:"
                            Grid.Column="0"
                            Grid.Row="3"
                            FontSize="Body"
@@ -119,7 +121,8 @@
                            FontSize="Body"
                            HeightRequest="50"/>
 
-                    <Label Text="Team Name:"
+                    <Label x:Name="TeamName"
+                           Text="Team Name:"
                            Grid.Column="0"
                            Grid.Row="4"
                            VerticalOptions="Center"
@@ -144,7 +147,8 @@
                     <Border StrokeShape="RoundRectangle 5,5,5,5"
                             HeightRequest="300"
                             StrokeThickness="2">
-                        <Editor Placeholder="Enter purpose"
+                        <Editor x:Name="Purpose"
+                                Placeholder="Enter purpose"
                                 FontSize="Body"/>
 
                     </Border>
