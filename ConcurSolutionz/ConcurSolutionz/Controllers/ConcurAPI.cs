@@ -417,7 +417,7 @@ namespace ConcurSolutionz
                 {
                     Expense expense = new Expense();
                     expense.Id = jsonArr[i]!["expenseId"]!.ToString();
-                    expense.Cost = Convert.ToDouble(jsonArr[i]!["summary"]!["transactionAmount"]!["value"]!.ToString());
+                    expense.Cost = Convert.ToDecimal(jsonArr[i]!["summary"]!["transactionAmount"]!["value"]!.ToString());
                     expense.Supplier = jsonArr[i]!["summary"]!["vendor"]!["description"]!.ToString();
                     expense.Date = jsonArr[i]!["summary"]!["transactionDate"]!.ToString();
                     expense.RPEKey = jsonArr[i]!["summary"]!["rpeKey"]!.ToString();

@@ -39,12 +39,14 @@
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <Entry Placeholder="Type"
+                    <Entry  x:Name="ExpenseType"
+                            Placeholder="Type"
                             Grid.Column="1"
                             Grid.Row="0"
                            HeightRequest="50"
                            FontSize="Body"/>
-                    <Label Text="Date"
+                    <Label x:Name="Date"
+                           Text="Date"
                            Grid.Row="1"
                            Grid.Column="0"
                            VerticalOptions="Center"
@@ -78,7 +80,8 @@
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <Entry Placeholder="Description"
+                    <Entry  x:Name="Description"
+                            Placeholder="Description"
                             Grid.Row="4"
                             Grid.Column="1"
                            HeightRequest="50"

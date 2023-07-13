@@ -41,6 +41,19 @@ namespace ConcurSolutionz.Views
             InitializeComponent();
         }
 
+		public List<string> getData() {
+            string expenseType = ExpenseType.Text;
+            string transactionDate = Date.Text;
+            string description = Description.Text;
+
+            List<string> data = new List<string>();
+            data.Add(expenseType);
+            data.Add(transactionDate);
+            data.Add(description);
+
+            return data;
+        }
+
         // Method to pick and show image file
         public async Task<FileResult> PickAndShow(PickOptions options)
         {
@@ -109,6 +122,8 @@ namespace ConcurSolutionz.Views
         {
             await Shell.Current.GoToAsync("..");
         }
+
+
 
 
     }

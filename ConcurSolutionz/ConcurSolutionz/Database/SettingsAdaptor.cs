@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public static class SettingsSocket
+    public static class SettingsAdaptor
     {
         public static dynamic ConvertSettings( Settings settings) {
             switch (settings.SubType){

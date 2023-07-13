@@ -60,16 +60,7 @@ namespace ConcurSolutionz.Database
                 string json;
                 try{
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
-                    switch (entry.MetaData.SubType){
-                        case "StudentProjectClaimMetaData":
-                            json = JsonSerializer.Serialize((StudentProjectClaimMetaData)entry.MetaData);
-                            break;
-
-                        default:
-                            json = JsonSerializer.Serialize(entry.MetaData);
-                            break;
-                    }
-                    
+                    json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entry.MetaData));
                     File.WriteAllText(entryMetaDataPath, json);
                 }
                 catch (Exception e){

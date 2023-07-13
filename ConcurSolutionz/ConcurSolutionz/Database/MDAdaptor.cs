@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ConcurSolutionz.Database
 {
-    public class MDSocket
+    public class MDAdaptor
     {
         public static dynamic ConvertMetaData( MetaData metaData) {
             switch (metaData.SubType){
