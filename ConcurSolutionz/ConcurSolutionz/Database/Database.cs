@@ -43,13 +43,13 @@ namespace ConcurSolutionz.Database
 
         public List<string> GetFilesFromWD(){
             // Make use of working directory to retrieve files
-            string[] folderPaths = Directory.GetFiles(@WorkingDirectory, "*.fdr");
-            string[] entryPaths = Directory.GetFiles(@WorkingDirectory, "*.entry");
+            string[] folderPaths = Directory.GetDirectories(WorkingDirectory, "*.fdr");
+            string[] entryPaths = Directory.GetDirectories(WorkingDirectory, "*.entry");
             List<string> files;
             if (folderPaths == null || folderPaths.Length == 0)
             {
                 // Working directory has no folders
-                if (entryPaths == null || folderPaths.Length == 0)
+                if (entryPaths == null || entryPaths.Length == 0)
                 {
                     // Working directory has no files
                     files = new List<string>();
@@ -157,8 +157,8 @@ namespace ConcurSolutionz.Database
         /// <summary>Deletes a file from the specified file path.</summary>
         /// <param name="filePath">The path of the file to be deleted.</param>
         public static void DeleteFile(string filePath){
-            // Delete a file using FilePath (Physical file management system)
-            File.Delete(filePath);
+            // Delete a file using Directory (Physical file management system)
+            Directory.Delete(filePath);
         }
         
         /// <summary>Navigates back to the previous directory.</summary>
