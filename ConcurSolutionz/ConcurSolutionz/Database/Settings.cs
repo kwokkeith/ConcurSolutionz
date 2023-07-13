@@ -13,6 +13,7 @@ namespace ConcurSolutionz.Database
         
         public Settings(){
             SetSettingsPath();
+
             if (!Directory.Exists(settingsdirectoryPath))
             {
                 Directory.CreateDirectory(settingsdirectoryPath);
@@ -57,6 +58,7 @@ namespace ConcurSolutionz.Database
                 }
             }
 
+            // Return null if root directory does not exist
             else
             {
                 using (StreamWriter writer = new StreamWriter(settingsfilePath))
@@ -65,14 +67,6 @@ namespace ConcurSolutionz.Database
                 }
                 return null;
             }
-            // If the file with root directory does not exist, prompt user to create root directory
-
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // TODO: CREATE AN INTERFACE TO PROMPT USER FOR ROOT DIRECTORY
-            // Possibly a method to call a simple UI to key in root directory
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         }
 
 
@@ -94,23 +88,8 @@ namespace ConcurSolutionz.Database
 
         private void SetSettingsPath(){
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-            // Windows OS
             settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
             settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-            // MAC OS
-            settingsdirectoryPath = Path.Combine(userProfile, "Library", "ConcurSolutionz");
-            settingsfilePath = Path.Combine(userProfile, "Library", "ConcurSolutionz", "settings.json");
-            }
-
-            else {
-                throw new Exception("OS Unsupported");
-            }
         }
     }
 }
