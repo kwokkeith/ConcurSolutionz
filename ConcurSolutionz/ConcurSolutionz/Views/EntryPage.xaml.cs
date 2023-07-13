@@ -9,11 +9,12 @@ namespace ConcurSolutionz.Views;
 
 public partial class EntryPage : ContentPage
 {
-    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } // Creation of the Receipts observable collection 
-
+    // ReceiptView collection for storing and displaying Receipt models
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } 
 
     public EntryPage()
     {
+        // Set the working directory for the database instance
         Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
 
         InitializeComponent();
@@ -21,10 +22,9 @@ public partial class EntryPage : ContentPage
         // Instantiate the Receipts collection
         ReceiptView = new ObservableCollection<Models.Receipt>();
 
-        StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
-        StudentProjectClaimMetaData md;
-
-        md = studentProjMDBuilder
+        // Creating metadata for student project claim
+        StudentProjectClaimMDBuilder studentProjMDBuilder = new();
+        StudentProjectClaimMetaData md = studentProjMDBuilder
             .SetEntryName("Entry 1")
             .SetEntryBudget(100)
             .SetClaimName("Claim 1")
@@ -34,11 +34,10 @@ public partial class EntryPage : ContentPage
             .SetProjectClub("Project Club 1")
             .Build();
 
-
+        // Building a receipt with specific details
         Receipt.ReceiptBuilder receiptBuilder = new();
         Receipt receipt1;
-
-        List<ConcurSolutionz.Database.Record> rec = new List<ConcurSolutionz.Database.Record>();
+        List<ConcurSolutionz.Database.Record> rec = new();
 
         receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
                 .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
@@ -53,11 +52,9 @@ public partial class EntryPage : ContentPage
 
         rec.Add(receipt1);
 
+        // Building an Entry instance with specific details
         ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
         ConcurSolutionz.Database.Entry entry;
-
-        //Directory.CreateDirectory("/Users/hongjing/Downloads/File_1");
-        // .SetMetaData(md)
 
         try
         {
@@ -68,8 +65,6 @@ public partial class EntryPage : ContentPage
                                 .SetMetaData(md)
                                 .SetRecords(rec)
                                 .Build();
-            Console.WriteLine("HI1");
-            Console.WriteLine(entry.MetaData);
         }
         catch (Exception ex)
         {
@@ -77,12 +72,12 @@ public partial class EntryPage : ContentPage
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
 
+        // Creating a file in the database
         Database.Database.CreateFile(entry);
 
-
-
+        // Convert database records into Receipt instances
         List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
-        List<ConcurSolutionz.Database.Receipt> receipts = new List<ConcurSolutionz.Database.Receipt>();
+        List<ConcurSolutionz.Database.Receipt> receipts = new();
 
         for (int i = 0; i < records.Count; i++)
         {
@@ -90,6 +85,7 @@ public partial class EntryPage : ContentPage
             receipts.Add(receipt);
         }
 
+        // Add converted Receipts to ReceiptView collection
         for (int i = 0; i < receipts.Count; i++)
         {
             string frontEndExpenseType = receipts[i].ExpenseType;
@@ -97,7 +93,6 @@ public partial class EntryPage : ContentPage
             string frontEndSupplierName = receipts[i].SupplierName;
             DateTime frontEndTransactionDate = receipts[i].TransactionDate;
             decimal frontEndReqAmount = receipts[i].ReqAmount;
-
             ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
                                                                           .SetExpenseType(frontEndExpenseType)
                                                                           .SetSupplierName(frontEndSupplierName)
@@ -112,9 +107,9 @@ public partial class EntryPage : ContentPage
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = ReceiptView;
-
    }
 
+    // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
         {
             string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard: Keyboard.Text);
@@ -124,90 +119,77 @@ public partial class EntryPage : ContentPage
             }
         }
 
-     async void EditRecord_Clicked(object sender, EventArgs e)
+    // Click event handler for editing record
+    async void EditRecord_Clicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(RecordPage));
         }
 
-        //private List<Models.Receipt> GetRecords() // need the database to build the receipt
-
-        //{
-        //    //return new List<Models.Receipt>
-        //    //{
-        //    //	new Models.Receipt {RecordName = "Macs", CreationDate="15 June", Amount=100.00},
-        //    //	new Models.Receipt {RecordName="Hardware", CreationDate="16 June", Amount=2000 }
-        //    //};
-
-        //}
-
-
-
-
-
-        private async void AddRecord_Clicked(object sender, EventArgs e)
+    // Click event handler for adding new record
+    private async void AddRecord_Clicked(object sender, EventArgs e)
+    {
+        string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
+        if (action == "Upload")
         {
-            string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
-            if (action == "Upload")
+            // Call the PickAndShow method with the options for picking an image file
+            await PickAndShow(new PickOptions
             {
-                // Call the PickAndShow method with the options for picking an image file
-                await PickAndShow(new PickOptions
-                {
-                    FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-                    { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.Android, new[] { "image/*" } },
-                    { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
-                }),
-                    PickerTitle = "Select an image"
-                });
-            }
-
+                FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
+                { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
+                { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
+                { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
+                { DevicePlatform.Android, new[] { "image/*" } },
+                { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
+            }),
+                PickerTitle = "Select an image"
+            });
         }
 
-        // Method to pick and show image file
-        public async Task<FileResult> PickAndShow(PickOptions options)
-        {
-            try
-            {
-                // Attempt to pick the file
-                var result = await FilePicker.PickAsync(options);
+    }
 
-                // If the result is not null, a file was picked
-                if (result != null)
+    // Method to pick and show image file
+    public async Task<FileResult> PickAndShow(PickOptions options)
+    {
+        try
+        {
+            // Attempt to pick the file
+            var result = await FilePicker.PickAsync(options);
+
+            // If the result is not null, a file was picked
+            if (result != null)
+            {
+                // If the picked file is a jpg or png
+                if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
+                    result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
+                    result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
-                    // If the picked file is a jpg or png
-                    if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
-                        result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // pass the file over to the record page
-                        await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
-                    }
-                    else
-                    {
-                        // Not a supported image type
-                        await DisplayAlert("Error", "Selected file is not a supported image type", "OK");
-                    }
+                    // pass the file over to the record page
+                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
                 }
                 else
                 {
-                    // User canceled file picker
-                    return null;
+                    // Not a supported image type
+                    await DisplayAlert("Error", "Selected file is not a supported image type", "OK");
                 }
-
-                // Return the file result
-                return result;
             }
-            catch (Exception ex)
+            else
             {
-                // The user canceled or something went wrong
-                await DisplayAlert("Error", "An error occurred while picking the file: " + ex.Message, "OK");
-
-                // Return null because an exception was thrown
+                // User canceled file picker
                 return null;
             }
+
+            // Return the file result
+            return result;
         }
+        catch (Exception ex)
+        {
+            // The user canceled or something went wrong
+            await DisplayAlert("Error", "An error occurred while picking the file: " + ex.Message, "OK");
+
+            // Return null because an exception was thrown
+            return null;
+        }
+    }
 
     }
 
