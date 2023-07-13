@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #nullable enable
 
 using System.Collections.Generic;
@@ -60,6 +61,22 @@ public partial class EntryPage : ContentPage
             EntryName.Text = value;
         }
     }
+=======
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using ConcurSolutionz.Controllers;
+using ConcurSolutionz.Database;
+// using System.IO;  
+
+namespace ConcurSolutionz.Views;
+
+public partial class EntryPage : ContentPage
+{
+    // ReceiptView collection for storing and displaying Receipt models
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } 
+
+>>>>>>> 978bca3 (updated EntryPage)
     public EntryPage()
     {
         // Set the working directory for the database instance
