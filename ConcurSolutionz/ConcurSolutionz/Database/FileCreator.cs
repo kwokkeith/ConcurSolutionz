@@ -92,7 +92,7 @@ namespace ConcurSolutionz.Database
                     // FOR RECEIPT PICTURE 
                     // Store pictures
                     string imgPath = receipt.ImgPath;
-                    string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Utilities.GetFileExtension(imgPath));   
+                    string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
 
                     // Clear all receipt images from receipt folder directory
                     string[] filePaths = Directory.GetFiles(receiptFolderPath);
