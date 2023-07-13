@@ -1,21 +1,23 @@
-﻿using System;
+﻿using ConcurSolutionz.Controllers;
+using System;
 using System.IO;
 
 namespace ConcurSolutionz.Views
 {
-    [QueryProperty(nameof(ImageFile), "file")]
+    [QueryProperty(nameof(entryObject), "entry")]
     public partial class RecordPage : ContentPage
     {
-        public string ImageFile
+        Database.Entry entryPassed = null;
+        public Database.Entry entryObject
         {
             set
             {
-                LoadImage(value);
+                LoadEntry(value);
             }
 
         }
 
-        private async void LoadImage(string filePath)
+        private async void LoadEntry(Database.Entry entry)
         {
             try
             {
@@ -26,7 +28,9 @@ namespace ConcurSolutionz.Views
                 //        ReceiptImage.Source = ImageSource.FromStream(() => stream);
                 //    }
                 //}
-                ReceiptImage.Source = ImageSource.FromFile(filePath);
+                // ReceiptImage.Source = ImageSource.FromFile(entry);
+                entryPassed = entry;
+
             }
             catch (Exception ex)
             {
@@ -66,6 +70,7 @@ namespace ConcurSolutionz.Views
                 if (result != null)
                 {
                     // If the picked file is a jpg or png
+                    
                     if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
@@ -118,7 +123,15 @@ namespace ConcurSolutionz.Views
             });
         }
 
-
+        public void RecordClick(object sender, EventArgs e)
+        {
+            List<string> data = getData();
+            if (data != null)
+            {
+                string imgPath = "";
+                AddRecord.addReceipt(entryPassed, data, imgPath);
+            }
+        }
 
 
     }

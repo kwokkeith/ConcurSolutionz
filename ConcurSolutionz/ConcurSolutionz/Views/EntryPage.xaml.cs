@@ -10,7 +10,8 @@ namespace ConcurSolutionz.Views;
 public partial class EntryPage : ContentPage
 {
     // ReceiptView collection for storing and displaying Receipt models
-    public ObservableCollection<Models.Receipt> ReceiptView { get; set; } 
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
+    ConcurSolutionz.Database.Entry entry;
 
     public EntryPage()
     {
@@ -53,8 +54,6 @@ public partial class EntryPage : ContentPage
         //rec.Add(receipt1);
 
         // Building an Entry instance with specific details
-        ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
-        ConcurSolutionz.Database.Entry entry = GetEntry();
 
         if (entry == null)
         {
@@ -65,6 +64,7 @@ public partial class EntryPage : ContentPage
                     Directory.Delete("/Users/hongjing/Downloads/File_1", true);
                 }
 
+                ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
                 entry = entryBuilder.SetFileName("File_1")
                                     .SetCreationDate(DateTime.Now)
                                     .SetLastModifiedDate(DateTime.Now)
@@ -117,13 +117,6 @@ public partial class EntryPage : ContentPage
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = ReceiptView;
-    }
-       
-    private ConcurSolutionz.Database.Entry GetEntry()
-    {
-        ConcurSolutionz.Database.Entry entry = null;
-        // replace null with entry object from RecordPage
-        return entry;
     }
 
     // Click event handler for editing entry name
@@ -181,7 +174,7 @@ public partial class EntryPage : ContentPage
                     result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
                     // pass the file over to the record page
-                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
+                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?entry={entry}");
                 }
                 else
                 {
