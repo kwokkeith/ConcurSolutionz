@@ -21,6 +21,7 @@ public partial class ChooseRootPage : ContentPage
         // update root directory in database
         Settings settings = new Settings();
         settings.SetRootDirectory(folder.Folder.Path);
+        Database.Database.Instance.Setwd(folder.Folder.Path);
 
 
         await Shell.Current.GoToAsync(nameof(MainPage));
