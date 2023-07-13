@@ -1,6 +1,10 @@
 ﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.MainPage">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
+
+    </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <StackLayout Padding="10">
             <FlexLayout Direction="Row" JustifyContent="Center" AlignItems="Center" Margin="0,20,0,20">

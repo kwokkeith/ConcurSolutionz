@@ -13,7 +13,8 @@
 
     <ShellContent
         Title="Files"
-        ContentTemplate="{DataTemplate local:EntryPage}"
-        Route="EntryPage" />
+
+        ContentTemplate="{DataTemplate local:EmptyPage}"
+        Route="EmptyPage" />
 
 </Shell>
