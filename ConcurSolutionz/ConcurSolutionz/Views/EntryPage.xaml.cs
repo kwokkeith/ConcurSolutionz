@@ -82,6 +82,7 @@ public partial class EntryPage : ContentPage
         // Set the working directory for the database instance
         //Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
 
+<<<<<<< HEAD
         InitializeComponent();
 
         receipts = new();
@@ -111,6 +112,116 @@ public partial class EntryPage : ContentPage
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
+=======
+        InitializeComponent();
+
+        // Instantiate the Receipts collection
+        ReceiptView = new ObservableCollection<Models.Receipt>();
+
+        // Creating metadata for student project claim
+        StudentProjectClaimMDBuilder studentProjMDBuilder = new();
+        StudentProjectClaimMetaData md = studentProjMDBuilder
+            .SetEntryName("File_1")
+            .SetEntryBudget(100)
+            .SetClaimName(ClaimName.Text)
+            .SetClaimDate(DateTime.ParseExact(DateTime.Now.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture))
+            .SetPurpose(Purpose.Text)
+            .SetTeamName(TeamName.Text)
+            .SetProjectClub(ProjectClub.Text)
+            .Build();
+
+        // Building a receipt with specific details
+        //Receipt.ReceiptBuilder receiptBuilder = new();
+        //Receipt receipt1;
+        //List<ConcurSolutionz.Database.Record> rec = new();
+
+        //receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+        //        .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+        //        .SetDescription("Pizza Hut for bonding activities")
+        //        .SetSupplierName("Pizza Hut")
+        //        .SetCityOfPurchase("Singapore, SINGAPORE")
+        //        .SetReqAmount(104.5m)
+        //        .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+        //        .SetReceiptStatus("Tax Receipt")
+        //        .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
+        //        .Build();
+
+        //rec.Add(receipt1);
+
+        // Building an Entry instance with specific details
+        ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
+        ConcurSolutionz.Database.Entry entry = GetEntry();
+
+        if (entry == null)
+        {
+            try
+            {
+                if (Directory.Exists("/Users/hongjing/Downloads/File_1"))
+                {
+                    Directory.Delete("/Users/hongjing/Downloads/File_1", true);
+                }
+
+                entry = entryBuilder.SetFileName("File_1")
+                                    .SetCreationDate(DateTime.Now)
+                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetFilePath("/Users/hongjing/Downloads")
+                                    .SetMetaData(md)
+                                    .SetRecords(new List<ConcurSolutionz.Database.Record>())
+                                    .Build();
+            }
+
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            // Creating a file in the database
+            Database.Database.CreateFile(entry);
+        }
+
+        
+        // Convert database records into Receipt instances
+        List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
+        List<ConcurSolutionz.Database.Receipt> receipts = new();
+
+        for (int i = 0; i < records.Count; i++)
+        {
+            ConcurSolutionz.Database.Receipt receipt = RecordAdaptor.ConvertRecord(records[i]);
+            receipts.Add(receipt);
+        }
+
+        // Add converted Receipts to ReceiptView collection
+        for (int i = 0; i < receipts.Count; i++)
+        {
+            string frontEndExpenseType = receipts[i].ExpenseType;
+            string frontEndPaymentType = receipts[i].PaymentType;
+            string frontEndSupplierName = receipts[i].SupplierName;
+            DateTime frontEndTransactionDate = receipts[i].TransactionDate;
+            decimal frontEndReqAmount = receipts[i].ReqAmount;
+            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
+                                                                          .SetExpenseType(frontEndExpenseType)
+                                                                          .SetSupplierName(frontEndSupplierName)
+                                                                          .SetTransactionDate(frontEndTransactionDate)
+                                                                          .SetReqAmount(frontEndReqAmount)
+                                                                          ));
+        }
+
+
+        // Set the BindingContext of the CollectionView
+        recordCollection.BindingContext = this;
+
+        // Set the ItemsSource of the CollectionView
+        recordCollection.ItemsSource = ReceiptView;
+    }
+       
+    private ConcurSolutionz.Database.Entry GetEntry()
+    {
+        ConcurSolutionz.Database.Entry entry = null;
+        // replace null with entry object from RecordPage
+        return entry;
+    }
+>>>>>>> b45b20e (Updated EntryPage)
 
         // Set the ItemsSource of the CollectionView
         recordCollection.ItemsSource = ReceiptView;

@@ -86,8 +86,12 @@
                            FontSize="Body"
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
+<<<<<<< HEAD
                   
                     <Entry  x:Name="ClaimNameInp"
+=======
+                    <Entry  x:Name="ClaimName"
+>>>>>>> b45b20e (Updated EntryPage)
                             Placeholder="Claim Name"
                             Grid.Column="1"
                             Grid.Row="1"
@@ -134,7 +138,10 @@
                            HeightRequest="50"/>
 
                     <Label x:Name="TeamName"
+<<<<<<< HEAD
 
+=======
+>>>>>>> b45b20e (Updated EntryPage)
                            Text="Team Name:"
                            Grid.Column="0"
                            Grid.Row="4"
