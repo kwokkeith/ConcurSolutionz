@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using ConcurSolutionz.Controllers; 
+using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
-using System.IO;
+// using System.IO;  
 
 namespace ConcurSolutionz.Views;
 
@@ -11,11 +11,12 @@ public partial class EntryPage : ContentPage
 {
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
+    ConcurSolutionz.Database.Entry entry;
 
     public EntryPage()
     {
         // Set the working directory for the database instance
-        Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
+        //Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
 
         InitializeComponent();
 
@@ -25,55 +26,64 @@ public partial class EntryPage : ContentPage
         // Creating metadata for student project claim
         StudentProjectClaimMDBuilder studentProjMDBuilder = new();
         StudentProjectClaimMetaData md = studentProjMDBuilder
-            .SetEntryName("Entry 1")
+            .SetEntryName("File_1")
             .SetEntryBudget(100)
-            .SetClaimName("Claim 1")
-            .SetClaimDate(DateTime.ParseExact("12/07/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-            .SetPurpose("Purpose 1")
-            .SetTeamName("Team 1")
-            .SetProjectClub("Project Club 1")
+            .SetClaimName(ClaimName.Text)
+            .SetClaimDate(DateTime.ParseExact(DateTime.Now.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture))
+            .SetPurpose(Purpose.Text)
+            .SetTeamName(TeamName.Text)
+            .SetProjectClub(ProjectClub.Text)
             .Build();
 
         // Building a receipt with specific details
-        Receipt.ReceiptBuilder receiptBuilder = new();
-        Receipt receipt1;
-        List<ConcurSolutionz.Database.Record> rec = new();
+        //Receipt.ReceiptBuilder receiptBuilder = new();
+        //Receipt receipt1;
+        //List<ConcurSolutionz.Database.Record> rec = new();
 
-        receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
-                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetDescription("Pizza Hut for bonding activities")
-                .SetSupplierName("Pizza Hut")
-                .SetCityOfPurchase("Singapore, SINGAPORE")
-                .SetReqAmount(104.5m)
-                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
-                .SetReceiptStatus("Tax Receipt")
-                .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
-                .Build();
+        //receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+        //        .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+        //        .SetDescription("Pizza Hut for bonding activities")
+        //        .SetSupplierName("Pizza Hut")
+        //        .SetCityOfPurchase("Singapore, SINGAPORE")
+        //        .SetReqAmount(104.5m)
+        //        .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
+        //        .SetReceiptStatus("Tax Receipt")
+        //        .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
+        //        .Build();
 
-        rec.Add(receipt1);
+        //rec.Add(receipt1);
 
         // Building an Entry instance with specific details
-        ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
-        ConcurSolutionz.Database.Entry entry;
 
-        try
+        if (entry == null)
         {
-            entry = entryBuilder.SetFileName("File_1")
-                                .SetCreationDate(DateTime.Now)
-                                .SetLastModifiedDate(DateTime.Now)
-                                .SetFilePath("/Users/hongjing/Downloads")
-                                .SetMetaData(md)
-                                .SetRecords(rec)
-                                .Build();
-        }
-        catch (Exception ex)
-        {
-            entry = null;
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            try
+            {
+                if (Directory.Exists("/Users/hongjing/Downloads/File_1"))
+                {
+                    Directory.Delete("/Users/hongjing/Downloads/File_1", true);
+                }
+
+                ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
+                entry = entryBuilder.SetFileName("File_1")
+                                    .SetCreationDate(DateTime.Now)
+                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetFilePath("/Users/hongjing/Downloads")
+                                    .SetMetaData(md)
+                                    .SetRecords(new List<ConcurSolutionz.Database.Record>())
+                                    .Build();
+            }
+
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            // Creating a file in the database
+            Database.Database.CreateFile(entry);
         }
 
-        // Creating a file in the database
-        Database.Database.CreateFile(entry);
 
         // Convert database records into Receipt instances
         List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
@@ -109,7 +119,6 @@ public partial class EntryPage : ContentPage
         recordCollection.ItemsSource = ReceiptView;
     }
 
-
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
@@ -121,7 +130,7 @@ public partial class EntryPage : ContentPage
     }
 
     // Click event handler for editing record
-    private async void EditRecord_Clicked(object sender, EventArgs e)
+    async void EditRecord_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(RecordPage));
     }
@@ -165,7 +174,7 @@ public partial class EntryPage : ContentPage
                     result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
                     // pass the file over to the record page
-                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
+                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?entry={entry}");
                 }
                 else
                 {
@@ -193,6 +202,4 @@ public partial class EntryPage : ContentPage
     }
 
 }
-
-
 
