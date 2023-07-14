@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +10,7 @@ using ConcurSolutionz.Database;
 namespace ConcurSolutionz.Views;
 [QueryProperty(nameof(FileName), "fileName")]
 [QueryProperty(nameof(ExistingFile), "existingFile")]
+
 public partial class EntryPage : ContentPage
 {
     private StudentProjectClaimMetaData md;
@@ -52,6 +53,13 @@ public partial class EntryPage : ContentPage
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
     Database.Entry entry;
 
+    public string InitName
+    {
+        set
+        {
+            EntryName.Text = value;
+        }
+    }
     public EntryPage()
     {
         // Set the working directory for the database instance
@@ -63,6 +71,7 @@ public partial class EntryPage : ContentPage
 
         // Instantiate the Receipts collection
         ReceiptView = new ObservableCollection<Models.Receipt>();
+
 
         // Check if there is an existing file
         if (ExistingFile) // There exist a file passed
