@@ -121,7 +121,15 @@ public partial class EntryPage : ContentPage
     private async void Concur_Clicked(object sender, EventArgs e)
     {
         string cookie = "";
+        try
+        {
+            cookie = await DisplayPromptAsync("Cookie", "Please copy the cookie from your browser extension when logged into Concur to proceed");
 
+        }
+        catch(Exception ex)
+        {
+            return;
+        }
 
         StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
         StudentProjectClaimMetaData md;
