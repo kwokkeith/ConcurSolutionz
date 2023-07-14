@@ -1,32 +1,76 @@
 ﻿using System;
 using System.IO;
+using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views
 {
-    [QueryProperty(nameof(ImageFile), "file")]
+    [QueryProperty(nameof(EntryFile), "file")]
+    [QueryProperty(nameof(ImagePath), "imagePath")]
+    [QueryProperty(nameof(ExistingRecordBool), "existingRecordBool")]
+    [QueryProperty(nameof(ExistingReceipt), "existingRecord")]
     public partial class RecordPage : ContentPage
     {
-        public string ImageFile
+        private string imagePath;
+        public Database.Entry entryFile { get; set; }
+        private bool existingRecord;
+        private Receipt currentReceipt;
+
+        public Receipt ExistingReceipt
         {
             set
             {
-                LoadImage(value);
+                currentReceipt = value;
             }
-
+            get
+            {
+                return currentReceipt;
+            }
         }
 
-        private async void LoadImage(string filePath)
+        public FileDB EntryFile
+        {
+            set
+            {
+                CreateExistEntry(value);
+            }
+        }
+
+        public string ImagePath
+        {
+            set
+            {
+                imagePath = value;
+            }
+            get
+            {
+                return imagePath;
+            }
+        }
+
+        public bool ExistingRecordBool
+        {
+            set
+            {
+                existingRecord = value;
+            }
+            get
+            {
+                return existingRecord;
+            }
+        }
+
+
+        private void CreateExistEntry(FileDB file)
+        {
+            entryFile = FileAdaptor.ConvertFileType(file);
+        }
+
+
+        private async void LoadImage(string imagePath)
         {
             try
             {
-                //using (var stream = File.OpenWrite(filePath))
-                //{
-                //    if(stream != null)
-                //    {
-                //        ReceiptImage.Source = ImageSource.FromStream(() => stream);
-                //    }
-                //}
-                ReceiptImage.Source = ImageSource.FromFile(filePath);
+                ReceiptImage.Source = ImageSource.FromFile(imagePath);
             }
             catch (Exception ex)
             {
@@ -39,20 +83,47 @@ namespace ConcurSolutionz.Views
         {
             // Initialize the XAML components
             InitializeComponent();
+
+            // Load receipt image into UI
+            LoadImage(ImagePath);
+
         }
 
+        // Getting user input 
+        // returns: a list of data <expenseType, transactionDate, description>
 		public List<string> getData() {
             string expenseType = ExpenseType.Text;
-            string transactionDate = Date.Text;
+            string transactionDate = TransactionDate.Date.ToString();
             string description = Description.Text;
 
-            List<string> data = new List<string>();
-            data.Add(expenseType);
-            data.Add(transactionDate);
-            data.Add(description);
+            List<string> data = new List<string>
+            {
+                expenseType,
+                transactionDate,
+                description
+            };
 
             return data;
         }
+
+
+        // Event handler for the FilePicker button click event
+        public async void OnFilePickerClicked(object sender, EventArgs e)
+        {
+            // Call the PickAndShow method with the options for picking an image file
+            await PickAndShow(new PickOptions
+            {
+                FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
+                    { DevicePlatform.iOS, new[] { ".jpg", ".jpeg", ".png" } },
+                    { DevicePlatform.macOS, new[] { ".jpg", "jpeg", ".png" } },
+                    { DevicePlatform.MacCatalyst, new[] { ".jpg", "jpeg", ".png" } },
+                    { DevicePlatform.Android, new[] { "image/*" } },
+                    { DevicePlatform.WinUI, new[] { ".jpg", "jpeg", ".png" } }
+                }),
+                PickerTitle = "Select an image"
+            });
+        }
+
 
         // Method to pick and show image file
         public async Task<FileResult> PickAndShow(PickOptions options)
@@ -88,7 +159,8 @@ namespace ConcurSolutionz.Views
                     return null;
                 }
 
-                // Return the file result
+                // Change the image path from result of the user's selected option
+                ImagePath = result.FullPath;
                 return result;
             }
             catch (Exception ex)
@@ -101,27 +173,40 @@ namespace ConcurSolutionz.Views
             }
         }
 
-        // Event handler for the FilePicker button click event
-        public async void OnFilePickerClicked(object sender, EventArgs e)
+        private Receipt BuildNewReceipt()
         {
-            // Call the PickAndShow method with the options for picking an image file
-            await PickAndShow(new PickOptions
-            {
-                FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-                    { DevicePlatform.iOS, new[] { ".jpg", ".jpeg", ".png" } },
-                    { DevicePlatform.macOS, new[] { ".jpg", "jpeg", ".png" } },
-                    { DevicePlatform.MacCatalyst, new[] { ".jpg", "jpeg", ".png" } },
-                    { DevicePlatform.Android, new[] { "image/*" } },
-                    { DevicePlatform.WinUI, new[] { ".jpg", "jpeg", ".png" } } 
-                }),
-                PickerTitle = "Select an image"
-            });
+            Receipt.ReceiptBuilder builder = new();
+            builder.SetExpenseType(ExpenseType.Text)
+                .SetTransactionDate(TransactionDate.Date)
+                .SetDescription(DescriptionInp.Text)
+                .SetCityOfPurchase(CityOfPurchase.Text)
+                .SetReqAmount(Convert.ToDecimal(reqAmount.Text))
+                .SetCurrency(Currency.Text)
+                .SetReceiptNumber(ReceiptNo.Text)
+                .SetReceiptStatus(ReceiptStatus.Text)
+                .SetSupplierName(SupplierName.Text)
+                .SetIsBillable(IsBillable.IsChecked)
+                .SetIsPersonalExpense(PersonalExpense.IsChecked)
+                .SetComment(Comment.Text);
+            return builder.Build();
         }
+
 
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
+            if (ExistingRecordBool) // If record exist before
+            {
+                entryFile.DelRecordByID(ExistingReceipt.RecordID);
+            }
+            Receipt receipt = BuildNewReceipt();
+
+            // Add new record/receipt to the entry object
+            entryFile.AddRecord(receipt);
+
             await Shell.Current.GoToAsync("..");
         }
+
+
 
 
 

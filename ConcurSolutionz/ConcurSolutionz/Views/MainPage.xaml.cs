@@ -73,27 +73,6 @@ namespace ConcurSolutionz.Views
 
         }
 
-
-        //private void LoadFiles(string directoryPath)
-        //{
-        //    currentDirectoryPath = directoryPath;
-
-        //    if (Directory.Exists(currentDirectoryPath))
-        //    {
-        //        Files.Clear();
-
-        //        // Load files and folders from the current directory
-        //        string[] fileEntries = Directory.GetFileSystemEntries(currentDirectoryPath);
-
-        //        foreach (string entryPath in fileEntries)
-        //        {
-        //            string fileName = Path.GetFileName(entryPath);
-        //            bool isFolder = Directory.Exists(entryPath);
-        //            Files.Add(new FileItem(fileName, isFolder));
-        //        }
-        //    }
-        //}
-
         private void OnFileTapped(object sender, EventArgs e)
         {
             var tappedFile = (sender as View)?.BindingContext as FileItem;
@@ -148,11 +127,6 @@ namespace ConcurSolutionz.Views
 
                 // Populate File Management View
                 RefreshPage();
-
-                //// Open the tapped folder and display its contents
-                //string folderPath = Path.Combine(currentDirectoryPath, tappedFile.FileName);
-                //LoadFiles(folderPath);
-                //SelectedFile = null;
             }
             else
             {
@@ -168,16 +142,6 @@ namespace ConcurSolutionz.Views
         {
             Database.Database.Instance.FileGoBack();
             SelectedFile = null;
-            //if (!string.IsNullOrEmpty(currentDirectoryPath))
-            //{
-            //    string parentDirectoryPath = Directory.GetParent(currentDirectoryPath)?.FullName;
-            //    if (parentDirectoryPath != null)
-            //    {
-
-            //        LoadFiles(parentDirectoryPath);
-            //        SelectedFile = null;
-            //    }
-            //}
         }
 
         private async void OnNewFolderClicked(object sender, EventArgs e)
@@ -206,29 +170,6 @@ namespace ConcurSolutionz.Views
                 {
                     await DisplayAlert("Failure!", "Failed to create folder!", "OK");
                 }
-
-
-
-                //try
-                //{
-                //    // Create a new folder in the target directory
-                //    string newFolderPath = Path.Combine(currentDirectoryPath, newName);
-                //    Directory.CreateDirectory(newFolderPath);
-
-                //    // Create a new folder item with the entered name
-                //    FileItem newFolder = new FileItem(newName, true);
-
-                //    // Add the new folder to the collection
-                //    Files.Add(newFolder);
-
-                //    // Select the new folder
-                //    SelectedFile = newFolder;
-                //}
-                //catch (Exception ex)
-                //{
-                //    // Handle any potential errors
-                //    Console.WriteLine($"Failed to create folder: {ex.Message}");
-                //}
             }
         }
 
@@ -242,34 +183,13 @@ namespace ConcurSolutionz.Views
                 try
                 {
                     // Call Entry system (UI)
-                    await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}");
+                    await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}");
 
                 }
                 catch (Exception ex)
                 {
                     await DisplayAlert("Failure!", "Failed to create new Entry!", "OK");
                 }
-
-                //try
-                //{
-                //    // Create a new file in the target directory
-                //    string newFilePath = Path.Combine(currentDirectoryPath, newName);
-                //    File.Create(newFilePath).Dispose();
-
-                //    // Create a new entry item with the entered name
-                //    FileItem newEntry = new FileItem(newName, false);
-
-                //    // Add the new entry to the collection
-                //    Files.Add(newEntry);
-
-                //    // Select the new entry
-                //    SelectedFile = newEntry;
-                //}
-                //catch (Exception ex)
-                //{
-                //    // Handle any potential errors
-                //    Console.WriteLine($"Failed to create file: {ex.Message}");
-                //}
             }
         }
 
@@ -339,55 +259,6 @@ namespace ConcurSolutionz.Views
                 {
                     DisplayAlert("Failure!", "Failed to delete file!", "OK");
                 }
-
-
-
-                //try
-                //{
-                //    string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
-
-                //    // Delete the selected file/folder from the target directory
-                //    if (SelectedFile.IsFolder)
-                //    {
-                //        Directory.Delete(filePath, true);
-                //    }
-                //    else
-                //    {
-                //        File.Delete(filePath);
-                //    }
-
-                //    // Get the index of the selected file
-                //    int selectedIndex = Files.IndexOf(SelectedFile);
-
-                //    // Remove the selected file from the collection
-                //    Files.Remove(SelectedFile);
-
-                //    // Select the previous file if it exists
-                //    if (selectedIndex > 0 && selectedIndex < Files.Count)
-                //    {
-                //        SelectedFile = Files[selectedIndex];
-                //        ScrollToSelectedItem();
-                //    }
-                //    else if (selectedIndex > 0 && selectedIndex == Files.Count)
-                //    {
-                //        SelectedFile = Files[selectedIndex - 1];
-                //        ScrollToSelectedItem();
-                //    }
-                //    else if (selectedIndex == 0 && Files.Count > 0)
-                //    {
-                //        SelectedFile = Files[0];
-                //        ScrollToSelectedItem();
-                //    }
-                //    else
-                //    {
-                //        SelectedFile = null;
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    // Handle any potential errors
-                //    Console.WriteLine($"Failed to deletefile/folder: {ex.Message}");
-                //}
             }
         }
 
@@ -430,15 +301,6 @@ namespace ConcurSolutionz.Views
                     break;
             }
         }
-
-        //private void ScrollToSelectedItem()
-        //{
-        //    if (fileListView.SelectedItem != null)
-        //    {
-        //        // Scroll to the selected item in the ListView
-        //        fileListView.ScrollTo(fileListView.SelectedItem, ScrollToPosition.MakeVisible, animated: true);
-        //    }
-        //}
 
         private void RefreshPage()
         {

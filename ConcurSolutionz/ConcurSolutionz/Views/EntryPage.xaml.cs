@@ -1,106 +1,80 @@
-﻿using System.Collections.ObjectModel;
+﻿#nullable enable
+
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using ConcurSolutionz.Controllers; 
+using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
-using System.IO;
+// using System.IO;  
 
 namespace ConcurSolutionz.Views;
-
+[QueryProperty(nameof(FileName), "fileName")]
+[QueryProperty(nameof(ExistingFile), "existingFile")]
 public partial class EntryPage : ContentPage
 {
+    private StudentProjectClaimMetaData md;
+    private List<Receipt> receipts;
+    private string fileName;
+
+    private bool existingFile; // To determine if an existing entry boolean passed
+    public bool ExistingFile
+    {
+        set
+        {
+            existingFile = value;
+        }
+        get
+        {
+            return existingFile;
+        }
+    } 
+
+    public string FileName
+    {
+        set
+        {
+            LoadFile(value);
+        }
+        get
+        {
+            return fileName;
+        }
+
+    }
+
+    private void LoadFile(string fileName)
+    {
+        EntryName.Text = fileName; // To change the Title of the page
+        this.fileName = fileName;
+    }
+
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
+    Database.Entry entry;
 
     public EntryPage()
     {
         // Set the working directory for the database instance
-        Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
+        //Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
 
         InitializeComponent();
+
+        receipts = new();
 
         // Instantiate the Receipts collection
         ReceiptView = new ObservableCollection<Models.Receipt>();
 
-        // Creating metadata for student project claim
-        StudentProjectClaimMDBuilder studentProjMDBuilder = new();
-        StudentProjectClaimMetaData md = studentProjMDBuilder
-            .SetEntryName("Entry 1")
-            .SetEntryBudget(100)
-            .SetClaimName("Claim 1")
-            .SetClaimDate(DateTime.ParseExact("12/07/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-            .SetPurpose("Purpose 1")
-            .SetTeamName("Team 1")
-            .SetProjectClub("Project Club 1")
-            .Build();
-
-        // Building a receipt with specific details
-        Receipt.ReceiptBuilder receiptBuilder = new();
-        Receipt receipt1;
-        List<ConcurSolutionz.Database.Record> rec = new();
-
-        receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
-                .SetTransactionDate(DateTime.ParseExact("24/01/2013", "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetDescription("Pizza Hut for bonding activities")
-                .SetSupplierName("Pizza Hut")
-                .SetCityOfPurchase("Singapore, SINGAPORE")
-                .SetReqAmount(104.5m)
-                .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
-                .SetReceiptStatus("Tax Receipt")
-                .SetImgPath("/Users/hongjing/Downloads/test.jpeg")
-                .Build();
-
-        rec.Add(receipt1);
-
-        // Building an Entry instance with specific details
-        ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
-        ConcurSolutionz.Database.Entry entry;
-
-        try
+        // Check if there is an existing file
+        if (ExistingFile) // There exist a file passed
         {
-            entry = entryBuilder.SetFileName("File_1")
-                                .SetCreationDate(DateTime.Now)
-                                .SetLastModifiedDate(DateTime.Now)
-                                .SetFilePath("/Users/hongjing/Downloads")
-                                .SetMetaData(md)
-                                .SetRecords(rec)
-                                .Build();
+            CreateExistingFile(FileName);
+            PopulateEntry();
         }
-        catch (Exception ex)
+        else // No existing file passed
         {
-            entry = null;
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            // TODO: Disable record UI features until user creates a file
+
         }
-
-        // Creating a file in the database
-        Database.Database.CreateFile(entry);
-
-        // Convert database records into Receipt instances
-        List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
-        List<ConcurSolutionz.Database.Receipt> receipts = new();
-
-        for (int i = 0; i < records.Count; i++)
-        {
-            ConcurSolutionz.Database.Receipt receipt = RecordAdaptor.ConvertRecord(records[i]);
-            receipts.Add(receipt);
-        }
-
-        // Add converted Receipts to ReceiptView collection
-        for (int i = 0; i < receipts.Count; i++)
-        {
-            string frontEndExpenseType = receipts[i].ExpenseType;
-            string frontEndPaymentType = receipts[i].PaymentType;
-            string frontEndSupplierName = receipts[i].SupplierName;
-            DateTime frontEndTransactionDate = receipts[i].TransactionDate;
-            decimal frontEndReqAmount = receipts[i].ReqAmount;
-            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
-                                                                          .SetExpenseType(frontEndExpenseType)
-                                                                          .SetSupplierName(frontEndSupplierName)
-                                                                          .SetTransactionDate(frontEndTransactionDate)
-                                                                          .SetReqAmount(frontEndReqAmount)
-                                                                          ));
-        }
-
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -109,7 +83,36 @@ public partial class EntryPage : ContentPage
         recordCollection.ItemsSource = ReceiptView;
     }
 
+    // Populate Entry Page (If entry exists)
+    private void PopulateEntry()
+    {
+        // Populate Metadata fields
+        ClaimNameInp.Text = md.ClaimName;
+        ClaimDateInp.Date = md.ClaimDate;
+        ProjectClubInp.Text = md.ProjectClub;
+        TeamNameInp.Text = md.TeamName;
+        Purpose.Text = md.Purpose;
+        
+        // Add Receipts to ReceiptView collection
+        foreach(Receipt receipt in receipts)
+        {
+            string frontEndExpenseType = receipt.ExpenseType;
+            string frontEndPaymentType = receipt.PaymentType;
+            string frontEndSupplierName = receipt.SupplierName;
+            DateTime frontEndTransactionDate = receipt.TransactionDate;
+            decimal frontEndReqAmount = receipt.ReqAmount;
 
+            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder()
+                .SetPaymentType(frontEndPaymentType)
+                .SetExpenseType(frontEndExpenseType)
+                .SetSupplierName(frontEndSupplierName)
+                .SetTransactionDate(frontEndTransactionDate)
+                .SetReqAmount(frontEndReqAmount)
+                ));
+        }
+    }
+
+    
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
@@ -121,11 +124,12 @@ public partial class EntryPage : ContentPage
     }
 
     // Click event handler for editing record
-    private async void EditRecord_Clicked(object sender, EventArgs e)
+    async void EditRecord_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(RecordPage));
     }
 
+    
     // Click event handler for adding new record
     private async void AddRecord_Clicked(object sender, EventArgs e)
     {
@@ -164,8 +168,29 @@ public partial class EntryPage : ContentPage
                     result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
                     result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
+                    // Convert receipt list to record list
+                    List<Database.Record> records = new();
+                    foreach(Receipt receipt in receipts)
+                    {
+                        records.Add((Database.Record) receipt);
+                    }
+                    
+                    // Create a File instance
+                    Database.Entry.EntryBuilder builder = new();
+                    builder.SetMetaData(md)
+                        .SetCreationDate(DateTime.Now)
+                        .SetFileName(fileName)
+                        .SetFilePath(Database.Database.Instance.Getwd())
+                        .SetLastModifiedDate(DateTime.Now)
+                        .SetRecords(records);
+                    FileDB file = builder.Build();
+
                     // pass the file over to the record page
-                    await Shell.Current.GoToAsync($"{nameof(RecordPage)}?file={Uri.EscapeDataString(result.FullPath)}");
+                    await Shell.Current.GoToAsync(
+                        $"{nameof(RecordPage)}?file={file}" +
+                        $"&imagePath={result.FullPath}" +
+                        $"&existingRecordBool={false}"); 
+                        //$"&existingRecord={null}");
                 }
                 else
                 {
@@ -192,7 +217,42 @@ public partial class EntryPage : ContentPage
         }
     }
 
+
+    // UTILITIES
+    // Create entry from existing file
+    private async void CreateExistingFile(string name)
+    {
+        Tuple<MetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
+
+        // Get existing metadata
+        try
+        {
+            md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
+        }
+        catch (Exception e)
+        {
+            await DisplayAlert("Failure!", "Failed to convert MetaData when loading from existing file!", "OK");
+        }
+
+        // Get List of existing Receipts
+        receipts.Clear(); // remove all receipts in existing receipts list
+        foreach(Database.Record record in fileDetail.Item2)
+        {
+            // Convert the record to receipt and add to list of receipts
+            try
+            {
+                receipts.Add(RecordAdaptor.ConvertRecord(record));
+            }
+            catch (Exception e)
+            {
+                await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
+            }
+        }
+
+
+
+
+    }
+    
 }
-
-
 
