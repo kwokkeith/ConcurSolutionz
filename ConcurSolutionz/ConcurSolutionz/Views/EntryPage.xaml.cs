@@ -12,6 +12,7 @@ public partial class EntryPage : ContentPage
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
     ConcurSolutionz.Database.Entry entry;
+    StudentProjectClaimMetaData md;
 
     public EntryPage()
     {
@@ -86,32 +87,34 @@ public partial class EntryPage : ContentPage
 
         
         // Convert database records into Receipt instances
-        List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
-        List<ConcurSolutionz.Database.Receipt> receipts = new();
-
-        for (int i = 0; i < records.Count; i++)
+        if (entry != null)
         {
-            ConcurSolutionz.Database.Receipt receipt = RecordAdaptor.ConvertRecord(records[i]);
-            receipts.Add(receipt);
+            List<ConcurSolutionz.Database.Record> records = entry.GetRecords();
+            List<ConcurSolutionz.Database.Receipt> receipts = new();
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                ConcurSolutionz.Database.Receipt receipt = RecordAdaptor.ConvertRecord(records[i]);
+                receipts.Add(receipt);
+            }
+
+            // Add converted Receipts to ReceiptView collection
+            for (int i = 0; i < receipts.Count; i++)
+            {
+                string frontEndExpenseType = receipts[i].ExpenseType;
+                string frontEndPaymentType = receipts[i].PaymentType;
+                string frontEndSupplierName = receipts[i].SupplierName;
+                DateTime frontEndTransactionDate = receipts[i].TransactionDate;
+                decimal frontEndReqAmount = receipts[i].ReqAmount;
+                ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
+                                                                              .SetExpenseType(frontEndExpenseType)
+                                                                              .SetSupplierName(frontEndSupplierName)
+                                                                              .SetTransactionDate(frontEndTransactionDate)
+                                                                              .SetReqAmount(frontEndReqAmount)
+                                                                              ));
+            }
         }
-
-        // Add converted Receipts to ReceiptView collection
-        for (int i = 0; i < receipts.Count; i++)
-        {
-            string frontEndExpenseType = receipts[i].ExpenseType;
-            string frontEndPaymentType = receipts[i].PaymentType;
-            string frontEndSupplierName = receipts[i].SupplierName;
-            DateTime frontEndTransactionDate = receipts[i].TransactionDate;
-            decimal frontEndReqAmount = receipts[i].ReqAmount;
-            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder().SetPaymentType(frontEndPaymentType)
-                                                                          .SetExpenseType(frontEndExpenseType)
-                                                                          .SetSupplierName(frontEndSupplierName)
-                                                                          .SetTransactionDate(frontEndTransactionDate)
-                                                                          .SetReqAmount(frontEndReqAmount)
-                                                                          ));
-        }
-
-
+       
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
 
@@ -138,6 +141,49 @@ public partial class EntryPage : ContentPage
     // Click event handler for adding new record
     private async void AddRecord_Clicked(object sender, EventArgs e)
     {
+        if (md == null)
+        {
+            StudentProjectClaimMDBuilder studentProjMDBuilder = new();
+            md = studentProjMDBuilder
+                .SetEntryName("File_1")
+                .SetEntryBudget(100)
+                .SetClaimName(ClaimName.Text)
+                .SetClaimDate(DateTime.ParseExact(DateTime.Now.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetPurpose(Purpose.Text)
+                .SetTeamName(TeamName.Text)
+                .SetProjectClub(ProjectClub.Text)
+                .Build();
+        }
+        
+        if (entry == null)
+        {
+            try
+            {
+                if (Directory.Exists("/Users/hongjing/Downloads/File_1"))
+                {
+                    Directory.Delete("/Users/hongjing/Downloads/File_1", true);
+                }
+
+                ConcurSolutionz.Database.Entry.EntryBuilder entryBuilder = new();
+                entry = entryBuilder.SetFileName("File_1")
+                                    .SetCreationDate(DateTime.Now)
+                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetFilePath("/Users/hongjing/Downloads")
+                                    .SetMetaData(md)
+                                    .SetRecords(new List<ConcurSolutionz.Database.Record>())
+                                    .Build();
+            }
+
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            // Creating a file in the database
+            Database.Database.CreateFile(entry);
+        }
+
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
         if (action == "Upload")
         {
