@@ -259,12 +259,9 @@ namespace ConcurSolutionz.Database
 
                 if (Directory.Exists(this.FilePath))
                 {
-                    throw new IOException("File already exists");
+                    Console.WriteLine("File already exists!");
                 }
-                else
-                {
-                    return this;
-                }
+                return this;
             }
 
             public EntryBuilder SetMetaData(MetaData MetaData)

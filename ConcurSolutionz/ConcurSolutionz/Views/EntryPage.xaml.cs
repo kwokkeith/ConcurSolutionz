@@ -199,14 +199,21 @@ public partial class EntryPage : ContentPage
                         .SetFilePath(Database.Database.Instance.Getwd())
                         .SetLastModifiedDate(DateTime.Now)
                         .SetRecords(records);
-                    FileDB file = builder.Build();
+                    Database.Entry entry = builder.Build();
+                    FileDB file = entry;
+
+                    // Declare object-based navigation data
+                    var navigationParameter = new Dictionary<string, object>
+                    {
+                        {"file", file },
+                        {"imagePath", result.FullPath },
+                        {"existingRecordBool", false }
+                        //{"existingRecord", null }
+                    };
 
                     // pass the file over to the record page
                     await Shell.Current.GoToAsync(
-                        $"{nameof(RecordPage)}?file={file}" +
-                        $"&imagePath={result.FullPath}" +
-                        $"&existingRecordBool={false}"); 
-                        //$"&existingRecord={null}");
+                        $"{nameof(RecordPage)}", navigationParameter);
                 }
                 else
                 {
@@ -226,7 +233,7 @@ public partial class EntryPage : ContentPage
         catch (Exception ex)
         {
             // The user canceled or something went wrong
-            await DisplayAlert("Error", "An error occurred while picking the file: " + ex.Message, "OK");
+            await DisplayAlert("Error", "An error occurred while picking the file: " + ex.ToString(), "OK");
 
             // Return null because an exception was thrown
             return null;

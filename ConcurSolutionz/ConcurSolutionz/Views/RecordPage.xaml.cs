@@ -7,31 +7,35 @@ namespace ConcurSolutionz.Views
     [QueryProperty(nameof(EntryFile), "file")]
     [QueryProperty(nameof(ImagePath), "imagePath")]
     [QueryProperty(nameof(ExistingRecordBool), "existingRecordBool")]
-    [QueryProperty(nameof(ExistingReceipt), "existingRecord")]
+    //[QueryProperty(nameof(ExistingReceipt), "existingRecord")]
     public partial class RecordPage : ContentPage
     {
         private string imagePath;
         public Database.Entry entryFile { get; set; }
         private bool existingRecord;
-        private Receipt currentReceipt;
+        //private Receipt currentReceipt;
 
-        public Receipt ExistingReceipt
-        {
-            set
-            {
-                currentReceipt = value;
-            }
-            get
-            {
-                return currentReceipt;
-            }
-        }
+        //public Receipt ExistingReceipt
+        //{
+        //    set
+        //    {
+        //        currentReceipt = value;
+        //    }
+        //    get
+        //    {
+        //        return currentReceipt;
+        //    }
+        //}
 
-        public FileDB EntryFile
+        public Database.Entry EntryFile
         {
             set
             {
                 CreateExistEntry(value);
+            }
+            get
+            {
+                return entryFile;
             }
         }
 
@@ -39,7 +43,8 @@ namespace ConcurSolutionz.Views
         {
             set
             {
-                imagePath = value;
+                imagePath = Convert.ToString(value);
+                LoadImage(imagePath);
             }
             get
             {
@@ -51,7 +56,7 @@ namespace ConcurSolutionz.Views
         {
             set
             {
-                existingRecord = value;
+                existingRecord = Convert.ToBoolean(value);
             }
             get
             {
@@ -60,9 +65,17 @@ namespace ConcurSolutionz.Views
         }
 
 
-        private void CreateExistEntry(FileDB file)
+        private void CreateExistEntry(object file)
         {
-            entryFile = FileAdaptor.ConvertFileType(file);
+            try
+            {
+                FileDB fileDb = (FileDB) file;
+                entryFile = FileAdaptor.ConvertFileType(fileDb);
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Error", "Error converting file: " + ex.ToString(), "OK");
+            }
         }
 
 
@@ -74,7 +87,7 @@ namespace ConcurSolutionz.Views
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", "An error occurred while loading the image: " + ex.Message, "OK");
+                await DisplayAlert("Error", "An error occurred while loading the image: " + ex.ToString(), "OK");
             }
         }
 
@@ -83,6 +96,7 @@ namespace ConcurSolutionz.Views
         {
             // Initialize the XAML components
             InitializeComponent();
+            BindingContext = this;
 
             // Load receipt image into UI
             LoadImage(ImagePath);
@@ -196,7 +210,7 @@ namespace ConcurSolutionz.Views
         {
             if (ExistingRecordBool) // If record exist before
             {
-                entryFile.DelRecordByID(ExistingReceipt.RecordID);
+                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
             }
             Receipt receipt = BuildNewReceipt();
 
