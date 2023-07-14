@@ -128,7 +128,6 @@ namespace ConcurSolutionz.Database
             else if (filePath.EndsWith(".entry"))
             {
                 // If Entry then:
-
                 // Construct entry filepath for Entry Subsystem
                 // Construct metadata of entry for Entry Subsystem
                 // Construct list of receipt metadata
@@ -147,14 +146,36 @@ namespace ConcurSolutionz.Database
                 // TODO: CALL ENTRY SUBSYSTEM
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-
-
+                
+                
             }
 
             else
             {
                 throw new Exception(filePath + " found in Files<List> but of invalid extension!");
+            }
+        }
+
+        // Uses a fileName to find a file and return a tuple of (Metadata, List<Record>) 
+        public Tuple<MetaData, List<Record>> getFileDetailFromFileName(string fileName)
+        {
+            string filePath = Path.Combine(WorkingDirectory, fileName); // root of file (Entry)
+            if (Path.Exists(filePath))
+            {
+                // Entry metadata path
+                string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
+                // Extract Entry MetaData from JSON
+                MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
+
+                // Extract out receipt from receipt metadata and return a list
+                string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
+                List<Record> records = ExtractRecords(ReceiptMetaDataPath);
+
+                return new Tuple<MetaData, List<Record>>(EntryMetaData, records);
+            }
+            else
+            {
+                throw new ArgumentException("file with file name " + fileName + " does not exist!");
             }
         }
 

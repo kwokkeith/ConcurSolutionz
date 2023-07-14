@@ -34,7 +34,9 @@
                       ColumnDefinitions=".3*,.7*"
                       ColumnSpacing="10"
                       Margin="0,50,0,0">
-                    <Label Text="Type"
+
+                    <Label
+                           Text="ExpenseType"
                            Grid.Row="0"
                            Grid.Column="0"
                            VerticalOptions="Center"
@@ -45,36 +47,74 @@
                             Grid.Row="0"
                            HeightRequest="50"
                            FontSize="Body"/>
-                    <Label x:Name="Date"
+
+                    <Label
                            Text="Date"
                            Grid.Row="1"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <DatePicker Grid.Row="1"
+                    <DatePicker
+                                x:Name="TransactionDate"
+                                Grid.Row="1"
                                 Grid.Column="1"
                                 VerticalOptions="Center"
                                 FontSize="Body"/>
-                    <Label Text="Receipt no."
+
+                    <Label
+                           Text="Description"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry  x:Name="DescriptionInp"
+                            Placeholder="Type"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                    <Label Text="Supplier Name"
                            Grid.Row="2"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <Entry Placeholder="Receipt no."
+                    <Entry
+                        x:Name="SupplierName"
+                        Text=""
+                        Placeholder="Supplier Name"
                             Grid.Row="2"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
+
                     <Label Text="Amount"
                            Grid.Row="3"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <Entry Placeholder="Amount"
+                    <Entry
+                            x:Name="reqAmount"
+                           Placeholder="Amount"
                             Grid.Row="3"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
+
+                    <Label Text="Receipt no."
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry
+                            x:Name="ReceiptNo"
+                            Placeholder="Receipt no."
+                            Grid.Row="2"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                    
                     <Label Text="Description"
                            Grid.Row="4"
                            Grid.Column="0"
@@ -86,7 +126,77 @@
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
-                    
+
+                     <Label Text="City of Purchase"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry
+                            x:Name="CityOfPurchase"
+                            Placeholder="City of Purchase"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                     <Label Text="Currency"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry
+                            x:Name="Currency"
+                            Placeholder="Currency"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                    <Label Text="Receipt Status"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry
+                        x:Name="ReceiptStatus"
+                        Placeholder="Receipt Status"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                    <Label Text="Comment"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Entry
+                        x:Name="Comment"
+                        Text=""
+                        Placeholder="Enter Comment"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"/>
+
+                    <CheckBox
+                        x:Name="IsBillable"
+                        IsChecked="False"/>
+                    <Label Text="Is Billable"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+
+                    <CheckBox
+                        x:Name="PersonalExpense"
+                        IsChecked="False"/>
+                    <Label Text="Personal Expense"
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
 
                 </Grid>
 
