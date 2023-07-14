@@ -30,7 +30,7 @@
                        FontSize="Large"
                        HorizontalOptions="CenterAndExpand"
                        Margin="0,30,0,0"/>
-                <Grid RowDefinitions="100,100,100,100,100"
+                <Grid RowDefinitions="100,100,100,100,100,100,100,100,100,100,100,100"
                       ColumnDefinitions=".3*,.7*"
                       ColumnSpacing="10"
                       Margin="0,50,0,0">
@@ -63,19 +63,19 @@
 
                     <Label
                            Text="Description"
-                           Grid.Row="0"
+                           Grid.Row="2"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry  x:Name="DescriptionInp"
                             Placeholder="Type"
                             Grid.Column="1"
-                            Grid.Row="0"
+                            Grid.Row="2"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Supplier Name"
-                           Grid.Row="2"
+                           Grid.Row="3"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
@@ -83,91 +83,91 @@
                         x:Name="SupplierName"
                         Text=""
                         Placeholder="Supplier Name"
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Amount"
-                           Grid.Row="3"
+                           Grid.Row="4"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                             x:Name="reqAmount"
                            Placeholder="Amount"
-                            Grid.Row="3"
+                            Grid.Row="4"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Receipt no."
-                           Grid.Row="2"
+                           Grid.Row="5"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                             x:Name="ReceiptNo"
                             Placeholder="Receipt no."
-                            Grid.Row="2"
+                            Grid.Row="5"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     
                     <Label Text="Description"
-                           Grid.Row="4"
+                           Grid.Row="6"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry  x:Name="Description"
                             Placeholder="Description"
-                            Grid.Row="4"
+                            Grid.Row="6"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                      <Label Text="City of Purchase"
-                           Grid.Row="2"
+                           Grid.Row="7"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                             x:Name="CityOfPurchase"
                             Placeholder="City of Purchase"
-                            Grid.Row="2"
+                            Grid.Row="7"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                      <Label Text="Currency"
-                           Grid.Row="2"
+                           Grid.Row="8"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                             x:Name="Currency"
                             Placeholder="Currency"
-                            Grid.Row="2"
+                            Grid.Row="8"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Receipt Status"
-                           Grid.Row="2"
+                           Grid.Row="9"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                         x:Name="ReceiptStatus"
                         Placeholder="Receipt Status"
-                            Grid.Row="2"
+                            Grid.Row="9"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Comment"
-                           Grid.Row="2"
+                           Grid.Row="10"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
@@ -175,25 +175,29 @@
                         x:Name="Comment"
                         Text=""
                         Placeholder="Enter Comment"
-                            Grid.Row="2"
+                            Grid.Row="10"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <CheckBox
                         x:Name="IsBillable"
-                        IsChecked="False"/>
+                        IsChecked="False"
+                        Grid.Row="11"
+                        Grid.Column="1"/>
                     <Label Text="Is Billable"
-                           Grid.Row="2"
+                           Grid.Row="11"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
 
                     <CheckBox
                         x:Name="PersonalExpense"
-                        IsChecked="False"/>
+                        IsChecked="False"
+                        Grid.Row="12"
+                        Grid.Column="1"/>
                     <Label Text="Personal Expense"
-                           Grid.Row="2"
+                           Grid.Row="12"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
@@ -204,7 +208,7 @@
                         <Button Text="Edit incorrect scans"
                             Grid.Column="0"
                             HeightRequest="50"/>
-                        <Button Clicked="RecordClick"
+                        <Button Clicked="OnSaveDetails_Clicked"
                             Text="Save details"
                             Grid.Column="1"
                             HeightRequest="50"/>

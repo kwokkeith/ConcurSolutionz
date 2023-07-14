@@ -193,7 +193,6 @@ namespace ConcurSolutionz.Views
             return builder.Build();
         }
 
-<<<<<<< HEAD
 
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
@@ -209,18 +208,6 @@ namespace ConcurSolutionz.Views
             await Shell.Current.GoToAsync("..");
         }
 
-=======
-
-        public void RecordClick(object sender, EventArgs e)
-        {
-            List<string> data = getData();
-            if (data != null)
-            {
-                string imgPath = "";
-                AddRecord.addReceipt(entryPassed, data, imgPath);
-            }
-        }
->>>>>>> 7e4641f (merge: addrecord and recordpage)
 
     }
 
