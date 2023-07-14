@@ -21,6 +21,7 @@
                 Source="edit_32.png"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
+            <Button x:Name="SetMetadataButton" Text="Save entry details" Clicked="SetMetaData_Clicked"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
@@ -55,6 +56,7 @@
                            Margin="40,0,0,0"/>
 
                     <Picker Title="Choose policy"
+                            x:Name="Policy"
                             Grid.Row="0"
                             Grid.Column="1"
                             FontSize="Body"
@@ -101,12 +103,13 @@
                             HeightRequest="50"
                             StrokeShape="RoundRectangle 5,5,5,5">
 
-                        <DatePicker Grid.Column="1"
+                        <DatePicker x:Name="EntryDatePicker"
+                            Grid.Column="1" 
                                 Grid.Row="2"
                                 VerticalOptions="Center"/>
                     </Border>
                     
-                    <Label x:Name="ProjectClub"
+                    <Label 
                            Text="Project/Club:"
                            Grid.Column="0"
                            Grid.Row="3"
@@ -114,6 +117,7 @@
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
                     <Entry Placeholder="Project/Club"
+                           x:Name="ProjectClub"
                             Grid.Column="1"
                             Grid.Row="3"
                             VerticalOptions="Center"
@@ -121,7 +125,7 @@
                            FontSize="Body"
                            HeightRequest="50"/>
 
-                    <Label x:Name="TeamName"
+                    <Label 
                            Text="Team Name:"
                            Grid.Column="0"
                            Grid.Row="4"
@@ -129,6 +133,7 @@
                            FontSize="Body"
                            Margin="40,0,0,0"/>
                     <Entry Placeholder="Team Name"
+                           x:Name="TeamName"
                             Grid.Column="1"
                             Grid.Row="4"
                             VerticalOptions="Center"
@@ -219,14 +224,20 @@
         <Grid ColumnDefinitions="*,*,*">
             <Button Text="New Record"
                     Margin="10"
-                    Clicked="AddRecord_Clicked"/>
+                    Clicked="AddRecord_Clicked"
+                    x:Name="AddRecordButton"
+                    IsEnabled="False"/>
             <Button Grid.Column="1"
                     Text="Edit Record"
                     Margin="10"
-                    Clicked="EditRecord_Clicked"/>
+                    Clicked="EditRecord_Clicked"
+                    x:Name="EditRecordButton"
+                    IsEnabled="False"/>
             <Button Text="Delete Record"
                     Grid.Column="2"
-                    Margin="10"/>
+                    Margin="10"
+                    x:Name="DeleteRecordButton"
+                    IsEnabled="False"/>
         </Grid>
 
           <ScrollView>
