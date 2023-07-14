@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConcurSolutionz.Controllers;
+using System;
 using System.IO;
 using ConcurSolutionz.Database;
 
@@ -151,6 +152,7 @@ namespace ConcurSolutionz.Views
                 if (result != null)
                 {
                     // If the picked file is a jpg or png
+                    
                     if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
@@ -219,10 +221,6 @@ namespace ConcurSolutionz.Views
 
             await Shell.Current.GoToAsync("..");
         }
-
-
-
-
 
 
     }

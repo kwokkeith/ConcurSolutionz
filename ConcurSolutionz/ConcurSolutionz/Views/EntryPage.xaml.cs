@@ -60,6 +60,7 @@ public partial class EntryPage : ContentPage
             EntryName.Text = value;
         }
     }
+
     public EntryPage()
     {
         // Set the working directory for the database instance
@@ -86,18 +87,16 @@ public partial class EntryPage : ContentPage
             EditRecordButton.IsEnabled = false;
             DeleteRecordButton.IsEnabled = false;
 
-
-
-
-
         }
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
 
         // Set the ItemsSource of the CollectionView
-        recordCollection.ItemsSource = ReceiptView;
+        //recordCollection.ItemsSource = ReceiptView;
     }
+
+    
 
     // Populate Entry Page (If entry exists)
     private void PopulateEntry()
@@ -149,6 +148,7 @@ public partial class EntryPage : ContentPage
     // Click event handler for adding new record
     private async void AddRecord_Clicked(object sender, EventArgs e)
     {
+       
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
         if (action == "Upload")
         {
@@ -281,8 +281,8 @@ public partial class EntryPage : ContentPage
         string claimName = ClaimNameInp.Text;
         DateTime claimDate = ClaimDateInp.Date;
         string purpose = Purpose.Text;
-        string projectClub = ProjectClub.Text;
-        string teamName = TeamName.Text;
+        string projectClub = ProjectClubInp.Text;
+        string teamName = TeamNameInp.Text;
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
