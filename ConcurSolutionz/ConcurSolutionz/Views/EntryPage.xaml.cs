@@ -82,6 +82,13 @@ public partial class EntryPage : ContentPage
         else // No existing file passed
         {
             // TODO: Disable record UI features until user creates a file
+            AddRecordButton.IsEnabled = false;
+            EditRecordButton.IsEnabled = false;
+            DeleteRecordButton.IsEnabled = false;
+
+
+
+
 
         }
 
@@ -181,7 +188,7 @@ public partial class EntryPage : ContentPage
                     List<Database.Record> records = new();
                     foreach(Receipt receipt in receipts)
                     {
-                        records.Add((Database.Record) receipt);
+                        records.Add(receipt);
                     }
                     
                     // Create a File instance
@@ -257,11 +264,106 @@ public partial class EntryPage : ContentPage
                 await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
             }
         }
-
-
-
-
     }
-    
+
+    // Click event handler for setting metadata of entry
+    private async void SetMetaData_Clicked(object sender, EventArgs e)
+    {
+        string entryName = EntryName.Text;
+        string entryBudgetString = BudgetEditor.Text;
+        string claimName = ClaimNameInp.Text;
+        DateTime claimDate = ClaimDateInp.Date;
+        string purpose = Purpose.Text;
+        string projectClub = ProjectClub.Text;
+        string teamName = TeamName.Text;
+        //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
+
+        // Check if any field is left blank
+        if ((entryName ?? claimName ?? purpose ?? projectClub ?? teamName) is null)
+        {
+            // display error and quit the function
+            await DisplayAlert("Error", "Please fill in all fields", "OK");
+            return;
+        }
+
+        // change entryBudgetString to decimal datatype
+        if (!Decimal.TryParse(entryBudgetString, out decimal entryBudget))
+        {
+            await DisplayAlert("Error", "Invalid budget entered", "OK");
+            return;
+        }
+
+        // build metadata if nothing is wrong
+        StudentProjectClaimMDBuilder studentProjMDBuilder = new();
+        try
+        {
+            md = studentProjMDBuilder
+                .SetEntryName(entryName)
+                .SetEntryBudget(entryBudget)
+                .SetClaimName(claimName)
+                .SetClaimDate(claimDate)
+                .SetPurpose(purpose)
+                .SetTeamName(teamName)
+                .SetProjectClub(projectClub)
+                .Build();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", "Unable to create metadata\n" +
+                ex, "OK");
+        }
+        // Display success
+        await DisplayAlert("Success", "Entry details successfully recorded", "OK");
+
+        // enable the disabled buttons
+        AddRecordButton.IsEnabled = true;
+        EditRecordButton.IsEnabled = true;
+        DeleteRecordButton.IsEnabled = true;
+
+        //Build entry
+
+        BuildEntry();
+    }
+
+    private async void BuildEntry()
+    {
+        if (entry == null)
+        {
+            try
+            {
+                // construct an entry path
+                string wd = Database.Database.Instance.Getwd();
+                string entryName = EntryName.Text;
+                string entryPath = Path.Combine(wd, entryName);
+
+                // if the file already exists, delete and create new one
+                if (Directory.Exists(entryPath))
+                {
+                    Directory.Delete(entryPath, true);
+                }
+
+                // build entry
+                Database.Entry.EntryBuilder entryBuilder = new();
+                entry = entryBuilder.SetFileName(entryName)
+                                    .SetCreationDate(DateTime.Now)
+                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetFilePath(wd)
+                                    .SetMetaData(md)
+                                    .SetRecords(new List<Database.Record>())
+                                    .Build();
+
+                await DisplayAlert("Success", "Entry successfully made", "OK");
+            }
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            // Creating a file in the database
+            Database.Database.CreateFile(entry);
+        }
+    }
+
 }
 
