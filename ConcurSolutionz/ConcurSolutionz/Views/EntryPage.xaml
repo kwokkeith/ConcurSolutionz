@@ -13,7 +13,7 @@
             <Label
                 FontSize="Title"
                 FontAttributes="Bold"
-                Text="Debug"
+                Text=""
                 VerticalOptions="Center"
                 x:Name="debug"/>
             <ImageButton Source="edit_32.png"/>

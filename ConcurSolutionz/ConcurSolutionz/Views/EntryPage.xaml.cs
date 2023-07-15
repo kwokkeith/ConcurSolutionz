@@ -1,6 +1,9 @@
 ﻿using ConcurSolutionz.Database;
 using ConcurSolutionz.Models;
 using System.Globalization;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
+using Microsoft.Maui.Controls;
 
 namespace ConcurSolutionz.Views;
 
@@ -120,16 +123,7 @@ public partial class EntryPage : ContentPage
 
     private async void Concur_Clicked(object sender, EventArgs e)
     {
-        string cookie = "";
-        try
-        {
-            cookie = await DisplayPromptAsync("Cookie", "Please copy the cookie from your browser extension when logged into Concur to proceed");
-
-        }
-        catch(Exception ex)
-        {
-            return;
-        }
+        //TEMPORARY PLACEHOLDER DATA FOR CLAIM AND DATA, CAN REMOVE
 
         StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
         StudentProjectClaimMetaData md;
@@ -169,6 +163,33 @@ public partial class EntryPage : ContentPage
             .SetMetaData(md)
             .SetRecords(records)
             .Build();
+
+
+
+        // DO NOT REMOVE
+        string cookie = "";
+        try
+        {
+            string input = await DisplayPromptAsync("Cookie", "Please copy the cookie from your browser extension when logged into Concur to proceed");
+            List<CookieJson> jsonDom = JsonSerializer.Deserialize<List<CookieJson>>(input)!;
+            foreach (CookieJson cookieJson in jsonDom)
+            {
+                if (cookieJson.name.Equals("OTSESSIONAABQRN") || cookieJson.name.Equals("OTSESSIONAABQRD") || cookieJson.name.Equals("JWT")) cookie += cookieJson.name + "=" + cookieJson.value + ";";
+            }
+            cookie = cookie.Remove(cookie.Length - 1);
+
+            if (!cookie.Contains("OTSESSIONAABQRN") || !cookie.Contains("OTSESSIONAABQRD") || !cookie.Contains("JWT") || string.IsNullOrEmpty(cookie))
+            {
+                await DisplayAlert("ERROR", "Cookie is incomplete, please relogin and try again.", "OK");
+                return;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return;
+        }
+
         PushToConcur(cookie, records, entry);
 
     }
@@ -190,10 +211,11 @@ public partial class EntryPage : ContentPage
         //Initialize API caller
         ConcurAPI concur = new ConcurAPI(cookie);
         string init = await concur.Initialize(); // Returns 0 is successful, 1-3 are errors
-        debug.Text = "Init status: " + init;
+        //debug.Text = "Init status: " + init;
         if (init != "0")
         {
             debug.Text = "Failed to init";
+            //return;
             throw new Exception("Failed to initialize API");
         }
         //Create new claim
@@ -226,7 +248,7 @@ public partial class EntryPage : ContentPage
 
             expenses.Add(expense);
         }
-        debug.Text = "RPE Key: ";
+        //debug.Text = "RPE Key: ";
 
         List<Expense> expenseIDs = await concur.GetAllExpenses(claim);
 
@@ -237,7 +259,7 @@ public partial class EntryPage : ContentPage
                 if (expenses[i].RPEKey.Equals(expenseIDs[j].RPEKey))
                 {
                     expenses[i].Id = expenseIDs[j].Id;
-                    debug.Text = "Expense " + expenses[i].Id + " is in claim " + claim.Id;
+                    //debug.Text = "Expense " + expenses[i].Id + " is in claim " + claim.Id;
                     string filepath = expenses[i].FilePath;
                     string[] split = filepath.Split('/');
                     expenses[i].ImageId = await concur.UploadImage(filepath, split.Last());
@@ -246,6 +268,7 @@ public partial class EntryPage : ContentPage
             }
 
         }
+        await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
         //debug.Text = "image id: " + expense.ImageId;
         //Purpose.Text = await concur.LinkImageToRequest(expense);
     }
