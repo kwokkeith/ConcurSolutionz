@@ -154,7 +154,7 @@ namespace ConcurSolutionz.Database
             try{
                 if (!File.Exists(destinationPath))
                 {
-                    File.Create(destinationPath);
+                    File.Create(destinationPath).Close();
                 }
                 File.Copy(sourcePath, destinationPath, true);
             }
