@@ -109,7 +109,7 @@ namespace ConcurSolutionz.Views
 		public List<string> getData() {
             string expenseType = ExpenseType.Text;
             string transactionDate = TransactionDate.Date.ToString();
-            string description = Description.Text;
+            string description = DescriptionInp.Text;
 
             List<string> data = new List<string>
             {
@@ -203,6 +203,7 @@ namespace ConcurSolutionz.Views
                 .SetSupplierName(SupplierName.Text)
                 .SetIsBillable(IsBillable.IsChecked)
                 .SetIsPersonalExpense(PersonalExpense.IsChecked)
+                .SetImgPath(imagePath)
                 .SetComment(Comment.Text);
             return builder.Build();
         }
@@ -214,12 +215,24 @@ namespace ConcurSolutionz.Views
             {
                 //entryFile.DelRecordByID(ExistingReceipt.RecordID);
             }
-            Receipt receipt = BuildNewReceipt();
+
+            Receipt receipt;
+            try
+            {
+                receipt = BuildNewReceipt();
+            }
+            catch (Exception ex)
+            {
+                // If error encountered while building receipt (missing fields, etc.)
+                await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+                return;
+            }
 
             // Add new record/receipt to the entry object
             entryFile.AddRecord(receipt);
 
-            await Shell.Current.GoToAsync("..");
+            // go back to entry page
+            await Shell.Current.GoToAsync(nameof(EntryPage));
         }
 
 

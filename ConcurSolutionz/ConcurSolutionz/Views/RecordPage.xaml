@@ -114,20 +114,7 @@
                            HeightRequest="50"
                            FontSize="Body"/>
 
-                    
-                    <Label Text="Description"
-                           Grid.Row="6"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry  x:Name="Description"
-                            Placeholder="Description"
-                            Grid.Row="6"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
-
-                     <Label Text="City of Purchase"
+                 <Label Text="City of Purchase"
                            Grid.Row="7"
                            Grid.Column="0"
                            VerticalOptions="Center"

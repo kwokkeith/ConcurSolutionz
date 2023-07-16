@@ -187,7 +187,7 @@ namespace ConcurSolutionz.Database
             string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             // Get all files with .json file extension in the ReceiptMetaData Folder.
-            string[] ReceiptMetaDatas = Directory.GetFiles(ReceiptMetaDataPath + "\\", "*.json");
+            string[] ReceiptMetaDatas = Directory.GetFiles(ReceiptMetaDataPath, "*.json");
             int assignedIndex = 0;
 
             // Increment assignedIndex and check for each iteration if number has been used

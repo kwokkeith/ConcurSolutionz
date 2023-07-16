@@ -6,15 +6,15 @@
     xmlns:local="clr-namespace:ConcurSolutionz.Views"
     Shell.FlyoutBehavior="Disabled">
 
-    <!--<ShellContent
-        Title="Entry"
-        ContentTemplate="{DataTemplate local:Main}"
-        Route="EntryPage" />-->
-
     <ShellContent
+        Title="Empty Page"
+        ContentTemplate="{DataTemplate local:EmptyPage}"
+        Route="EmptyPage" />
+
+    <!--<ShellContent
         Title="Files"
 
-        ContentTemplate="{DataTemplate local:RecordPage}"
-        Route="RecordPage" />
+        ContentTemplate="{DataTemplate local:ChooseRootPage}"
+        Route="ChooseRootPage" />-->
 
 </Shell>
