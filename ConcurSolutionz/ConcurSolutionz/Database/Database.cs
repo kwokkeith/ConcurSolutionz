@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.IO;
 using System.Security.AccessControl;
 using System.Text.Json;
 
@@ -5,7 +7,6 @@ namespace ConcurSolutionz.Database
 {
     public sealed class Database
     {   
-        private string WorkingDirectory { get; set;}
         public List<string> Files { get; private set; }
         public Settings Settings { get; set; }
 
@@ -34,17 +35,24 @@ namespace ConcurSolutionz.Database
         }
 
         public string Getwd(){
-            return WorkingDirectory;
+            return Directory.GetCurrentDirectory();
         }
 
         public void Setwd(string wd){
-            WorkingDirectory = wd;
+            try
+            {
+                Directory.SetCurrentDirectory(wd);
+            }
+                       catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e);
+            }
         }
 
         public List<string> GetFilesFromWD(){
             // Make use of working directory to retrieve files
-            string[] folderPaths = Directory.GetDirectories(WorkingDirectory, "*.fdr");
-            string[] entryPaths = Directory.GetDirectories(WorkingDirectory, "*.entry");
+            string[] folderPaths = Directory.GetDirectories(Directory.GetCurrentDirectory(), "*.fdr");
+            string[] entryPaths = Directory.GetDirectories(Directory.GetCurrentDirectory(), "*.entry");
             List<string> files;
             if (folderPaths == null || folderPaths.Length == 0)
             {
@@ -65,7 +73,7 @@ namespace ConcurSolutionz.Database
                 if (folderPaths == null || folderPaths.Length == 0)
                 {
                     // No folder as well
-                    files = new List<String>();
+                    files = new List<string>();
                 }
                 else
                 {
@@ -88,15 +96,15 @@ namespace ConcurSolutionz.Database
         /// <param name="fileName">The name of the file to select.</param>
         /// <exception cref="Exception">Thrown when the specified file name is not found in the Files list of the Database.</exception>
         public void FileSelectByFileName(string fileName){
+            Files = GetFilesFromWD();
+            string newPath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
             // If fileName exist in Files
-            if (Files.Contains(fileName)){
-                string newPath = Path.Combine(WorkingDirectory, fileName);
-
+            if (Files.Any(newPath.Contains)){
                 FileSelectByFilePath(newPath);
             }
             else{
                 throw new Exception(fileName + " not found in Files<List> of Database! "
-                + "Perhaps need to update Files<List> of Database?" + "\n Files: " + Files);
+                + "Ensure that extension is correct" + "\n Files: " + Files);
             }
         }
 
@@ -105,10 +113,18 @@ namespace ConcurSolutionz.Database
         /// <param name="filePath">The file path of the file to be selected.</param>
         /// <exception cref="Exception">Thrown when the file has an invalid extension.</exception>
         public void FileSelectByFilePath(string filePath){
+
+            if (!Directory.Exists(filePath) && (filePath.EndsWith(".entry") || filePath.EndsWith(".fdr")))
+            {
+                throw new Exception(filePath + " not found! "
+                               + "Check the filename again");
+            }
+
+
             // Check if File is Folder:
-            if(filePath.EndsWith(".fdr")){
+           else if (filePath.EndsWith(".fdr")){
                 // If Folder then change workingdirectory path
-                WorkingDirectory = filePath;
+                Setwd(filePath);
             }
 
             else if (filePath.EndsWith(".entry")){
@@ -138,7 +154,7 @@ namespace ConcurSolutionz.Database
             }
 
             else{
-                throw new Exception(filePath + " found in Files<List> but of invalid extension!");
+                throw new Exception(filePath + "is of invalid extension!");
             }
         }
 
@@ -171,13 +187,13 @@ namespace ConcurSolutionz.Database
             string rootDirectory = Settings.GetRootDirectory();
 
             // Check if RootDirectory == WorkingDirectory
-            if (WorkingDirectory.Equals(rootDirectory))
+            if (Getwd().Equals(rootDirectory))
             {
                 return;
             }
             else
             {
-                WorkingDirectory = System.IO.Directory.GetParent(WorkingDirectory).FullName;
+                Setwd(Directory.GetParent(Getwd()).FullName);
             }
         }
 
