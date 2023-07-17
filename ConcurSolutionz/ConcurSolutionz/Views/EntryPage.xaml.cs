@@ -45,7 +45,11 @@ public partial class EntryPage : ContentPage
 
     private void LoadFile(string fileName)
     {
+        if (fileName.EndsWith(".entry")){
+            fileName = fileName.Substring(0, fileName.Length - 6);
+        }
         EntryName.Text = fileName; // To change the Title of the page
+
         this.fileName = fileName;
     }
 
@@ -77,7 +81,7 @@ public partial class EntryPage : ContentPage
         // Check if there is an existing file
         if (ExistingFile) // There exist a file passed
         {
-            CreateExistingFile(FileName);
+            CreateExistingFile(FileName + ".entry");
             PopulateEntry();
         }
         else // No existing file passed

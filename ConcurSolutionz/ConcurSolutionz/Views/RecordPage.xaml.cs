@@ -232,7 +232,7 @@ namespace ConcurSolutionz.Views
             entryFile.AddRecord(receipt);
 
             // go back to entry page
-            await Shell.Current.GoToAsync(nameof(EntryPage));
+            await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={entryFile.FileName}&existingFile={true}");
         }
 
 
