@@ -8,11 +8,6 @@
         <models:Entry/>
 
     </ContentPage.BindingContext>
-
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
-
-    </Shell.BackButtonBehavior>
     
     <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
