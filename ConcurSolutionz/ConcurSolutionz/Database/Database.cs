@@ -227,7 +227,7 @@ namespace ConcurSolutionz.Database
         // @@@@@@@@@@@@@@@@@@@@@@@@@
         private static MetaData ExtractEntryMetaData(string MetaDataPath)
         {
-            if (File.Exists(MetaDataPath))
+            if (Path.Exists(MetaDataPath))
             {
                 try
                 {
@@ -250,22 +250,20 @@ namespace ConcurSolutionz.Database
 
         private static List<Record> ExtractRecords(string RecordsMetaDataPath)
         {
-            if (File.Exists(RecordsMetaDataPath))
+            if (Directory.Exists(RecordsMetaDataPath))
             {
                 try
                 {
-                    List<Record> Records = new();
+                    List<Record> Receipts = new();
                     string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
-                    foreach (string fileName in ReceiptMetaDatas)
+                    foreach (string filePath in ReceiptMetaDatas)
                     {
-                        string path = RecordsMetaDataPath + fileName;
-
-                        string json = File.ReadAllText(path);
-                        Receipt metaData = JsonSerializer.Deserialize<Receipt>(json);
-                        Records.Add(metaData);
+                        string json = File.ReadAllText(filePath);
+                        Receipt record_MD = JsonSerializer.Deserialize<Receipt>(json);
+                        Receipts.Add(record_MD);
                     }
 
-                    return Records;
+                    return Receipts;
                 }
                 catch (Exception e)
                 {

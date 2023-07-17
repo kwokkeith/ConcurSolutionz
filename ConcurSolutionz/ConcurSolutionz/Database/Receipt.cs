@@ -1,3 +1,7 @@
+#nullable enable
+
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ConcurSolutionz.Database
 {
@@ -9,7 +13,7 @@ namespace ConcurSolutionz.Database
         public string Description { get; set; }
         public string SupplierName { get; set; }
         public string CityOfPurchase { get; set; }
-        private decimal reqAmount;
+        public decimal reqAmount;
         public decimal ReqAmount
         {
             get { return reqAmount; }
@@ -20,7 +24,7 @@ namespace ConcurSolutionz.Database
                 reqAmount = value;
             }
         }
-        private decimal conversionRate;
+        public decimal conversionRate;
         public decimal ConversionRate {
             get
             {
@@ -35,7 +39,7 @@ namespace ConcurSolutionz.Database
                 // Calculate new Currency Amount
                 CurrencyAmountSGD = ReqAmount * ConversionRate;
             } }
-        private decimal currencyAmountSGD;
+        public decimal currencyAmountSGD;
         public decimal CurrencyAmountSGD
         {
             get
@@ -59,13 +63,13 @@ namespace ConcurSolutionz.Database
 
         //Concur Identifiers
         //Id of the expense reflected on Concur (ExpenseId)
-        private string Id;
+        public string? Id { get; set; }
         //ReportId of the claim that this expense(parent) is under
-        private string ReportId;
+        public string? ReportId { get; set; }
         //Key assigned to expense upon creation used to identify the expense
-        private string RPEKey;
+        public string? RPEKey { get; set; }
         //Id of the image that should be attached to the expense
-        private string ImgId;
+        public string? ImgId { get; set; }
 
         public Receipt(ReceiptBuilder builder)
         {
@@ -96,6 +100,7 @@ namespace ConcurSolutionz.Database
             CityOfPurchase = builder.CityOfPurchase;
             ReqAmount = builder.ReqAmount;
             ConversionRate = builder.ConversionRate;
+            Currency = builder.Currency;
             CurrencyAmountSGD = builder.CurrencyAmountSGD;
             ReceiptNumber = builder.ReceiptNumber;
             ReceiptStatus = builder.ReceiptStatus;
@@ -107,8 +112,69 @@ namespace ConcurSolutionz.Database
             ReportId = builder.ReportId;
             RPEKey = builder.RPEKey;
             ImgId = builder.ImgId;
-            Currency = builder.Currency;
             SubType = builder.SubType;
+        }
+
+        public class ReceiptConverter : JsonConverter<Receipt>
+        {
+            public override void Write(Utf8JsonWriter writer, Receipt value, JsonSerializerOptions options)
+            {
+                // Write JSON
+            }
+
+            public override Receipt Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                JsonDocument doc = JsonDocument.ParseValue(ref reader);
+                string paymentType = doc.RootElement.GetProperty("PaymentType").GetString();
+                string expenseType = doc.RootElement.GetProperty("ExpenseType").GetString();
+                string transactionDate = doc.RootElement.GetProperty("TransactionDate").GetString();
+                string description = doc.RootElement.GetProperty("Description").GetString();
+                string supplierName = doc.RootElement.GetProperty("SupplierName").GetString();
+                string cityOfPurchase = doc.RootElement.GetProperty("CityOfPurchase").GetString();
+                decimal reqAmount = doc.RootElement.GetProperty("ReqAmount").GetDecimal();
+                decimal conversionRate = doc.RootElement.GetProperty("ConversionRate").GetDecimal();
+                string currency = doc.RootElement.GetProperty("Currency").GetString();
+                decimal currencyAmountSGD = doc.RootElement.GetProperty("CurrencyAmountSGD").GetDecimal();
+                string receiptNumber = doc.RootElement.GetProperty("ReceiptNumber").GetString();
+                string receiptStatus = doc.RootElement.GetProperty("ReceiptStatus").GetString();
+                bool isBillable = doc.RootElement.GetProperty("IsBillable").GetBoolean();
+                bool isPersonalExpense = doc.RootElement.GetProperty("IsPersonalExpense").GetBoolean();
+                string comment = doc.RootElement.GetProperty("Comment").GetString();
+                string imgPath = doc.RootElement.GetProperty("ImgPath").GetString();
+                string? id = doc.RootElement.GetProperty("Id").GetString();
+                string? reportId = doc.RootElement.GetProperty("ReportId").GetString();
+                string? rpeKey = doc.RootElement.GetProperty("RPEKey").GetString();
+                string? imgId = doc.RootElement.GetProperty("ImgId").GetString();
+                string subType = doc.RootElement.GetProperty("SubType").GetString();
+                int recordID = doc.RootElement.GetProperty("RecordID").GetInt32();
+
+
+                ReceiptBuilder builder = new ReceiptBuilder();
+
+                builder.SetPaymentType(paymentType);
+                builder.SetExpenseType(expenseType);
+                builder.SetTransactionDate(DateTime.Parse(transactionDate));
+                builder.SetDescription(description);
+                builder.SetSupplierName(supplierName);
+                builder.SetCityOfPurchase(cityOfPurchase);
+                builder.SetReqAmount(reqAmount);
+                builder.SetConversionRate(conversionRate);
+                builder.SetCurrency(currency);
+                builder.SetReceiptNumber(receiptNumber);
+                builder.SetReceiptStatus(receiptStatus);
+                builder.SetIsBillable(isBillable);
+                builder.SetIsPersonalExpense(isPersonalExpense);
+                builder.SetComment(comment);
+                builder.SetImgPath(imgPath);
+                builder.SetId(id);
+                builder.SetReportId(reportId);
+                builder.SetRPEKey(rpeKey);
+                builder.SetImgId(imgId);
+
+                Receipt receipt = builder.Build();
+                receipt.RecordID = recordID;
+                return receipt;
+            }
         }
 
         /// <summary>Deletes a record and its associated image file.</summary>
@@ -129,7 +195,7 @@ namespace ConcurSolutionz.Database
         //        }
         //    }
 
-            
+
 
         //    catch (IOException e)
         //    {
@@ -243,18 +309,18 @@ namespace ConcurSolutionz.Database
                 return SetCurrencyAmountSGD();
             }
 
-            public ReceiptBuilder SetCurrency(string currency)
-            {
-                this.Currency = currency;
-                return this;
-            }
-
             private ReceiptBuilder SetCurrencyAmountSGD()
             {
                 if (ReqAmount != 0m || ConversionRate != 0)
                 {
                     CurrencyAmountSGD = ReqAmount * ConversionRate;
                 }
+                return this;
+            }
+
+            public ReceiptBuilder SetCurrency(string currency)
+            {
+                this.Currency = currency;
                 return this;
             }
 
@@ -289,11 +355,6 @@ namespace ConcurSolutionz.Database
                 this.ImgPath = ImgPath;
                 return this;
             }
-            public ReceiptBuilder SetImgId(string imgId)
-            {
-                ImgId = imgId;
-                return this;
-            }
 
             public ReceiptBuilder SetId(string id)
             {
@@ -310,6 +371,12 @@ namespace ConcurSolutionz.Database
             public ReceiptBuilder SetRPEKey(string rpeKey)
             {
                 RPEKey = rpeKey;
+                return this;
+            }
+
+            public ReceiptBuilder SetImgId(string imgId)
+            {
+                ImgId = imgId;
                 return this;
             }
 

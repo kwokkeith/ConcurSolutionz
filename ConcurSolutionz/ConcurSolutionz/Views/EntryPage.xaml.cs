@@ -8,9 +8,9 @@ using ConcurSolutionz.Database;
 // using System.IO;  
 
 namespace ConcurSolutionz.Views;
+
 [QueryProperty(nameof(FileName), "fileName")]
 [QueryProperty(nameof(ExistingFile), "existingFile")]
-
 public partial class EntryPage : ContentPage
 {
     private StudentProjectClaimMetaData md;
@@ -23,10 +23,12 @@ public partial class EntryPage : ContentPage
         set
         {
             existingFile = value;
-        }
-        get
-        {
-            return existingFile;
+            OnPropertyChanged();
+            if (existingFile)
+            {
+                CreateExistingFile(FileName + ".entry");
+                PopulateEntry();
+            }
         }
     } 
 
@@ -79,7 +81,7 @@ public partial class EntryPage : ContentPage
 
 
         // Check if there is an existing file
-        if (ExistingFile) // There exist a file passed
+        if (existingFile) // There exist a file passed
         {
             CreateExistingFile(FileName + ".entry");
             PopulateEntry();
@@ -258,7 +260,7 @@ public partial class EntryPage : ContentPage
         }
         catch (Exception e)
         {
-            await DisplayAlert("Failure!", "Failed to convert MetaData when loading from existing file!", "OK");
+            await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {e}", "OK");
         }
 
         // Get List of existing Receipts
@@ -290,7 +292,7 @@ public partial class EntryPage : ContentPage
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
-        if ((entryName ?? claimName ?? purpose ?? projectClub ?? teamName) is null)
+        if ((entryName ?? claimName ?? purpose ?? projectClub ?? teamName) == "")
         {
             // display error and quit the function
             await DisplayAlert("Error", "Please fill in all fields", "OK");
