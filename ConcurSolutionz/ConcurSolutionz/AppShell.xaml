@@ -13,8 +13,8 @@
 
     <!--<ShellContent
         Title="Files"
-
         ContentTemplate="{DataTemplate local:ChooseRootPage}"
         Route="ChooseRootPage" />-->
+
 
 </Shell>
