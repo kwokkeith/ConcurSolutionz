@@ -1,4 +1,7 @@
 
+using System.Text.Json.Serialization;
+using System.Text.Json;
+
 namespace ConcurSolutionz.Database
 {
     public class StudentProjectClaimMetaData : MetaData
@@ -39,6 +42,42 @@ namespace ConcurSolutionz.Database
             this.TeamName = claimMDBuilder.TeamName;
             this.ProjectClub = claimMDBuilder.ProjectClub;
             this.SubType = claimMDBuilder.SubType;
+        }
+
+        public class StudentProjectClaimMetaDataConverter : JsonConverter<StudentProjectClaimMetaData>
+        {
+            public override void Write(Utf8JsonWriter writer, StudentProjectClaimMetaData value, JsonSerializerOptions options)
+            {
+                // Write JSON
+            }
+
+            public override StudentProjectClaimMetaData Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                JsonDocument doc = JsonDocument.ParseValue(ref reader);
+                string entryName = doc.RootElement.GetProperty("EntryName").GetString();
+                decimal entryBudget = doc.RootElement.GetProperty("EntryBudget").GetDecimal();
+                string policy = doc.RootElement.GetProperty("Policy").GetString();
+                string claimName = doc.RootElement.GetProperty("ClaimName").GetString();
+                DateTime claimDate = doc.RootElement.GetProperty("ClaimDate").GetDateTime();
+                string purpose = doc.RootElement.GetProperty("Purpose").GetString();
+                string teamName = doc.RootElement.GetProperty("TeamName").GetString();
+                string projectClub = doc.RootElement.GetProperty("ProjectClub").GetString();
+                string subType = doc.RootElement.GetProperty("SubType").GetString();
+                         
+
+                StudentProjectClaimMDBuilder builder = new StudentProjectClaimMDBuilder();
+
+                StudentProjectClaimMetaData md = builder.SetClaimName(claimName)
+                                                        .SetClaimDate(claimDate)
+                                                        .SetPurpose(purpose)
+                                                        .SetTeamName(teamName)
+                                                        .SetProjectClub(projectClub)
+                                                        .SetEntryName(entryName)
+                                                        .SetEntryBudget(entryBudget)
+                                                        .Build();
+
+                return md;
+            }
         }
     }
 }

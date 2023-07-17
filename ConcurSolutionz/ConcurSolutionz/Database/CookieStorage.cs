@@ -47,7 +47,10 @@ namespace ConcurSolutionz.Database
                     }
 
                     string json = File.ReadAllText(CookiePath);
-                    Cookie cookie = JsonSerializer.Deserialize<Cookie>(json);
+                    var options = new JsonSerializerOptions();
+                    options.Converters.Add(new Cookie.CookieConverter());
+
+                    Cookie cookie = JsonSerializer.Deserialize<Cookie>(json, options);
                     if (cookie.ExpiryDate < DateTime.Now)
                     {
                         Console.WriteLine("Cookie has expired.");

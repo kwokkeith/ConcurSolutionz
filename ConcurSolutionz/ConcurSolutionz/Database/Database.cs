@@ -1,58 +1,59 @@
-using System.Diagnostics;
-using System.IO;
 using System.Security.AccessControl;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
 {
     public sealed class Database
-    {   
+    {
+        private string WorkingDirectory { get; set; }
         public List<string> Files { get; private set; }
         public Settings Settings { get; set; }
 
         private static Database _instance;
-        
+
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
-        private Database(){
+        private Database()
+        {
         }
-        
-        public static Database Instance{
-            get {
-                if (_instance == null){
+
+        public static Database Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
                     _instance = new Database();
                 }
                 return _instance;
             }
         }
 
-        public Settings GetSettings(){
+        public Settings GetSettings()
+        {
             return Settings;
         }
 
-        public void SetSetting(Settings settings){
+        public void SetSetting(Settings settings)
+        {
             this.Settings = settings;
         }
 
-        public string Getwd(){
-            return Directory.GetCurrentDirectory();
+        public string Getwd()
+        {
+            return WorkingDirectory;
         }
 
-        public void Setwd(string wd){
-            try
-            {
-                Directory.SetCurrentDirectory(wd);
-            }
-                       catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e);
-            }
+        public void Setwd(string wd)
+        {
+            WorkingDirectory = wd;
         }
 
-        public List<string> GetFilesFromWD(){
+        public List<string> GetFilesFromWD()
+        {
             // Make use of working directory to retrieve files
-            string[] folderPaths = Directory.GetDirectories(Directory.GetCurrentDirectory(), "*.fdr");
-            string[] entryPaths = Directory.GetDirectories(Directory.GetCurrentDirectory(), "*.entry");
+            string[] folderPaths = Directory.GetDirectories(WorkingDirectory, "*.fdr");
+            string[] entryPaths = Directory.GetDirectories(WorkingDirectory, "*.entry");
             List<string> files;
             if (folderPaths == null || folderPaths.Length == 0)
             {
@@ -73,7 +74,7 @@ namespace ConcurSolutionz.Database
                 if (folderPaths == null || folderPaths.Length == 0)
                 {
                     // No folder as well
-                    files = new List<string>();
+                    files = new List<String>();
                 }
                 else
                 {
@@ -88,57 +89,54 @@ namespace ConcurSolutionz.Database
                 files = folderPaths.ToList();
             }
 
-            return files; 
+            return files;
         }
 
 
         /// <summary>Method handles selection of a file by its file name.</summary>
         /// <param name="fileName">The name of the file to select.</param>
         /// <exception cref="Exception">Thrown when the specified file name is not found in the Files list of the Database.</exception>
-        public void FileSelectByFileName(string fileName){
-            Files = GetFilesFromWD();
-            string newPath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+        public void FileSelectByFileName(string fileName)
+        {
             // If fileName exist in Files
-            if (Files.Any(newPath.Contains)){
+            if (Files.Contains(fileName))
+            {
+                string newPath = Path.Combine(WorkingDirectory, fileName);
+
                 FileSelectByFilePath(newPath);
             }
-            else{
+            else
+            {
                 throw new Exception(fileName + " not found in Files<List> of Database! "
-                + "Ensure that extension is correct" + "\n Files: " + Files);
+                + "Perhaps need to update Files<List> of Database?" + "\n Files: " + Files);
             }
         }
 
-        
+
         /// <summary>Method handles selection of a file based on its file path.</summary>
         /// <param name="filePath">The file path of the file to be selected.</param>
         /// <exception cref="Exception">Thrown when the file has an invalid extension.</exception>
-        public void FileSelectByFilePath(string filePath){
-
-            if (!Directory.Exists(filePath) && (filePath.EndsWith(".entry") || filePath.EndsWith(".fdr")))
-            {
-                throw new Exception(filePath + " not found! "
-                               + "Check the filename again");
-            }
-
-
+        public void FileSelectByFilePath(string filePath)
+        {
             // Check if File is Folder:
-           else if (filePath.EndsWith(".fdr")){
+            if (filePath.EndsWith(".fdr"))
+            {
                 // If Folder then change workingdirectory path
-                Setwd(filePath);
+                WorkingDirectory = filePath;
             }
 
-            else if (filePath.EndsWith(".entry")){
+            else if (filePath.EndsWith(".entry"))
+            {
                 // If Entry then:
-
                 // Construct entry filepath for Entry Subsystem
                 // Construct metadata of entry for Entry Subsystem
                 // Construct list of receipt metadata
-                
+
                 string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
 
                 // Extract Entry MetaData from JSON
                 MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
-                
+
 
                 // Extract out receipt from receipt metadata and return a list
                 string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
@@ -148,13 +146,36 @@ namespace ConcurSolutionz.Database
                 // TODO: CALL ENTRY SUBSYSTEM
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
                 
-
+                
             }
 
-            else{
-                throw new Exception(filePath + "is of invalid extension!");
+            else
+            {
+                throw new Exception(filePath + " found in Files<List> but of invalid extension!");
+            }
+        }
+
+        // Uses a fileName to find a file and return a tuple of (Metadata, List<Record>) 
+        public Tuple<StudentProjectClaimMetaData, List<Record>> getFileDetailFromFileName(string fileName)
+        {
+            string filePath = Path.Combine(WorkingDirectory, fileName); // root of file (Entry)
+            if (Path.Exists(filePath))
+            {
+                // Entry metadata path
+                string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
+                // Extract Entry MetaData from JSON
+                StudentProjectClaimMetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
+
+                // Extract out receipt from receipt metadata and return a list
+                string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
+                List<Record> records = ExtractRecords(ReceiptMetaDataPath);
+
+                return new Tuple<StudentProjectClaimMetaData, List<Record>>(EntryMetaData, records);
+            }
+            else
+            {
+                throw new ArgumentException("file with file name " + fileName + " does not exist!");
             }
         }
 
@@ -164,7 +185,8 @@ namespace ConcurSolutionz.Database
         /// <remarks>
         /// This method delegates the file creation process to the <see cref="FileCreator.CreateFile"/> method.
         /// </remarks>
-        public static void CreateFile(FileDB file){
+        public static void CreateFile(FileDB file)
+        {
             // Call FileCreator class method to createFile
             FileCreator.CreateFile(file);
         }
@@ -172,28 +194,30 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Deletes a file from the specified file path.</summary>
         /// <param name="filePath">The path of the file to be deleted.</param>
-        public static void DeleteFile(string filePath){
+        public static void DeleteFile(string filePath)
+        {
             // Delete a file using Directory (Physical file management system)
             Directory.Delete(filePath);
         }
-        
+
         /// <summary>Navigates back to the previous directory.</summary>
         /// <remarks>
         /// This method updates the working directory by removing the last directory from the path.
         /// If the working directory is already at the root directory, no action is taken.
         /// </remarks>
-        public void FileGoBack(){
+        public void FileGoBack()
+        {
             // Set working directory one path back
             string rootDirectory = Settings.GetRootDirectory();
 
             // Check if RootDirectory == WorkingDirectory
-            if (Getwd().Equals(rootDirectory))
+            if (WorkingDirectory.Equals(rootDirectory))
             {
                 return;
             }
             else
             {
-                Setwd(Directory.GetParent(Getwd()).FullName);
+                WorkingDirectory = System.IO.Directory.GetParent(WorkingDirectory).FullName;
             }
         }
 
@@ -201,13 +225,17 @@ namespace ConcurSolutionz.Database
         // @@@@@@@@@@@@@@@@@@@@@@@@@
         // DATABASE UTILITY METHODS
         // @@@@@@@@@@@@@@@@@@@@@@@@@
-        private static MetaData ExtractEntryMetaData(string MetaDataPath){
-            if (File.Exists(MetaDataPath))
+        private static StudentProjectClaimMetaData ExtractEntryMetaData(string MetaDataPath)
+        {
+            if (Path.Exists(MetaDataPath))
             {
                 try
                 {
                     string json = File.ReadAllText(MetaDataPath);
-                    MetaData metaData = JsonSerializer.Deserialize<MetaData>(json);
+                    var options = new JsonSerializerOptions();
+                    options.Converters.Add(new StudentProjectClaimMetaData.StudentProjectClaimMetaDataConverter());
+
+                    StudentProjectClaimMetaData metaData = JsonSerializer.Deserialize<StudentProjectClaimMetaData>(json, options);
                     return metaData;
                 }
                 catch (Exception e)
@@ -223,22 +251,25 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        private static List<Record> ExtractRecords(string RecordsMetaDataPath){
-            if (File.Exists(RecordsMetaDataPath))
+        private static List<Record> ExtractRecords(string RecordsMetaDataPath)
+        {
+            if (Directory.Exists(RecordsMetaDataPath))
             {
                 try
                 {
-                    List<Record> Records = new();
+                    List<Record> Receipts = new();
                     string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
-                    foreach(string fileName in ReceiptMetaDatas){
-                        string path = RecordsMetaDataPath + fileName;
+                    foreach (string filePath in ReceiptMetaDatas)
+                    {
+                        string json = File.ReadAllText(filePath);
+                        var options = new JsonSerializerOptions();
+                        options.Converters.Add(new Receipt.ReceiptConverter());
 
-                        string json = File.ReadAllText(path);
-                        Receipt metaData = JsonSerializer.Deserialize<Receipt>(json);
-                        Records.Add(metaData);
+                        Receipt record_MD = JsonSerializer.Deserialize<Receipt>(json, options);
+                        Receipts.Add(record_MD);
                     }
 
-                    return Records;
+                    return Receipts;
                 }
                 catch (Exception e)
                 {
