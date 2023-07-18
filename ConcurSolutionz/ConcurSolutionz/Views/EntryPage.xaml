@@ -2,23 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.EntryPage"
+             xmlns:models="clr-namespace:ConcurSolutionz.Models"
              Title="Entry">
-    <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
+    <ContentPage.BindingContext>
+        <models:Entry/>
+
+    </ContentPage.BindingContext>
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
             <Label
+                x:Name="EntryName"
                 FontSize="Title"
                 FontAttributes="Bold"
                 Text="Elements of Software Construction"
                 VerticalOptions="Center"/>
-            <ImageButton Source="edit_32.png"/>
+            <ImageButton
+                Source="edit_32.png"
+                x:Name="EditEntryNameButton"
+                Clicked="EditEntryName_Clicked"/>
+            <Button x:Name="SetMetadataButton" Text="Save Entry Metadata" Clicked="SetMetaData_Clicked"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
               ColumnSpacing="20">
 
-            <Button Text="Transfer to concur"
+            <Button Text="Transfer to Concur"
                     Grid.Column="0"
-                    Margin="10"/>
+                    Margin="10"
+                    Clicked="Concur_Clicked"/>
 
             <Button Text="Delete Entry"
                     Grid.Column="1"
@@ -45,10 +57,11 @@
                            Margin="40,0,0,0"/>
 
                     <Picker Title="Choose policy"
+                            x:Name="Policy"
                             Grid.Row="0"
                             Grid.Column="1"
-                            FontSize="Body"
-                            HeightRequest="50">
+                            Background="#d3d3d3"
+                            FontSize="Body">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Student Project Claim</x:String>
@@ -69,7 +82,9 @@
                            FontSize="Body"
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
-                    <Entry Placeholder="Claim Name"
+                  
+                    <Entry  x:Name="ClaimNameInp"
+                            Placeholder="Claim Name"
                             Grid.Column="1"
                             Grid.Row="1"
                             VerticalOptions="Center"
@@ -90,24 +105,31 @@
                             HeightRequest="50"
                             StrokeShape="RoundRectangle 5,5,5,5">
 
-                        <DatePicker Grid.Column="1"
+                        <DatePicker
+                                x:Name="ClaimDateInp"
+                                Grid.Column="1"
                                 Grid.Row="2"
                                 VerticalOptions="Center"/>
                     </Border>
                     
+
                     <Label Text="Project/Club:"
                            Grid.Column="0"
                            Grid.Row="3"
                            FontSize="Body"
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
-                    <Entry Placeholder="Project/Club"
-                            Grid.Column="1"
-                            Grid.Row="3"
-                            VerticalOptions="Center"
-                            VerticalTextAlignment="Center"
+                  
+                    <Entry x:Name="ProjectClubInp"
+                           Placeholder="Project/Club"
+                           Grid.Column="1"
+                           Grid.Row="3"
+                           VerticalOptions="Center"
+                           VerticalTextAlignment="Center"
                            FontSize="Body"
                            HeightRequest="50"/>
+
+
 
                     <Label Text="Team Name:"
                            Grid.Column="0"
@@ -115,7 +137,9 @@
                            VerticalOptions="Center"
                            FontSize="Body"
                            Margin="40,0,0,0"/>
-                    <Entry Placeholder="Team Name"
+
+                    <Entry  x:Name="TeamNameInp"
+                            Placeholder="Team Name"
                             Grid.Column="1"
                             Grid.Row="4"
                             VerticalOptions="Center"
@@ -134,7 +158,8 @@
                     <Border StrokeShape="RoundRectangle 5,5,5,5"
                             HeightRequest="300"
                             StrokeThickness="2">
-                        <Editor Placeholder="Enter purpose"
+                        <Editor x:Name="Purpose"
+                                Placeholder="Enter purpose"
                                 FontSize="Body"/>
 
                     </Border>
@@ -178,84 +203,120 @@
 
             </HorizontalStackLayout>
            
-            
             <Label Grid.Row="1"
-                   Text="Current Expenditure: "
-                   FontSize="Body"
-                   VerticalOptions="Center"/>
-            <Label Grid.Row="1"
+                    Text="Current Expenditure: "
+                    FontSize="Body"
+                    VerticalOptions="Center"/>
+
+
+            <HorizontalStackLayout Grid.Column="1" Grid.Row="1">
+                <Label Text="$"
+                VerticalOptions="Center"
+                FontSize="Body"/> 
+                <Label
+                   x:Name="CurrentExpenseInput"
+                   Grid.Row="1"
                    Grid.Column="1"
-                   Text="$10"
+                   Text=""
                    FontSize="Body"
                    VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
 
             <Label Grid.Row="2"
                    Text="Remaining Budget: "
                    FontSize="Body"
                    VerticalOptions="Center"/>
-            <Label Grid.Row="2"
+
+
+            <HorizontalStackLayout Grid.Column="1" Grid.Row="2">
+                <Label Text="$"
+                VerticalOptions="Center"
+                FontSize="Body"/> 
+
+                <Label
+                   x:Name="RemainingBudget"
+                   Grid.Row="2"
                    Grid.Column="1"
-                   Text="$100"
+                   Text=""
                    FontSize="Body"
-                   VerticalOptions="Center"
-                   x:Name="Remaining"/>
+                   VerticalOptions="Center"/>
+            </HorizontalStackLayout>
 
         </Grid>
 
         <Grid ColumnDefinitions="*,*,*">
             <Button Text="New Record"
                     Margin="10"
-                    Clicked="AddRecord_Clicked"/>
+                    Clicked="AddRecord_Clicked"
+                    x:Name="AddRecordButton"
+                    IsEnabled="False"/>
             <Button Grid.Column="1"
                     Text="Edit Record"
                     Margin="10"
-                    Clicked="EditRecord_Clicked"/>
+                    Clicked="EditRecord_Clicked"
+                    x:Name="EditRecordButton"
+                    IsEnabled="False"/>
             <Button Text="Delete Record"
                     Grid.Column="2"
-                    Margin="10"/>
+                    Margin="10"
+                    x:Name="DeleteRecordButton"
+                    IsEnabled="False"/>
         </Grid>
 
+          <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <CollectionView SelectionMode="Single" x:Name="recordCollection" EmptyView="No data available" Margin="20,0,20,0">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"
-                                 Span="4"
-                                 HorizontalItemSpacing="40"
-                                 VerticalItemSpacing="20"/>
+                <Grid x:Name="HeaderGrid" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Index" Grid.Column="0" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="Payment Type" Grid.Column="1" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="Expense Type" Grid.Column="2" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="Supplier Details" Grid.Column="3" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="Date" Grid.Column="4" HorizontalOptions="Center" FontAttributes="Bold"/>
+                    <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold"/> 
+                </Grid>
 
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="10" BorderColor="Grey" CornerRadius="5" Padding="8" VerticalOptions="Center" HorizontalOptions="Center">
-                        <StackLayout>
-                            <Label Text="{Binding RecordName}"
-                                   FontSize="Large"
-                                   FontAttributes="Bold"/>
-                            <BoxView Color="Grey"
-                                     HeightRequest="2"
-                                     HorizontalOptions="Fill"/>
-                            <Label Text="{Binding Amount}" Grid.Column="1" FontSize="Large" VerticalOptions="Center" HorizontalOptions="Center"/>
-
-
-                        </StackLayout>
-    
-
-                    </Frame>
-
-
-                </DataTemplate>
-
-
-            </CollectionView.ItemTemplate>
-
-        </CollectionView>
-        
-        
+                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding RecordId}" Grid.Column="0" HorizontalOptions="Center"/>  
+                                <Label Text="{Binding PaymentType}" Grid.Column="1" HorizontalOptions="Center"/>
+                                <Label Text="{Binding ExpenseType}" Grid.Column="2" HorizontalOptions="Center"/>
+                                <Label Text="{Binding SupplierName}" Grid.Column="3" HorizontalOptions="Center"/>
+                                <Label Text="{Binding TransactionDate, StringFormat='{0:MM/dd/yyyy}'}" Grid.Column="4" HorizontalOptions="Center"/>
+                                <Label Text="{Binding ReqAmount, StringFormat='{0:C2}'}" Grid.Column="5" HorizontalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </ScrollView>
     </VerticalStackLayout>
 
-    
-
-        
-
+    </ScrollView>
     
 </ContentPage>
+
+
+       

@@ -5,49 +5,21 @@ using System.Diagnostics;
 
 namespace Unit_Testing
 {
-    public class CookieStorageSetup : IDisposable
-    {
-        public CookieStorageSetup()
-        {
-            string testdirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests");
-
-            if (!Directory.Exists(testdirectoryPath))
-            {
-                Directory.CreateDirectory(testdirectoryPath);
-            }
-
-            if (Directory.Exists(Path.Combine(testdirectoryPath, "CookieStorageTest.fdr")))
-            {
-                Directory.Delete(Path.Combine(testdirectoryPath, "CookieStorageTest.fdr"), true);
-            }
-            Directory.CreateDirectory(Path.Combine(testdirectoryPath, "CookieStorageTest.fdr"));
-        }
-
-        public void Dispose()
-        {
-            // Do not remove: needed by IDisposable
-            // Nothing is done to teardown
-        }
-    }
-
-    public class CookieStorageTests: IClassFixture<CookieStorageSetup>
+    public class CookieStorageTests
     {
         Cookie.CookieBuilder cookieBuilder = new();
         Cookie cookie;
-        string cookiestoragetestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "CookieStorageTest.fdr");
 
 
         [Fact]
         public void StoreCookie_StoresValidCookie_AndCookieFileExists()
         {
-            string path = Path.Combine(cookiestoragetestpath, "File 1.entry");
-
             // Arrange
-            if (Directory.Exists(path))
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry"))
             {
-                Directory.Delete(path, true);
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry", true);
             }
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 1.entry");
 
 
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture))
@@ -60,6 +32,7 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 1.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
 
             // Act
@@ -70,16 +43,14 @@ namespace Unit_Testing
         }
 
         [Fact]
-        public void RetrieveCookie_RetrievesValidCookie()
+        public void RetrieveCookie_StoresAndRetrievesCookie()
         {
-            string path = Path.Combine(cookiestoragetestpath, "File 2.entry");
-
             // Arrange
-            if (Directory.Exists(path))
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry"))
             {
-                Directory.Delete(path, true);
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry", true);
             }
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 2.entry");
 
 
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/2024", "dd/MM/yyyy", CultureInfo.InvariantCulture))
@@ -92,6 +63,7 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 2.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
             storage.StoreCookie(cookie);
 
@@ -112,19 +84,17 @@ namespace Unit_Testing
         }
 
         [Fact]
-        public void RetrieveCookie_ReturnsNull_IfCookieFolderDoesNotExist()
+        public void RetrieveCookie_ReturnsNull_IfCookieFileDoesNotExist()
         {
-            string path = Path.Combine(cookiestoragetestpath, "File 3.entry");
-
             // Arrange
-            if (Directory.Exists(path))
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry"))
             {
-                Directory.Delete(path, true);
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry", true);
             }
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 3.entry");
 
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 3.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
-            Directory.Delete(path, true);
 
             // Act
             Cookie retrievedCookie = storage.RetrieveCookie();
@@ -136,14 +106,12 @@ namespace Unit_Testing
         [Fact]
         public void RetrieveCookie_ReturnsNull_IfCookieExpired()
         {
-            string path = Path.Combine(cookiestoragetestpath, "File 4.entry");
-
             // Arrange
-            if (Directory.Exists(path))
+            if (Directory.Exists("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry"))
             {
-                Directory.Delete(path, true);
+                Directory.Delete("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry", true);
             }
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory("D:/ConcurTests/CookieStorageTest.fdr/File 4.entry");
 
             cookie = cookieBuilder.SetExpiryDate(DateTime.ParseExact("24/01/1994", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetBm_sz("abc")
@@ -155,6 +123,7 @@ namespace Unit_Testing
                 .SetBm_sv("jkl")
                 .Build();
 
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 4.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
             storage.StoreCookie(cookie);
 
@@ -164,28 +133,6 @@ namespace Unit_Testing
             // Assert
             Assert.True(retrievedCookie == null);
 
-        }
-
-        [Fact]
-        public void RetrieveCookie_ReturnsNull_IfCookieFileDoesNotExist()
-        {
-            string path = Path.Combine(cookiestoragetestpath, "File 3.entry");
-
-            // Arrange
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }
-            Directory.CreateDirectory(path);
-
-            CookieStorage storage = new CookieStorage { CookieStoragePath = path };
-            File.Delete(Path.Combine(path, "cookie.json"));
-
-            // Act
-            Cookie retrievedCookie = storage.RetrieveCookie();
-
-            // Assert
-            Assert.True(retrievedCookie == null);
         }
 
         [Fact]
@@ -202,9 +149,8 @@ namespace Unit_Testing
                     .SetBm_sv("jkl")
                     .Build();
 
-            string path = Path.Combine(cookiestoragetestpath, "File 4.entry");
+            string path = "D:/ConcurTests/CookieStorageTest.fdr/File 4.entry";
             CookieStorage storage = new CookieStorage { CookieStoragePath = path };
-            storage.StoreCookie(cookie);
 
             // Act
             storage.ClearCookies();

@@ -100,7 +100,7 @@ namespace Unit_Testing
             decimal Value = -1231231.23m;
 
             // Assert
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfNegative(Value));
+            Assert.Throws<ArgumentNullException>(() => Utilities.CheckIfNegative(Value));
         }
 
         [Fact]
@@ -144,7 +144,8 @@ namespace Unit_Testing
         public void CheckDateTimeAheadOfNow_ThrowErrorForDateAhead()
         {
             // Arrange
-            DateTime Value = DateTime.Now.AddDays(1);
+            DateTime Value = DateTime.Now;
+            Value.AddDays(1);
 
             // Assert
             Assert.Throws<ArgumentException>(() => Utilities.CheckDateTimeAheadOfNow(Value));

@@ -7,8 +7,14 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Entry"
-        ContentTemplate="{DataTemplate local:EntryPage}"
-        Route="EntryPage" />
+        Title="Empty Page"
+        ContentTemplate="{DataTemplate local:EmptyPage}"
+        Route="EmptyPage" />
+
+    <!--<ShellContent
+        Title="Files"
+        ContentTemplate="{DataTemplate local:ChooseRootPage}"
+        Route="ChooseRootPage" />-->
+
 
 </Shell>
