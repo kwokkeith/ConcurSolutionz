@@ -408,8 +408,6 @@ public partial class EntryPage : ContentPage
                                     .SetMetaData(md)
                                     .SetRecords(new List<Database.Record>())
                                     .Build();
-
-                await DisplayAlert("Success", "Entry successfully made", "OK");
             }
             catch (Exception ex)
             {
