@@ -8,16 +8,21 @@ namespace ConcurSolutionz.Database
     {
         public static void CreateFile(FileDB file){
             // Is File == Folder?
-            try{
-                if (file.Folder){
+            if (Directory.Exists(file.FilePath))
+            {
+                throw new IOException("File already exists");
+            }
+            else
+            {
+
+                if (file.Folder)
+                {
                     CreateFolder(file);
                 }
-                else{
+                else
+                {
                     CreateEntry(file as Entry);
                 }
-            }
-            catch(Exception ex){
-                Console.WriteLine(ex.ToString());
             }
 
         }

@@ -79,12 +79,7 @@ namespace ConcurSolutionz.Database
                 Utilities.CheckNull(FileName);
                 this.FilePath = Path.Combine(FilePath, FileName);
 
-                if (Directory.Exists(this.FilePath)){
-                    throw new IOException("Folder already exists");
-                }
-                else{
-                    return this;
-                }
+                return this;
             }
 
             public Folder Build(){

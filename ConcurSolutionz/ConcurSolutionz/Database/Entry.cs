@@ -172,7 +172,7 @@ namespace ConcurSolutionz.Database
             string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             // Get all files with .json file extension in the ReceiptMetaData Folder.
-            string[] ReceiptMetaDatas = Directory.GetFiles(ReceiptMetaDataPath + "\\", "*.json");
+            string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(ReceiptMetaDataPath,""), "*.json");
             int assignedIndex = 0;
 
             // Increment assignedIndex and check for each iteration if number has been used
@@ -240,14 +240,7 @@ namespace ConcurSolutionz.Database
 
                 this.FilePath = Path.Combine(FilePath, FileName);
 
-                if (Directory.Exists(this.FilePath))
-                {
-                    throw new IOException("File already exists");
-                }
-                else
-                {
-                    return this;
-                }
+                return this;
             }
 
             public EntryBuilder SetMetaData(MetaData MetaData){
