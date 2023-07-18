@@ -9,7 +9,7 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <FlexLayout Direction="Row" JustifyContent="Center" AlignItems="Center" Margin="0,20,0,20">
+            <HorizontalStackLayout Margin="0,20,0,20">
                 <Button Text="New Folder" Clicked="OnNewFolderClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="New Entry" Clicked="OnNewEntryClicked" />
@@ -21,7 +21,7 @@
                 <Button Text="Sort" Clicked="OnSortClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="Back" Clicked="OnBackClicked" />
-            </FlexLayout>
+            </HorizontalStackLayout>
 
             <!-- File list placeholder -->
             <ListView ItemsSource="{Binding Files}"
