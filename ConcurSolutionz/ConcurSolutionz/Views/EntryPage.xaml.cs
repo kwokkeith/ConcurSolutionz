@@ -404,7 +404,7 @@ public partial class EntryPage : ContentPage
         {
 
             //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
-            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "selenium-wrapper", "macos", "selenium-wrapper");
+            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
