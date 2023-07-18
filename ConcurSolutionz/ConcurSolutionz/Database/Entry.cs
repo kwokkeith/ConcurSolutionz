@@ -105,7 +105,9 @@ namespace ConcurSolutionz.Database
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-            Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+
 
             // Update last modified date of Entry
             UpdateModifiedDate();
@@ -124,7 +126,8 @@ namespace ConcurSolutionz.Database
                 if (record.RecordID == ID){
                     Records.Remove(record);
                     Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-                    Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
