@@ -121,46 +121,65 @@
                            FontSize="Body"/>
 
                  <Label Text="City of Purchase"
+                           Grid.Row="6"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           FontSize="Body"/>
+                    <Picker
+                            x:Name="CityOfPurchase"
+                            Title="City"
+                            Grid.Row="6"
+                            Grid.Column="1"
+                           HeightRequest="50"
+                           FontSize="Body"
+                           >
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String >Singapore, SINGAPORE</x:String>
+
+                                    </x:Array>
+
+                                </Picker.ItemsSource>
+
+                            </Picker>
+
+                     <Label Text="Currency"
                            Grid.Row="7"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
-                    <Entry
-                            x:Name="CityOfPurchase"
-                            Placeholder="City of Purchase"
+                    <Picker
+                            x:Name="Currency"
+                            Title="Currency"
                             Grid.Row="7"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Singapore, Dollar</x:String>
 
-                     <Label Text="Currency"
-                           Grid.Row="8"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                            x:Name="Currency"
-                            Placeholder="Currency"
-                            Grid.Row="8"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+                                    </x:Array>
+
+                                </Picker.ItemsSource>
+
+                            </Picker>
 
                     <Label Text="Receipt Status"
-                           Grid.Row="9"
+                           Grid.Row="8"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry
                         x:Name="ReceiptStatus"
                         Placeholder="Receipt Status"
-                            Grid.Row="9"
+                            Grid.Row="8"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
 
                     <Label Text="Comment"
-                           Grid.Row="10"
+                           Grid.Row="9"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
@@ -168,7 +187,7 @@
                         x:Name="Comment"
                         Text=""
                         Placeholder="Enter Comment"
-                            Grid.Row="10"
+                            Grid.Row="9"
                             Grid.Column="1"
                            HeightRequest="50"
                            FontSize="Body"/>
@@ -176,11 +195,11 @@
                     <CheckBox
                         x:Name="IsBillable"
                         IsChecked="False"
-                        Grid.Row="11"
+                        Grid.Row="10"
                         Grid.Column="1"
                         HorizontalOptions="Start"/>
                     <Label Text="Is Billable"
-                           Grid.Row="11"
+                           Grid.Row="10"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
@@ -188,11 +207,11 @@
                     <CheckBox
                         x:Name="PersonalExpense"
                         IsChecked="False"
-                        Grid.Row="12"
+                        Grid.Row="11"
                         Grid.Column="1"
                         HorizontalOptions="Start"/>
                     <Label Text="Personal Expense"
-                           Grid.Row="12"
+                           Grid.Row="11"
                            Grid.Column="0"
                            VerticalOptions="Center"
                            FontSize="Body"/>
