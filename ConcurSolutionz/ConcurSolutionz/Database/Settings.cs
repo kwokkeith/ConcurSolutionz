@@ -9,9 +9,10 @@ namespace ConcurSolutionz.Database
     {
         private string settingsfilePath;
         private string settingsdirectoryPath;
-        public string SubType {get; set;}
-        
-        public Settings(){
+        public string SubType { get; set; }
+
+        public Settings()
+        {
             SetSettingsPath();
 
             if (!Directory.Exists(settingsdirectoryPath))
@@ -28,7 +29,8 @@ namespace ConcurSolutionz.Database
         /// <summary>Fetches the JSON file from settings path containing the root directory
         /// Returns the root directory of the application.</summary>
         /// <returns>The root directory of the application.</returns>
-        public string GetRootDirectory(){
+        public string GetRootDirectory()
+        {
             // Get all text from Path
             if (File.Exists(settingsfilePath))
             {
@@ -41,11 +43,9 @@ namespace ConcurSolutionz.Database
                     RootDirectoryData rootDirectory = JsonSerializer.Deserialize<RootDirectoryData>(json);
 
                     // Create root folder if it does not exist
-                    if (!File.Exists(rootDirectory.RootDirectory))
+                    if (!Directory.Exists(rootDirectory.RootDirectory))
                     {
                         Directory.CreateDirectory(rootDirectory.RootDirectory);
-                        string rtdir = "D:";
-                        Directory.CreateDirectory(Path.Combine(rtdir, "ConcurOCRsystem"));
 
                     }
 
@@ -70,7 +70,8 @@ namespace ConcurSolutionz.Database
         }
 
 
-        public void SetRootDirectory(string path){
+        public void SetRootDirectory(string path)
+        {
             // Create RootDirectoryObject to be converted to Json
             RootDirectoryData rootDirectory = new()
             {
@@ -81,12 +82,14 @@ namespace ConcurSolutionz.Database
         }
 
         // Wrapper class for JSON
-        class RootDirectoryData{
+        class RootDirectoryData
+        {
             public string RootDirectory { get; set; }
 
         }
 
-        private void SetSettingsPath(){
+        private void SetSettingsPath()
+        {
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
             settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
