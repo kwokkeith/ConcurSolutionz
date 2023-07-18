@@ -41,7 +41,7 @@
 
         <Border StrokeShape="RoundRectangle 10,10,10,10"
                 Stroke="#D3D3D3"
-                BackgroundColor="CadetBlue"
+                BackgroundColor="AliceBlue"
                 Padding="20,10"
                 StrokeThickness="2"
                 HeightRequest="400">
