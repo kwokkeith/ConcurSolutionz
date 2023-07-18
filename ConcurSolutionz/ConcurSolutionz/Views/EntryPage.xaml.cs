@@ -334,9 +334,6 @@ public partial class EntryPage : ContentPage
                 .SetProjectClub(projectClub)
                 .Build();
 
-            // Display success
-            await DisplayAlert("Success", "Entry details successfully recorded", "OK");
-
             // enable the disabled buttons
             AddRecordButton.IsEnabled = true;
             EditRecordButton.IsEnabled = true;
