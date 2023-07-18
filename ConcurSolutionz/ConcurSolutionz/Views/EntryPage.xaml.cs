@@ -127,7 +127,10 @@ public partial class EntryPage : ContentPage
         TeamNameInp.Text = md.TeamName;
         Purpose.Text = md.Purpose;
         BudgetEditor.Text = md.EntryBudget.ToString();
-        
+
+        // Clear ReceiptView Collection
+        ReceiptView.Clear();
+
         // Add Receipts to ReceiptView collection
         foreach(Database.Receipt receipt in receipts)
         {
@@ -137,13 +140,18 @@ public partial class EntryPage : ContentPage
             DateTime frontEndTransactionDate = receipt.TransactionDate;
             decimal frontEndReqAmount = receipt.ReqAmount;
 
-            ReceiptView.Add(new Models.Receipt(new Models.ReceiptBuilder()
+            Models.ReceiptBuilder builder = new Models.ReceiptBuilder()
                 .SetPaymentType(frontEndPaymentType)
                 .SetExpenseType(frontEndExpenseType)
                 .SetSupplierName(frontEndSupplierName)
                 .SetTransactionDate(frontEndTransactionDate)
                 .SetReqAmount(frontEndReqAmount)
-                ));
+                .SetSupplierName(receipt.SupplierName);
+
+            Models.Receipt modelReceipt = builder.Build();
+            modelReceipt.recordID = receipt.RecordID + 1;
+
+            ReceiptView.Add(modelReceipt);
         }
     }
 

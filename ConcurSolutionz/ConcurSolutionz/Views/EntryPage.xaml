@@ -21,13 +21,13 @@
                 Source="edit_32.png"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
-            <Button x:Name="SetMetadataButton" Text="Save entry details" Clicked="SetMetaData_Clicked"/>
+            <Button x:Name="SetMetadataButton" Text="Save Entry Metadata" Clicked="SetMetaData_Clicked"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
               ColumnSpacing="20">
 
-            <Button Text="Transfer to concur"
+            <Button Text="Transfer to Concur"
                     Grid.Column="0"
                     Margin="10"
                     Clicked="Concur_Clicked"/>
@@ -287,7 +287,7 @@
                                 <Label Text="{Binding ExpenseType}" Grid.Column="2" HorizontalOptions="Center"/>
                                 <Label Text="{Binding SupplierName}" Grid.Column="3" HorizontalOptions="Center"/>
                                 <Label Text="{Binding TransactionDate, StringFormat='{0:MM/dd/yyyy}'}" Grid.Column="4" HorizontalOptions="Center"/>
-                                <Label Text="{Binding ReqAmount, StringFormat='C'}" Grid.Column="5" HorizontalOptions="Center"/>
+                                <Label Text="{Binding ReqAmount, StringFormat='{0:C2}'}" Grid.Column="5" HorizontalOptions="Center"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

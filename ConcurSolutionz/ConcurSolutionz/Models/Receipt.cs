@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace ConcurSolutionz.Models
 {
-    public class Receipt : Record, INotifyPropertyChanged
+    public class Receipt : INotifyPropertyChanged
     {
         //Attributes
         private string paymentType;
@@ -21,7 +21,8 @@ namespace ConcurSolutionz.Models
         private bool isPersonalExpense;
         private string comment;
         private string imgPath;
-        private int recordID;
+        public int recordID { get; set; }
+        private string reqAmountString;
 
         // Property change event
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,10 +70,46 @@ namespace ConcurSolutionz.Models
                     OnPropertyChanged(nameof(TransactionDate));
                 }
             }
-
-            // Implement the remaining properties similarly... 
         }
 
+        public decimal ReqAmount
+        {
+            get => reqAmount;
+            set
+            {
+                if (reqAmount != value)
+                {
+                    reqAmount = value;
+                    OnPropertyChanged(nameof(ReqAmount));
+                    ReqAmountString = Convert.ToString(value);
+                }
+            }
+        }
+
+        public string ReqAmountString
+        {
+            get => reqAmountString;
+            set
+            {
+                if (reqAmountString != value)
+                {
+                    OnPropertyChanged(nameof(ReqAmountString));
+                }
+            }
+        }
+
+        public string SupplierName
+        {
+            get => supplierName;
+            set
+            {
+                if (supplierName != value)
+                {
+                    supplierName = value;
+                    OnPropertyChanged(nameof(SupplierName));
+                }
+            }
+        }
 
         //Id of the expense reflected on Concur (ExpenseId)
         private string Id;
@@ -85,7 +122,6 @@ namespace ConcurSolutionz.Models
         // Methods from Record interface
         public void AssignRecordId()
         {
-            // implement method
         }
 
         public int GetRecordId()
@@ -127,6 +163,7 @@ namespace ConcurSolutionz.Models
     }
     public class ReceiptBuilder
     {
+
         public string PaymentType { get; set; }
         public string ExpenseType { get; set; }
         public DateTime TransactionDate { get; set; }
@@ -191,7 +228,7 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
-        public ReceiptBuilder setCurrencyAmountSGD(decimal currencyAmountSGD)
+        public ReceiptBuilder SetCurrencyAmountSGD(decimal currencyAmountSGD)
         {
             CurrencyAmountSGD = currencyAmountSGD;
             return this;
