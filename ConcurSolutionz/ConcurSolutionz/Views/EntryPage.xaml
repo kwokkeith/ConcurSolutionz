@@ -60,8 +60,7 @@
                             x:Name="Policy"
                             Grid.Row="0"
                             Grid.Column="1"
-                            FontSize="Body"
-                            HeightRequest="50">
+                            FontSize="Body">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Student Project Claim</x:String>
