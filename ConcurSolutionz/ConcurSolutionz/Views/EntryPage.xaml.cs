@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using ConcurSolutionz.Controllers;
@@ -399,7 +400,8 @@ public partial class EntryPage : ContentPage
         //Starting chrome driver
         try
         {
-            process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "selenium-wrapper", "macos", "selenium-wrapper");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
