@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace ConcurSolutionz.Models
 {
-    public class Receipt : Record, INotifyPropertyChanged
+    public class Receipt : INotifyPropertyChanged
     {
         //Attributes
         private string paymentType;
@@ -21,7 +21,8 @@ namespace ConcurSolutionz.Models
         private bool isPersonalExpense;
         private string comment;
         private string imgPath;
-        private int recordID;
+        public int recordID { get; set; }
+
 
         // Property change event
         public event PropertyChangedEventHandler PropertyChanged;
@@ -30,6 +31,32 @@ namespace ConcurSolutionz.Models
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public decimal ReqAmount
+        {
+            get => reqAmount;
+            set
+            {
+                if (reqAmount != value)
+                {
+                    reqAmount = value;
+                    OnPropertyChanged(nameof(ReqAmount));
+                }
+            }
+        }
+
+        public string SupplierName
+        {
+            get => supplierName;
+            set
+            {
+                if (supplierName != value)
+                {
+                    supplierName = value;
+                    OnPropertyChanged(nameof(SupplierName));
+                }
+            }
         }
 
         public string PaymentType
@@ -185,13 +212,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
-        public ReceiptBuilder setConversionRate(decimal conversionRate)
+        public ReceiptBuilder SetConversionRate(decimal conversionRate)
         {
             ConversionRate = conversionRate;
             return this;
         }
 
-        public ReceiptBuilder setCurrencyAmountSGD(decimal currencyAmountSGD)
+        public ReceiptBuilder SetCurrencyAmountSGD(decimal currencyAmountSGD)
         {
             CurrencyAmountSGD = currencyAmountSGD;
             return this;
