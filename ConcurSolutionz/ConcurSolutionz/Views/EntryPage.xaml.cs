@@ -333,23 +333,28 @@ public partial class EntryPage : ContentPage
                 .SetTeamName(teamName)
                 .SetProjectClub(projectClub)
                 .Build();
+
+            // Display success
+            await DisplayAlert("Success", "Entry details successfully recorded", "OK");
+
+            // enable the disabled buttons
+            AddRecordButton.IsEnabled = true;
+            EditRecordButton.IsEnabled = true;
+            DeleteRecordButton.IsEnabled = true;
+
+            //Build entry
+            if (md != null)
+            {
+                BuildEntry();
+            }
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", "Unable to create metadata\n" +
                 ex, "OK");
         }
-        // Display success
-        await DisplayAlert("Success", "Entry details successfully recorded", "OK");
-
-        // enable the disabled buttons
-        AddRecordButton.IsEnabled = true;
-        EditRecordButton.IsEnabled = true;
-        DeleteRecordButton.IsEnabled = true;
-
-        //Build entry
-
-        BuildEntry();
+        
+        
     }
 
     private async void BuildEntry()
