@@ -189,16 +189,16 @@ namespace ConcurSolutionz.Views
             }
         }
 
-        private Receipt BuildNewReceipt()
+        private Receipt BuildNewReceipt(string ReceiptNumber, decimal ReqAmount)
         {
             Receipt.ReceiptBuilder builder = new();
             builder.SetExpenseType(ExpenseType.Text)
                 .SetTransactionDate(TransactionDate.Date)
                 .SetDescription(DescriptionInp.Text)
                 .SetCityOfPurchase(CityOfPurchase.Text)
-                .SetReqAmount(Convert.ToDecimal(reqAmount.Text))
+                .SetReqAmount(ReqAmount)
                 .SetCurrency(Currency.Text)
-                .SetReceiptNumber(ReceiptNo.Text)
+                .SetReceiptNumber(ReceiptNumber)
                 .SetReceiptStatus(ReceiptStatus.Text)
                 .SetSupplierName(SupplierName.Text)
                 .SetIsBillable(IsBillable.IsChecked)
@@ -211,22 +211,41 @@ namespace ConcurSolutionz.Views
 
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
-            if (ExistingRecordBool) // If record exist before
-            {
-                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
-            }
-
             Receipt receipt;
             try
             {
-                receipt = BuildNewReceipt();
+                string tesseractPath = "";
+                ConcurSolutionz.OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
+                string ReceiptNumber = receiptData.receiptNumber;
+                decimal ReqAmount = receiptData.reqAmount;
+
+                receipt = BuildNewReceipt(ReceiptNumber, ReqAmount);
+
             }
+
             catch (Exception ex)
             {
                 // If error encountered while building receipt (missing fields, etc.)
                 await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
                 return;
             }
+
+            if (ExistingRecordBool) // If record exist before
+            {
+                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
+            }
+
+            //Receipt receipt;
+            //try
+            //{
+            //    receipt = BuildNewReceipt();
+            //}
+            //catch (Exception ex)
+            //{
+            //    // If error encountered while building receipt (missing fields, etc.)
+            //    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+            //    return;
+            //}
 
             // Add new record/receipt to the entry object
             entryFile.AddRecord(receipt);
