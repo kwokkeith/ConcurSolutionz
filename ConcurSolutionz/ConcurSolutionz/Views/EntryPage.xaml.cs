@@ -400,8 +400,9 @@ public partial class EntryPage : ContentPage
         //Starting chrome driver
         try
         {
-            //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper";
-            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "selenium-manager", "macos", "selenium-manager");
+
+            //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "selenium-wrapper", "macos", "selenium-wrapper");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
