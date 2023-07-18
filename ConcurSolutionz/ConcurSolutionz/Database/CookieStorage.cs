@@ -14,7 +14,7 @@ namespace ConcurSolutionz.Database
         public void StoreCookie(Cookie cookie){
             try{
                 // Check if CookieStorage folder exist, if not the create
-                if (!File.Exists(CookieStoragePath))
+                if (!Directory.Exists(CookieStoragePath))
                 {
                     // Create CookieStorage directory if it does not exist.
                     Directory.CreateDirectory(CookieStoragePath);
@@ -47,7 +47,10 @@ namespace ConcurSolutionz.Database
                     }
 
                     string json = File.ReadAllText(CookiePath);
-                    Cookie cookie = JsonSerializer.Deserialize<Cookie>(json);
+                    var options = new JsonSerializerOptions();
+                    options.Converters.Add(new Cookie.CookieConverter());
+
+                    Cookie cookie = JsonSerializer.Deserialize<Cookie>(json, options);
                     if (cookie.ExpiryDate < DateTime.Now)
                     {
                         Console.WriteLine("Cookie has expired.");
@@ -73,7 +76,7 @@ namespace ConcurSolutionz.Database
 
         private string GetCookiePath(){
             try{
-                return Path.Combine(CookieStoragePath + "cookie.json");
+                return Path.Combine(CookieStoragePath, "cookie.json");
             }
             catch{
                 Console.WriteLine("Failed to write to " + CookieStoragePath + "cookie.json");

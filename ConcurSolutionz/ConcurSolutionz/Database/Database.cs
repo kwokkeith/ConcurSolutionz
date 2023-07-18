@@ -98,10 +98,11 @@ namespace ConcurSolutionz.Database
         /// <exception cref="Exception">Thrown when the specified file name is not found in the Files list of the Database.</exception>
         public void FileSelectByFileName(string fileName)
         {
+            string newPath = Path.Combine(WorkingDirectory, fileName);
+
             // If fileName exist in Files
-            if (Directory.Exists(fileName))
+            if (Directory.Exists(newPath))
             {
-                string newPath = Path.Combine(WorkingDirectory, fileName);
 
                 FileSelectByFilePath(newPath);
             }
@@ -146,8 +147,8 @@ namespace ConcurSolutionz.Database
                 // TODO: CALL ENTRY SUBSYSTEM
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-
+                
+                
             }
 
             else
@@ -157,7 +158,7 @@ namespace ConcurSolutionz.Database
         }
 
         // Uses a fileName to find a file and return a tuple of (Metadata, List<Record>) 
-        public Tuple<StudentProjectClaimMetaData, List<Record>> getFileDetailFromFileName(string fileName)
+        public Tuple<MetaData, List<Record>> getFileDetailFromFileName(string fileName)
         {
             string filePath = Path.Combine(WorkingDirectory, fileName); // root of file (Entry)
             if (Path.Exists(filePath))
@@ -165,13 +166,13 @@ namespace ConcurSolutionz.Database
                 // Entry metadata path
                 string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
                 // Extract Entry MetaData from JSON
-                StudentProjectClaimMetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
+                MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
 
                 // Extract out receipt from receipt metadata and return a list
                 string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
                 List<Record> records = ExtractRecords(ReceiptMetaDataPath);
 
-                return new Tuple<StudentProjectClaimMetaData, List<Record>>(EntryMetaData, records);
+                return new Tuple<MetaData, List<Record>>(EntryMetaData, records);
             }
             else
             {
@@ -197,8 +198,17 @@ namespace ConcurSolutionz.Database
         public static void DeleteFile(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
+            File.Delete(filePath);
+        }
+
+        /// <summary>Deletes a file from the specified file path.</summary>
+        /// <param name="filePath">The path of the file to be deleted.</param>
+        public static void DeleteDirectory(string filePath)
+        {
+            // Delete a file using Directory (Physical file management system)
             Directory.Delete(filePath);
         }
+
 
         /// <summary>Navigates back to the previous directory.</summary>
         /// <remarks>
@@ -225,17 +235,19 @@ namespace ConcurSolutionz.Database
         // @@@@@@@@@@@@@@@@@@@@@@@@@
         // DATABASE UTILITY METHODS
         // @@@@@@@@@@@@@@@@@@@@@@@@@
-        private static StudentProjectClaimMetaData ExtractEntryMetaData(string MetaDataPath)
+        private static MetaData ExtractEntryMetaData(string MetaDataPath)
         {
             if (Path.Exists(MetaDataPath))
             {
                 try
                 {
                     string json = File.ReadAllText(MetaDataPath);
-                    var options = new JsonSerializerOptions();
-                    options.Converters.Add(new StudentProjectClaimMetaData.StudentProjectClaimMetaDataConverter());
+                    JsonDocument doc = JsonDocument.Parse(json);
+                    JsonElement subtypeElement = doc.RootElement.GetProperty("SubType");
+                    string subType = subtypeElement.GetString();
 
-                    StudentProjectClaimMetaData metaData = JsonSerializer.Deserialize<StudentProjectClaimMetaData>(json, options);
+                    MetaData metaData = JSONAdaptor.GetEntryMetaDataFromJSON(json, subType);
+                  
                     return metaData;
                 }
                 catch (Exception e)
@@ -262,10 +274,12 @@ namespace ConcurSolutionz.Database
                     foreach (string filePath in ReceiptMetaDatas)
                     {
                         string json = File.ReadAllText(filePath);
-                        var options = new JsonSerializerOptions();
-                        options.Converters.Add(new Receipt.ReceiptConverter());
+                        JsonDocument doc = JsonDocument.Parse(json);
+                        JsonElement subtypeElement = doc.RootElement.GetProperty("SubType");
+                        string subType = subtypeElement.GetString();
 
-                        Receipt record_MD = JsonSerializer.Deserialize<Receipt>(json, options);
+
+                        Record record_MD = JSONAdaptor.GetRecordFromJSON(json, subType);
                         Receipts.Add(record_MD);
                     }
 

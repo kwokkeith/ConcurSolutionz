@@ -105,7 +105,9 @@ namespace ConcurSolutionz.Database
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-            Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+
 
             // Update last modified date of Entry
             UpdateModifiedDate();
@@ -124,7 +126,8 @@ namespace ConcurSolutionz.Database
                 if (record.RecordID == ID){
                     Records.Remove(record);
                     Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-                    Database.DeleteFile(Path.Combine(receiptFolderPath, record.RecordID.ToString())); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
@@ -159,9 +162,12 @@ namespace ConcurSolutionz.Database
 
         // Calls EntrySubsystem
         public override void SelectedAction(){
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             // TODO: Call EntrySubSystem to add records (FOR EXISTING ENTRY)
             // I.e. when Entry exist in File Management already... Then we want to
             // edit or modify it.
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
             return;
         }
 
@@ -172,7 +178,7 @@ namespace ConcurSolutionz.Database
             string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
             // Get all files with .json file extension in the ReceiptMetaData Folder.
-            string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(ReceiptMetaDataPath, ""), "*.json");
+            string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(ReceiptMetaDataPath,""), "*.json");
             int assignedIndex = 0;
 
             // Increment assignedIndex and check for each iteration if number has been used

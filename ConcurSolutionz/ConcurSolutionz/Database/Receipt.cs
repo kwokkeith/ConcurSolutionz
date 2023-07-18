@@ -63,16 +63,6 @@ namespace ConcurSolutionz.Database
         public string Comment { get; set; }
         public string ImgPath { get; set; }
 
-        //Concur Identifiers
-        //Id of the expense reflected on Concur (ExpenseId)
-        public string? Id { get; set; }
-        //ReportId of the claim that this expense(parent) is under
-        public string? ReportId { get; set; }
-        //Key assigned to expense upon creation used to identify the expense
-        public string? RPEKey { get; set; }
-        //Id of the image that should be attached to the expense
-        public string? ImgId { get; set; }
-
         public Receipt(ReceiptBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
@@ -110,10 +100,6 @@ namespace ConcurSolutionz.Database
             IsPersonalExpense = builder.IsPersonalExpense;
             Comment = builder.Comment;
             ImgPath = builder.ImgPath;
-            Id = builder.Id;
-            ReportId = builder.ReportId;
-            RPEKey = builder.RPEKey;
-            ImgId = builder.ImgId;
             SubType = builder.SubType;
         }
 
@@ -143,10 +129,6 @@ namespace ConcurSolutionz.Database
                 bool isPersonalExpense = doc.RootElement.GetProperty("IsPersonalExpense").GetBoolean();
                 string comment = doc.RootElement.GetProperty("Comment").GetString();
                 string imgPath = doc.RootElement.GetProperty("ImgPath").GetString();
-                string? id = doc.RootElement.GetProperty("Id").GetString();
-                string? reportId = doc.RootElement.GetProperty("ReportId").GetString();
-                string? rpeKey = doc.RootElement.GetProperty("RPEKey").GetString();
-                string? imgId = doc.RootElement.GetProperty("ImgId").GetString();
                 string subType = doc.RootElement.GetProperty("SubType").GetString();
                 int recordID = doc.RootElement.GetProperty("RecordID").GetInt32();
 
@@ -168,10 +150,6 @@ namespace ConcurSolutionz.Database
                 builder.SetIsPersonalExpense(isPersonalExpense);
                 builder.SetComment(comment);
                 builder.SetImgPath(imgPath);
-                builder.SetId(id);
-                builder.SetReportId(reportId);
-                builder.SetRPEKey(rpeKey);
-                builder.SetImgId(imgId);
 
                 Receipt receipt = builder.Build();
                 receipt.RecordID = recordID;
@@ -356,30 +334,6 @@ namespace ConcurSolutionz.Database
             public ReceiptBuilder SetImgPath(string ImgPath)
             {
                 this.ImgPath = ImgPath;
-                return this;
-            }
-
-            public ReceiptBuilder SetId(string id)
-            {
-                Id = id;
-                return this;
-            }
-
-            public ReceiptBuilder SetReportId(string id)
-            {
-                ReportId = id;
-                return this;
-            }
-
-            public ReceiptBuilder SetRPEKey(string rpeKey)
-            {
-                RPEKey = rpeKey;
-                return this;
-            }
-
-            public ReceiptBuilder SetImgId(string imgId)
-            {
-                ImgId = imgId;
                 return this;
             }
 

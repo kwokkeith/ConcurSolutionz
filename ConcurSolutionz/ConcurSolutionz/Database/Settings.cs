@@ -9,9 +9,10 @@ namespace ConcurSolutionz.Database
     {
         private string settingsfilePath;
         private string settingsdirectoryPath;
-        public string SubType {get; set;}
-        
-        public Settings(){
+        public string SubType { get; set; }
+
+        public Settings()
+        {
             SetSettingsPath();
 
             if (!Directory.Exists(settingsdirectoryPath))
@@ -28,7 +29,8 @@ namespace ConcurSolutionz.Database
         /// <summary>Fetches the JSON file from settings path containing the root directory
         /// Returns the root directory of the application.</summary>
         /// <returns>The root directory of the application.</returns>
-        public string GetRootDirectory(){
+        public string GetRootDirectory()
+        {
             // Get all text from Path
             if (File.Exists(settingsfilePath))
             {
@@ -41,11 +43,9 @@ namespace ConcurSolutionz.Database
                     RootDirectoryData rootDirectory = JsonSerializer.Deserialize<RootDirectoryData>(json);
 
                     // Create root folder if it does not exist
-                    if (!File.Exists(rootDirectory.RootDirectory))
+                    if (!Directory.Exists(rootDirectory.RootDirectory))
                     {
                         Directory.CreateDirectory(rootDirectory.RootDirectory);
-                        string rtdir = "D:";
-                        Directory.CreateDirectory(Path.Combine(rtdir, "ConcurOCRsystem"));
 
                     }
 
@@ -58,6 +58,7 @@ namespace ConcurSolutionz.Database
                 }
             }
 
+            // Return null if root directory does not exist
             else
             {
                 using (StreamWriter writer = new StreamWriter(settingsfilePath))
@@ -66,18 +67,11 @@ namespace ConcurSolutionz.Database
                 }
                 return null;
             }
-            // If the file with root directory does not exist, prompt user to create root directory
-
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // TODO: CREATE AN INTERFACE TO PROMPT USER FOR ROOT DIRECTORY
-            // Possibly a method to call a simple UI to key in root directory
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         }
 
 
-        public void SetRootDirectory(string path){
+        public void SetRootDirectory(string path)
+        {
             // Create RootDirectoryObject to be converted to Json
             RootDirectoryData rootDirectory = new()
             {
@@ -88,17 +82,17 @@ namespace ConcurSolutionz.Database
         }
 
         // Wrapper class for JSON
-        class RootDirectoryData{
+        class RootDirectoryData
+        {
             public string RootDirectory { get; set; }
 
         }
 
-        private void SetSettingsPath(){
+        private void SetSettingsPath()
+        {
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
             settingsdirectoryPath = Path.Combine(userProfile, "Documents", "ConcurSolutionz");
             settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
-
         }
     }
 }

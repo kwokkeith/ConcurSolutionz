@@ -1,3 +1,4 @@
+
 namespace ConcurSolutionz.Database
 {
     public abstract class FileDB

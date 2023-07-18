@@ -129,6 +129,11 @@ public partial class EntryPage : ContentPage
         Purpose.Text = md.Purpose;
         BudgetEditor.Text = md.EntryBudget.ToString();
 
+        // Entry Budget
+        decimal entryBudget = md.EntryBudget;
+        decimal currentExpense = 0;
+        decimal remainingBudget;
+
         // Clear ReceiptView Collection
         ReceiptView.Clear();
 
@@ -140,6 +145,9 @@ public partial class EntryPage : ContentPage
             string frontEndSupplierName = receipt.SupplierName;
             DateTime frontEndTransactionDate = receipt.TransactionDate;
             decimal frontEndReqAmount = receipt.ReqAmount;
+
+            // Add current Expense of Entry
+            currentExpense += receipt.reqAmount;
 
             Models.ReceiptBuilder builder = new Models.ReceiptBuilder()
                .SetPaymentType(frontEndPaymentType)
@@ -154,6 +162,13 @@ public partial class EntryPage : ContentPage
 
             ReceiptView.Add(modelReceipt);
         }
+
+        // Calculate remaining Budget
+        remainingBudget = entryBudget - currentExpense;
+
+        // Populate the UI for entry budget
+        CurrentExpenseInput.Text = currentExpense.ToString();
+        RemainingBudget.Text = remainingBudget.ToString();
     }
 
     
@@ -273,7 +288,7 @@ public partial class EntryPage : ContentPage
     // Create entry from existing file
     private async void CreateExistingFile(string name)
     {
-        Tuple<StudentProjectClaimMetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
+        Tuple<MetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
 
         // Get existing metadata
         try

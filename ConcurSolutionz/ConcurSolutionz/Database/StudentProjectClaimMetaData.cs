@@ -6,14 +6,12 @@ namespace ConcurSolutionz.Database
 {
     public class StudentProjectClaimMetaData : MetaData
     {
-        public string Policy { get; set; }
+        public string Policy { get; set; } 
         public string ClaimName { get; set; }
         private DateTime claimDate;
-        public DateTime ClaimDate
-        {
-            get { return claimDate; }
-            set
-            {
+        public DateTime ClaimDate {
+            get{ return claimDate; }
+            set {
                 Utilities.CheckDateTimeAheadOfNow(value);
                 claimDate = value;
             }
@@ -22,8 +20,7 @@ namespace ConcurSolutionz.Database
         public string TeamName { get; set; }
         public string ProjectClub { get; set; }
 
-        public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder)
-        {
+        public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder){
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(claimMDBuilder.EntryName);
             Utilities.CheckNull(claimMDBuilder.EntryBudget);
@@ -66,7 +63,7 @@ namespace ConcurSolutionz.Database
                 string teamName = doc.RootElement.GetProperty("TeamName").GetString();
                 string projectClub = doc.RootElement.GetProperty("ProjectClub").GetString();
                 string subType = doc.RootElement.GetProperty("SubType").GetString();
-
+                         
 
                 StudentProjectClaimMDBuilder builder = new StudentProjectClaimMDBuilder();
 

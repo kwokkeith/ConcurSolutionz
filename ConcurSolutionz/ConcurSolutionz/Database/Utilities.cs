@@ -63,19 +63,6 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        // Returns the file extension of the file name passed (including the dot)
-        public static string GetFileExtension(string fileName)
-        {
-            CheckNull(fileName);
-            int index = fileName.LastIndexOf('.');
-            if (index == -1)
-            {
-                throw new ArgumentException("No file extension found!");
-            }
-            return fileName.Substring(index);
-        }
-
-
         public static void CheckDateTimeAheadOfNow(DateTime date){
             CheckNull(date);
             int res = DateTime.Compare(date, DateTime.Now);
@@ -97,15 +84,18 @@ namespace ConcurSolutionz.Database
         }
 
         public static string ConstEntryMetaDataPath(string entryPath){
+            CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "EntryMetaData.json");
         }
 
         // Creating Receipt MetaData path creates Receipts folder as well
         public static string ConstReceiptsFdrPath(string entryPath){
+            CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Receipts.fdr");
         }
 
         public static string ConstReceiptMetaDataPath(string entryPath){
+            CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Receipts.fdr", "ReceiptJSON.fdr");
         }
 

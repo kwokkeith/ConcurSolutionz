@@ -203,27 +203,45 @@
 
             </HorizontalStackLayout>
            
-            
             <Label Grid.Row="1"
-                   Text="Current Expenditure: "
-                   FontSize="Body"
-                   VerticalOptions="Center"/>
-            <Label Grid.Row="1"
+                    Text="Current Expenditure: "
+                    FontSize="Body"
+                    VerticalOptions="Center"/>
+
+
+            <HorizontalStackLayout Grid.Column="1" Grid.Row="1">
+                <Label Text="$"
+                VerticalOptions="Center"
+                FontSize="Body"/> 
+                <Label
+                   x:Name="CurrentExpenseInput"
+                   Grid.Row="1"
                    Grid.Column="1"
-                   Text="$10"
+                   Text=""
                    FontSize="Body"
                    VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
 
             <Label Grid.Row="2"
                    Text="Remaining Budget: "
                    FontSize="Body"
                    VerticalOptions="Center"/>
-            <Label Grid.Row="2"
+
+
+            <HorizontalStackLayout Grid.Column="1" Grid.Row="2">
+                <Label Text="$"
+                VerticalOptions="Center"
+                FontSize="Body"/> 
+
+                <Label
+                   x:Name="RemainingBudget"
+                   Grid.Row="2"
                    Grid.Column="1"
-                   Text="$100"
+                   Text=""
                    FontSize="Body"
-                   VerticalOptions="Center"
-                   x:Name="Remaining"/>
+                   VerticalOptions="Center"/>
+            </HorizontalStackLayout>
 
         </Grid>
 
