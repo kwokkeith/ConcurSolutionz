@@ -12,9 +12,9 @@ namespace Unit_Testing
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    public class Setup : IDisposable
+    public class DBSetup : IDisposable
     {
-        public Setup()
+        public DBSetup()
         {
             string testdirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests");
 
@@ -37,10 +37,10 @@ namespace Unit_Testing
         }
     }
 
-    public class DatabaseTests : IClassFixture<Setup>
+    public class DatabaseTests : IClassFixture<DBSetup>
     {
         string dbtestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "DatabaseTest.fdr");
-        string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_5669.jpg");
+        string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1000.png");
 
         [Fact]
         public void InstanceTest_ShouldReturnSameInstance()
@@ -55,9 +55,9 @@ namespace Unit_Testing
 
         [Fact]
         public void SetSettings_AndGetSettings_ReturnsSameDirectory()
-        {   
+        {
             // Arrange
-            var dbinstance = Database.Instance;
+            Database dbinstance = Database.Instance;
             Settings settings = new();
             string path = dbtestpath;
             settings.SetRootDirectory(path);
@@ -203,10 +203,10 @@ namespace Unit_Testing
             Directory.CreateDirectory(Path.Combine(dbtestpath,"Folder 2.fdr"));
 
             // Act
-            Database.DeleteFile(path);
+            Database.DeleteDirectory(path);
 
             // Assert
-            Assert.False(File.Exists(path));
+            Assert.False(Directory.Exists(path));
 
         }
 

@@ -264,8 +264,9 @@ namespace Unit_Testing
                 .SetDescription("Pizza Hut for bonding activities")
                 .SetSupplierName("Pizza Hut")
                 .SetCityOfPurchase("Singapore, SINGAPORE")
-                .SetCurrency("US, Dollar")
                 .SetReqAmount(104.5m)
+                .SetConversionRate(conversionRate)
+                .SetCurrency("Singapore, Dollar")
                 .SetCurrency("1.38085")
                 .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
                 .SetReceiptStatus("Tax Receipt")
@@ -294,7 +295,7 @@ namespace Unit_Testing
                 .SetCityOfPurchase("Singapore, SINGAPORE")
                 .SetCurrency("US, Dollar")
                 .SetReqAmount(104.5m)
-                .SetCurrency("1.38085")
+                .SetConversionRate(1.38085m)
                 .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
                 .SetReceiptStatus("Tax Receipt")
                 .SetImgPath("IMG_5669.JPG")
@@ -337,7 +338,7 @@ namespace Unit_Testing
             // Assert
             receipt.Currency = Currency;
             receipt.ConversionRate = conversionRate;
-            Assert.InRange(receiptBuilder.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M);
+            Assert.InRange(receipt.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M);
         }
 
         [Theory]
@@ -358,9 +359,8 @@ namespace Unit_Testing
                 .SetDescription("Pizza Hut for bonding activities")
                 .SetSupplierName("Pizza Hut")
                 .SetCityOfPurchase("Singapore, SINGAPORE")
-                .SetCurrency("US, Dollar")
                 .SetReqAmount(104.5m)
-                .SetCurrency("1.38085")
+                .SetConversionRate(1.38085m)
                 .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
                 .SetReceiptStatus("Tax Receipt")
                 .SetImgPath("IMG_5669.JPG")
@@ -386,7 +386,7 @@ namespace Unit_Testing
                 .SetCityOfPurchase("Singapore, SINGAPORE")
                 .SetCurrency("US, Dollar")
                 .SetReqAmount(104.5m)
-                .SetCurrency("1.38085")
+                .SetConversionRate(1.38085m)
                 .SetReceiptNumber("30355108-C3J1JCMTHEYJGO")
                 .SetReceiptStatus("Tax Receipt")
                 .SetImgPath("IMG_5669.JPG")
