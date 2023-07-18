@@ -59,8 +59,7 @@
                     <Picker Title="Choose policy"
                             x:Name="Policy"
                             Grid.Row="0"
-                            Grid.Column="1"
-                            FontSize="Body">
+                            Grid.Column="1">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Student Project Claim</x:String>
