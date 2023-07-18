@@ -99,7 +99,7 @@ namespace ConcurSolutionz.Database
         public void FileSelectByFileName(string fileName)
         {
             // If fileName exist in Files
-            if (Files.Contains(fileName))
+            if (Directory.Exists(fileName))
             {
                 string newPath = Path.Combine(WorkingDirectory, fileName);
 
@@ -197,8 +197,17 @@ namespace ConcurSolutionz.Database
         public static void DeleteFile(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
+            File.Delete(filePath);
+        }
+
+        /// <summary>Deletes a file from the specified file path.</summary>
+        /// <param name="filePath">The path of the file to be deleted.</param>
+        public static void DeleteDirectory(string filePath)
+        {
+            // Delete a file using Directory (Physical file management system)
             Directory.Delete(filePath);
         }
+
 
         /// <summary>Navigates back to the previous directory.</summary>
         /// <remarks>
