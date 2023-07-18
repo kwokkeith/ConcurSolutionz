@@ -9,7 +9,7 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <HorizontalStackLayout Margin="0,20,0,20">
+            <HorizontalStackLayout Margin="0,20,0,20" HorizontalOptions="Center">
                 <Button Text="New Folder" Clicked="OnNewFolderClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="New Entry" Clicked="OnNewEntryClicked" />
