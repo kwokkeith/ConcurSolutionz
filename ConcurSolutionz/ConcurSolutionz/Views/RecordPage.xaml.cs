@@ -189,16 +189,16 @@ namespace ConcurSolutionz.Views
             }
         }
 
-        private Receipt BuildNewReceipt(string ReceiptNumber, decimal ReqAmount)
+        private Receipt BuildNewReceipt()
         {
             Receipt.ReceiptBuilder builder = new();
             builder.SetExpenseType(ExpenseType.Text)
                 .SetTransactionDate(TransactionDate.Date)
                 .SetDescription(DescriptionInp.Text)
                 .SetCityOfPurchase(CityOfPurchase.Text)
-                .SetReqAmount(ReqAmount)
+                .SetReqAmount(Convert.ToDecimal(reqAmount.Text))
                 .SetCurrency(Currency.Text)
-                .SetReceiptNumber(ReceiptNumber)
+                .SetReceiptNumber(ReceiptNo.Text)
                 .SetReceiptStatus(ReceiptStatus.Text)
                 .SetSupplierName(SupplierName.Text)
                 .SetIsBillable(IsBillable.IsChecked)
@@ -208,19 +208,38 @@ namespace ConcurSolutionz.Views
             return builder.Build();
         }
 
-
-        public async void OnSaveDetails_Clicked(object sender, EventArgs e)
+        public async void OnOCRButton_Clicked(object sender, EventArgs e)
         {
-            Receipt receipt;
             try
             {
                 string tesseractPath = "";
-                ConcurSolutionz.OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
+                OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
                 string ReceiptNumber = receiptData.receiptNumber;
-                decimal ReqAmount = receiptData.reqAmount;
+                string ReqAmount = Convert.ToString(receiptData.reqAmount);
 
-                receipt = BuildNewReceipt(ReceiptNumber, ReqAmount);
+                ReceiptNo.Text = ReceiptNumber;
+                reqAmount.Text = ReqAmount;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Falied to call OCR: " + ex, "OK");
+                return;
+            }
+            
+        }
 
+
+        public async void OnSaveDetails_Clicked(object sender, EventArgs e)
+        {
+            if (ExistingRecordBool) // If record exist before
+            {
+                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
+            }
+
+            Receipt receipt;
+            try
+            {
+                receipt = BuildNewReceipt();
             }
 
             catch (Exception ex)
@@ -229,23 +248,6 @@ namespace ConcurSolutionz.Views
                 await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
                 return;
             }
-
-            if (ExistingRecordBool) // If record exist before
-            {
-                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
-            }
-
-            //Receipt receipt;
-            //try
-            //{
-            //    receipt = BuildNewReceipt();
-            //}
-            //catch (Exception ex)
-            //{
-            //    // If error encountered while building receipt (missing fields, etc.)
-            //    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
-            //    return;
-            //}
 
             // Add new record/receipt to the entry object
             entryFile.AddRecord(receipt);

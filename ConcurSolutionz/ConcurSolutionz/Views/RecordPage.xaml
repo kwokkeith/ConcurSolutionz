@@ -19,6 +19,7 @@
                 <Button x:Name="OCRButton"
                         Text="OCR Scan"
                         Grid.Row="1"
+                        Clicked="OnOCRButton_Clicked"
                         HeightRequest="50"
                         Margin="10"/>
             </Grid>
