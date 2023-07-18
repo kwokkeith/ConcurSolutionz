@@ -31,7 +31,6 @@ public partial class EntryPage : ContentPage
         set
         {
             existingFile = value;
-            //entry = Database.Entry.
             OnPropertyChanged();
             if (existingFile)
             {
@@ -169,6 +168,8 @@ public partial class EntryPage : ContentPage
         // Populate the UI for entry budget
         CurrentExpenseInput.Text = currentExpense.ToString();
         RemainingBudget.Text = remainingBudget.ToString();
+
+        BuildMDPopulate();
     }
 
     
@@ -317,7 +318,13 @@ public partial class EntryPage : ContentPage
     }
 
     // Click event handler for setting metadata of entry
-    private async void SetMetaData_Clicked(object sender, EventArgs e)
+    private void SetMetaData_Clicked(object sender, EventArgs e)
+    {
+        BuildMDPopulate();
+        
+    }
+
+    private async void BuildMDPopulate()
     {
         string entryName = EntryName.Text;
         string entryBudgetString = BudgetEditor.Text;
@@ -329,7 +336,7 @@ public partial class EntryPage : ContentPage
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
-        if (entryName == "" || claimName == "" || purpose == "" || projectClub == "" ||  teamName == "")
+        if (entryName == "" || claimName == "" || purpose == "" || projectClub == "" || teamName == "")
         {
             // display error and quit the function
             await DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -373,8 +380,6 @@ public partial class EntryPage : ContentPage
             await DisplayAlert("Error", "Unable to create metadata\n" +
                 ex, "OK");
         }
-        
-        
     }
 
     private async void BuildEntry()
