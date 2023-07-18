@@ -162,9 +162,12 @@ namespace ConcurSolutionz.Database
 
         // Calls EntrySubsystem
         public override void SelectedAction(){
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             // TODO: Call EntrySubSystem to add records (FOR EXISTING ENTRY)
             // I.e. when Entry exist in File Management already... Then we want to
             // edit or modify it.
+            // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
             return;
         }
 

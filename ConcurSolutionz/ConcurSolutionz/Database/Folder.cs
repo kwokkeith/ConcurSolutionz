@@ -75,13 +75,14 @@ namespace ConcurSolutionz.Database
             /// <param name="FilePath">The file path to set (working directory).</param>
             /// <returns>The updated FolderBuilder instance.</returns>
             /// <exception cref="ArgumentNullException">Thrown when the FileName is null.</exception>
-            public FolderBuilder SetFilePath(string FilePath){
+            public FolderBuilder SetFilePath(string FilePath)
+            {
                 Utilities.CheckNull(FileName);
                 this.FilePath = Path.Combine(FilePath, FileName);
 
                 return this;
             }
-
+        
             public Folder Build(){
                 return new Folder(this);
             }

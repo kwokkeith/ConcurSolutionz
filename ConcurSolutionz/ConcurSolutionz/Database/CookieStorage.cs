@@ -14,7 +14,7 @@ namespace ConcurSolutionz.Database
         public void StoreCookie(Cookie cookie){
             try{
                 // Check if CookieStorage folder exist, if not the create
-                if (!File.Exists(CookieStoragePath))
+                if (!Directory.Exists(CookieStoragePath))
                 {
                     // Create CookieStorage directory if it does not exist.
                     Directory.CreateDirectory(CookieStoragePath);
@@ -76,7 +76,7 @@ namespace ConcurSolutionz.Database
 
         private string GetCookiePath(){
             try{
-                return Path.Combine(CookieStoragePath + "cookie.json");
+                return Path.Combine(CookieStoragePath, "cookie.json");
             }
             catch{
                 Console.WriteLine("Failed to write to " + CookieStoragePath + "cookie.json");

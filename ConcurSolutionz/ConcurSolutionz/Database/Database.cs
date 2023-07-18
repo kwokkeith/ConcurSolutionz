@@ -98,10 +98,11 @@ namespace ConcurSolutionz.Database
         /// <exception cref="Exception">Thrown when the specified file name is not found in the Files list of the Database.</exception>
         public void FileSelectByFileName(string fileName)
         {
+            string newPath = Path.Combine(WorkingDirectory, fileName);
+
             // If fileName exist in Files
-            if (Directory.Exists(fileName))
+            if (Directory.Exists(newPath))
             {
-                string newPath = Path.Combine(WorkingDirectory, fileName);
 
                 FileSelectByFilePath(newPath);
             }
