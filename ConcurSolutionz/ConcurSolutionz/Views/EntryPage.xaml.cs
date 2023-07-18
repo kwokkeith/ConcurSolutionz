@@ -28,9 +28,12 @@ public partial class EntryPage : ContentPage
             {
                 CreateExistingFile(FileName + ".entry");
                 PopulateEntry();
+                AddRecordButton.IsEnabled = true;
+                EditRecordButton.IsEnabled = true;
+                DeleteRecordButton.IsEnabled = true;
             }
         }
-    } 
+    }
 
     public string FileName
     {
@@ -48,7 +51,8 @@ public partial class EntryPage : ContentPage
     private void LoadFile(string fileName)
     {
         if (fileName.EndsWith(".entry")){
-            fileName = fileName.Substring(0, fileName.Length - 6);
+            string[] path = fileName.Split("/");
+            fileName = path.Last().Substring(0, path.Last().Length - 6);
         }
         EntryName.Text = fileName; // To change the Title of the page
 
@@ -70,7 +74,7 @@ public partial class EntryPage : ContentPage
     public EntryPage()
     {
         // Set the working directory for the database instance
-        //Database.Database.Instance.Setwd("/Users/hongjing/Downloads");
+        //Database.Database.Instance.Setwd("/Users/hongjing/Downloads")
 
         InitializeComponent();
 
@@ -81,25 +85,29 @@ public partial class EntryPage : ContentPage
 
 
         // Check if there is an existing file
-        if (existingFile) // There exist a file passed
-        {
-            CreateExistingFile(FileName + ".entry");
-            PopulateEntry();
-        }
-        else // No existing file passed
-        {
-            // TODO: Disable record UI features until user creates a file
-            AddRecordButton.IsEnabled = false;
-            EditRecordButton.IsEnabled = false;
-            DeleteRecordButton.IsEnabled = false;
+        //      if (existingFile) // There exist a file passed
+        //        {
+        //            CreateExistingFile(FileName + ".entry");
+        //            PopulateEntry();
+        //        }
+        //        else // No existing file passed
+        //        {
+        //            // TODO: Disable record UI features until user creates a file
+        //            AddRecordButton.IsEnabled = false;
+        //            EditRecordButton.IsEnabled = false;
+        //            DeleteRecordButton.IsEnabled = false;
 
-        }
+        //        }
+
+        AddRecordButton.IsEnabled = false;
+        EditRecordButton.IsEnabled = false;
+        DeleteRecordButton.IsEnabled = false;
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
 
         // Set the ItemsSource of the CollectionView
-        //recordCollection.ItemsSource = ReceiptView;
+        recordCollection.ItemsSource = ReceiptView;
     }
 
     

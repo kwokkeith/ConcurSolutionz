@@ -95,7 +95,7 @@ namespace ConcurSolutionz.Views
                     // Handle file selection logic
                     // You can implement your custom logic here
                     // LOGIC TO IMPLEMENT ACTION FOR OTHER FILES
-                    DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
+                    //DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
 
                     // Create Entry Object using the Entry metadata... (Ask Database to execute the jump to the other UI)
                     // ...
@@ -131,7 +131,8 @@ namespace ConcurSolutionz.Views
             else
             {
                 // Call entry UI
-                Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+                //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={false}");
 
             }
             // Delay the selection to avoid immediate reselection due to double-tap gesture
@@ -142,6 +143,7 @@ namespace ConcurSolutionz.Views
         {
             Database.Database.Instance.FileGoBack();
             SelectedFile = null;
+            RefreshPage();
         }
 
         private async void OnNewFolderClicked(object sender, EventArgs e)

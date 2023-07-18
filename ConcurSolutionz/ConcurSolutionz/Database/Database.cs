@@ -99,7 +99,7 @@ namespace ConcurSolutionz.Database
         public void FileSelectByFileName(string fileName)
         {
             // If fileName exist in Files
-            if (Files.Contains(fileName))
+            if (Directory.Exists(fileName))
             {
                 string newPath = Path.Combine(WorkingDirectory, fileName);
 
