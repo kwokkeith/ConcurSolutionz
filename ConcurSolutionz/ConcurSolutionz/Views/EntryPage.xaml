@@ -60,7 +60,7 @@
                             x:Name="Policy"
                             Grid.Row="0"
                             Grid.Column="1"
-                            TextColor="Black">
+                            Background="#d3d3d3">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Student Project Claim</x:String>
