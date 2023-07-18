@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Globalization;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace ConcurSolutionz.Database
 {
@@ -14,7 +15,7 @@ namespace ConcurSolutionz.Database
             set{
                 if (File.Exists(Utilities.ConstEntryMetaDataPath(this.FilePath)))
                 {
-                    metaData = value;
+                    metaData = value ?? null;
 
                     // Create Entry MetaData
                     string json;
@@ -29,7 +30,8 @@ namespace ConcurSolutionz.Database
                 {
                     metaData = value;
                 }
-        }}
+            }
+        }
         public List<Record> Records { get; set; }
 
 
@@ -175,8 +177,12 @@ namespace ConcurSolutionz.Database
 
             // Increment assignedIndex and check for each iteration if number has been used
             // If "<assignedIndex>.json" exist in the list of receipt metadata files.
-            while (ReceiptMetaDatas.Contains(Convert.ToString(assignedIndex) + ".json")){
-                assignedIndex++;
+            foreach (string path in ReceiptMetaDatas)
+            {
+                if (Path.GetFileName(path) == $"{assignedIndex}.json")
+                {
+                    assignedIndex++;
+                }
             }
             return assignedIndex;
         }

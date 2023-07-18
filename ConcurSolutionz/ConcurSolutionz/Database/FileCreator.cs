@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Text.Json;
 
@@ -83,7 +84,22 @@ namespace ConcurSolutionz.Database
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
         public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
-            foreach( Record record in entry.GetRecords())
+            // Clear all receipt images from receipt folder directory
+            string[] filePaths = Directory.GetFiles(receiptFolderPath);
+            foreach (string filePath in filePaths)
+            {
+                File.Delete(filePath);
+            }
+            // Clear Receipt Metadta
+            filePaths = Directory.GetFiles(receiptJSONFolder);
+            foreach (string filePath in filePaths)
+            {
+                File.Delete(filePath);
+            }
+
+
+
+            foreach ( Record record in entry.GetRecords())
                 {
                     // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
                     Receipt receipt = RecordAdaptor.ConvertRecord(record);
@@ -94,23 +110,12 @@ namespace ConcurSolutionz.Database
                     string imgPath = receipt.ImgPath;
                     string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
 
-                    // Clear all receipt images from receipt folder directory
-                    string[] filePaths = Directory.GetFiles(receiptFolderPath);
-                    foreach(string filePath in filePaths){
-                        File.Delete(filePath);
-                    }
 
                     // Add receipt images into receipt folder directory
                     CopyFile(imgPath, receiptPath);
 
                     // @@@@@@@@@@@@@@@@@@@@@@
                     // FOR RECEIPT METADATA
-                    // Clear Receipt Metadta
-                    filePaths = Directory.GetFiles(receiptJSONFolder);
-                    foreach(string filePath in filePaths){
-                        File.Delete(filePath);
-                    }
-
                     // Store Receipt Metadata
                     try{
                         // Generate unique metaData filepath name
