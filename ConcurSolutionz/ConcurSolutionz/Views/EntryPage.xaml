@@ -29,7 +29,8 @@
 
             <Button Text="Transfer to concur"
                     Grid.Column="0"
-                    Margin="10"/>
+                    Margin="10"
+                    Clicked="Concur_Clicked"/>
 
             <Button Text="Delete Entry"
                     Grid.Column="1"

@@ -3,8 +3,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text.Json;
 using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
+using ConcurSolutionz.Models;
 // using System.IO;  
 
 namespace ConcurSolutionz.Views;
@@ -14,8 +16,13 @@ namespace ConcurSolutionz.Views;
 public partial class EntryPage : ContentPage
 {
     private StudentProjectClaimMetaData md;
-    private List<Receipt> receipts;
+    private List<Database.Receipt> receipts;
     private string fileName;
+    Database.Entry entry;
+
+    // ReceiptView collection for storing and displaying Receipt models
+    public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
+
 
     private bool existingFile; // To determine if an existing entry boolean passed
     public bool ExistingFile
@@ -23,6 +30,7 @@ public partial class EntryPage : ContentPage
         set
         {
             existingFile = value;
+            //entry = Database.Entry.
             OnPropertyChanged();
             if (existingFile)
             {
@@ -59,9 +67,6 @@ public partial class EntryPage : ContentPage
         this.fileName = fileName;
     }
 
-    // ReceiptView collection for storing and displaying Receipt models
-    public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
-    Database.Entry entry;
 
     public string InitName
     {
@@ -121,9 +126,10 @@ public partial class EntryPage : ContentPage
         ProjectClubInp.Text = md.ProjectClub;
         TeamNameInp.Text = md.TeamName;
         Purpose.Text = md.Purpose;
+        BudgetEditor.Text = md.EntryBudget.ToString();
         
         // Add Receipts to ReceiptView collection
-        foreach(Receipt receipt in receipts)
+        foreach(Database.Receipt receipt in receipts)
         {
             string frontEndExpenseType = receipt.ExpenseType;
             string frontEndPaymentType = receipt.PaymentType;
@@ -200,11 +206,11 @@ public partial class EntryPage : ContentPage
                 {
                     // Convert receipt list to record list
                     List<Database.Record> records = new();
-                    foreach(Receipt receipt in receipts)
+                    foreach(Database.Receipt receipt in receipts)
                     {
                         records.Add(receipt);
                     }
-                    
+
                     // Create a File instance
                     Database.Entry.EntryBuilder builder = new();
                     builder.SetMetaData(md)
@@ -222,7 +228,6 @@ public partial class EntryPage : ContentPage
                         {"file", file },
                         {"imagePath", result.FullPath },
                         {"existingRecordBool", false }
-                        //{"existingRecord", null }
                     };
 
                     // pass the file over to the record page
@@ -259,7 +264,7 @@ public partial class EntryPage : ContentPage
     // Create entry from existing file
     private async void CreateExistingFile(string name)
     {
-        Tuple<MetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
+        Tuple<StudentProjectClaimMetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
 
         // Get existing metadata
         try
@@ -386,5 +391,100 @@ public partial class EntryPage : ContentPage
         }
     }
 
-}
+    private async void Concur_Clicked(object sender, EventArgs e)
+    {
 
+        // DO NOT REMOVE
+        string cookie = "";
+        try
+        {
+            string input = await DisplayPromptAsync("Cookie", "Please copy the cookie from your browser extension when logged into Concur to proceed");
+            List<CookieJson> jsonDom = JsonSerializer.Deserialize<List<CookieJson>>(input)!;
+            foreach (CookieJson cookieJson in jsonDom)
+            {
+                Console.WriteLine(cookie);
+                if (cookieJson.name.Equals("OTSESSIONAABQRN") || cookieJson.name.Equals("OTSESSIONAABQRD") || cookieJson.name.Equals("JWT")) cookie += cookieJson.name + "=" + cookieJson.value + ";";
+            }
+            cookie = cookie.Remove(cookie.Length - 1);
+
+            if (!cookie.Contains("OTSESSIONAABQRN") || !cookie.Contains("OTSESSIONAABQRD") || !cookie.Contains("JWT") || string.IsNullOrEmpty(cookie))
+            {
+                await DisplayAlert("ERROR", "Cookie is incomplete, please relogin and try again.", "OK");
+                return;
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return;
+        }
+
+        PushToConcur(cookie, receipts, entry);
+
+    }
+
+    public async void PushToConcur(string cookie, List<Database.Receipt> receipts, Database.Entry entry)
+    {
+        //Initialize API caller
+        ConcurAPI concur = new ConcurAPI(cookie);
+        string init = await concur.Initialize(); // Returns 0 is successful, 1-3 are errors
+        Console.WriteLine("Init status: " + init);
+        if (init != "0")
+        {
+            Console.WriteLine("Failed to init");
+            //return;
+            throw new Exception("Failed to initialize API");
+        }
+        //Create new claim
+        StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)entry.MetaData;
+        Claim claim = new Claim();
+        claim.Name = MD.ClaimName;
+        claim.Date = MD.ClaimDate.ToString("yyyy-MM-dd");
+        claim.Policy = MD.ProjectClub;  //TODO: REPLACE With actual policy
+        claim.TeamName = MD.TeamName;
+        claim.Purpose = MD.Purpose;
+
+        claim.Id = await concur.CreateClaim(claim);
+        claim.Key = await concur.GetReportKey(claim.Id);
+
+        Console.WriteLine("Claim key: " + claim.Key);
+        List<Expense> expenses = new List<Expense>();
+
+        for (int i = 0; i < receipts.Count; i++)
+        {
+            Expense expense = new Expense();
+            expense.Date = receipts[i].TransactionDate.ToString("yyyy-MM-dd");
+            expense.Cost = receipts[i].CurrencyAmountSGD;
+            expense.Description = receipts[i].Description;
+            expense.Supplier = receipts[i].SupplierName;
+            expense.ReceiptNo = receipts[i].ReceiptNumber;
+            expense.Comment = receipts[i].Comment;
+            expense.ReportId = claim.Id;
+            expense.FilePath = receipts[i].ImgPath;
+            expense.RPEKey = await concur.CreateExpense(expense, claim);
+
+            expenses.Add(expense);
+        }
+
+        List<Expense> expenseIDs = await concur.GetAllExpenses(claim);
+
+        for (int i = 0; i < expenses.Count; i++)
+        {
+            for (int j = 0; j < expenseIDs.Count; j++)
+            {
+                if (expenses[i].RPEKey.Equals(expenseIDs[j].RPEKey))
+                {
+                    expenses[i].Id = expenseIDs[j].Id;
+                    Console.WriteLine("Expense " + expenses[i].Id + " is in claim " + claim.Id);
+                    string filepath = expenses[i].FilePath;
+                    string[] split = filepath.Split('/');
+                    expenses[i].ImageId = await concur.UploadImage(filepath, split.Last());
+                    await concur.LinkImageToRequest(expenses[i]);
+                }
+            }
+
+        }
+        await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
+        //Purpose.Text = await concur.LinkImageToRequest(expense);
+    }
+}

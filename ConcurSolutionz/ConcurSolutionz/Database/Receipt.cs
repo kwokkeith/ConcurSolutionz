@@ -7,7 +7,7 @@ namespace ConcurSolutionz.Database
 {
     public class Receipt : Record
     {
-        public string PaymentType { get; set; }        
+        public string PaymentType { get; set; }
         public string ExpenseType { get; set; }
         public DateTime TransactionDate { get; set; }
         public string Description { get; set; }
@@ -25,7 +25,8 @@ namespace ConcurSolutionz.Database
             }
         }
         public decimal conversionRate;
-        public decimal ConversionRate {
+        public decimal ConversionRate
+        {
             get
             {
                 return conversionRate;
@@ -38,7 +39,8 @@ namespace ConcurSolutionz.Database
 
                 // Calculate new Currency Amount
                 CurrencyAmountSGD = ReqAmount * ConversionRate;
-            } }
+            }
+        }
         public decimal currencyAmountSGD;
         public decimal CurrencyAmountSGD
         {
@@ -90,7 +92,7 @@ namespace ConcurSolutionz.Database
             Utilities.CheckNull(builder.Comment);
             Utilities.CheckNull(builder.ImgPath);
             Utilities.CheckNull(builder.Currency);
-            
+
             // Set the attributes
             PaymentType = builder.PaymentType;
             ExpenseType = builder.ExpenseType;
@@ -205,7 +207,7 @@ namespace ConcurSolutionz.Database
         //}
 
         // Builder for the Receipt class
-        public class ReceiptBuilder  
+        public class ReceiptBuilder
         {
             public string PaymentType { get; private set; }
             public string ExpenseType { get; private set; }
@@ -239,7 +241,8 @@ namespace ConcurSolutionz.Database
             public const string DEFAULT_PAYMENT = "Cash";
             public const string DEFAULT_RECEIPT_STATUS = "Tax Receipt";
 
-            public ReceiptBuilder(){
+            public ReceiptBuilder()
+            {
                 // Input any default values (Non-compulsory fields)
                 SupplierName = "";
                 Comment = "";
@@ -252,56 +255,56 @@ namespace ConcurSolutionz.Database
                 // Default Value (Only matters when City of Purchase
                 // is not Singapore)
                 ReqAmount = 0m;
-                CurrencyAmountSGD = 0m; 
-                ConversionRate = 0m;   
+                CurrencyAmountSGD = 0m;
+                ConversionRate = 0m;
 
                 // Constant subtype
                 SubType = "Receipt";
             }
-            
-            public ReceiptBuilder SetPaymentType(string PaymentType)  
+
+            public ReceiptBuilder SetPaymentType(string PaymentType)
             {
                 this.PaymentType = PaymentType;
                 return this;
             }
-            
-            public ReceiptBuilder SetExpenseType(string ExpenseType) 
+
+            public ReceiptBuilder SetExpenseType(string ExpenseType)
             {
                 this.ExpenseType = ExpenseType;
-                return this;    
+                return this;
             }
-            
-            public ReceiptBuilder SetTransactionDate(DateTime TransactionDate) 
+
+            public ReceiptBuilder SetTransactionDate(DateTime TransactionDate)
             {
-                this.TransactionDate = TransactionDate;  
-                return this;   
+                this.TransactionDate = TransactionDate;
+                return this;
             }
-            
-            public ReceiptBuilder SetDescription (string Description)   
+
+            public ReceiptBuilder SetDescription(string Description)
             {
                 this.Description = Description;
                 return this;
-            }  
-            
-            public ReceiptBuilder SetSupplierName(string SupplierName) 
+            }
+
+            public ReceiptBuilder SetSupplierName(string SupplierName)
             {
                 this.SupplierName = SupplierName;
                 return this;
             }
-            
-            public ReceiptBuilder SetCityOfPurchase(string CityOfPurchase) 
+
+            public ReceiptBuilder SetCityOfPurchase(string CityOfPurchase)
             {
                 this.CityOfPurchase = CityOfPurchase;
                 return this;
             }
-            
+
             public ReceiptBuilder SetReqAmount(decimal ReqAmount)
             {
                 Utilities.CheckIfNegative(ReqAmount);
                 this.ReqAmount = ReqAmount;
                 return SetCurrencyAmountSGD();
             }
-            
+
             public ReceiptBuilder SetConversionRate(decimal ConversionRate)
             {
                 Utilities.CheckIfNegative(ConversionRate);
@@ -380,17 +383,17 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
-            public Receipt Build()   
+            public Receipt Build()
             {
                 if (Currency != SINGAPORE_CURRENCY)
                 {
-                    if (CurrencyAmountSGD == 0m || ConversionRate == 0) 
+                    if (CurrencyAmountSGD == 0m || ConversionRate == 0)
                     {
                         throw new ArgumentException("If currency set is " +
                             "not Singapore SGD, please set ConversionRate.");
                     }
                 }
-                return new Receipt(this);   
+                return new Receipt(this);
             }
         }
     }

@@ -132,7 +132,7 @@ namespace ConcurSolutionz.Views
             {
                 // Call entry UI
                 //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={false}");
+                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}");
 
             }
             // Delay the selection to avoid immediate reselection due to double-tap gesture
