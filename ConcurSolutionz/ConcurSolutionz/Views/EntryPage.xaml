@@ -8,8 +8,8 @@
         <models:Entry/>
 
     </ContentPage.BindingContext>
-    
-    <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
             <Label
                 x:Name="EntryName"
@@ -295,6 +295,9 @@
             </Grid>
         </ScrollView>
     </VerticalStackLayout>
+
+    </ScrollView>
+    
 </ContentPage>
 
 

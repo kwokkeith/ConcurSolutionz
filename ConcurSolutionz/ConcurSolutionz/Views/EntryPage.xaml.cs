@@ -313,7 +313,7 @@ public partial class EntryPage : ContentPage
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
-        if ((entryName ?? claimName ?? purpose ?? projectClub ?? teamName) == "")
+        if (entryName == "" || claimName == "" || purpose == "" || projectClub == "" ||  teamName == "")
         {
             // display error and quit the function
             await DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -401,34 +401,46 @@ public partial class EntryPage : ContentPage
 
     private async void Concur_Clicked(object sender, EventArgs e)
     {
-
-        // DO NOT REMOVE
+        Console.WriteLine("About to start selenium");
         string cookie = "";
+        Process process = new Process();
+        //Starting chrome driver
         try
         {
-            string input = await DisplayPromptAsync("Cookie", "Please copy the cookie from your browser extension when logged into Concur to proceed");
-            List<CookieJson> jsonDom = JsonSerializer.Deserialize<List<CookieJson>>(input)!;
-            foreach (CookieJson cookieJson in jsonDom)
-            {
-                Console.WriteLine(cookie);
-                if (cookieJson.name.Equals("OTSESSIONAABQRN") || cookieJson.name.Equals("OTSESSIONAABQRD") || cookieJson.name.Equals("JWT")) cookie += cookieJson.name + "=" + cookieJson.value + ";";
-            }
-            cookie = cookie.Remove(cookie.Length - 1);
-
-            if (!cookie.Contains("OTSESSIONAABQRN") || !cookie.Contains("OTSESSIONAABQRD") || !cookie.Contains("JWT") || string.IsNullOrEmpty(cookie))
-            {
-                await DisplayAlert("ERROR", "Cookie is incomplete, please relogin and try again.", "OK");
-                return;
-            }
+            process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
+            process.Start();
 
         }
         catch (Exception ex)
         {
+            Console.WriteLine("Failed to start Selenium");
             return;
         }
-
+        //Attempting to read from chrome reader
+        try
+        {
+            process.StandardInput.WriteLine("");
+            StreamReader reader = process.StandardOutput;
+            while (true)
+            {
+                string newline = reader.ReadLine()!;
+                if (newline == null) break;
+                cookie += newline;
+            }
+            cookie = "JWT" + cookie.Split("JWT")[1];
+            await DisplayAlert("Progress", "Cookies Extracted! Please wait for the next prompt for completion", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("ERROR", "Error extracting cookies, please try again.", "OK");
+            Console.WriteLine(ex.ToString());
+            return;
+        }
+        Console.WriteLine("cookie:" + cookie);
         PushToConcur(cookie, receipts, entry);
-
     }
 
     public async void PushToConcur(string cookie, List<Database.Receipt> receipts, Database.Entry entry)

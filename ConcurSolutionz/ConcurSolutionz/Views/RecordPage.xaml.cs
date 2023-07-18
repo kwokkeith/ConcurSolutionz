@@ -212,7 +212,7 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "";
+                string tesseractPath = "/Users/jianghongbei/Downloads/tesseract";
                 OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
