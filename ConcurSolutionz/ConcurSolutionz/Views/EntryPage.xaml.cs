@@ -169,9 +169,7 @@ public partial class EntryPage : ContentPage
         CurrentExpenseInput.Text = currentExpense.ToString();
         RemainingBudget.Text = remainingBudget.ToString();
 
-        DisplayAlert("Build entry starts", "wait a while", "ok");
         BuildMDPopulate();
-        DisplayAlert("Success", "")
     }
 
     
