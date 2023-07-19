@@ -39,7 +39,9 @@ public partial class EntryPage : ContentPage
                 AddRecordButton.IsVisible = true;
                 EditRecordButton.IsVisible = true;
                 DeleteRecordButton.IsVisible = true;
+                UpdateMetadataButton.IsVisible = true;
                 SetMetadataButton.IsVisible = false;
+
             }
         }
     }
@@ -108,6 +110,7 @@ public partial class EntryPage : ContentPage
         AddRecordButton.IsVisible = false;
         EditRecordButton.IsVisible = false;
         DeleteRecordButton.IsVisible = false;
+        UpdateMetadataButton.IsVisible = false;
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -369,10 +372,13 @@ public partial class EntryPage : ContentPage
             AddRecordButton.IsVisible = true;
             EditRecordButton.IsVisible = true;
             DeleteRecordButton.IsVisible = true;
+            UpdateMetadataButton.IsVisible = true;
             SetMetadataButton.IsVisible = false;
 
+            Show_Message();
+            
             //Build entry
-            if (md != null)
+            if (md != null && entry == null)
             {
                 BuildEntry();
             }
@@ -423,6 +429,12 @@ public partial class EntryPage : ContentPage
                 Database.Database.CreateFile(entry);
             }
         }
+    }
+
+    private async void Show_Message()
+    {
+        UpdateMessage.Opacity = 1;
+        await UpdateMessage.FadeTo(0, 5000);
     }
 
     private async void Concur_Clicked(object sender, EventArgs e)

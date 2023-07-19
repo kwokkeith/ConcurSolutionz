@@ -21,6 +21,8 @@
                 Source="edit_32.png"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
+             <Button x:Name="UpdateMetadataButton" Text="Update Entry Metadata" Clicked="SetMetaData_Clicked"/>
+            <Label x:Name="UpdateMessage" Text="Updated successfully!" VerticalOptions="Center" Margin=" 10" Opacity="0"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
