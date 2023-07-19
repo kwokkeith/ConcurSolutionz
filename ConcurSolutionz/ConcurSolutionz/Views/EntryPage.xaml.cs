@@ -169,7 +169,9 @@ public partial class EntryPage : ContentPage
         CurrentExpenseInput.Text = currentExpense.ToString();
         RemainingBudget.Text = remainingBudget.ToString();
 
+        DisplayAlert("Build entry starts", "wait a while", "ok");
         BuildMDPopulate();
+        DisplayAlert("Success", "")
     }
 
     
@@ -415,8 +417,11 @@ public partial class EntryPage : ContentPage
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
 
-            // Creating a file in the database
-            Database.Database.CreateFile(entry);
+            if (!existingFile)
+            {
+                // Creating a file in the database
+                Database.Database.CreateFile(entry);
+            }
         }
     }
 
