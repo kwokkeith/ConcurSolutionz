@@ -49,7 +49,7 @@ namespace ConcurSolutionz.Database
             WorkingDirectory = wd;
         }
 
-        public List<string> GetFilesFromWD()
+        public List<string> GetFilePathsFromWD()
         {
             // Make use of working directory to retrieve files
             string[] folderPaths = Directory.GetDirectories(WorkingDirectory, "*.fdr");
@@ -92,6 +92,16 @@ namespace ConcurSolutionz.Database
             return files;
         }
 
+        public List<string> GetFileNamesFromWD()
+        {
+            List<string> files = GetFilePathsFromWD();
+            List<string> fileNames = new List<string>();
+            foreach (string file in files)
+            {
+                fileNames.Add(Path.GetFileName(file));
+            }
+            return fileNames;
+        }
 
         /// <summary>Method handles selection of a file by its file name.</summary>
         /// <param name="fileName">The name of the file to select.</param>
@@ -195,18 +205,10 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Deletes a file from the specified file path.</summary>
         /// <param name="filePath">The path of the file to be deleted.</param>
-        public static void DeleteFile(string filePath)
+        public static void DeleteFileByFilePath(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
-            File.Delete(filePath);
-        }
-
-        /// <summary>Deletes a file from the specified file path.</summary>
-        /// <param name="filePath">The path of the file to be deleted.</param>
-        public static void DeleteDirectory(string filePath)
-        {
-            // Delete a file using Directory (Physical file management system)
-            Directory.Delete(filePath);
+            Directory.Delete(filePath, true);
         }
 
 
