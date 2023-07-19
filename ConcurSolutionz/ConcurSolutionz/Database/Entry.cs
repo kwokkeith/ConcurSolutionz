@@ -51,7 +51,7 @@ namespace ConcurSolutionz.Database
             FilePath = builder.FilePath;
             MetaData = builder.MetaData;
             Records = builder.Records;
-            FileType = builder.FileType;
+            FileType = GetType().FullName;
             SetFolder();
         }
 
@@ -203,14 +203,10 @@ namespace ConcurSolutionz.Database
             public string FilePath { get; private set; }
             public MetaData MetaData { get; private set; }
             public List<Record> Records { get; private set; }    
-            public string FileType { get; private set; }
 
             public EntryBuilder(){
                 // Set Default Values
                 Records = new List<Record>();
-
-                // Set FileType (to be used by adaptor)
-                FileType = "Entry";
             }
 
             public EntryBuilder SetFileName(string FileName){

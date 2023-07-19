@@ -18,12 +18,10 @@ namespace ConcurSolutionz.Database
         public string ProjectClub {get; private set;}
         public string SubType { get; private set; }
         private const string POLICY = "Student Project Claim";
-        public const string SUBTYPE = "StudentProjectClaimMetaData";
 
 
         public StudentProjectClaimMDBuilder(){
             Policy = POLICY;
-            SubType = SUBTYPE;
             EntryBudget = DEFAULT_BUDGET;
             EntryName = DEFAULT_ENTRYNAME;
         }

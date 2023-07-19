@@ -30,7 +30,6 @@ namespace ConcurSolutionz.Database
             Utilities.CheckNull(claimMDBuilder.Purpose);
             Utilities.CheckNull(claimMDBuilder.TeamName);
             Utilities.CheckNull(claimMDBuilder.ProjectClub);
-            Utilities.CheckNull(claimMDBuilder.SubType);
 
             // If all variables are declared then create ClaimMetaData
             this.EntryName = claimMDBuilder.EntryName;
@@ -41,7 +40,7 @@ namespace ConcurSolutionz.Database
             this.Purpose = claimMDBuilder.Purpose;
             this.TeamName = claimMDBuilder.TeamName;
             this.ProjectClub = claimMDBuilder.ProjectClub;
-            this.SubType = claimMDBuilder.SubType;
+            this.SubType = GetType().FullName;
         }
 
         public class StudentProjectClaimMetaDataConverter : JsonConverter<StudentProjectClaimMetaData>

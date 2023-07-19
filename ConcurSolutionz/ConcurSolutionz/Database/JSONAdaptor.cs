@@ -6,33 +6,31 @@ namespace ConcurSolutionz.Database
 	{
         public static dynamic GetRecordFromJSON(string json, string recordSubtype)
         {
-            switch (recordSubtype)
+            if (recordSubtype == typeof(Receipt).FullName)
             {
-                case "Receipt":
-                    {
-                        var options = new JsonSerializerOptions();
-                        options.Converters.Add(new Receipt.ReceiptConverter());
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new Receipt.ReceiptConverter());
 
-                        return JsonSerializer.Deserialize<Receipt>(json, options); ;
-                    }
-                default:
-                    throw new ArgumentException("Invalid record subtype detected, could not convert using JSONAdaptor!");
+                return JsonSerializer.Deserialize<Receipt>(json, options);
+            }
+            else
+            { 
+                throw new ArgumentException("Invalid record subtype detected, could not convert using JSONAdaptor!");
             }
         }
 
         public static dynamic GetEntryMetaDataFromJSON(string json, string entryMDSubType)
         {
-            switch (entryMDSubType)
+            if (entryMDSubType == typeof(StudentProjectClaimMetaData).FullName)
             {
-                case "StudentProjectClaimMetaData":
-                    {
-                        var options = new JsonSerializerOptions();
-                        options.Converters.Add(new StudentProjectClaimMetaData.StudentProjectClaimMetaDataConverter());
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new StudentProjectClaimMetaData.StudentProjectClaimMetaDataConverter());
 
-                        return JsonSerializer.Deserialize<StudentProjectClaimMetaData>(json, options); ;
-                    }
-                default:
-                    throw new ArgumentException("Invalid entry metadata subtype detected, could not convert using JSONAdaptor!");
+                return JsonSerializer.Deserialize<StudentProjectClaimMetaData>(json, options);
+            }
+            else
+            { 
+                throw new ArgumentException("Invalid entry metadata subtype detected, could not convert using JSONAdaptor!");
             }
         }
     }

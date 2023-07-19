@@ -9,11 +9,13 @@ namespace ConcurSolutionz.Database
     public class RecordAdaptor
     {
         public static dynamic ConvertRecord( Record record) {
-            switch (record.SubType){
-                case "Receipt": 
-                    return (Receipt) record;
-                default:
-                    throw new ArgumentException("Invalid Record subtype detected, could not convert using RecordSocket!");
+            if (record.SubType == typeof(Receipt).FullName)
+            {
+                return (Receipt)record;
+            }
+            else
+            { 
+                throw new ArgumentException("Invalid Record subtype detected, could not convert using RecordSocket!");
             }
         }
     }

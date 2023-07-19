@@ -100,7 +100,7 @@ namespace ConcurSolutionz.Database
             IsPersonalExpense = builder.IsPersonalExpense;
             Comment = builder.Comment;
             ImgPath = builder.ImgPath;
-            SubType = builder.SubType;
+            SubType = GetType().FullName;
         }
 
         public class ReceiptConverter : JsonConverter<Receipt>
@@ -202,7 +202,6 @@ namespace ConcurSolutionz.Database
             public bool IsPersonalExpense { get; private set; }
             public string Comment { get; private set; }
             public string ImgPath { get; private set; }
-            public string SubType { get; private set; }
 
             //Id of the image that should be attached to the expense
             public string ImgId { get; set; }
@@ -235,9 +234,6 @@ namespace ConcurSolutionz.Database
                 ReqAmount = 0m;
                 CurrencyAmountSGD = 0m;
                 ConversionRate = 0m;
-
-                // Constant subtype
-                SubType = "Receipt";
             }
 
             public ReceiptBuilder SetPaymentType(string PaymentType)
