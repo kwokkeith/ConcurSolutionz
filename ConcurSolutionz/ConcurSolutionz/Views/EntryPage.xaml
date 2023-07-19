@@ -21,7 +21,6 @@
                 Source="edit_32.png"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
-            <Button x:Name="SetMetadataButton" Text="Save Entry Metadata" Clicked="SetMetaData_Clicked"/>
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
@@ -60,8 +59,9 @@
                             x:Name="Policy"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Background="#d3d3d3"
-                            FontSize="Body">
+                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                            FontSize="Body"
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=100}">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Student Project Claim</x:String>
@@ -245,23 +245,23 @@
 
         </Grid>
 
+        <Button x:Name="SetMetadataButton" Text="Save Entry Metadata" Clicked="SetMetaData_Clicked"/>
+
+
         <Grid ColumnDefinitions="*,*,*">
             <Button Text="New Record"
                     Margin="10"
                     Clicked="AddRecord_Clicked"
-                    x:Name="AddRecordButton"
-                    IsEnabled="False"/>
+                    x:Name="AddRecordButton"/>
             <Button Grid.Column="1"
                     Text="Edit Record"
                     Margin="10"
                     Clicked="EditRecord_Clicked"
-                    x:Name="EditRecordButton"
-                    IsEnabled="False"/>
+                    x:Name="EditRecordButton"/>
             <Button Text="Delete Record"
                     Grid.Column="2"
                     Margin="10"
-                    x:Name="DeleteRecordButton"
-                    IsEnabled="False"/>
+                    x:Name="DeleteRecordButton"/>
         </Grid>
 
           <ScrollView>

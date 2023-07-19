@@ -130,9 +130,9 @@
                             Title="City"
                             Grid.Row="6"
                             Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"
-                           >
+                           Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                            FontSize="Body"
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=100}">
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
                                         <x:String >Singapore, SINGAPORE</x:String>
@@ -153,8 +153,9 @@
                             Title="Currency"
                             Grid.Row="7"
                             Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body">
+                           Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                            FontSize="Body"
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=100}">
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
                                         <x:String>Singapore, Dollar</x:String>

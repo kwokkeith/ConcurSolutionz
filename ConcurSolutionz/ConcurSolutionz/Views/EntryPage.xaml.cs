@@ -36,9 +36,10 @@ public partial class EntryPage : ContentPage
             {
                 CreateExistingFile(FileName + ".entry");
                 PopulateEntry();
-                AddRecordButton.IsEnabled = true;
-                EditRecordButton.IsEnabled = true;
-                DeleteRecordButton.IsEnabled = true;
+                AddRecordButton.IsVisible = true;
+                EditRecordButton.IsVisible = true;
+                DeleteRecordButton.IsVisible = true;
+                SetMetadataButton.IsVisible = false;
             }
         }
     }
@@ -103,10 +104,10 @@ public partial class EntryPage : ContentPage
         //            DeleteRecordButton.IsEnabled = false;
 
         //        }
-
-        AddRecordButton.IsEnabled = false;
-        EditRecordButton.IsEnabled = false;
-        DeleteRecordButton.IsEnabled = false;
+        SetMetadataButton.IsVisible = true;
+        AddRecordButton.IsVisible = false;
+        EditRecordButton.IsVisible = false;
+        DeleteRecordButton.IsVisible = false;
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -336,7 +337,7 @@ public partial class EntryPage : ContentPage
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
-        if (entryName == "" || claimName == "" || purpose == "" || projectClub == "" || teamName == "")
+        if (entryName == null || claimName == null || purpose == null || projectClub == null || teamName == null)
         {
             // display error and quit the function
             await DisplayAlert("Error", "Please fill in all fields", "OK");
@@ -365,9 +366,10 @@ public partial class EntryPage : ContentPage
                 .Build();
 
             // enable the disabled buttons
-            AddRecordButton.IsEnabled = true;
-            EditRecordButton.IsEnabled = true;
-            DeleteRecordButton.IsEnabled = true;
+            AddRecordButton.IsVisible = true;
+            EditRecordButton.IsVisible = true;
+            DeleteRecordButton.IsVisible = true;
+            SetMetadataButton.IsVisible = false;
 
             //Build entry
             if (md != null)
