@@ -8,6 +8,23 @@
         <models:Entry/>
 
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="LightSkyBlue" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ScrollView>
         <VerticalStackLayout Spacing="10" Margin="10" Padding="16">
         <HorizontalStackLayout>
@@ -290,7 +307,7 @@
                     <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold"/> 
                 </Grid>
 
-                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available">
+                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available" SelectionMode="Single" SelectionChanged="OnRecordSelectionChanged">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

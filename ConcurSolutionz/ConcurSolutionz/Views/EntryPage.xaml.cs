@@ -321,12 +321,20 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    void OnRecordSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        int? previous = (e.PreviousSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
+        int? current = (e.CurrentSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
+        
+    }
+
     // Click event handler for setting metadata of entry
     private void SetMetaData_Clicked(object sender, EventArgs e)
     {
         BuildMDPopulate();
         
     }
+
 
     private async void BuildMDPopulate()
     {
@@ -433,8 +441,8 @@ public partial class EntryPage : ContentPage
 
     private async void Show_Message()
     {
-        UpdateMessage.Opacity = 1;
-        await UpdateMessage.FadeTo(0, 5000);
+        await UpdateMessage.FadeTo(1, 500);
+        await UpdateMessage.FadeTo(0, 4000);
     }
 
     private async void Concur_Clicked(object sender, EventArgs e)
@@ -518,7 +526,7 @@ public partial class EntryPage : ContentPage
         {
             Expense expense = new Expense();
             expense.Date = receipts[i].TransactionDate.ToString("yyyy-MM-dd");
-            expense.Cost = receipts[i].CurrencyAmountSGD;
+            expense.Cost = receipts[i].ReqAmount;
             expense.Description = receipts[i].Description;
             expense.Supplier = receipts[i].SupplierName;
             expense.ReceiptNo = receipts[i].ReceiptNumber;

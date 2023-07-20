@@ -89,6 +89,5 @@
 	  <BundleResource Include="Resources\Images\receipt.jpeg" />
 	  <BundleResource Include="Resources\Images\edit_32.png" />
 	  <BundleResource Include="Resources\Images\edit_64.png" />
-	  <BundleResource Include="Resources\Images\check_mark.png" />
 	</ItemGroup>
 </Project>
