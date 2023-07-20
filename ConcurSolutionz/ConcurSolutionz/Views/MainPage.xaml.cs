@@ -44,6 +44,7 @@ namespace ConcurSolutionz.Views
             Files = new ObservableCollection<FileItem>();
             CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
             BindingContext = this;
+            currentDirectoryPath = rootDirectoryPath;
             
             // Get current working directory from database
             LoadFilesFromDB();
@@ -53,7 +54,7 @@ namespace ConcurSolutionz.Views
         // Loads the files using the database's current working directory
         private void LoadFilesFromDB()
         {
-            List<string> fileNames = Database.Database.Instance.GetFilesFromWD();
+            List<string> fileNames = Database.Database.Instance.GetFileNamesFromWD();
 
             foreach (string fileName in fileNames)
             {
@@ -255,11 +256,11 @@ namespace ConcurSolutionz.Views
             {
                 try
                 {
-                    Database.Database.DeleteFile(SelectedFile.FileName);
+                    Database.Database.DeleteFileByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
                 }
-                catch
+                catch (Exception ex)
                 {
-                    DisplayAlert("Failure!", "Failed to delete file!", "OK");
+                    DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
                 }
             }
         }

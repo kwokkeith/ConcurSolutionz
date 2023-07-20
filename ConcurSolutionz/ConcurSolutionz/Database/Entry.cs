@@ -104,9 +104,9 @@ namespace ConcurSolutionz.Database
             string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
             string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
 
-            Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
-            Database.DeleteFile(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+            Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
 
 
             // Update last modified date of Entry
@@ -125,9 +125,9 @@ namespace ConcurSolutionz.Database
             foreach (Record record in Records){
                 if (record.RecordID == ID){
                     Records.Remove(record);
-                    Database.DeleteFile(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
-                    Database.DeleteFile(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+                    Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
+                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
