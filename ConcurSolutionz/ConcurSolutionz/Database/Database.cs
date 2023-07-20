@@ -221,6 +221,7 @@ namespace ConcurSolutionz.Database
             Directory.Delete(filePath, true);
         }
 
+
         /// <summary>Renames EntryMetadata when Entry is renamed.</summary>
         /// <remarks>
         /// This method updates the EntryName parameter of the EntryMetaData.json file if the Entry is renamed.
