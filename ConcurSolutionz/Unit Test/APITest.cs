@@ -8,7 +8,7 @@ using ConcurSolutionz;
 using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Models;
 
-namespace Unit_Testing
+namespace Unit_Test
 {
     [Collection("APITest")]
     public class APITest
