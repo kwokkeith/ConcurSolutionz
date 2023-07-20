@@ -79,7 +79,11 @@ public partial class MainPage : ContentPage
     // update color of the selected grids
     private void UpdateColor(Grid Previous, Grid Current)
     {
-        Previous.Background = new SolidColorBrush(Colors.White);
+        if (!(Previous is null))
+        {
+            Previous.Background = new SolidColorBrush(Colors.White);
+
+        }
         Current.Background = new SolidColorBrush(Colors.LightSkyBlue);
 
     }
