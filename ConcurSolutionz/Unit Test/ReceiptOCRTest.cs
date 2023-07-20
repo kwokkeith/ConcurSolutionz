@@ -1,6 +1,6 @@
 ﻿using System;
 using ConcurSolutionz.Database;
-namespace Unit_Testing
+namespace Unit_Test
 {
 	public class ReceiptOCRTest
 	{

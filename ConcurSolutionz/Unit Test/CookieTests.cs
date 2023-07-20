@@ -2,7 +2,7 @@
 using System.Globalization;
 using ConcurSolutionz.Database;
 
-namespace Unit_Testing
+namespace Unit_Test
 {
     public class CookieTests
     {
