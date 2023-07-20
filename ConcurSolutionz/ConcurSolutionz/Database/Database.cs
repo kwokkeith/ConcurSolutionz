@@ -209,7 +209,7 @@ namespace ConcurSolutionz.Database
         {
             // Delete a file using Directory (Physical file management system)
 
-            Directory.Delete(filePath);
+            Directory.Delete(filePath, true);
         }
 
 
