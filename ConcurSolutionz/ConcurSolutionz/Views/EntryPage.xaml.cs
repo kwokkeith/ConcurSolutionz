@@ -502,6 +502,9 @@ public partial class EntryPage : ContentPage
         string cookie = "";
         Process process = new Process();
         //Starting chrome driver
+        if (entry == null) {await DisplayAlert("Error", "Entry not saved/ is empty", "OK"); return; }
+        else if (receipts.Count == 0) {await DisplayAlert("Error", "No receipts added, please add one before sending to concur", "OK"); return; }
+
         try
         {
 
@@ -535,6 +538,8 @@ public partial class EntryPage : ContentPage
             }
             cookie = "JWT" + cookie.Split("JWT")[1];
             await DisplayAlert("Progress", "Cookies Extracted! Please wait for the next prompt for completion", "OK");
+            Console.WriteLine("cookie:" + cookie);
+            PushToConcur(cookie, receipts, entry);
         }
         catch (Exception ex)
         {
@@ -542,8 +547,7 @@ public partial class EntryPage : ContentPage
             Console.WriteLine(ex.ToString());
             return;
         }
-        Console.WriteLine("cookie:" + cookie);
-        PushToConcur(cookie, receipts, entry);
+        
     }
 
     public async void PushToConcur(string cookie, List<Database.Receipt> receipts, Database.Entry entry)
