@@ -208,7 +208,8 @@ namespace ConcurSolutionz.Database
         public static void DeleteFileByFilePath(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
-            Directory.Delete(filePath, true);
+
+            Directory.Delete(filePath);
         }
 
 

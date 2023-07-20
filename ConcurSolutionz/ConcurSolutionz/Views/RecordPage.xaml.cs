@@ -8,6 +8,7 @@ namespace ConcurSolutionz.Views
     [QueryProperty(nameof(EntryFile), "file")]
     [QueryProperty(nameof(ImagePath), "imagePath")]
     [QueryProperty(nameof(ExistingRecordBool), "existingRecordBool")]
+    //[QueryProperty(nameof(ExistingReceipt), "existingRecord")]
     public partial class RecordPage : ContentPage
     {
         private string imagePath;

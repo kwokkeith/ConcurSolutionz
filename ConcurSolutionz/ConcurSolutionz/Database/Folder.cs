@@ -15,6 +15,7 @@ namespace ConcurSolutionz.Database
             CreationDate = builder.CreationDate;
             LastModifiedDate = builder.LastModifiedDate;
             FilePath = builder.FilePath;
+            FileType = GetType().FullName;
             SetFolder();
         }
 

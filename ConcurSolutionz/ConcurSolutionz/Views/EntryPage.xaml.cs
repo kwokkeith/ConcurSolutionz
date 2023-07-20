@@ -41,7 +41,6 @@ public partial class EntryPage : ContentPage
                 DeleteRecordButton.IsVisible = true;
                 UpdateMetadataButton.IsVisible = true;
                 SetMetadataButton.IsVisible = false;
-
             }
         }
     }
@@ -288,7 +287,6 @@ public partial class EntryPage : ContentPage
         }
     }
 
-
     // UTILITIES
     // Create entry from existing file
     private async void CreateExistingFile(string name)
@@ -336,6 +334,7 @@ public partial class EntryPage : ContentPage
     }
 
 
+    // UTILITIES
     private async void BuildMDPopulate()
     {
         string entryName = EntryName.Text;

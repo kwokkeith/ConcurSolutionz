@@ -8,12 +8,13 @@ namespace ConcurSolutionz.Database
     public class FileAdaptor
     {
         public static dynamic ConvertFileType( FileDB file) {
-            switch (file.FileType){
-                case "Entry": {
+            if(file.FileType == typeof(Entry).FullName)
+            { 
                     return (Entry) file;
-                }
-                default:
-                    throw new ArgumentException("Invalid File subtype detected, could not convert using FileSocket!");
+            }
+            else
+            {
+                throw new ArgumentException("Invalid File subtype detected, could not convert using FileSocket!");
             }
         }
     }

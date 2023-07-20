@@ -257,6 +257,7 @@ namespace ConcurSolutionz.Views
                 try
                 {
                     Database.Database.DeleteFileByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
+                    RefreshPage();
                 }
                 catch (Exception ex)
                 {

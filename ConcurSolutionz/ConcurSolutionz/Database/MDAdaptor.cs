@@ -7,13 +7,14 @@ namespace ConcurSolutionz.Database
 {
     public class MDAdaptor
     {
-        public static dynamic ConvertMetaData( MetaData metaData) {
-            switch (metaData.SubType){
-                case "StudentProjectClaimMetaData": {
-                    return (StudentProjectClaimMetaData) metaData;
-                }
-                default:
-                    throw new ArgumentException("Invalid MetaData subtype detected, could not convert using MDSocket!");
+        public static dynamic ConvertMetaData(MetaData metaData) {
+            if (metaData.SubType == typeof(StudentProjectClaimMetaData).FullName)
+            { 
+              return (StudentProjectClaimMetaData) metaData;
+            }
+            else
+            { 
+                throw new ArgumentException("Invalid MetaData subtype detected, could not convert using MDSocket!");
             }
         }
     }
