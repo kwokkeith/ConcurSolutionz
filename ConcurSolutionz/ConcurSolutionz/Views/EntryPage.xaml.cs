@@ -459,7 +459,7 @@ public partial class EntryPage : ContentPage
 
         try
         {
-            if(DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
+            if(DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
             else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
             //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
