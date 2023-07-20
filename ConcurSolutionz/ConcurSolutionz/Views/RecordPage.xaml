@@ -132,7 +132,7 @@
                             Grid.Column="1"
                             Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
                             FontSize="Body"
-                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=100}">
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
 
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
@@ -156,7 +156,7 @@
                             Grid.Column="1"
                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
                             FontSize="Body"
-                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=100}">
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
                                 <Picker.ItemsSource>
                                     <x:Array Type="{x:Type x:String}">
                                         <x:String>Singapore, Dollar</x:String>
