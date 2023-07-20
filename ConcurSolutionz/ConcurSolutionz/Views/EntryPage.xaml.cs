@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -455,8 +456,9 @@ public partial class EntryPage : ContentPage
         //Starting chrome driver
         try
         {
-            //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
-            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+            if(DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
@@ -554,6 +556,37 @@ public partial class EntryPage : ContentPage
 
         }
         await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
+        Process process = new Process();
+        try
+        {
+            string[] CookieSplit = cookie.Split(";");
+            string jwt = "", bqrn = "", bqrd = "";
+            foreach(string param in CookieSplit)
+            {
+                string[] temp = param.Split("=");
+                if (temp[0].Equals("JWT")) jwt = temp[1];
+                else if (temp[0].Equals("OTSESSIONAABQRD")) bqrn = temp[1];
+                else if (temp[0].Equals("OTSESSIONAABQRN")) bqrd = temp[1];
+
+            }
+            Debug.WriteLine("JWT: " + jwt);
+            Debug.WriteLine("BQRN: " + bqrn);
+            Debug.WriteLine("BQRD: " + bqrd);
+            if (DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\SessionHijackBrowser.exe";
+            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.Arguments = jwt + " " + bqrn + " " + bqrd;
+            process.Start();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Failed to start Cookie Browser");
+            return;
+        }
         //Purpose.Text = await concur.LinkImageToRequest(expense);
     }
 }
