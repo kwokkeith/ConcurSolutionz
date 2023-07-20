@@ -13,6 +13,7 @@ using ConcurSolutionz.Models;
 namespace ConcurSolutionz.Views;
 
 [QueryProperty(nameof(FileName), "fileName")]
+[QueryProperty(nameof(filePath), "filePath")]
 [QueryProperty(nameof(ExistingFile), "existingFile")]
 public partial class EntryPage : ContentPage
 {
@@ -24,7 +25,7 @@ public partial class EntryPage : ContentPage
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
 
-
+    public string filePath { get; set; }
     private bool existingFile; // To determine if an existing entry boolean passed
     public bool ExistingFile
     {
@@ -164,7 +165,7 @@ public partial class EntryPage : ContentPage
 
             ReceiptView.Add(modelReceipt);
         }
-
+        
         // Calculate remaining Budget
         remainingBudget = entryBudget - currentExpense;
 
@@ -175,7 +176,7 @@ public partial class EntryPage : ContentPage
         BuildMDPopulate();
     }
 
-    
+
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
@@ -187,12 +188,18 @@ public partial class EntryPage : ContentPage
     }
 
     // Click event handler for editing record
-    async void EditRecord_Clicked(object sender, EventArgs e)
+    private async void EditRecord_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(RecordPage));
     }
 
-    
+    private async void DeleteEntry_Clicked(object sender, EventArgs e)
+    {
+        Database.Database.DeleteDirectoryByFilePath(filePath);
+        await Shell.Current.GoToAsync(nameof(MainPage));
+    }
+
+
     // Click event handler for adding new record
     private async void AddRecord_Clicked(object sender, EventArgs e)
     {
@@ -215,6 +222,26 @@ public partial class EntryPage : ContentPage
         }
 
     }
+
+    private void DeleteRecord_Clicked(object sender, EventArgs e)
+    {
+        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+        Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+        if (selectedReceipt != null)
+        {
+            // Remove receipt from collection
+            ReceiptView.Remove(selectedReceipt);
+            receipts.Remove(receipt);
+            entry.DelRecord(rec);
+
+            // Update remaining budget and remove from entry
+            PopulateEntry();
+
+
+        }
+    }
+
 
     // Method to pick and show image file
     public async Task<FileResult> PickAndShow(PickOptions options)
@@ -385,7 +412,7 @@ public partial class EntryPage : ContentPage
             Show_Message();
             
             //Build entry
-            if (md != null && entry == null)
+            if (md != null)
             {
                 BuildEntry();
             }
@@ -397,31 +424,32 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    //Handles initialization of entry and updating of variables md, entry, and receipts
     private async void BuildEntry()
     {
-        if (entry == null)
+        List<Database.Record> records = new();
+        // construct an entry path
+        string wd = Database.Database.Instance.Getwd();
+        string entryName = EntryName.Text;
+        string entryPath = Path.Combine(wd, entryName + ".entry");
+        Database.Entry.EntryBuilder entryBuilder = new();
+        foreach (Database.Receipt receipt in receipts)
+        {
+            records.Add(RecordAdaptor.ConvertRecord(receipt));
+        }
+
+        //Build entry from scratch (for fresh opening of entry)
+        if (entry == null && (existingFile))
         {
             try
             {
-                // construct an entry path
-                string wd = Database.Database.Instance.Getwd();
-                string entryName = EntryName.Text;
-                string entryPath = Path.Combine(wd, entryName);
-
-                // if the file already exists, delete and create new one
-                if (Directory.Exists(entryPath))
-                {
-                    Directory.Delete(entryPath, true);
-                }
-
                 // build entry
-                Database.Entry.EntryBuilder entryBuilder = new();
                 entry = entryBuilder.SetFileName(entryName)
-                                    .SetCreationDate(DateTime.Now)
-                                    .SetLastModifiedDate(DateTime.Now)
+                                    .SetCreationDate(Directory.GetCreationTime(entryPath))
+                                    .SetLastModifiedDate(Directory.GetLastAccessTime(entryPath))
                                     .SetFilePath(wd)
                                     .SetMetaData(md)
-                                    .SetRecords(new List<Database.Record>())
+                                    .SetRecords(records)
                                     .Build();
             }
             catch (Exception ex)
@@ -429,12 +457,36 @@ public partial class EntryPage : ContentPage
                 entry = null;
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
+        }
 
-            if (!existingFile)
+        // Rebuild Entry after modifications (while in entry)
+        else
+        {
+            if (Directory.Exists(entryPath))
             {
-                // Creating a file in the database
-                Database.Database.CreateFile(entry);
+                Database.Database.DeleteDirectoryByFilePath(entryPath);
             }
+
+            // Rebuild entry
+            try
+            {
+                entry = entryBuilder.SetFileName(entryName)
+                                    .SetCreationDate(Directory.GetCreationTime(entryPath))
+                                    .SetLastModifiedDate(Directory.GetLastAccessTime(entryPath))
+                                    .SetFilePath(wd)
+                                    .SetMetaData(md)
+                                    .SetRecords(records)
+                                    .Build();
+
+                FileCreator.CreateFile(entry);
+
+            }
+            catch (Exception ex)
+            {
+                entry = null;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
         }
     }
 
@@ -558,4 +610,5 @@ public partial class EntryPage : ContentPage
         await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
         //Purpose.Text = await concur.LinkImageToRequest(expense);
     }
+
 }
