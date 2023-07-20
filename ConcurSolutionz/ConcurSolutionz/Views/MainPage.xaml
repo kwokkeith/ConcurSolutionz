@@ -7,8 +7,10 @@
         <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
 
     </Shell.BackButtonBehavior>
+
     <ContentPage.Content>
         <StackLayout Padding="10">
+            <Label x:Name="WorkingDirectory"/>
             <HorizontalStackLayout Margin="0,20,0,20" HorizontalOptions="Center">
                 <Button Text="New Folder" Clicked="OnNewFolderClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />

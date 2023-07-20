@@ -20,6 +20,7 @@ public partial class EntryPage : ContentPage
     private List<Database.Receipt> receipts;
     private string fileName;
     Database.Entry entry;
+    Database.Receipt selectedReceipt;
 
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
@@ -319,6 +320,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    // change the selected record
     void OnRecordSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         int? previous = (e.PreviousSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
@@ -438,6 +440,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    // show success message after setting entry metadata
     private async void Show_Message()
     {
         await UpdateMessage.FadeTo(1, 500);
@@ -452,12 +455,7 @@ public partial class EntryPage : ContentPage
         //Starting chrome driver
         try
         {
-
             //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
-            if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium")))
-            {
-                await DisplayAlert("nice", "you got it", "ok");
-            }
             process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
