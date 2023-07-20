@@ -15,7 +15,7 @@
                             NumberOfTapsRequired="1" />
                     </Image.GestureRecognizers>
                 </Image>
-                <Rectangle x:Name="ReceiptOverlay"
+                <Polygon x:Name="ReceiptOverlay"
                     Stroke="Red"
                     WidthRequest="0"
                     HeightRequest="0"

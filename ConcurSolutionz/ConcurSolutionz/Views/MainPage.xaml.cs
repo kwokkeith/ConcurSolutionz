@@ -55,14 +55,15 @@ public partial class MainPage : ContentPage
 
         }
 
-        // Run code when the Main Page is navigated to
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
+    // Run code when the Main Page is navigated to
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
 
-            // Populate File Management View
-            RefreshPage();
-        }
+        // Populate File Management View
+        RefreshPage();
+    }
+
 
     // Loads the files using the database's current working directory
     private void LoadFilesFromDB()
@@ -95,7 +96,6 @@ public partial class MainPage : ContentPage
 
         }
         Current.Background = new SolidColorBrush(Colors.LightSkyBlue);
-
     }
 
     private void OnFileTapped(object sender, EventArgs e)
@@ -145,30 +145,29 @@ public partial class MainPage : ContentPage
             }
         }
     }
-
-        private async void OnFileDoubleTapped(object sender, EventArgs e)
+    private async void OnFileDoubleTapped(object sender, EventArgs e)
+    {
+        // Handle file/folder double tap event
+        var tappedFile = (sender as View)?.BindingContext as FileItem;
+        string filePath = Path.Combine(currentDirectoryPath,tappedFile.FileName);
+        if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
         {
-            // Handle file/folder double tap event
-            var tappedFile = (sender as View)?.BindingContext as FileItem;
-            string filePath = Path.Combine(currentDirectoryPath,tappedFile.FileName);
-            if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
-            {
-                // SELECT file
-                Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+            // SELECT file
+            Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
 
-                // Populate File Management View
-                RefreshPage();
-            }
-            else
-            {
-                // Call entry UI
-                //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
-
+            // Populate File Management View
+            RefreshPage();
         }
-        // Delay the selection to avoid immediate reselection due to double-tap gesture
-        await Task.Delay(200);
+        else
+        {
+            // Call entry UI
+            //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+            await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
+
     }
+    // Delay the selection to avoid immediate reselection due to double-tap gesture
+    await Task.Delay(200);
+}
 
     private void OnBackClicked(object sender, EventArgs e)
     {
@@ -205,7 +204,6 @@ public partial class MainPage : ContentPage
             }
         }
     }
-
         private async void OnNewEntryClicked(object sender, EventArgs e)
         {
             // Prompt the user for the new entry name
