@@ -212,6 +212,24 @@ namespace ConcurSolutionz.Database
             Directory.Delete(filePath, true);
         }
 
+        /// <summary>Renames EntryMetadata when Entry is renamed.</summary>
+        /// <remarks>
+        /// This method updates the EntryName parameter of the EntryMetaData.json file if the Entry is renamed.
+        /// </remarks>
+        public static void RenameEntry(string filePath)
+        {
+            // Get EntryMetaDataPath
+            string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
+
+            // Extract Entry MetaData from JSON
+            MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
+
+            // Update EntryName parameter of EntryMetaData.json file
+            EntryMetaData.EntryName = Path.GetFileName(filePath);
+
+            // Write EntryMetaData back to JSON
+            File.WriteAllText(EntryMetaDataPath, JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(EntryMetaData)));
+        }
 
         /// <summary>Navigates back to the previous directory.</summary>
         /// <remarks>

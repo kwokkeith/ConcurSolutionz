@@ -51,6 +51,14 @@ namespace ConcurSolutionz.Views
 
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Populate File Management View
+            RefreshPage();
+        }
+
         // Loads the files using the database's current working directory
         private void LoadFilesFromDB()
         {
@@ -198,7 +206,6 @@ namespace ConcurSolutionz.Views
 
         private async void OnRenameClicked(object sender, EventArgs e)
         {
-            return;
             // Handle Rename button click
             if (SelectedFile != null)
             {
@@ -209,7 +216,6 @@ namespace ConcurSolutionz.Views
 
         private async Task RenameSelectedFile(string initialValue, string promptMessage)
         {
-            return;
             // Prompt the user for the new name
             string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
 
@@ -221,14 +227,7 @@ namespace ConcurSolutionz.Views
                     string newFilePath = Path.Combine(currentDirectoryPath, newName);
 
                     // Rename the selected file/folder in the target directory
-                    if (SelectedFile.IsFolder)
-                    {
-                        Directory.Move(filePath, newFilePath);
-                    }
-                    else
-                    {
-                        File.Move(filePath, newFilePath);
-                    }
+                    Directory.Move(filePath, newFilePath);
 
                     // Create a new FileItem with the updated file name and other properties
                     FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
@@ -240,6 +239,9 @@ namespace ConcurSolutionz.Views
 
                     // Update the SelectedFile property with the renamed file
                     SelectedFile = renamedFile;
+
+                    // Handle updating of Metadata
+                    Database.Database.RenameEntry(newFilePath);
                 }
                 catch (Exception ex)
                 {
@@ -257,6 +259,7 @@ namespace ConcurSolutionz.Views
                 try
                 {
                     Database.Database.DeleteFileByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
+                    SelectedFile = null;
                     RefreshPage();
                 }
                 catch (Exception ex)
