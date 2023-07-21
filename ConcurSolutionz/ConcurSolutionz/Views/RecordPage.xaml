@@ -9,7 +9,19 @@
               ColumnSpacing="10">
             <Grid RowDefinitions="50,50,2*" RowSpacing="10">
                 <Image x:Name="ReceiptImage"
-                       Grid.Row="2"/>
+                    Grid.Row="2">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SpecifyCoords"
+                            NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Rectangle x:Name="ReceiptOverlay"
+                    Stroke="Red"
+                    WidthRequest="0"
+                    HeightRequest="0"
+                    HorizontalOptions="Start" 
+                    Grid.Row="2"/>
+
                 <Button x:Name="FilePickerBtn"
                         Text="Upload receipt"
                         Grid.Row="0"

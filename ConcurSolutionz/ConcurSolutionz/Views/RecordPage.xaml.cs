@@ -7,26 +7,25 @@ namespace ConcurSolutionz.Views
 {
     [QueryProperty(nameof(EntryFile), "file")]
     [QueryProperty(nameof(ImagePath), "imagePath")]
-    [QueryProperty(nameof(ExistingRecordBool), "existingRecordBool")]
-    //[QueryProperty(nameof(ExistingReceipt), "existingRecord")]
+    [QueryProperty(nameof(ExistingReceipt), "existingReceipt")]
     public partial class RecordPage : ContentPage
     {
         private string imagePath;
         public Database.Entry entryFile { get; set; }
-        private bool existingRecord;
-        //private Receipt currentReceipt;
+        private Receipt currentReceipt;
 
-        //public Receipt ExistingReceipt
-        //{
-        //    set
-        //    {
-        //        currentReceipt = value;
-        //    }
-        //    get
-        //    {
-        //        return currentReceipt;
-        //    }
-        //}
+        public Receipt ExistingReceipt
+        {
+            set
+            {
+                currentReceipt = value;
+                PopulateRecordPage(value);
+            }
+            get
+            {
+                return currentReceipt;
+            }
+        }
 
         public Database.Entry EntryFile
         {
@@ -53,18 +52,21 @@ namespace ConcurSolutionz.Views
             }
         }
 
-        public bool ExistingRecordBool
+        private void PopulateRecordPage(Receipt receipt)
         {
-            set
-            {
-                existingRecord = Convert.ToBoolean(value);
-            }
-            get
-            {
-                return existingRecord;
-            }
+            ExpenseType.Text = receipt.ExpenseType;
+            TransactionDate.Date = receipt.TransactionDate;
+            DescriptionInp.Text = receipt.Description;
+            SupplierName.Text = receipt.SupplierName;
+            reqAmount.Text = receipt.reqAmount.ToString();
+            ReceiptNo.Text = receipt.ReceiptNumber;
+            CityOfPurchase.SelectedIndex = 0;
+            Currency.SelectedIndex = 0;
+            ReceiptStatus.Text = receipt.ReceiptStatus;
+            Comment.Text = receipt.Comment;
+            IsBillable.IsChecked = receipt.IsBillable;
+            PersonalExpense.IsChecked = receipt.IsPersonalExpense;
         }
-
 
         private void CreateExistEntry(object file)
         {
@@ -212,8 +214,9 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "/Users/jianghongbei/Downloads/tesseract";
-                OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
+                string tesseractPath = "./bin/tesseract-compiled-windows/tesseract/tesseract.exe";
+                string tessdataPath = "./bin/tesseract-compiled-windows/tesseract/tessdata";
+                Controllers.ReceiptOCR receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
 
@@ -231,9 +234,9 @@ namespace ConcurSolutionz.Views
 
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
-            if (ExistingRecordBool) // If record exist before
+            if (ExistingReceipt != null) // If record exist before
             {
-                //entryFile.DelRecordByID(ExistingReceipt.RecordID);
+                entryFile.DelRecordByID(ExistingReceipt.RecordID);
             }
 
             Receipt receipt;
@@ -255,9 +258,15 @@ namespace ConcurSolutionz.Views
             // go back to entry page
             await Shell.Current.GoToAsync($"..?fileName={entryFile.FileName}&existingFile={true}");
         }
-
+        public void SpecifyCoords(object sender, TappedEventArgs e)
+        {
+            Point? coords = e.GetPosition((View)sender);
+            DisplayAlert("DEBUG",coords.ToString(),"OK");
+            var overlay = ReceiptOverlay;
+            overlay.WidthRequest = 200;
+            overlay.HeightRequest = 200;
+            overlay.Margin = new Thickness(50,25);
+        }
 
     }
-
-
 }

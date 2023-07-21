@@ -35,7 +35,8 @@ namespace ConcurSolutionz.Views
         public SortOption CurrentSortOption { get; set; }
 
         private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
-        private string currentDirectoryPath;
+        public string currentDirectoryPath;
+        public string SearchText { get; set; }
 
         // On Page load
         public MainPage()
@@ -49,6 +50,15 @@ namespace ConcurSolutionz.Views
             // Get current working directory from database
             LoadFilesFromDB();
 
+        }
+
+        // Run code when the Main Page is navigated to
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Populate File Management View
+            RefreshPage();
         }
 
         // Loads the files using the database's current working directory
@@ -121,6 +131,7 @@ namespace ConcurSolutionz.Views
         {
             // Handle file/folder double tap event
             var tappedFile = (sender as View)?.BindingContext as FileItem;
+            string filePath = Path.Combine(currentDirectoryPath,tappedFile.FileName);
             if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
             {
                 // SELECT file
@@ -133,7 +144,7 @@ namespace ConcurSolutionz.Views
             {
                 // Call entry UI
                 //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}");
+                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
 
             }
             // Delay the selection to avoid immediate reselection due to double-tap gesture
@@ -180,13 +191,14 @@ namespace ConcurSolutionz.Views
         {
             // Prompt the user for the new entry name
             string newName = await DisplayPromptAsync("New Entry", "Enter a new entry name");
+            string filePath = Path.Combine(currentDirectoryPath, newName);
 
             if (!string.IsNullOrWhiteSpace(newName))
             {
                 try
                 {
                     // Call Entry system (UI)
-                    await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}");
+                    await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}&filePath={filePath}");
 
                 }
                 catch (Exception ex)
@@ -198,7 +210,6 @@ namespace ConcurSolutionz.Views
 
         private async void OnRenameClicked(object sender, EventArgs e)
         {
-            return;
             // Handle Rename button click
             if (SelectedFile != null)
             {
@@ -209,7 +220,6 @@ namespace ConcurSolutionz.Views
 
         private async Task RenameSelectedFile(string initialValue, string promptMessage)
         {
-            return;
             // Prompt the user for the new name
             string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
 
@@ -221,14 +231,7 @@ namespace ConcurSolutionz.Views
                     string newFilePath = Path.Combine(currentDirectoryPath, newName);
 
                     // Rename the selected file/folder in the target directory
-                    if (SelectedFile.IsFolder)
-                    {
-                        Directory.Move(filePath, newFilePath);
-                    }
-                    else
-                    {
-                        File.Move(filePath, newFilePath);
-                    }
+                    Directory.Move(filePath, newFilePath);
 
                     // Create a new FileItem with the updated file name and other properties
                     FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
@@ -240,6 +243,9 @@ namespace ConcurSolutionz.Views
 
                     // Update the SelectedFile property with the renamed file
                     SelectedFile = renamedFile;
+
+                    // Handle updating of Metadata
+                    Database.Database.RenameEntry(newFilePath);
                 }
                 catch (Exception ex)
                 {
@@ -256,7 +262,8 @@ namespace ConcurSolutionz.Views
             {
                 try
                 {
-                    Database.Database.DeleteFileByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
+                    Database.Database.DeleteDirectoryByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
+                    SelectedFile = null;
                     RefreshPage();
                 }
                 catch (Exception ex)
@@ -290,6 +297,25 @@ namespace ConcurSolutionz.Views
             SortFiles();
 
             // Notify the UI that the Files collection has changed
+            OnPropertyChanged(nameof(Files));
+        }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchText = e.NewTextValue;
+            if (SearchText == null || SearchText == "" || SearchText == " ")
+            {
+                RefreshPage();
+            }
+        }
+
+        private void OnSearchButtonClicked(object sender, EventArgs e)
+        {
+            // Filter the files based on the search text
+            Files = new ObservableCollection<FileItem>(
+              Files.Where(f => f.FileName.Contains(SearchText)));
+
+            // Refresh list view
             OnPropertyChanged(nameof(Files));
         }
 
