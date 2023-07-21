@@ -35,6 +35,7 @@ namespace ConcurSolutionz.Controllers
                 process.StartInfo.FileName = tesseractPath;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.CreateNoWindow = true;
 
                 process.StartInfo.Arguments = "--tessdata-dir " + tessdataPath + " " + imgPath + " - tsv quiet";
 
