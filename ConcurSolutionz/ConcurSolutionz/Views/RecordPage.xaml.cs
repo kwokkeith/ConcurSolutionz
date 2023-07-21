@@ -217,8 +217,8 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "./bin/tesseract-compiled-windows/tesseract/tesseract.exe";
-                string tessdataPath = "./bin/tesseract-compiled-windows/tesseract/tessdata";
+                string tesseractPath = "./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/tesseract/tesseract";
+                string tessdataPath = "./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/tesseract/tessdata";
                 Controllers.ReceiptOCR receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
