@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurSolutionz", "ConcurSo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit Test", "Unit Test\Unit Test.csproj", "{FCA9F834-B5E0-43FF-8A6B-16A97438A07D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI Test", "UI Test\UI Test.csproj", "{82F26E65-E0E8-40A1-A573-E06D704BDFB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{FCA9F834-B5E0-43FF-8A6B-16A97438A07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA9F834-B5E0-43FF-8A6B-16A97438A07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA9F834-B5E0-43FF-8A6B-16A97438A07D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F26E65-E0E8-40A1-A573-E06D704BDFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F26E65-E0E8-40A1-A573-E06D704BDFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F26E65-E0E8-40A1-A573-E06D704BDFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F26E65-E0E8-40A1-A573-E06D704BDFB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

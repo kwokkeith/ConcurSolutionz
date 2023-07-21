@@ -279,7 +279,7 @@ namespace ConcurSolutionz.Views
             pc.Add(topRight);
             pc.Add(bottomRight);
             pc.Add(bottomLeft);
-            overlay.Points = pc;
+            //overlay.Points = pc;
             overlay.IsVisible = true;
         }
 

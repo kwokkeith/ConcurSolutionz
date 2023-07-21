@@ -1,3 +1,6 @@
 {
-    "dotnet.defaultSolution": "ConcurSolutionz\\ConcurSolutionz.sln"
+    "dotnet.defaultSolution": "ConcurSolutionz\\ConcurSolutionz.sln",
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "main"
+    ]
 }
