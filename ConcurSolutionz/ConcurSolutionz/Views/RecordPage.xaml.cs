@@ -22,10 +22,6 @@ namespace ConcurSolutionz.Views
                 if (value != null)
                 {
                     PopulateRecordPage(value);
-<<<<<<< HEAD
-=======
-
->>>>>>> e9179ca (feat: add_record bugfix)
                 }
             }
             get
