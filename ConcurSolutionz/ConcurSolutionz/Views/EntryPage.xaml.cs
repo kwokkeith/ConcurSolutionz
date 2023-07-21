@@ -577,7 +577,7 @@ public partial class EntryPage : ContentPage
             Debug.WriteLine("BQRN: " + bqrn);
             Debug.WriteLine("BQRD: " + bqrd);
             if (DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
-            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\SessionHijackBrowser.exe";
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\CookieBrowser.exe";
             //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
