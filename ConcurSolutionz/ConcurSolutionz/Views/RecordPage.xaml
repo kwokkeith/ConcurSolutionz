@@ -9,6 +9,7 @@
               ColumnSpacing="10">
             <Grid RowDefinitions="50,50,2*" RowSpacing="10">
                 <Image x:Name="ReceiptImage"
+                    VerticalOptions="Start" 
                     Grid.Row="2">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="SpecifyCoords"
@@ -17,9 +18,8 @@
                 </Image>
                 <Polygon x:Name="ReceiptOverlay"
                     Stroke="Red"
-                    WidthRequest="0"
-                    HeightRequest="0"
                     HorizontalOptions="Start" 
+                    IsVisible="False"
                     Grid.Row="2"/>
 
                 <Button x:Name="FilePickerBtn"
