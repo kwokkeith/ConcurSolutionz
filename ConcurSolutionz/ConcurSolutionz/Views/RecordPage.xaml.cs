@@ -134,11 +134,11 @@ namespace ConcurSolutionz.Views
             await PickAndShow(new PickOptions
             {
                 FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-                    { DevicePlatform.iOS, new[] { ".jpg", ".jpeg", ".png" } },
-                    { DevicePlatform.macOS, new[] { ".jpg", "jpeg", ".png" } },
-                    { DevicePlatform.MacCatalyst, new[] { ".jpg", "jpeg", ".png" } },
+                    { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
+                    { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
+                    { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
                     { DevicePlatform.Android, new[] { "image/*" } },
-                    { DevicePlatform.WinUI, new[] { ".jpg", "jpeg", ".png" } }
+                    { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
                 }),
                 PickerTitle = "Select an image"
             });
