@@ -190,7 +190,21 @@ public partial class EntryPage : ContentPage
     // Click event handler for editing record
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(RecordPage));
+        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
+        FileDB file = entry;
+        var imagePath = receipt.ImgPath;
+
+
+        var navigationParameter = new Dictionary<string, object>
+                    {
+                        {"file", file },
+                        {"imagePath", imagePath },
+                        {"existingReceipt", receipt }
+                    };
+
+        await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
@@ -282,7 +296,7 @@ public partial class EntryPage : ContentPage
                     {
                         {"file", file },
                         {"imagePath", result.FullPath },
-                        {"existingRecordBool", false }
+                        {"existingReceipt", null }
                     };
 
                     // pass the file over to the record page
