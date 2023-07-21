@@ -259,11 +259,23 @@ namespace ConcurSolutionz.Views
         public void SpecifyCoords(object sender, TappedEventArgs e)
         {
             Point? coords = e.GetPosition((View)sender);
-            DisplayAlert("DEBUG",coords.ToString(),"OK");
+            //DisplayAlert("DEBUG",coords.ToString(),"OK");
+            //DisplayAlert("DEBUG",ReceiptImage.Parent.Bounds.ToString(),"OK");
             var overlay = ReceiptOverlay;
-            overlay.WidthRequest = 200;
-            overlay.HeightRequest = 200;
-            overlay.Margin = new Thickness(50,25);
+            double rectWidth = 80.0;
+            double rectHeight = 50.0;
+            PointCollection pc = new PointCollection();
+            Point center = (Point) coords;
+            Point topLeft = new Point(center.X - rectWidth/2, center.Y - rectHeight/2);
+            Point topRight = new Point(topLeft.X + rectWidth, topLeft.Y);
+            Point bottomRight = new Point(topRight.X, topRight.Y + rectHeight);
+            Point bottomLeft = new Point(topLeft.X, topLeft.Y + rectHeight);
+            pc.Add(topLeft);
+            pc.Add(topRight);
+            pc.Add(bottomRight);
+            pc.Add(bottomLeft);
+            overlay.Points = pc;
+            overlay.IsVisible = true;
         }
 
     }
