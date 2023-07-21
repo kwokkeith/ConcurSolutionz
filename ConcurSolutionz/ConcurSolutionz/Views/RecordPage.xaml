@@ -1,243 +1,252 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ConcurSolutionz.Views.RecordPage"
-             Title="RecordPage">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ConcurSolutionz.Views.RecordPage"
+    Title="RecordPage">
     <ScrollView Margin="20">
         <VerticalStackLayout>
-        <Grid ColumnDefinitions="*,*"
-              ColumnSpacing="10">
+            <Grid ColumnDefinitions="*,*"
+                ColumnSpacing="10">
             <Grid RowDefinitions="50,50,2*" RowSpacing="10">
                 <Image x:Name="ReceiptImage"
-                       Grid.Row="2"/>
-                <Button x:Name="FilePickerBtn"
-                        Text="Upload receipt"
-                        Grid.Row="0"
-                        Clicked="OnFilePickerClicked"
-                        Margin="10"
-                        HeightRequest="50"/>
-                <Button x:Name="OCRButton"
-                        Text="OCR Scan"
-                        Grid.Row="1"
-                        Clicked="OnOCRButton_Clicked"
-                        HeightRequest="50"
-                        Margin="10"/>
-            </Grid>
+                    Grid.Row="2">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SpecifyCoords"
+                            NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
+                <Rectangle x:Name="ReceiptOverlay"
+                    Stroke="Red"
+                    WidthRequest="0"
+                    HeightRequest="0"
+                    HorizontalOptions="Start" 
+                    Grid.Row="2"/>
+            <Button x:Name="FilePickerBtn"
+                Text="Upload receipt"
+                Grid.Row="0"
+                Clicked="OnFilePickerClicked"
+                Margin="10"
+                HeightRequest="50"/>
+            <Button x:Name="OCRButton"
+                Text="OCR Scan"
+                Grid.Row="1"
+                Clicked="OnOCRButton_Clicked"
+                HeightRequest="50"
+                Margin="10"/>
+        </Grid>
 
-            <Border Grid.Column="1"
-                    Stroke="#D3D3D3"
-                    StrokeShape="RoundRectangle 5,5,5,5"
-                    Padding="16,8"
-                    BackgroundColor="AliceBlue">
+        <Border Grid.Column="1"
+            Stroke="#D3D3D3"
+            StrokeShape="RoundRectangle 5,5,5,5"
+            Padding="16,8"
+            BackgroundColor="AliceBlue">
 
-                <VerticalStackLayout>
+        <VerticalStackLayout>
 
-                <Label Text="Edit receipt details below"
-                       FontSize="Large"
-                       HorizontalOptions="CenterAndExpand"
-                       Margin="0,30,0,0"/>
-                <Grid RowDefinitions="100,100,100,100,100,100,100,100,100,100,100,100,100"
-                      ColumnDefinitions=".3*,.7*"
-                      ColumnSpacing="10"
-                      Margin="0,50,0,0">
+            <Label Text="Edit receipt details below"
+                FontSize="Large"
+                HorizontalOptions="CenterAndExpand"
+                Margin="0,30,0,0"/>
+            <Grid RowDefinitions="100,100,100,100,100,100,100,100,100,100,100,100,100"
+                ColumnDefinitions=".3*,.7*"
+                ColumnSpacing="10"
+                Margin="0,50,0,0">
 
-                    <Label
-                           Text="ExpenseType"
-                           Grid.Row="0"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry  x:Name="ExpenseType"
-                            Placeholder="Type"
-                            Grid.Column="1"
-                            Grid.Row="0"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+            <Label
+                Text="ExpenseType"
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Entry  x:Name="ExpenseType"
+                Placeholder="Type"
+                Grid.Column="1"
+                Grid.Row="0"
+                HeightRequest="50"
+                FontSize="Body"/>
 
-                    <Label
-                           Text="Date"
-                           Grid.Row="1"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <DatePicker
-                                x:Name="TransactionDate"
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                VerticalOptions="Center"
-                                FontSize="Body"/>
+            <Label
+                Text="Date"
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <DatePicker
+                x:Name="TransactionDate"
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalOptions="Center"
+                FontSize="Body"/>
 
-                    <Label
-                           Text="Description"
-                           Grid.Row="2"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry  x:Name="DescriptionInp"
-                            Placeholder="Type"
-                            Grid.Column="1"
-                            Grid.Row="2"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+            <Label
+                Text="Description"
+                Grid.Row="2"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Entry  x:Name="DescriptionInp"
+                Placeholder="Type"
+                Grid.Column="1"
+                Grid.Row="2"
+                HeightRequest="50"
+                FontSize="Body"/>
 
-                    <Label Text="Supplier Name"
-                           Grid.Row="3"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                        x:Name="SupplierName"
-                        Text=""
-                        Placeholder="Supplier Name"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+            <Label Text="Supplier Name"
+                Grid.Row="3"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Entry
+                x:Name="SupplierName"
+                Text=""
+                Placeholder="Supplier Name"
+                Grid.Row="3"
+                Grid.Column="1"
+                HeightRequest="50"
+                FontSize="Body"/>
 
-                    <Label Text="Amount"
-                           Grid.Row="4"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                            x:Name="reqAmount"
-                           Placeholder="Amount"
-                            Grid.Row="4"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+            <Label Text="Amount"
+                Grid.Row="4"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Entry
+                x:Name="reqAmount"
+                Placeholder="Amount"
+                Grid.Row="4"
+                Grid.Column="1"
+                HeightRequest="50"
+                FontSize="Body"/>
 
-                    <Label Text="Receipt no."
-                           Grid.Row="5"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                            x:Name="ReceiptNo"
-                            Placeholder="Receipt no."
-                            Grid.Row="5"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+            <Label Text="Receipt no."
+                Grid.Row="5"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Entry
+                x:Name="ReceiptNo"
+                Placeholder="Receipt no."
+                Grid.Row="5"
+                Grid.Column="1"
+                HeightRequest="50"
+                FontSize="Body"/>
 
-                 <Label Text="City of Purchase"
-                           Grid.Row="6"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Picker
-                            x:Name="CityOfPurchase"
-                            Title="City"
-                            Grid.Row="6"
-                            Grid.Column="1"
-                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
-                            FontSize="Body"
-                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
+            <Label Text="City of Purchase"
+                Grid.Row="6"
+                Grid.Column="0"
+                VerticalOptions="Center"
+                FontSize="Body"/>
+            <Picker
+                x:Name="CityOfPurchase"
+                Title="City"
+                Grid.Row="6"
+                Grid.Column="1"
+                HeightRequest="50"
+                FontSize="Body"
+                >
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String >Singapore, SINGAPORE</x:String>
 
-                                <Picker.ItemsSource>
-                                    <x:Array Type="{x:Type x:String}">
-                                        <x:String >Singapore, SINGAPORE</x:String>
+                </x:Array>
 
-                                    </x:Array>
+            </Picker.ItemsSource>
 
-                                </Picker.ItemsSource>
+        </Picker>
 
-                            </Picker>
+        <Label Text="Currency"
+            Grid.Row="7"
+            Grid.Column="0"
+            VerticalOptions="Center"
+            FontSize="Body"/>
+        <Picker
+            x:Name="Currency"
+            Title="Currency"
+            Grid.Row="7"
+            Grid.Column="1"
+            HeightRequest="50"
+            FontSize="Body">
+        <Picker.ItemsSource>
+            <x:Array Type="{x:Type x:String}">
+                <x:String>Singapore, Dollar</x:String>
 
-                     <Label Text="Currency"
-                           Grid.Row="7"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Picker
-                            x:Name="Currency"
-                            Title="Currency"
-                            Grid.Row="7"
-                            Grid.Column="1"
-                           Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
-                            FontSize="Body"
-                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
-                                <Picker.ItemsSource>
-                                    <x:Array Type="{x:Type x:String}">
-                                        <x:String>Singapore, Dollar</x:String>
+            </x:Array>
 
-                                    </x:Array>
+        </Picker.ItemsSource>
 
-                                </Picker.ItemsSource>
+    </Picker>
 
-                            </Picker>
+    <Label Text="Receipt Status"
+        Grid.Row="8"
+        Grid.Column="0"
+        VerticalOptions="Center"
+        FontSize="Body"/>
+    <Entry
+        x:Name="ReceiptStatus"
+        Placeholder="Receipt Status"
+        Grid.Row="8"
+        Grid.Column="1"
+        HeightRequest="50"
+        FontSize="Body"/>
 
-                    <Label Text="Receipt Status"
-                           Grid.Row="8"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                        x:Name="ReceiptStatus"
-                        Placeholder="Receipt Status"
-                            Grid.Row="8"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+    <Label Text="Comment"
+        Grid.Row="9"
+        Grid.Column="0"
+        VerticalOptions="Center"
+        FontSize="Body"/>
+    <Entry
+        x:Name="Comment"
+        Text=""
+        Placeholder="Enter Comment"
+        Grid.Row="9"
+        Grid.Column="1"
+        HeightRequest="50"
+        FontSize="Body"/>
 
-                    <Label Text="Comment"
-                           Grid.Row="9"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
-                    <Entry
-                        x:Name="Comment"
-                        Text=""
-                        Placeholder="Enter Comment"
-                            Grid.Row="9"
-                            Grid.Column="1"
-                           HeightRequest="50"
-                           FontSize="Body"/>
+    <CheckBox
+        x:Name="IsBillable"
+        IsChecked="False"
+        Grid.Row="10"
+        Grid.Column="1"
+        HorizontalOptions="Start"/>
+    <Label Text="Is Billable"
+        Grid.Row="10"
+        Grid.Column="0"
+        VerticalOptions="Center"
+        FontSize="Body"/>
 
-                    <CheckBox
-                        x:Name="IsBillable"
-                        IsChecked="False"
-                        Grid.Row="10"
-                        Grid.Column="1"
-                        HorizontalOptions="Start"/>
-                    <Label Text="Is Billable"
-                           Grid.Row="10"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
+    <CheckBox
+        x:Name="PersonalExpense"
+        IsChecked="False"
+        Grid.Row="11"
+        Grid.Column="1"
+        HorizontalOptions="Start"/>
+    <Label Text="Personal Expense"
+        Grid.Row="11"
+        Grid.Column="0"
+        VerticalOptions="Center"
+        FontSize="Body"/>
 
-                    <CheckBox
-                        x:Name="PersonalExpense"
-                        IsChecked="False"
-                        Grid.Row="11"
-                        Grid.Column="1"
-                        HorizontalOptions="Start"/>
-                    <Label Text="Personal Expense"
-                           Grid.Row="11"
-                           Grid.Column="0"
-                           VerticalOptions="Center"
-                           FontSize="Body"/>
+    </Grid>
 
-                </Grid>
+    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,20">
+        <Button Text="Edit incorrect scans"
+            Grid.Column="0"
+            HeightRequest="50"/>
+        <Button Clicked="OnSaveDetails_Clicked"
+            Text="Save details"
+            Grid.Column="1"
+            HeightRequest="50"/>
 
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,20">
-                        <Button Text="Edit incorrect scans"
-                            Grid.Column="0"
-                            HeightRequest="50"/>
-                        <Button Clicked="OnSaveDetails_Clicked"
-                            Text="Save details"
-                            Grid.Column="1"
-                            HeightRequest="50"/>
+    </Grid>
 
-                    </Grid>
 
-                    
-            </VerticalStackLayout>
+                </VerticalStackLayout>
 
             </Border>
         </Grid>
     </VerticalStackLayout>
 
-    </ScrollView>
-    
+        </ScrollView>
+
 </ContentPage>
