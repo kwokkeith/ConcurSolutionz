@@ -642,7 +642,7 @@ public partial class EntryPage : ContentPage
             Debug.WriteLine("JWT: " + jwt);
             Debug.WriteLine("BQRN: " + bqrn);
             Debug.WriteLine("BQRD: " + bqrd);
-            if (DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "publish", "SessionHijackBrowser");
+            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "publish", "SessionHijackBrowser");
             else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\CookieBrowser.exe";
             //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
