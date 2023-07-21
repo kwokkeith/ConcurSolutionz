@@ -37,7 +37,7 @@ namespace ConcurSolutionz.Controllers
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.CreateNoWindow = true;
 
-                process.StartInfo.Arguments = "--tessdata-dir " + tessdataPath + " " + imgPath + " - tsv quiet";
+                process.StartInfo.Arguments = "--tessdata-dir " + tessdataPath + " \"" + imgPath + "\" - tsv quiet";
 
                 process.Start();
 
