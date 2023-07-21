@@ -19,7 +19,10 @@ namespace ConcurSolutionz.Views
             set
             {
                 currentReceipt = value;
-                PopulateRecordPage(value);
+                if (value != null)
+                {
+                    PopulateRecordPage(value);
+                }
             }
             get
             {
