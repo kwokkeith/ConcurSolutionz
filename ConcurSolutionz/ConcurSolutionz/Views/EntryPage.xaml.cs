@@ -1,4 +1,4 @@
-#nullable enable
+    #nullable enable
 
 using System;
 using System.Collections;
@@ -192,21 +192,27 @@ public partial class EntryPage : ContentPage
     // Click event handler for editing record
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
-        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
-        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+        try
+        {
+            Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+            Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
 
-        FileDB file = entry;
-        var imagePath = receipt.ImgPath;
+            FileDB file = entry;
+            var imagePath = receipt.ImgPath;
 
 
-        var navigationParameter = new Dictionary<string, object>
+            var navigationParameter = new Dictionary<string, object>
                     {
                         {"file", file },
                         {"imagePath", imagePath },
                         {"existingReceipt", receipt }
                     };
 
-        await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
+            await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
+        } catch
+        {
+            await DisplayAlert("Error", "Please select a record", "OK");
+        }
     }
 
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
