@@ -23,6 +23,9 @@
                 <Button Text="Sort" Clicked="OnSortClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
                 <Button Text="Back" Clicked="OnBackClicked" />
+                <SearchBar x:Name="searchBar" 
+                SearchButtonPressed="OnSearchButtonClicked"
+                TextChanged="OnSearchTextChanged" />
             </HorizontalStackLayout>
 
             <!-- File list placeholder -->

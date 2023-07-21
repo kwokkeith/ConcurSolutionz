@@ -37,8 +37,9 @@ public partial class MainPage : ContentPage
     public SortOption CurrentSortOption { get; set; }
     public Grid SelectedItem { get; set; }
 
-    private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
-    private string currentDirectoryPath;
+        private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
+        public string currentDirectoryPath;
+        public string SearchText { get; set; }
 
     // On Page load
     public MainPage()
@@ -52,7 +53,16 @@ public partial class MainPage : ContentPage
         // Get current working directory from database
         LoadFilesFromDB();
 
-    }
+        }
+
+        // Run code when the Main Page is navigated to
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Populate File Management View
+            RefreshPage();
+        }
 
     // Loads the files using the database's current working directory
     private void LoadFilesFromDB()
@@ -136,23 +146,24 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void OnFileDoubleTapped(object sender, EventArgs e)
-    {
-        // Handle file/folder double tap event
-        var tappedFile = (sender as View)?.BindingContext as FileItem;
-        if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
+        private async void OnFileDoubleTapped(object sender, EventArgs e)
         {
-            // SELECT file
-            Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+            // Handle file/folder double tap event
+            var tappedFile = (sender as View)?.BindingContext as FileItem;
+            string filePath = Path.Combine(currentDirectoryPath,tappedFile.FileName);
+            if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
+            {
+                // SELECT file
+                Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
 
-            // Populate File Management View
-            RefreshPage();
-        }
-        else
-        {
-            // Call entry UI
-            //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-            await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}");
+                // Populate File Management View
+                RefreshPage();
+            }
+            else
+            {
+                // Call entry UI
+                //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
 
         }
         // Delay the selection to avoid immediate reselection due to double-tap gesture
@@ -195,17 +206,18 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void OnNewEntryClicked(object sender, EventArgs e)
-    {
-        // Prompt the user for the new entry name
-        string newName = await DisplayPromptAsync("New Entry", "Enter a new entry name");
-
-        if (!string.IsNullOrWhiteSpace(newName))
+        private async void OnNewEntryClicked(object sender, EventArgs e)
         {
-            try
+            // Prompt the user for the new entry name
+            string newName = await DisplayPromptAsync("New Entry", "Enter a new entry name");
+            string filePath = Path.Combine(currentDirectoryPath, newName);
+
+            if (!string.IsNullOrWhiteSpace(newName))
             {
-                // Call Entry system (UI)
-                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}");
+                try
+                {
+                    // Call Entry system (UI)
+                    await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}&filePath={filePath}");
 
             }
             catch (Exception ex)
@@ -215,22 +227,20 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void OnRenameClicked(object sender, EventArgs e)
-    {
-        return;
-        // Handle Rename button click
-        if (SelectedFile != null)
+        private async void OnRenameClicked(object sender, EventArgs e)
         {
-            // Prompt for renaming the selected file/folder
-            await RenameSelectedFile(SelectedFile.FileName, "Enter a new name");
+            // Handle Rename button click
+            if (SelectedFile != null)
+            {
+                // Prompt for renaming the selected file/folder
+                await RenameSelectedFile(SelectedFile.FileName, "Enter a new name");
+            }
         }
-    }
 
-    private async Task RenameSelectedFile(string initialValue, string promptMessage)
-    {
-        return;
-        // Prompt the user for the new name
-        string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
+        private async Task RenameSelectedFile(string initialValue, string promptMessage)
+        {
+            // Prompt the user for the new name
+            string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
@@ -239,15 +249,8 @@ public partial class MainPage : ContentPage
                 string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
                 string newFilePath = Path.Combine(currentDirectoryPath, newName);
 
-                // Rename the selected file/folder in the target directory
-                if (SelectedFile.IsFolder)
-                {
+                    // Rename the selected file/folder in the target directory
                     Directory.Move(filePath, newFilePath);
-                }
-                else
-                {
-                    File.Move(filePath, newFilePath);
-                }
 
                 // Create a new FileItem with the updated file name and other properties
                 FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
@@ -257,33 +260,37 @@ public partial class MainPage : ContentPage
                 int selectedIndex = Files.IndexOf(SelectedFile);
                 Files[selectedIndex] = renamedFile;
 
-                // Update the SelectedFile property with the renamed file
-                SelectedFile = renamedFile;
-            }
-            catch (Exception ex)
-            {
-                // Handle any potential errors
-                Console.WriteLine($"Failed to rename file/folder: {ex.Message}");
-            }
-        }
-    }
+                    // Update the SelectedFile property with the renamed file
+                    SelectedFile = renamedFile;
 
-    private void OnDeleteClicked(object sender, EventArgs e)
-    {
-        // Handle Delete button click
-        if (SelectedFile != null)
-        {
-            try
-            {
-                Database.Database.DeleteFileByFilePath(Path.Combine(currentDirectoryPath, SelectedFile.FileName));
-                RefreshPage();
-            }
-            catch (Exception ex)
-            {
-                DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
+                    // Handle updating of Metadata
+                    Database.Database.RenameEntry(newFilePath);
+                }
+                catch (Exception ex)
+                {
+                    // Handle any potential errors
+                    Console.WriteLine($"Failed to rename file/folder: {ex.Message}");
+                }
             }
         }
-    }
+
+        private void OnDeleteClicked(object sender, EventArgs e)
+        {
+            // Handle Delete button click
+            if (SelectedFile != null)
+            {
+                try
+                {
+                    Database.Database.DeleteDirectoryByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
+                    SelectedFile = null;
+                    RefreshPage();
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
+                }
+            }
+        }
 
     private async void OnSortClicked(object sender, EventArgs e)
     {
@@ -308,9 +315,28 @@ public partial class MainPage : ContentPage
         // Sort the files based on the selected option
         SortFiles();
 
-        // Notify the UI that the Files collection has changed
-        OnPropertyChanged(nameof(Files));
-    }
+            // Notify the UI that the Files collection has changed
+            OnPropertyChanged(nameof(Files));
+        }
+
+        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchText = e.NewTextValue;
+            if (SearchText == null || SearchText == "" || SearchText == " ")
+            {
+                RefreshPage();
+            }
+        }
+
+        private void OnSearchButtonClicked(object sender, EventArgs e)
+        {
+            // Filter the files based on the search text
+            Files = new ObservableCollection<FileItem>(
+              Files.Where(f => f.FileName.Contains(SearchText)));
+
+            // Refresh list view
+            OnPropertyChanged(nameof(Files));
+        }
 
     private void SortFiles()
     {

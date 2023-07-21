@@ -53,6 +53,7 @@
             <Button Text="Delete Entry"
                     Grid.Column="1"
                     Margin="10"
+                    Clicked="DeleteEntry_Clicked"
                     BackgroundColor="IndianRed"/>
 
         </Grid>
@@ -278,6 +279,7 @@
             <Button Text="Delete Record"
                     Grid.Column="2"
                     Margin="10"
+                    Clicked="DeleteRecord_Clicked"
                     x:Name="DeleteRecordButton"/>
 
         </Grid>
