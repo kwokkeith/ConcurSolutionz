@@ -3,7 +3,7 @@ using System.Globalization;
 using ConcurSolutionz.Database;
 using Newtonsoft.Json.Linq;
 
-namespace Unit_Testing
+namespace Unit_Test
 {
     public class MetaDataTest
     {
@@ -15,11 +15,11 @@ namespace Unit_Testing
             MetaData metadata;
 
             // Act
-            metadata = builder.SetEntryName("SCF-MAY2022-001")
+            metadata = builder.SetClaimName("SCF-MAY2022-001")
                 .SetClaimDate(DateTime.ParseExact("06/05/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetPurpose("Cohort class bonding for cohort 02")
-                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
                 .SetTeamName("RaisinStudios")
+                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
                 .Build();
 
             StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
@@ -58,7 +58,7 @@ namespace Unit_Testing
             StudentProjectClaimMDBuilder builder = new();
 
             // Act
-            builder.SetEntryName("SCF-MAY2022-001")
+            builder.SetClaimName("SCF-MAY2022-001")
             .SetClaimDate(DateTime.ParseExact("06/05/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture))
             .SetPurpose("Cohort class bonding for cohort 02")
             .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES");
@@ -72,12 +72,12 @@ namespace Unit_Testing
         public void SetClaimDate_ThrowErrorIfAhead()
         {
             // Arrange
-            DateTime Value = DateTime.Now;
-            Value.AddDays(1);
+            DateTime Value = DateTime.Now.AddDays(1);
             StudentProjectClaimMDBuilder builder = new();
 
             // Assert
-            Assert.Throws<ArgumentException>(() => builder.SetClaimDate(Value));
+            Assert.Throws<ArgumentException>(() => builder.SetClaimName("SCF-MAY2022-001")
+                                    .SetClaimDate(Value));
         }
 
         [Fact]
@@ -99,31 +99,36 @@ namespace Unit_Testing
             DateTime updatedTime = DateTime.ParseExact("26/06/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
             // Act
-            metadata = builder.SetEntryName("SCF-MAY2022-001")
+            metadata = builder.SetClaimName("SCF-MAY2022-001")
                 .SetClaimDate(DateTime.ParseExact("06/05/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetPurpose("Cohort class bonding for cohort 02")
-                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
                 .SetTeamName("RaisinStudios")
+                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
+                .SetEntryName("Entry 1")
+                .SetEntryBudget(100m)
                 .Build();
 
             StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
 
             MD.ClaimName = "Claim1";
-            MD.EntryName = "Entry1";
-            MD.EntryBudget = 3432.232m;
-            MD.Policy = "Other Student Claim";
-            MD.ProjectClub = "CompStruc";
-            MD.TeamName = "ChestnutStudios";
             MD.ClaimDate = updatedTime;
+            MD.Purpose = "Cohort class bonding for cohort 02";
+            MD.TeamName = "ChestnutStudios";
+            MD.ProjectClub = "CompStruc";
+            MD.EntryName = "Entry1";
+            MD.EntryBudget = 100m;
+            MD.Policy = "Other Student Claim";
 
             // Assert
             Assert.Equal("Claim1", MD.ClaimName);
             Assert.Equal("Entry1", MD.EntryName);
-            Assert.Equal(3432.232m, MD.EntryBudget);
+            Assert.Equal(100m, MD.EntryBudget);
             Assert.Equal("Other Student Claim", MD.Policy);
             Assert.Equal("CompStruc", MD.ProjectClub);
             Assert.Equal("ChestnutStudios", MD.TeamName);
             Assert.Equal(updatedTime, MD.ClaimDate);
+            Assert.Equal("Cohort class bonding for cohort 02", MD.Purpose);
+
         }
 
         [Fact]
@@ -134,11 +139,12 @@ namespace Unit_Testing
             MetaData metadata;
 
             // Act
-            metadata = builder.SetEntryName("SCF-MAY2022-001")
+            metadata = builder.SetClaimName("SCF-MAY2022-001")
                 .SetClaimDate(DateTime.ParseExact("06/05/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetPurpose("Cohort class bonding for cohort 02")
-                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
                 .SetTeamName("RaisinStudios")
+                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
+                .SetEntryName("SCF-MAY2022-001")
                 .Build();
 
             StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
@@ -153,11 +159,10 @@ namespace Unit_Testing
             // Arrange
             StudentProjectClaimMDBuilder builder = new();
             MetaData metadata;
-            DateTime updatedDate = DateTime.Now;
-            updatedDate.AddDays(1);
+            DateTime updatedDate = DateTime.Now.AddDays(1);
 
             // Act
-            metadata = builder.SetEntryName("SCF-MAY2022-001")
+            metadata = builder.SetClaimName("SCF-MAY2022-001")
                 .SetClaimDate(DateTime.ParseExact("06/05/2022", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 .SetPurpose("Cohort class bonding for cohort 02")
                 .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")

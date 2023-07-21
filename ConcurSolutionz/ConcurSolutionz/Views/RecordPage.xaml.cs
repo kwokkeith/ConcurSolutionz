@@ -212,8 +212,9 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "/Users/jianghongbei/Downloads/tesseract";
-                OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
+                string tesseractPath = "./bin/tesseract-compiled-windows/tesseract/tesseract.exe";
+                string tessdataPath = "./bin/tesseract-compiled-windows/tesseract/tessdata";
+                Controllers.ReceiptOCR receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
 
@@ -255,9 +256,27 @@ namespace ConcurSolutionz.Views
             // go back to entry page
             await Shell.Current.GoToAsync($"..?fileName={entryFile.FileName}&existingFile={true}");
         }
-
+        public void SpecifyCoords(object sender, TappedEventArgs e)
+        {
+            Point? coords = e.GetPosition((View)sender);
+            //DisplayAlert("DEBUG",coords.ToString(),"OK");
+            //DisplayAlert("DEBUG",ReceiptImage.Parent.Bounds.ToString(),"OK");
+            var overlay = ReceiptOverlay;
+            double rectWidth = 80.0;
+            double rectHeight = 50.0;
+            PointCollection pc = new PointCollection();
+            Point center = (Point) coords;
+            Point topLeft = new Point(center.X - rectWidth/2, center.Y - rectHeight/2);
+            Point topRight = new Point(topLeft.X + rectWidth, topLeft.Y);
+            Point bottomRight = new Point(topRight.X, topRight.Y + rectHeight);
+            Point bottomLeft = new Point(topLeft.X, topLeft.Y + rectHeight);
+            pc.Add(topLeft);
+            pc.Add(topRight);
+            pc.Add(bottomRight);
+            pc.Add(bottomLeft);
+            overlay.Points = pc;
+            overlay.IsVisible = true;
+        }
 
     }
-
-
 }

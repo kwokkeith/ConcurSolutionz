@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Threading;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Views;
-using ConcurSolutionz.OCR;
 
 namespace ConcurSolutionz.Controllers {
 
@@ -24,7 +23,8 @@ namespace ConcurSolutionz.Controllers {
             // Data to get from OCR
             //string imgPath = imgPath;
             string tesseractPath = "";
-            ConcurSolutionz.OCR.RecieptOCR receiptData = new(imgPath, tesseractPath);
+            string tessdataPath = "";
+            ReceiptOCR receiptData = new(imgPath, tesseractPath, tessdataPath);
             string ReceiptNumber = receiptData.receiptNumber;
             decimal ReqAmount = receiptData.reqAmount;
             // int RecordID = receiptData.get();

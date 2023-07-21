@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ public partial class EntryPage : ContentPage
     private List<Database.Receipt> receipts;
     private string fileName;
     Database.Entry entry;
+    Database.Receipt selectedReceipt;
 
     // ReceiptView collection for storing and displaying Receipt models
     public ObservableCollection<Models.Receipt> ReceiptView { get; set; }
@@ -346,6 +348,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    // change the selected record
     void OnRecordSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         int? previous = (e.PreviousSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
@@ -490,6 +493,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    // show success message after setting entry metadata
     private async void Show_Message()
     {
         await UpdateMessage.FadeTo(1, 500);
@@ -502,15 +506,14 @@ public partial class EntryPage : ContentPage
         string cookie = "";
         Process process = new Process();
         //Starting chrome driver
+        if (entry == null) {await DisplayAlert("Error", "Entry not saved/ is empty", "OK"); return; }
+        else if (receipts.Count == 0) {await DisplayAlert("Error", "No receipts added, please add one before sending to concur", "OK"); return; }
+
         try
         {
-
-            //process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
-            if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium")))
-            {
-                await DisplayAlert("nice", "you got it", "ok");
-            }
-            process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+            if(DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
+            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
@@ -535,6 +538,8 @@ public partial class EntryPage : ContentPage
             }
             cookie = "JWT" + cookie.Split("JWT")[1];
             await DisplayAlert("Progress", "Cookies Extracted! Please wait for the next prompt for completion", "OK");
+            Console.WriteLine("cookie:" + cookie);
+            PushToConcur(cookie, receipts, entry);
         }
         catch (Exception ex)
         {
@@ -542,8 +547,7 @@ public partial class EntryPage : ContentPage
             Console.WriteLine(ex.ToString());
             return;
         }
-        Console.WriteLine("cookie:" + cookie);
-        PushToConcur(cookie, receipts, entry);
+        
     }
 
     public async void PushToConcur(string cookie, List<Database.Receipt> receipts, Database.Entry entry)
@@ -608,6 +612,37 @@ public partial class EntryPage : ContentPage
 
         }
         await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
+        Process process = new Process();
+        try
+        {
+            string[] CookieSplit = cookie.Split(";");
+            string jwt = "", bqrn = "", bqrd = "";
+            foreach(string param in CookieSplit)
+            {
+                string[] temp = param.Split("=");
+                if (temp[0].Equals("JWT")) jwt = temp[1];
+                else if (temp[0].Equals("OTSESSIONAABQRD")) bqrn = temp[1];
+                else if (temp[0].Equals("OTSESSIONAABQRN")) bqrd = temp[1];
+
+            }
+            Debug.WriteLine("JWT: " + jwt);
+            Debug.WriteLine("BQRN: " + bqrn);
+            Debug.WriteLine("BQRD: " + bqrd);
+            if (DeviceInfo.Current.Platform == DevicePlatform.macOS) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\SessionHijackBrowser.exe";
+            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.Arguments = jwt + " " + bqrn + " " + bqrd;
+            process.Start();
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Failed to start Cookie Browser");
+            return;
+        }
         //Purpose.Text = await concur.LinkImageToRequest(expense);
     }
 

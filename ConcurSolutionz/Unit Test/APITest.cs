@@ -8,7 +8,7 @@ using ConcurSolutionz;
 using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Models;
 
-namespace Unit_Testing
+namespace Unit_Test
 {
     [Collection("APITest")]
     public class APITest
@@ -22,7 +22,9 @@ namespace Unit_Testing
         public void Init(string cookie) 
         {
             concur = new ConcurAPI(cookie);
-            string init = concur.Initialize();
+            Task<string> task = concur.Initialize();
+            task.Wait();
+            string init = task.Result;
             Assert.True(init.Equals("0"));
         }
 
@@ -54,7 +56,7 @@ namespace Unit_Testing
             //Create new expense
             Expense expense = new Expense();
             expense.Date = "2023-06-21";
-            expense.Cost = 69.00;
+            expense.Cost = (decimal)69.00;
             expense.Description = "Test Description";
             expense.Supplier = "Test Supplier";
             expense.ReceiptNo = "Test Receipt";

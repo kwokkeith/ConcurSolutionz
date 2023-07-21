@@ -1,54 +1,57 @@
 ﻿using System.Collections.ObjectModel;
 using ConcurSolutionz.Database;
 
-namespace ConcurSolutionz.Views
+namespace ConcurSolutionz.Views;
+
+
+public class FileItem
 {
-    public class FileItem
-    {
-        public string FileName { get; set; }
-        public string Icon { get; set; }
-        public bool IsFolder { get; set; }
-        public DateTime CreationDateTime { get; set; }
-        public ObservableCollection<FileItem> Children { get; set; }
+    public string FileName { get; set; }
+    public string Icon { get; set; }
+    public bool IsFolder { get; set; }
+    public DateTime CreationDateTime { get; set; }
+    public ObservableCollection<FileItem> Children { get; set; }
 
-        public FileItem(string fileName, bool isFolder)
+
+    public FileItem(string fileName, bool isFolder)
+    {
+        FileName = fileName;
+        IsFolder = isFolder;
+        if (isFolder)
         {
-            FileName = fileName;
-            IsFolder = isFolder;
-            if (isFolder)
-            {
-                //Icon = "file_icon.png";
-                Children = new ObservableCollection<FileItem>();
-            }
-            else
-            {
-                //Icon = "doc_icon.png";
-            }
-            CreationDateTime = DateTime.Now;
+            //Icon = "file_icon.png";
+            Children = new ObservableCollection<FileItem>();
         }
-    }
-
-    public partial class MainPage : ContentPage
-    {
-        public ObservableCollection<FileItem> Files { get; set; }
-        public FileItem SelectedFile { get; set; }
-        public SortOption CurrentSortOption { get; set; }
-
-        private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
-        public string currentDirectoryPath;
-        public string SearchText { get; set; }
-
-        // On Page load
-        public MainPage()
+        else
         {
-            InitializeComponent();
-            Files = new ObservableCollection<FileItem>();
-            CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
-            BindingContext = this;
-            currentDirectoryPath = rootDirectoryPath;
-            
-            // Get current working directory from database
-            LoadFilesFromDB();
+            //Icon = "doc_icon.png";
+        }
+        CreationDateTime = DateTime.Now;
+    }
+}
+
+public partial class MainPage : ContentPage
+{
+    public ObservableCollection<FileItem> Files { get; set; }
+    public FileItem SelectedFile { get; set; }
+    public SortOption CurrentSortOption { get; set; }
+    public Grid SelectedItem { get; set; }
+
+    private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
+    public string currentDirectoryPath;
+    public string SearchText { get; set; }
+
+    // On Page load
+    public MainPage()
+    {
+        InitializeComponent();
+        Files = new ObservableCollection<FileItem>();
+        CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
+        BindingContext = this;
+        currentDirectoryPath = rootDirectoryPath;
+
+        // Get current working directory from database
+        LoadFilesFromDB();
 
         }
 
@@ -61,71 +64,87 @@ namespace ConcurSolutionz.Views
             RefreshPage();
         }
 
-        // Loads the files using the database's current working directory
-        private void LoadFilesFromDB()
+    // Loads the files using the database's current working directory
+    private void LoadFilesFromDB()
+    {
+        List<string> fileNames = Database.Database.Instance.GetFileNamesFromWD();
+
+        foreach (string fileName in fileNames)
         {
-            List<string> fileNames = Database.Database.Instance.GetFileNamesFromWD();
+            // Check if file is boolean
+            bool isFolder;
 
-            foreach (string fileName in fileNames)
+            if (fileName.EndsWith(".fdr"))
+                isFolder = true;
+            else
             {
-                // Check if file is boolean
-                bool isFolder;
-
-                if (fileName.EndsWith(".fdr"))
-                    isFolder = true;
-                else
-                {
-                    isFolder = false;
-                }
-
-                // Create FileItem instance
-                Files.Add(new FileItem(fileName, isFolder));
+                isFolder = false;
             }
 
+            // Create FileItem instance
+            Files.Add(new FileItem(fileName, isFolder));
         }
+    }
 
-        private void OnFileTapped(object sender, EventArgs e)
+    // update color of the selected grids
+    private void UpdateColor(Grid Previous, Grid Current)
+    {
+        if (!(Previous is null))
         {
-            var tappedFile = (sender as View)?.BindingContext as FileItem;
-            if (tappedFile != null)
+            Previous.Background = new SolidColorBrush(Colors.White);
+
+        }
+        Current.Background = new SolidColorBrush(Colors.LightSkyBlue);
+
+    }
+
+    private void OnFileTapped(object sender, EventArgs e)
+    {
+        var tappedFile = (sender as View)?.BindingContext as FileItem;
+        // set the color of selected grid
+        var previousItem = SelectedItem;
+        SelectedItem = (Grid)sender;
+        UpdateColor(previousItem, SelectedItem);
+        //grid.Background = new SolidColorBrush(Colors.AliceBlue);
+        if (tappedFile != null)
+        {
+            if (tappedFile.IsFolder) // if file tapped is a folder
             {
-                if (tappedFile.IsFolder) // if file tapped is a folder
+                // Modify selected file
+                SelectedFile = tappedFile;
+
+                // KEITH: If you wish to select file with single click
+                //// Open the tapped folder and display its contents
+                ////Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+
+                //// Populate File Management View
+                //RefreshPage();
+            }
+            else
+            {
+                // Handle file selection logic
+                // You can implement your custom logic here
+                // LOGIC TO IMPLEMENT ACTION FOR OTHER FILES
+                //DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
+
+                // Create Entry Object using the Entry metadata... (Ask Database to execute the jump to the other UI)
+                // ...
+                // TODO: CALL DATABASE (Database end still needs to do this creating the entry object using the metadatas and pass it to the Entry system
+                try
                 {
                     // Modify selected file
                     SelectedFile = tappedFile;
 
                     // KEITH: If you wish to select file with single click
-                    //// Open the tapped folder and display its contents
-                    ////Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-
-                    //// Populate File Management View
-                    //RefreshPage();
+                    //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
                 }
-                else
+                catch
                 {
-                    // Handle file selection logic
-                    // You can implement your custom logic here
-                    // LOGIC TO IMPLEMENT ACTION FOR OTHER FILES
-                    //DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
-
-                    // Create Entry Object using the Entry metadata... (Ask Database to execute the jump to the other UI)
-                    // ...
-                    // TODO: CALL DATABASE (Database end still needs to do this creating the entry object using the metadatas and pass it to the Entry system
-                    try
-                    {
-                        // Modify selected file
-                        SelectedFile = tappedFile;
-
-                        // KEITH: If you wish to select file with single click
-                        //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-                    }
-                    catch
-                    {
-                        DisplayAlert("Failure!", "File failed to open!", "OK");
-                    }
+                    DisplayAlert("Failure!", "File failed to open!", "OK");
                 }
             }
         }
+    }
 
         private async void OnFileDoubleTapped(object sender, EventArgs e)
         {
@@ -146,46 +165,46 @@ namespace ConcurSolutionz.Views
                 //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
                 await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
 
-            }
-            // Delay the selection to avoid immediate reselection due to double-tap gesture
-            await Task.Delay(200);
         }
+        // Delay the selection to avoid immediate reselection due to double-tap gesture
+        await Task.Delay(200);
+    }
 
-        private void OnBackClicked(object sender, EventArgs e)
+    private void OnBackClicked(object sender, EventArgs e)
+    {
+        Database.Database.Instance.FileGoBack();
+        SelectedFile = null;
+        RefreshPage();
+    }
+
+    private async void OnNewFolderClicked(object sender, EventArgs e)
+    {
+        // Prompt the user for the new folder name
+        string newName = await DisplayPromptAsync("New Folder", "Enter a new folder name");
+
+        if (!string.IsNullOrWhiteSpace(newName))
         {
-            Database.Database.Instance.FileGoBack();
-            SelectedFile = null;
-            RefreshPage();
-        }
-
-        private async void OnNewFolderClicked(object sender, EventArgs e)
-        {
-            // Prompt the user for the new folder name
-            string newName = await DisplayPromptAsync("New Folder", "Enter a new folder name");
-
-            if (!string.IsNullOrWhiteSpace(newName))
+            try
             {
-                try
-                {
-                    // Create a folder using the Database
-                    Folder.FolderBuilder builder = new Folder.FolderBuilder()
-                        .SetCreationDate(DateTime.Now)
-                        .SetFileName(newName)
-                        .SetFilePath(Database.Database.Instance.Getwd())
-                        .SetLastModifiedDate(DateTime.Now);
-                    Folder folder = builder.Build();
-                    Database.Database.CreateFile(folder);
+                // Create a folder using the Database
+                Folder.FolderBuilder builder = new Folder.FolderBuilder()
+                    .SetCreationDate(DateTime.Now)
+                    .SetFileName(newName)
+                    .SetFilePath(Database.Database.Instance.Getwd())
+                    .SetLastModifiedDate(DateTime.Now);
+                Folder folder = builder.Build();
+                Database.Database.CreateFile(folder);
 
-                    // Repopulate Files
-                    RefreshPage();
+                // Repopulate Files
+                RefreshPage();
 
-                }
-                catch
-                {
-                    await DisplayAlert("Failure!", "Failed to create folder!", "OK");
-                }
+            }
+            catch
+            {
+                await DisplayAlert("Failure!", "Failed to create folder!", "OK");
             }
         }
+    }
 
         private async void OnNewEntryClicked(object sender, EventArgs e)
         {
@@ -200,13 +219,13 @@ namespace ConcurSolutionz.Views
                     // Call Entry system (UI)
                     await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={newName}&existingFile={false}&filePath={filePath}");
 
-                }
-                catch (Exception ex)
-                {
-                    await DisplayAlert("Failure!", "Failed to create new Entry!", "OK");
-                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Failure!", "Failed to create new Entry!", "OK");
             }
         }
+    }
 
         private async void OnRenameClicked(object sender, EventArgs e)
         {
@@ -223,23 +242,23 @@ namespace ConcurSolutionz.Views
             // Prompt the user for the new name
             string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
 
-            if (!string.IsNullOrWhiteSpace(newName))
+        if (!string.IsNullOrWhiteSpace(newName))
+        {
+            try
             {
-                try
-                {
-                    string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
-                    string newFilePath = Path.Combine(currentDirectoryPath, newName);
+                string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
+                string newFilePath = Path.Combine(currentDirectoryPath, newName);
 
                     // Rename the selected file/folder in the target directory
                     Directory.Move(filePath, newFilePath);
 
-                    // Create a new FileItem with the updated file name and other properties
-                    FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
-                    renamedFile.CreationDateTime = DateTime.Now;
+                // Create a new FileItem with the updated file name and other properties
+                FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
+                renamedFile.CreationDateTime = DateTime.Now;
 
-                    // Replace the selected file with the renamed file in the collection
-                    int selectedIndex = Files.IndexOf(SelectedFile);
-                    Files[selectedIndex] = renamedFile;
+                // Replace the selected file with the renamed file in the collection
+                int selectedIndex = Files.IndexOf(SelectedFile);
+                Files[selectedIndex] = renamedFile;
 
                     // Update the SelectedFile property with the renamed file
                     SelectedFile = renamedFile;
@@ -273,28 +292,28 @@ namespace ConcurSolutionz.Views
             }
         }
 
-        private async void OnSortClicked(object sender, EventArgs e)
+    private async void OnSortClicked(object sender, EventArgs e)
+    {
+        // Display a dialog box to choose the sorting option
+        string action = await DisplayActionSheet("Sort by", "Cancel", null, "By Alphabetical Order", "By Creation Date");
+
+        // Determine the selected sorting option
+        if (action == "By Alphabetical Order")
         {
-            // Display a dialog box to choose the sorting option
-            string action = await DisplayActionSheet("Sort by", "Cancel", null, "By Alphabetical Order", "By Creation Date");
+            CurrentSortOption = SortOption.Alphabetical;
+        }
+        else if (action == "By Creation Date")
+        {
+            CurrentSortOption = SortOption.Date;
+        }
+        else
+        {
+            // Cancelled or no option selected
+            return;
+        }
 
-            // Determine the selected sorting option
-            if (action == "By Alphabetical Order")
-            {
-                CurrentSortOption = SortOption.Alphabetical;
-            }
-            else if (action == "By Creation Date")
-            {
-                CurrentSortOption = SortOption.Date;
-            }
-            else
-            {
-                // Cancelled or no option selected
-                return;
-            }
-
-            // Sort the files based on the selected option
-            SortFiles();
+        // Sort the files based on the selected option
+        SortFiles();
 
             // Notify the UI that the Files collection has changed
             OnPropertyChanged(nameof(Files));
@@ -319,30 +338,30 @@ namespace ConcurSolutionz.Views
             OnPropertyChanged(nameof(Files));
         }
 
-        private void SortFiles()
-        {
-            switch (CurrentSortOption)
-            {
-                case SortOption.Alphabetical:
-                    Files = new ObservableCollection<FileItem>(Files.OrderBy(file => file.FileName));
-                    break;
-                case SortOption.Date:
-                    Files = new ObservableCollection<FileItem>(Files.OrderByDescending(file => file.CreationDateTime));
-                    break;
-            }
-        }
-
-        private void RefreshPage()
-        {
-            Files.Clear(); // Remove all files in the Files list
-            LoadFilesFromDB(); // Reload from current working directory
-            SelectedFile = null; // deselect selected files
-        }
-    }
-
-    public enum SortOption
+    private void SortFiles()
     {
-        Alphabetical,
-        Date
+        switch (CurrentSortOption)
+        {
+            case SortOption.Alphabetical:
+                Files = new ObservableCollection<FileItem>(Files.OrderBy(file => file.FileName));
+                break;
+            case SortOption.Date:
+                Files = new ObservableCollection<FileItem>(Files.OrderByDescending(file => file.CreationDateTime));
+                break;
+        }
     }
+
+    private void RefreshPage()
+    {
+        Files.Clear(); // Remove all files in the Files list
+        LoadFilesFromDB(); // Reload from current working directory
+        SelectedFile = null; // deselect selected files
+    }
+}
+
+
+public enum SortOption
+{
+    Alphabetical,
+    Date
 }
