@@ -37,9 +37,9 @@ public partial class MainPage : ContentPage
     public SortOption CurrentSortOption { get; set; }
     public Grid SelectedItem { get; set; }
 
-    private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
-    public string currentDirectoryPath;
-    public string SearchText { get; set; }
+        private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
+        public string currentDirectoryPath;
+        public string SearchText { get; set; }
 
     // On Page load
     public MainPage()
