@@ -212,8 +212,9 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "/Users/jianghongbei/Downloads/tesseract";
-                OCR.RecieptOCR receiptData = new(imagePath, tesseractPath);
+                string tesseractPath = "./bin/tesseract-compiled-windows/tesseract/tesseract.exe";
+                string tessdataPath = "./bin/tesseract-compiled-windows/tesseract/tessdata";
+                Controllers.ReceiptOCR receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
 
@@ -255,9 +256,15 @@ namespace ConcurSolutionz.Views
             // go back to entry page
             await Shell.Current.GoToAsync($"..?fileName={entryFile.FileName}&existingFile={true}");
         }
-
+        public void SpecifyCoords(object sender, TappedEventArgs e)
+        {
+            Point? coords = e.GetPosition((View)sender);
+            DisplayAlert("DEBUG",coords.ToString(),"OK");
+            var overlay = ReceiptOverlay;
+            overlay.WidthRequest = 200;
+            overlay.HeightRequest = 200;
+            overlay.Margin = new Thickness(50,25);
+        }
 
     }
-
-
 }
