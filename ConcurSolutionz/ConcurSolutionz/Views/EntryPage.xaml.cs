@@ -182,10 +182,35 @@ public partial class EntryPage : ContentPage
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
+        string prevName = EntryName.Text + ".entry";
+
         string result = await DisplayPromptAsync("New entry name", "Alphabets and spaces only", keyboard: Keyboard.Text);
-        if (result != null)
+        string newName = result + ".entry";
+
+        string rootDir = Database.Database.Instance.GetSettings().GetRootDirectory();
+
+        if (!string.IsNullOrWhiteSpace(result))
         {
-            EntryName.Text = result;
+            try
+            {
+                string newFilePath = Path.Combine(rootDir, newName);
+                string prevFilePath = Path.Combine(rootDir, prevName); 
+
+                // Rename the selected file/folder in the target directory
+                Directory.Move(prevFilePath, newFilePath);
+
+                // Create a new FileItem with the updated file name and other properties
+                FileItem renamedFile = new FileItem(newName, false);
+                renamedFile.CreationDateTime = DateTime.Now;
+
+                // Handle updating of Metadata
+                Database.Database.RenameEntry(newFilePath);
+                EntryName.Text = result;
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.ToString(), "ok");
+            }
         }
     }
 
