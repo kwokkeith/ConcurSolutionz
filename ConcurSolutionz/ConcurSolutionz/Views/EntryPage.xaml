@@ -139,17 +139,14 @@
                            FontSize="Body"
                            VerticalOptions="Center"
                            Margin="40,0,0,0"/>
-                  
-                    <Entry x:Name="ProjectClubInp"
-                           Placeholder="Project/Club"
-                           Grid.Column="1"
-                           Grid.Row="3"
-                           VerticalOptions="Center"
-                           VerticalTextAlignment="Center"
-                           FontSize="Body"
-                           HeightRequest="50"/>
 
-
+                    <Picker x:Name="ProjectClubInp"
+                            Title="Project/Club"
+                            Grid.Column="1"
+                            Grid.Row="3"
+                            FontSize="Body"
+                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                            HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"/>
 
                     <Label Text="Team Name:"
                            Grid.Column="0"
