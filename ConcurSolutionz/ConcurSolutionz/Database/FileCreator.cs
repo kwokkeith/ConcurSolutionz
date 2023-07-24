@@ -89,20 +89,7 @@ namespace ConcurSolutionz.Database
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
         public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
-            // Clear all receipt images from receipt folder directory
-            string[] filePaths = Directory.GetFiles(receiptFolderPath);
-            foreach (string filePath in filePaths)
-            {
-                File.Delete(filePath);
-            }
-            // Clear Receipt Metadta
-            filePaths = Directory.GetFiles(receiptJSONFolder);
-            foreach (string filePath in filePaths)
-            {
-                File.Delete(filePath);
-            }
-
-
+            List<string> writtenFiles = new List<string>();
 
             foreach ( Record record in entry.GetRecords())
                 {
@@ -119,12 +106,16 @@ namespace ConcurSolutionz.Database
                     // Add receipt images into receipt folder directory
                     CopyFile(imgPath, receiptPath);
 
+                    // Update receipt image path to the new location
+                    receipt.ImgPath = receiptPath;
+                    writtenFiles.Add(receiptPath); 
                     // @@@@@@@@@@@@@@@@@@@@@@
                     // FOR RECEIPT METADATA
                     // Store Receipt Metadata
                     try{
                         // Generate unique metaData filepath name
-                        string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");       
+                        string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");
+                        writtenFiles.Add(receiptMetaDataPath);
 
                         // Serialise record object and write it to the unique metadata location above
                         string json = JsonSerializer.Serialize(receipt);
@@ -134,6 +125,23 @@ namespace ConcurSolutionz.Database
                         Console.WriteLine("Error: " + e);
                     }
                 }
+
+            // Delete any files that were not written to
+            foreach (string file in Directory.GetFiles(receiptFolderPath))
+            {
+                if (!writtenFiles.Contains(file))
+                {
+                    File.Delete(file);
+                }
+            }
+
+            foreach (string file in Directory.GetFiles(receiptJSONFolder))
+            {
+                if (!writtenFiles.Contains(file))
+                {
+                    File.Delete(file);
+                }
+            }
         }
 
         /// <summary>Copies files from a source directory to a destination directory.</summary>
@@ -143,7 +151,7 @@ namespace ConcurSolutionz.Database
         /// This method copies all files from the source directory to the destination directory.
         /// If the destination directory already contains a file with the same name, it will be overwritten.
         /// </remarks>
-        private static void CopyFiles(string sourcePath, string destinationPath){
+        public static void CopyFiles(string sourcePath, string destinationPath){
             string[] files = Directory.GetFiles(sourcePath);
             try{
                 foreach(string file in files)
@@ -160,7 +168,7 @@ namespace ConcurSolutionz.Database
         /// <param name="sourcePath">The path of the file to be copied.</param>
         /// <param name="destinationPath">The path where the file will be copied to.</param>
         /// <remarks>If a file with the same name already exists at the destination path, it will be overwritten.</remarks>
-        private static void CopyFile(string sourcePath, string destinationPath){
+        public static void CopyFile(string sourcePath, string destinationPath){
             try{
                 if (!File.Exists(destinationPath))
                 {

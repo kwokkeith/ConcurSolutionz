@@ -607,6 +607,9 @@ public partial class EntryPage : ContentPage
         Database.Entry.EntryBuilder entryBuilder = new();
         foreach (Database.Receipt receipt in receipts)
         {
+            string receiptFileName = Path.GetFileName(receipt.ImgPath);
+            FileCreator.CopyFile(receipt.ImgPath,Path.Combine(Path.GetTempPath(), receiptFileName));
+            receipt.ImgPath = Path.Combine(Path.GetTempPath(), receiptFileName);
             records.Add(RecordAdaptor.ConvertRecord(receipt));
         }
 

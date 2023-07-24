@@ -182,6 +182,12 @@ namespace ConcurSolutionz.Views
 
                 // Change the image path from result of the user's selected option
                 ImagePath = result.FullPath;
+
+                if (ExistingReceipt != null) // If record exist before
+                {
+                      // Update the receipt image path
+                    ExistingReceipt.ImgPath = ImagePath;
+                }
                 return result;
             }
             catch (Exception ex)
@@ -237,22 +243,43 @@ namespace ConcurSolutionz.Views
 
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
+            Receipt receipt;
+
             if (ExistingReceipt != null) // If record exist before
             {
+                string receiptFileName;
+                receiptFileName = Path.GetFileName(ExistingReceipt.ImgPath);
+
+                FileCreator.CopyFile(ExistingReceipt.ImgPath, Path.Combine(Path.GetTempPath(), receiptFileName));
+
                 entryFile.DelRecordByID(ExistingReceipt.RecordID);
+                try
+                {
+                    receipt = BuildNewReceipt();
+                }
+
+                catch (Exception ex)
+                {
+                    // If error encountered while building receipt (missing fields, etc.)
+                    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+                    return;
+                }
+                receipt.ImgPath = Path.Combine(Path.GetTempPath(), receiptFileName);
             }
 
-            Receipt receipt;
-            try
+            else // if receipt doesnt exist
             {
-                receipt = BuildNewReceipt();
-            }
+                try
+                {
+                    receipt = BuildNewReceipt();
+                }
 
-            catch (Exception ex)
-            {
-                // If error encountered while building receipt (missing fields, etc.)
-                await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
-                return;
+                catch (Exception ex)
+                {
+                    // If error encountered while building receipt (missing fields, etc.)
+                    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+                    return;
+                }
             }
 
             // Add new record/receipt to the entry object
