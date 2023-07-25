@@ -365,8 +365,13 @@ public partial class EntryPage : ContentPage
 
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
     {
-        Database.Database.DeleteDirectoryByFilePath(filePath);
-        await Shell.Current.GoToAsync(nameof(MainPage));
+        bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Entry {Path.GetFileNameWithoutExtension(entry.FileName)}?", "Yes", "No");
+
+        if (answer)
+        {
+            Database.Database.DeleteDirectoryByFilePath(filePath);
+            await Shell.Current.GoToAsync(nameof(MainPage));
+        }
     }
 
 
@@ -404,14 +409,18 @@ public partial class EntryPage : ContentPage
         Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
         if (selectedReceipt != null)
         {
-            // Remove receipt from collection
-            ReceiptView.Remove(selectedReceipt);
-            receipts.Remove(receipt);
-            entry.DelRecord(rec);
+            bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Record {receipt.RecordID + 1}?", "Yes", "No");
 
-            // Update remaining budget and remove from entry
-            PopulateEntry();
+            if (answer)
+            {
+                // Remove receipt from collection
+                ReceiptView.Remove(selectedReceipt);
+                receipts.Remove(receipt);
+                entry.DelRecord(rec);
 
+                // Update remaining budget and remove from entry
+                PopulateEntry();
+            }
 
         }
     }
