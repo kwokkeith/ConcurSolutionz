@@ -51,9 +51,10 @@ namespace ConcurSolutionz.Database
             if (!Directory.Exists(entry.FilePath)){
                 // Create base entry folder
                 Directory.CreateDirectory(entry.FilePath);
-
-                // FolderPath for Receipt inside entry
-                string receiptFolderPath = Utilities.ConstReceiptsFdrPath(entry.FilePath);
+                try
+                {
+                    // FolderPath for Receipt inside entry
+                    string receiptFolderPath = Utilities.ConstReceiptsFdrPath(entry.FilePath);
                 
                 // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
                 string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
@@ -64,7 +65,7 @@ namespace ConcurSolutionz.Database
 
                 // Create Entry MetaData
                 string json;
-                try{
+
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
                     json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entry.MetaData));
                     
@@ -92,39 +93,39 @@ namespace ConcurSolutionz.Database
             List<string> writtenFiles = new List<string>();
 
             foreach ( Record record in entry.GetRecords())
-                {
-                    // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
-                    Receipt receipt = RecordAdaptor.ConvertRecord(record);
+            {
+                // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
+                Receipt receipt = RecordAdaptor.ConvertRecord(record);
 
-                    // @@@@@@@@@@@@@@@@@@@@@@
-                    // FOR RECEIPT PICTURE 
-                    // Store pictures
-                    string imgPath = receipt.ImgPath;
-                    string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
+                // @@@@@@@@@@@@@@@@@@@@@@
+                // FOR RECEIPT PICTURE 
+                // Store pictures
+                string imgPath = receipt.ImgPath;
+                string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
 
 
-                    // Add receipt images into receipt folder directory
-                    CopyFile(imgPath, receiptPath);
+                // Add receipt images into receipt folder directory
+                CopyFile(imgPath, receiptPath);
 
-                    // Update receipt image path to the new location
-                    receipt.ImgPath = receiptPath;
-                    writtenFiles.Add(receiptPath); 
-                    // @@@@@@@@@@@@@@@@@@@@@@
-                    // FOR RECEIPT METADATA
-                    // Store Receipt Metadata
-                    try{
-                        // Generate unique metaData filepath name
-                        string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");
-                        writtenFiles.Add(receiptMetaDataPath);
+                // Update receipt image path to the new location
+                receipt.ImgPath = receiptPath;
+                writtenFiles.Add(receiptPath); 
+                // @@@@@@@@@@@@@@@@@@@@@@
+                // FOR RECEIPT METADATA
+                // Store Receipt Metadata
+                try{
+                    // Generate unique metaData filepath name
+                    string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");
+                    writtenFiles.Add(receiptMetaDataPath);
 
-                        // Serialise record object and write it to the unique metadata location above
-                        string json = JsonSerializer.Serialize(receipt);
-                        File.WriteAllText(receiptMetaDataPath, json);
-                    }
-                    catch (Exception e){
-                        Console.WriteLine("Error: " + e);
-                    }
+                    // Serialise record object and write it to the unique metadata location above
+                    string json = JsonSerializer.Serialize(receipt);
+                    File.WriteAllText(receiptMetaDataPath, json);
                 }
+                catch (Exception e){
+                    Console.WriteLine("Error: " + e);
+                }
+            }
 
             // Delete any files that were not written to
             foreach (string file in Directory.GetFiles(receiptFolderPath))
