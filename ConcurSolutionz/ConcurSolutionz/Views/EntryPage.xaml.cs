@@ -342,27 +342,25 @@ public partial class EntryPage : ContentPage
     // Click event handler for editing record
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
-        try
+        if (recordCollection.SelectedItem == null)
         {
-            Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
-            Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
-
-            FileDB file = entry;
-            var imagePath = receipt.ImgPath;
-
-
-            var navigationParameter = new Dictionary<string, object>
-                    {
-                        {"file", file },
-                        {"imagePath", imagePath },
-                        {"existingReceipt", receipt }
-                    };
-
-            await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
-        } catch
-        {
-            await DisplayAlert("Error", "Please select a record", "OK");
+            await DisplayAlert("Error", "Please select a record!", "OK");
         }
+        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
+        FileDB file = entry;
+        var imagePath = receipt.ImgPath;
+
+
+        var navigationParameter = new Dictionary<string, object>
+                {
+                    {"file", file },
+                    {"imagePath", imagePath },
+                    {"existingReceipt", receipt }
+                };
+
+        await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
@@ -395,8 +393,12 @@ public partial class EntryPage : ContentPage
 
     }
 
-    private void DeleteRecord_Clicked(object sender, EventArgs e)
+    private async void DeleteRecord_Clicked(object sender, EventArgs e)
     {
+        if (recordCollection.SelectedItem == null)
+        {
+            await DisplayAlert("Error", "Please select a record!", "OK");
+        }
         Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
         Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
         Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
