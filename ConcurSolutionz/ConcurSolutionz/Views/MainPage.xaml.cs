@@ -286,21 +286,27 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void OnDeleteClicked(object sender, EventArgs e)
+    private async void OnDeleteClicked(object sender, EventArgs e)
     {
         // Handle Delete button click
         if (SelectedFile != null)
         {
-            try
+            bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete the following {(SelectedFile.IsFolder ? "Folder": "Entry")}: {Path.GetFileNameWithoutExtension(SelectedFile.FileName)}?", "Yes", "No");
+
+            if (answer)
             {
-                Database.Database.DeleteDirectoryByFilePath(Path.Combine(currentDirectoryPath,SelectedFile.FileName));
-                SelectedFile = null;
-                RefreshPage();
+                try
+                {
+                    Database.Database.DeleteDirectoryByFilePath(Path.Combine(currentDirectoryPath, SelectedFile.FileName));
+                    SelectedFile = null;
+                    RefreshPage();
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
+                }
             }
-            catch (Exception ex)
-            {
-                DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
-            }
+
         }
     }
 
