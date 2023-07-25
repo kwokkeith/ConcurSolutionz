@@ -56,15 +56,15 @@ namespace ConcurSolutionz.Database
                     // FolderPath for Receipt inside entry
                     string receiptFolderPath = Utilities.ConstReceiptsFdrPath(entry.FilePath);
                 
-                // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
-                string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
+                    // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
+                    string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
 
-                // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
-//                Directory.CreateDirectory(receiptFolderPath);
-                Directory.CreateDirectory(receiptJSONFolder);
+                    // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
+    //                Directory.CreateDirectory(receiptFolderPath);
+                    Directory.CreateDirectory(receiptJSONFolder);
 
-                // Create Entry MetaData
-                string json;
+                    // Create Entry MetaData
+                    string json;
 
                     string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(entry.FilePath);
                     json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entry.MetaData));
