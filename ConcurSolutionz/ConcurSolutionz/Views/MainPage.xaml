@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ConcurSolutionz.Views.MainPage"
+             xmlns:local="clr-namespace:ConcurSolutionz.Views"
              Title="File management">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
@@ -12,17 +13,17 @@
         <StackLayout Padding="10">
             <Label x:Name="WorkingDirectory"/>
             <HorizontalStackLayout Margin="0,20,0,20" HorizontalOptions="Center">
-                <Button Text="New Folder" Clicked="OnNewFolderClicked" />
+                <Button ImageSource="back.png" WidthRequest="100" HeightRequest="16" Text="Back" Clicked="OnBackClicked" />
+                <Button ImageSource="folder.png" WidthRequest="140" HeightRequest="16" Text="New Folder" Clicked="OnNewFolderClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
-                <Button Text="New Entry" Clicked="OnNewEntryClicked" />
+                <Button ImageSource="entry.png" WidthRequest="140" HeightRequest="16" Text="New Entry" Clicked="OnNewEntryClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
-                <Button Text="Rename" Clicked="OnRenameClicked" />
+                <Button ImageSource="rename.png" WidthRequest="140" HeightRequest="16" Text="Rename" Clicked="OnRenameClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
-                <Button Text="Delete" Clicked="OnDeleteClicked" />
+                <Button ImageSource="delete.png" WidthRequest="140" HeightRequest="16" Text="Delete" Clicked="OnDeleteClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
-                <Button Text="Sort" Clicked="OnSortClicked" />
+                <Button ImageSource="sort.png" WidthRequest="140" HeightRequest="16" Text="Sort" Clicked="OnSortClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" />
-                <Button Text="Back" Clicked="OnBackClicked" />
                 <SearchBar x:Name="searchBar" 
                 SearchButtonPressed="OnSearchButtonClicked"
                 TextChanged="OnSearchTextChanged" />
@@ -46,7 +47,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Image Source="{Binding Icon}" WidthRequest="24" HeightRequest="24" />
-                                <Label Grid.Column="1" Text="{Binding FileName}" Margin="10,0,0,0" />
+                                <Label Grid.Column="1" Text="{Binding FileName, Converter={StaticResource RemoveExtensionConverter}}" Margin="10,0,0,0" />
                                 <Label Grid.Column="2" Text="{Binding CreationDateTime, StringFormat='{0:dd MMM yyyy} at {0:HH:mm}'}"
                                     HorizontalOptions="EndAndExpand" FontSize="12" TextColor="Gray" />
                             </Grid>
@@ -56,4 +57,9 @@
             </ListView>
         </StackLayout>
     </ContentPage.Content>
+
+    <ContentPage.Resources>
+        <local:RemoveExtensionConverter x:Key="RemoveExtensionConverter" />
+    </ContentPage.Resources>
+    
 </ContentPage>

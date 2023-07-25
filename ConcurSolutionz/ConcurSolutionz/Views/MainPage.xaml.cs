@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views;
@@ -15,17 +16,17 @@ public class FileItem
 
     public FileItem(string fileName, bool isFolder)
     {
-        FileName = fileName;
         IsFolder = isFolder;
         if (isFolder)
         {
-            //Icon = "file_icon.png";
+            Icon = "folder.png";
             Children = new ObservableCollection<FileItem>();
         }
         else
         {
-            //Icon = "doc_icon.png";
+            Icon = "entry.png";
         }
+        FileName = fileName;
         CreationDateTime = DateTime.Now;
     }
 }
@@ -76,14 +77,20 @@ public partial class MainPage : ContentPage
             bool isFolder;
 
             if (fileName.EndsWith(".fdr"))
+            {
                 isFolder = true;
+                // Create FileItem instance
+                Files.Add(new FileItem(fileName, isFolder));
+
+            }
             else
             {
                 isFolder = false;
+                // Create FileItem instance
+                Files.Add(new FileItem(fileName, isFolder));
+
             }
 
-            // Create FileItem instance
-            Files.Add(new FileItem(fileName, isFolder));
         }
     }
 
@@ -361,6 +368,20 @@ public partial class MainPage : ContentPage
         Files.Clear(); // Remove all files in the Files list
         LoadFilesFromDB(); // Reload from current working directory
         SelectedFile = null; // deselect selected files
+    }
+}
+// UTILITIES
+public class RemoveExtensionConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        string fileName = (string)value;
+        return Path.GetFileNameWithoutExtension(fileName);
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }
 
