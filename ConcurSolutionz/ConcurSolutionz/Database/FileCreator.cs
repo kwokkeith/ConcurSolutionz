@@ -69,13 +69,13 @@ namespace ConcurSolutionz.Database
                     json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entry.MetaData));
                     
                     File.WriteAllText(entryMetaDataPath, json);
+                    PopulateReceiptFolder(entry, receiptFolderPath, receiptJSONFolder);
+
+                    Console.WriteLine(entry.FileName + " Folder Created");
                 }
                 catch (Exception e){
                     Console.WriteLine("Error: " + e);
                 }
-                PopulateReceiptFolder(entry, receiptFolderPath, receiptJSONFolder);
-
-                Console.WriteLine(entry.FileName + " Folder Created");
             }
         }
 
