@@ -24,7 +24,10 @@ public partial class EntryPage : ContentPage
     Database.Entry entry;
     Database.Receipt selectedReceipt;
 
+    // Calculate budget
     private decimal entryBudget { get; set; }
+    private decimal currentExpense { get; set; }
+    private decimal remainingBudget { get; set; }
 
     // Dictionary containing the names of projects/clubs, along with their codes
     private IReadOnlyDictionary<string, string> ClubDict { get; }
@@ -262,9 +265,10 @@ public partial class EntryPage : ContentPage
         BudgetEditor.Text = md.EntryBudget.ToString();
 
         // Entry Budget
-        decimal entryBudget = md.EntryBudget;
-        decimal currentExpense = 0;
-        decimal remainingBudget;
+        entryBudget = md.EntryBudget;
+        currentExpense = 0;
+        //decimal currentExpense = 0;
+        //decimal remainingBudget;
 
         // Clear ReceiptView Collection
         ReceiptView.Clear();
@@ -294,22 +298,37 @@ public partial class EntryPage : ContentPage
 
             ReceiptView.Add(modelReceipt);
         }
-        
-        // Calculate remaining Budget
-        remainingBudget = entryBudget - currentExpense;
 
-        // Populate the UI for entry budget
-        CurrentExpenseInput.Text = currentExpense.ToString();
-        RemainingBudget.Text = remainingBudget.ToString();
-
+        CalculateBudget();
         BuildMDPopulate();
     }
 
-    private void OnBudgetCompleted(object sender, EventArgs e)
+    private async void OnBudgetCompleted(object sender, EventArgs e)
     {
-        string budget = ((Editor)sender).Text;
+        string entryBudgetString = BudgetEditor.Text;
+        // change entryBudgetString to decimal datatype
+        if (!Decimal.TryParse(entryBudgetString, out decimal budget))
+        {
+            budgetWarning.IsVisible = true;
+            return;
+        }
+        budgetWarning.IsVisible = false;
+        entryBudget = budget;
+        CalculateBudget();
+    }
 
-        
+    private void CalculateBudget()
+    {
+        remainingBudget = entryBudget - currentExpense;
+        CurrentExpenseInput.Text = currentExpense.ToString();
+        RemainingBudget.Text = remainingBudget.ToString();
+        if (remainingBudget < 0)
+        {
+            RemainingBudget.TextColor = Colors.Red;
+        } else
+        {
+            RemainingBudget.TextColor = Colors.Black;
+        }
     }
 
 
