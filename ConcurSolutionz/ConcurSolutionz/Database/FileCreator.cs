@@ -60,7 +60,7 @@ namespace ConcurSolutionz.Database
                     string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
 
                     // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
-    //                Directory.CreateDirectory(receiptFolderPath);
+                    //Directory.CreateDirectory(receiptFolderPath);
                     Directory.CreateDirectory(receiptJSONFolder);
 
                     // Create Entry MetaData
@@ -94,6 +94,7 @@ namespace ConcurSolutionz.Database
 
             foreach ( Record record in entry.GetRecords())
             {
+
                 // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
                 Receipt receipt = RecordAdaptor.ConvertRecord(record);
 
@@ -124,6 +125,7 @@ namespace ConcurSolutionz.Database
                 }
                 catch (Exception e){
                     Console.WriteLine("Error: " + e);
+                    throw e;
                 }
             }
 
@@ -162,6 +164,7 @@ namespace ConcurSolutionz.Database
             }
             catch(Exception e){
                 Console.WriteLine(e.ToString());
+                throw e;
             }
         }
 
@@ -179,6 +182,7 @@ namespace ConcurSolutionz.Database
             }
             catch(Exception e){
                 Console.WriteLine(e.ToString());
+                throw e;
             }
         }
     }

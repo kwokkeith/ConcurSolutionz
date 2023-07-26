@@ -216,7 +216,14 @@
                     VerticalOptions="Center"
                     VerticalTextAlignment="Center"
                     FontSize="Body"
-                    Completed="OnBudgetCompleted"/>
+                    MaxLength="10"
+                    TextChanged="OnBudgetCompleted"/>
+
+                <Image Source="warning.png"
+                       x:Name="budgetWarning"
+                       Margin="10"
+                       WidthRequest="25"
+                       IsVisible="false"/>
 
 
             </HorizontalStackLayout>

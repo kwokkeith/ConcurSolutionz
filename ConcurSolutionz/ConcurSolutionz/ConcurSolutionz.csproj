@@ -92,6 +92,7 @@
 	  <None Remove="Resources\Images\icons8-edit-32.png" />
 	  <None Remove="Resources\Images\icons8-edit-64.png" />
 	  <None Remove="Resources\Images\check-mark.png" />
+	  <None Remove="Resources\Images\warning.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\ketty.jpeg" />
@@ -104,5 +105,8 @@
 	  <MauiImage Include="Resources\Images\folder.png" Resize="false" />
 	  <MauiImage Include="Resources\Images\rename.png" Resize="false" />
 	  <MauiImage Include="Resources\Images\sort.png" Resize="false" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Resources\Images\warning.png" />
 	</ItemGroup>
 </Project>
