@@ -24,6 +24,8 @@ public partial class EntryPage : ContentPage
     Database.Entry entry;
     Database.Receipt selectedReceipt;
 
+    private decimal entryBudget { get; set; }
+
     // Dictionary containing the names of projects/clubs, along with their codes
     private IReadOnlyDictionary<string, string> ClubDict { get; }
 
@@ -301,6 +303,13 @@ public partial class EntryPage : ContentPage
         RemainingBudget.Text = remainingBudget.ToString();
 
         BuildMDPopulate();
+    }
+
+    private void OnBudgetCompleted(object sender, EventArgs e)
+    {
+        string budget = ((Editor)sender).Text;
+
+        
     }
 
 

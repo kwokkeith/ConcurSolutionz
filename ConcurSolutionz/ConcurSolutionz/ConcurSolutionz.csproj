@@ -45,6 +45,12 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <CreatePackage>true</CreatePackage>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\back.png" />
+	</ItemGroup>
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -61,6 +67,10 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiIcon Include="Resources\Images\back.png">
+		  <BaseSize>8</BaseSize>
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</MauiIcon>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -84,10 +94,15 @@
 	  <None Remove="Resources\Images\check-mark.png" />
 	</ItemGroup>
 	<ItemGroup>
-	  <BundleResource Include="Resources\Images\ketty.jpeg" />
-	  <BundleResource Include="Resources\Images\receipt.jpeg" />
-	  <BundleResource Include="Resources\Images\receipt.jpeg" />
-	  <BundleResource Include="Resources\Images\edit_32.png" />
-	  <BundleResource Include="Resources\Images\edit_64.png" />
+	  <MauiImage Include="Resources\Images\ketty.jpeg" />
+	  <MauiImage Include="Resources\Images\receipt.jpeg" />
+	  <MauiImage Include="Resources\Images\receipt.jpeg" />
+	  <MauiImage Include="Resources\Images\edit_32.png" Resize="true" />
+	  <MauiImage Include="Resources\Images\edit_64.png" />
+	  <MauiImage Include="Resources\Images\delete.png" Resize="false" />
+	  <MauiImage Include="Resources\Images\entry.png" Resize="false" />
+	  <MauiImage Include="Resources\Images\folder.png" Resize="false" />
+	  <MauiImage Include="Resources\Images\rename.png" Resize="false" />
+	  <MauiImage Include="Resources\Images\sort.png" Resize="false" />
 	</ItemGroup>
 </Project>

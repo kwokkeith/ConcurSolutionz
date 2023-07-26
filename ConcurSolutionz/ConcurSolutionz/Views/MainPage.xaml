@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              x:Class="ConcurSolutionz.Views.MainPage"
              xmlns:local="clr-namespace:ConcurSolutionz.Views"
              Title="File management">
@@ -11,23 +12,21 @@
 
     <ContentPage.Content>
         <StackLayout Padding="10">
-            <HorizontalStackLayout Margin="0,-10,0,10" HorizontalOptions="Center">
-                <SearchBar x:Name="searchBar" SearchButtonPressed="OnSearchButtonClicked" TextChanged="OnSearchTextChanged" Placeholder="Search" BackgroundColor="NavajoWhite" WidthRequest="400"/>
-            </HorizontalStackLayout>
+            <SearchBar x:Name="searchBar" Margin="0,-10,0,0" SearchButtonPressed="OnSearchButtonClicked" TextChanged="OnSearchTextChanged" Placeholder="Search" BackgroundColor="NavajoWhite" WidthRequest="400" ios:SearchBar.SearchBarStyle="Prominent"/>
 
             <Label x:Name="WorkingDirectory"/>
-            <HorizontalStackLayout Margin="0,-20,0,20" HorizontalOptions="Center">
-                <Button ImageSource="back.png" WidthRequest="100" HeightRequest="16" Text="Back" Clicked="OnBackClicked" />
+            <HorizontalStackLayout Margin="0,5,0,5" HorizontalOptions="Center">
+                <Button ImageSource="back.png"  MaximumWidthRequest="140" Text="Back" Clicked="OnBackClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" Color="White"/>
-                <Button ImageSource="folder.png" WidthRequest="140" HeightRequest="16" Text="New Folder" Clicked="OnNewFolderClicked" />
+                <Button ImageSource="folder.png" WidthRequest="140" HeightRequest="16" Text="New Folder" Clicked="OnNewFolderClicked"/>
                 <BoxView WidthRequest="10" HeightRequest="1" Color="White"/>
                 <Button ImageSource="entry.png" WidthRequest="140" HeightRequest="16" Text="New Entry" Clicked="OnNewEntryClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" Color="White"/>
-                <Button ImageSource="rename.png" WidthRequest="120" HeightRequest="16" Text="Rename" Clicked="OnRenameClicked" />
+                <Button ImageSource="rename.png" WidthRequest="140" HeightRequest="16" Text="Rename" Clicked="OnRenameClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" Color="White"/>
-                <Button ImageSource="delete.png" WidthRequest="120" HeightRequest="16" Text="Delete" Clicked="OnDeleteClicked" />
+                <Button ImageSource="delete.png" WidthRequest="140" HeightRequest="16" Text="Delete" Clicked="OnDeleteClicked" />
                 <BoxView WidthRequest="10" HeightRequest="1" Color="White"/>
-                <Button ImageSource="sort.png" WidthRequest="110" HeightRequest="16" Text="Sort" Clicked="OnSortClicked" />
+                <Button ImageSource="sort.png" WidthRequest="140" HeightRequest="16" Text="Sort" Clicked="OnSortClicked" />
             </HorizontalStackLayout>
 
             <!-- File list placeholder -->
