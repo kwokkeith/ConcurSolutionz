@@ -125,7 +125,7 @@ namespace ConcurSolutionz.Database
                 }
                 catch (Exception e){
                     Console.WriteLine("Error: " + e);
-                    throw new Exception(e);
+                    throw e;
                 }
             }
 
@@ -164,6 +164,7 @@ namespace ConcurSolutionz.Database
             }
             catch(Exception e){
                 Console.WriteLine(e.ToString());
+                throw e;
             }
         }
 
@@ -181,6 +182,7 @@ namespace ConcurSolutionz.Database
             }
             catch(Exception e){
                 Console.WriteLine(e.ToString());
+                throw e;
             }
         }
     }
