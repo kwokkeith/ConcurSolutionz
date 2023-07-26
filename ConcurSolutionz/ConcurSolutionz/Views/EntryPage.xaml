@@ -215,7 +215,8 @@
                     HorizontalTextAlignment="Start"
                     VerticalOptions="Center"
                     VerticalTextAlignment="Center"
-                    FontSize="Body"/>
+                    FontSize="Body"
+                    Completed="OnBudgetCompleted"/>
 
 
             </HorizontalStackLayout>

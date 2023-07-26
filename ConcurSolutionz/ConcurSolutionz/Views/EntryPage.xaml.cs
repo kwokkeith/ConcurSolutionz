@@ -24,6 +24,8 @@ public partial class EntryPage : ContentPage
     Database.Entry entry;
     Database.Receipt selectedReceipt;
 
+    private decimal entryBudget { get; set; }
+
     // Dictionary containing the names of projects/clubs, along with their codes
     private IReadOnlyDictionary<string, string> ClubDict { get; }
 
@@ -303,6 +305,13 @@ public partial class EntryPage : ContentPage
         BuildMDPopulate();
     }
 
+    private void OnBudgetCompleted(object sender, EventArgs e)
+    {
+        string budget = ((Editor)sender).Text;
+
+        
+    }
+
 
     // Click event handler for editing entry name
     private async void EditEntryName_Clicked(object sender, EventArgs e)
@@ -342,27 +351,25 @@ public partial class EntryPage : ContentPage
     // Click event handler for editing record
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
-        try
+        if (recordCollection.SelectedItem == null)
         {
-            Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
-            Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
-
-            FileDB file = entry;
-            var imagePath = receipt.ImgPath;
-
-
-            var navigationParameter = new Dictionary<string, object>
-                    {
-                        {"file", file },
-                        {"imagePath", imagePath },
-                        {"existingReceipt", receipt }
-                    };
-
-            await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
-        } catch
-        {
-            await DisplayAlert("Error", "Please select a record", "OK");
+            await DisplayAlert("Error", "Please select a record!", "OK");
         }
+        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
+        FileDB file = entry;
+        var imagePath = receipt.ImgPath;
+
+
+        var navigationParameter = new Dictionary<string, object>
+                {
+                    {"file", file },
+                    {"imagePath", imagePath },
+                    {"existingReceipt", receipt }
+                };
+
+        await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
@@ -402,6 +409,10 @@ public partial class EntryPage : ContentPage
 
     private async void DeleteRecord_Clicked(object sender, EventArgs e)
     {
+        if (recordCollection.SelectedItem == null)
+        {
+            await DisplayAlert("Error", "Please select a record!", "OK");
+        }
         Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
         Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
         Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
