@@ -311,7 +311,8 @@
                         x:Name="DeleteRecordButton"/>
             </Grid>
 
-            <Grid VerticalOptions="FillAndExpand">
+            <Grid VerticalOptions="FillAndExpand"
+                  x:Name="AllRecords">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>

@@ -53,6 +53,7 @@ public partial class EntryPage : ContentPage
                 TransferButton.IsVisible = true;
                 DeleteEntryButton.IsVisible = true;
                 EditEntryNameButton.IsVisible = true;
+                AllRecords.IsVisible = true;
             }
         }
     }
@@ -123,6 +124,7 @@ public partial class EntryPage : ContentPage
         TransferButton.IsVisible = false;
         DeleteEntryButton.IsVisible = false;
         EditEntryNameButton.IsVisible = false;
+        AllRecords.IsVisible = false;
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -591,7 +593,12 @@ public partial class EntryPage : ContentPage
         string claimName = ClaimNameInp.Text;
         DateTime claimDate = ClaimDateInp.Date;
         string purpose = Purpose.Text;
-        string projectClub = ClubDict[(string)ProjectClubInp.SelectedItem];
+        string projectClub = null;
+        if (ProjectClubInp.SelectedIndex > -1)
+        {
+            projectClub = ClubDict[(string)ProjectClubInp.SelectedItem];
+
+        }
         string teamName = TeamNameInp.Text;
         //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
@@ -624,14 +631,14 @@ public partial class EntryPage : ContentPage
                 .SetProjectClub(projectClub)
                 .Build();
 
-            //// enable the disabled buttons
-            //AddRecordButton.IsVisible = true;
-            //EditRecordButton.IsVisible = true;
-            //DeleteRecordButton.IsVisible = true;
-            //TransferButton.IsVisible = false;
-            //DeleteEntryButton.IsVisible = false;
-            //EditEntryNameButton.IsVisible = false;
-
+            // enable the disabled buttons
+            AddRecordButton.IsVisible = true;
+            EditRecordButton.IsVisible = true;
+            DeleteRecordButton.IsVisible = true;
+            TransferButton.IsVisible = true;
+            DeleteEntryButton.IsVisible = true;
+            EditEntryNameButton.IsVisible = true;
+            AllRecords.IsVisible = true;
 
             Show_Message();
             SetMetadataButton.IsEnabled = false;
