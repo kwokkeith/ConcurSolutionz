@@ -50,8 +50,9 @@ public partial class EntryPage : ContentPage
                 AddRecordButton.IsVisible = true;
                 EditRecordButton.IsVisible = true;
                 DeleteRecordButton.IsVisible = true;
-                UpdateMetadataButton.IsVisible = true;
-                SetMetadataButton.IsVisible = false;
+                TransferButton.IsVisible = true;
+                DeleteEntryButton.IsVisible = true;
+                EditEntryNameButton.IsVisible = true;
             }
         }
     }
@@ -116,11 +117,12 @@ public partial class EntryPage : ContentPage
         //            DeleteRecordButton.IsEnabled = false;
 
         //        }
-        SetMetadataButton.IsVisible = true;
         AddRecordButton.IsVisible = false;
         EditRecordButton.IsVisible = false;
         DeleteRecordButton.IsVisible = false;
-        UpdateMetadataButton.IsVisible = false;
+        TransferButton.IsVisible = false;
+        DeleteEntryButton.IsVisible = false;
+        EditEntryNameButton.IsVisible = false;
 
         // Set the BindingContext of the CollectionView
         recordCollection.BindingContext = this;
@@ -303,7 +305,7 @@ public partial class EntryPage : ContentPage
         BuildMDPopulate();
     }
 
-    private async void OnBudgetCompleted(object sender, EventArgs e)
+    private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;
         // change entryBudgetString to decimal datatype
@@ -315,6 +317,7 @@ public partial class EntryPage : ContentPage
         budgetWarning.IsVisible = false;
         entryBudget = budget;
         CalculateBudget();
+        OnEditorsTextChanged(sender, e);
     }
 
     private void CalculateBudget()
@@ -328,6 +331,14 @@ public partial class EntryPage : ContentPage
         } else
         {
             RemainingBudget.TextColor = Colors.Black;
+        }
+    }
+
+    private void OnEditorsTextChanged(object sender, EventArgs e)
+    {
+        if(SetMetadataButton.IsEnabled == false)
+        {
+            SetMetadataButton.IsEnabled = true;
         }
     }
 
@@ -613,14 +624,17 @@ public partial class EntryPage : ContentPage
                 .SetProjectClub(projectClub)
                 .Build();
 
-            // enable the disabled buttons
-            AddRecordButton.IsVisible = true;
-            EditRecordButton.IsVisible = true;
-            DeleteRecordButton.IsVisible = true;
-            UpdateMetadataButton.IsVisible = true;
-            SetMetadataButton.IsVisible = false;
+            //// enable the disabled buttons
+            //AddRecordButton.IsVisible = true;
+            //EditRecordButton.IsVisible = true;
+            //DeleteRecordButton.IsVisible = true;
+            //TransferButton.IsVisible = false;
+            //DeleteEntryButton.IsVisible = false;
+            //EditEntryNameButton.IsVisible = false;
+
 
             Show_Message();
+            SetMetadataButton.IsEnabled = false;
             
             //Build entry
             if (md != null)
