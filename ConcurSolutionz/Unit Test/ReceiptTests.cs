@@ -78,6 +78,7 @@ namespace Unit_Test
         [InlineData("Ukraine, Hryvnia", "23499.14", "0.0466524385", "1096.29")]
         [InlineData("China, Yuan Renminbi", "43343.39", "0.20892", "9055.30")]
         [InlineData("Malaysia, Ringgit", "39383.43", "0.31697", "12483.37")]
+        [InlineData("Malaysia, Ringgit", "0", "0.31697", "0")]
         public void SetCurrencyAmountSGD_ConvertedCurrencyShouldCalculate(
             string Currency, string ReqAmount,
             string ConversionRate, string Expected)
@@ -196,6 +197,7 @@ namespace Unit_Test
         [InlineData("120.34")]
         [InlineData("200.4")]
         [InlineData("100000002.3")]
+        [InlineData("0")]
         public void ReceiptSetReqAmount_ShouldReturnNewSetValue(String ReqAmount)
         {
             // Arrange
