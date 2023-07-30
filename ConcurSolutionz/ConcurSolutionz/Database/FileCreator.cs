@@ -99,7 +99,6 @@ namespace ConcurSolutionz.Database
                 Receipt receipt = RecordAdaptor.ConvertRecord(record);
 
                 // @@@@@@@@@@@@@@@@@@@@@@
-                // FOR RECEIPT PICTURE 
                 // Store pictures
                 string imgPath = receipt.ImgPath;
                 string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
@@ -114,8 +113,8 @@ namespace ConcurSolutionz.Database
                 // Update receipt image path to the new location
                 receipt.ImgPath = receiptPath;
                 writtenFiles.Add(receiptPath); 
+
                 // @@@@@@@@@@@@@@@@@@@@@@
-                // FOR RECEIPT METADATA
                 // Store Receipt Metadata
                 try{
                     // Generate unique metaData filepath name

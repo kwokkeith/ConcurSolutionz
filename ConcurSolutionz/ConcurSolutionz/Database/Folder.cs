@@ -30,7 +30,6 @@ namespace ConcurSolutionz.Database
         }
 
         private void StepIntoFolder(){
-            // TODO: Step into folder
             try{
                 Database.Instance.Setwd(FilePath);
 

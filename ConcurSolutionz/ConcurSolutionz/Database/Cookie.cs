@@ -44,6 +44,7 @@ namespace ConcurSolutionz.Database
 
                 public override Cookie Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
                 {
+                    // Manually override parsing of JSON and return a Cookie object
                     JsonDocument doc = JsonDocument.ParseValue(ref reader); 
                     string expiryDate = doc.RootElement.GetProperty("ExpiryDate").GetString();
                     string bmSz = doc.RootElement.GetProperty("bm_sz").GetString();

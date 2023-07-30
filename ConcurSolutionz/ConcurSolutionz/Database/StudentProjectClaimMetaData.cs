@@ -52,6 +52,7 @@ namespace ConcurSolutionz.Database
 
             public override StudentProjectClaimMetaData Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
+                // Manually override parsing of JSON and return a StudentProjectClaimMetaData object
                 JsonDocument doc = JsonDocument.ParseValue(ref reader);
                 string entryName = doc.RootElement.GetProperty("EntryName").GetString();
                 decimal entryBudget = doc.RootElement.GetProperty("EntryBudget").GetDecimal();

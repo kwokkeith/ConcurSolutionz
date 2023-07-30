@@ -112,6 +112,7 @@ namespace ConcurSolutionz.Database
 
             public override Receipt Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
+                // Manually override parsing of JSON and return a Receipt object
                 JsonDocument doc = JsonDocument.ParseValue(ref reader);
                 string paymentType = doc.RootElement.GetProperty("PaymentType").GetString();
                 string expenseType = doc.RootElement.GetProperty("ExpenseType").GetString();
@@ -157,33 +158,6 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        /// <summary>Deletes a record and its associated image file.</summary>
-        /// <remarks>
-        /// This method deletes the image file associated with the record, identified by the RecordID.
-        /// If the file is successfully deleted, a success message is printed to the console.
-        /// If the file cannot be deleted, an error message is printed to the console along with the exception message.
-        /// </remarks>
-        //public override void DelRecord()
-        //{
-        //    string fileName = "receipt " + RecordID + ".jpg";
-        //    try
-        //    {
-        //        File.Delete(fileName);
-        //        if (!File.Exists(fileName))
-        //        {
-        //        Console.WriteLine($"File {fileName} successfully deleted");
-        //        }
-        //    }
-
-
-
-        //    catch (IOException e)
-        //    {
-        //        Console.WriteLine($"File {fileName} could not be deleted");
-        //        Console.WriteLine(e.Message);
-        //    }
-        //}
-
         // Builder for the Receipt class
         public class ReceiptBuilder
         {
@@ -202,15 +176,6 @@ namespace ConcurSolutionz.Database
             public bool IsPersonalExpense { get; private set; }
             public string Comment { get; private set; }
             public string ImgPath { get; private set; }
-
-            //Id of the image that should be attached to the expense
-            public string ImgId { get; set; }
-            //Id of the claim as reflected on Concur(rptId)
-            public string Id { get; set; }
-            //ReportId of the claim that this expense(parent) is under
-            public string ReportId { get; set; }
-            //Key of the claim as reflected on Concur(rptKey)
-            public string RPEKey { get; set; }
             public string Currency { get; private set; }
 
             public const string SINGAPORE_CURRENCY = "Singapore, Dollar";

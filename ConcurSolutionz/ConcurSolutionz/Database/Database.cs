@@ -113,7 +113,6 @@ namespace ConcurSolutionz.Database
             // If fileName exist in Files
             if (Directory.Exists(newPath))
             {
-
                 FileSelectByFilePath(newPath);
             }
             else
@@ -139,26 +138,7 @@ namespace ConcurSolutionz.Database
             else if (filePath.EndsWith(".entry"))
             {
                 // If Entry then:
-                // Construct entry filepath for Entry Subsystem
-                // Construct metadata of entry for Entry Subsystem
-                // Construct list of receipt metadata
-
-                string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
-
-                // Extract Entry MetaData from JSON
-                MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
-
-
-                // Extract out receipt from receipt metadata and return a list
-                string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
-                List<Record> records = ExtractRecords(ReceiptMetaDataPath);
-
-                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // TODO: CALL ENTRY SUBSYSTEM
-                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-                
-                
+                // Do Nothing as it is implemented in UI
             }
 
             else
@@ -208,7 +188,6 @@ namespace ConcurSolutionz.Database
         public static void DeleteFileByFilePath(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
-
             File.Delete(filePath);
         }
 
@@ -217,7 +196,6 @@ namespace ConcurSolutionz.Database
         public static void DeleteDirectoryByFilePath(string filePath)
         {
             // Delete a file using Directory (Physical file management system)
-
             Directory.Delete(filePath, true);
         }
 
