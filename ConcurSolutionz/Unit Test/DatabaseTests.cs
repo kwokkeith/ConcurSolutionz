@@ -587,6 +587,7 @@ namespace Unit_Test
         {
 
             // Arrange
+            Thread.Sleep(100);
             string path1 = Path.Combine(dbtestpath, "Folder 9.fdr");
             string path2 = dbtestpath;
 
