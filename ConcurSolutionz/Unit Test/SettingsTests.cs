@@ -1,30 +1,57 @@
 ﻿using System;
+using System.Reflection.PortableExecutable;
+using System.Text.Json;
 using ConcurSolutionz.Database;
 
 namespace Unit_Test
 {
-    public class SettingsTests
+    public class SettingsSetup : IDisposable
     {
-        string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-
-        [Fact]
-        public void A_SetRootDirectory_WritesJsonToFile()
+        public SettingsSetup()
         {
-            string settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
+            string testdirectoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests");
 
-            // Arrange
-            if (Directory.Exists("D:/ConcurTests/SettingsTest.fdr"))
+            if (!Directory.Exists(testdirectoryPath))
             {
-                Directory.Delete("D:/ConcurTests/SettingsTest.fdr", true);
+                Directory.CreateDirectory(testdirectoryPath);
             }
-            Directory.CreateDirectory("D:/ConcurTests/SettingsTest.fdr");
+
+            if (Directory.Exists(Path.Combine(testdirectoryPath, "SettingsTest.fdr")))
+            {
+                Directory.Delete(Path.Combine(testdirectoryPath, "SettingsTest.fdr"), true);
+            }
+            Directory.CreateDirectory(Path.Combine(testdirectoryPath, "SettingsTest.fdr"));
+            System.Threading.Thread.Sleep(100);
+        }
+
+        public void Dispose()
+        {
+            // Do not remove: needed by IDisposable
+            // Nothing is done to teardown
+        }
+    }
+
+    public class SettingsTests: IClassFixture<SettingsSetup>
+    {
+        string settingsfilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurSolutionz", "settings.json");
+        string settingstestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "SettingsTest.fdr");
+
+        [Fact, TestPriority(0)]
+        public void SetRootDirectory_WritesJsonToFile()
+        {
+            // Arrange
+            if (Directory.Exists(settingstestPath))
+            {
+                Directory.Delete(settingstestPath, true);
+            }
+            Directory.CreateDirectory(settingstestPath);
 
             if (File.Exists(settingsfilePath))
             { 
                 File.Delete(settingsfilePath);
             }
 
-            string path = "D:/ConcurTests/SettingsTest.fdr";
+            string path = settingstestPath;
             Settings settings = new();
 
             // Act
@@ -32,21 +59,21 @@ namespace Unit_Test
 
             // Assert  
             string json = File.ReadAllText(settingsfilePath);
-            Assert.Contains(path, json);
+            JsonDocument doc = JsonDocument.Parse(json);
+            JsonElement rootDirectory = doc.RootElement.GetProperty("RootDirectory");
+            Assert.Equal(path, rootDirectory.GetString());
         }
 
-        [Fact]
-        public void B_GetRootDirectory_ReturnsSavedRootDirectory()
+        [Fact, TestPriority(1)]
+        public void GetRootDirectory_ReturnsSavedRootDirectory()
         {
-            string settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
-
             if (File.Exists(settingsfilePath))
             {
                 File.Delete(settingsfilePath);
             }
 
             // Arrange
-            string expectedPath = "D:/ConcurTests/SettingsTest.fdr";
+            string expectedPath = settingstestPath;
             Settings settings = new Settings();
             settings.SetRootDirectory(expectedPath);
 
@@ -57,11 +84,9 @@ namespace Unit_Test
             Assert.Equal(expectedPath, actualPath);
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public void GetRootDirectory_ReturnsNull_WhenSettingsFileMissing()
         {
-            string settingsfilePath = Path.Combine(userProfile, "Documents", "ConcurSolutionz", "settings.json");
-
             if (File.Exists(settingsfilePath))
             {
                 File.Delete(settingsfilePath);

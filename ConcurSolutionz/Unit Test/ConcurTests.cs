@@ -34,8 +34,8 @@ namespace Unit_Test
         string concurtestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "ConcurTest.fdr");
         string settingsfilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurSolutionz", "settings.json");
 
-        [Fact]
-        public void A_SetRootDirectory_WritesJsonToFile()
+        [Fact, TestPriority(0)]
+        public void SetRootDirectory_WritesJsonToFile()
         {
             // Arrange
             if (File.Exists(settingsfilePath))
@@ -55,8 +55,8 @@ namespace Unit_Test
             Assert.Equal(concurtestpath, rootDirectory.GetString());
         }
 
-        [Fact]
-        public void B_GetRootDirectory_ReturnsSavedRootDirectory()
+        [Fact, TestPriority(1)]
+        public void GetRootDirectory_ReturnsSavedRootDirectory()
         {
             if (File.Exists(settingsfilePath))
             {
@@ -74,7 +74,7 @@ namespace Unit_Test
             Assert.Equal(concurtestpath, actualPath);
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public void GetRootDirectory_ReturnsNull_WhenSettingsFileMissing()
         {
             if (File.Exists(settingsfilePath))
@@ -91,7 +91,7 @@ namespace Unit_Test
             Assert.Null(path);
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public void SetCookieStoragePath_SetsCookieStoragePath()
         {
             // Arrange

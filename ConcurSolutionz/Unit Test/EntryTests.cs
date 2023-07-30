@@ -42,9 +42,9 @@ namespace Unit_Test
         Receipt receipt2;
         List<ConcurSolutionz.Database.Record> records = new List<ConcurSolutionz.Database.Record>();
         string entrytestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "EntryTest.fdr");
-        string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1000.png");
+        string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1001.png");
 
-        [Fact]
+        [Fact, TestPriority(0)]
         public void BuildEntry_ShouldBuild_UsingBuilder()
         {
             // Arrange
@@ -104,7 +104,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public void BuildEntry_ShouldThrowException_ForMissingAttributes()
         {
             // Arrange
@@ -114,7 +114,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => entryBuilder.Build());
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public void BuildEntry_ShouldThrowException_ForSettingFilePathBeforeFileName()
         {
             // Arrange
@@ -138,7 +138,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public void BuildEntry_ShouldThrowException_ForDuplicateFileName()
         {
             // Arrange
@@ -169,7 +169,7 @@ namespace Unit_Test
         }
 
 
-        [Fact]
+        [Fact, TestPriority(4)]
         public void BuildEntry_ShouldThrowException_ForNullFile()
         {
             // Arrange
@@ -179,7 +179,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => entryBuilder.SetFileName(null));
         }
 
-        [Fact]
+        [Fact, TestPriority(5)]
         public void BuildEntry_ShouldThrowException_ForNullFilePath()
         {
             // Arrange
@@ -190,7 +190,7 @@ namespace Unit_Test
                 .SetFilePath(null));
         }
 
-        [Fact]
+        [Fact, TestPriority(6)]
         public void BuildEntry_ShouldThrowException_ForInvalidFilePath()
         {
             // Arrange
@@ -201,7 +201,7 @@ namespace Unit_Test
                 .SetFilePath(Path.Combine(entrytestpath, "jasbnfjnjwn")));
         }
 
-        [Fact]
+        [Fact, TestPriority(7)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureCreationDate()
         {
             // Arrange
@@ -225,7 +225,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact]
+        [Fact, TestPriority(8)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureLastModifiedDate()
         {
             // Arrange
@@ -249,7 +249,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact]
+        [Fact, TestPriority(9)]
         public void BuildEntry_ShouldReturnFalseFolderVariable()
         {
             // Arrange
@@ -297,7 +297,7 @@ namespace Unit_Test
             Assert.False(entry.Folder);
         }
 
-        [Fact]
+        [Fact, TestPriority(10)]
         public void AssignRecordID_SetsAUniqueRecordID()
         {
             // Arrange
@@ -360,7 +360,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(11)]
         public void AddRecord_AddsRecord_ToListOfRecords()
         {
             // Arrange
@@ -421,7 +421,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(12)]
         public void DelRecord_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -481,7 +481,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords().Count);
         }
 
-        [Fact]
+        [Fact, TestPriority(13)]
         public void DelRecord_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -540,7 +540,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(14)]
         public void DelRecordByID_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -600,7 +600,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords()[0].RecordID);
         }
 
-        [Fact]
+        [Fact, TestPriority(15)]
         public void DelRecordByID_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -661,7 +661,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(16)]
         public void GetRecords_ReturnsListOfRecords()
         {
             // Arrange
@@ -725,7 +725,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact, TestPriority(17)]
         public void GetRecord_ReturnsRecord_WithSpecifiedRecordID()
         {
             // Arrange
@@ -779,13 +779,14 @@ namespace Unit_Test
                 .SetRecords(records)
                 .Build();
             Database.CreateFile(entry);
+
             entry.AddRecord(receipt2);
 
             Assert.Equal(receipt1, entry.GetRecord(0));
             Assert.Equal(receipt2, entry.GetRecord(1));
         }
 
-        [Fact]
+        [Fact, TestPriority(18)]
         public void GetRecord_ReturnsNull_WhenRetrievingNonExistingRecord()
         {
             // Arrange

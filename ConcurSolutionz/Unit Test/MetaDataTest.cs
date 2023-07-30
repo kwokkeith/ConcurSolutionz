@@ -40,7 +40,7 @@ namespace Unit_Test
             string Expected5 = "RaisinStudios";
             Assert.Equal(Expected5, MD.TeamName);
 
-            string Expected6 = "StudentProjectClaimMetaData";
+            string Expected6 = "ConcurSolutionz.Database.StudentProjectClaimMetaData";
             Assert.Equal(Expected6, MD.SubType);
 
             Assert.Equal(MDBuilder.DEFAULT_BUDGET, MD.EntryBudget);
