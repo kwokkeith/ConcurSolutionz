@@ -147,27 +147,6 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        /// <summary>Copies files from a source directory to a destination directory.</summary>
-        /// <param name="sourcePath">The path of the source directory.</param>
-        /// <param name="destinationPath">The path of the destination directory.</param>
-        /// <remarks>
-        /// This method copies all files from the source directory to the destination directory.
-        /// If the destination directory already contains a file with the same name, it will be overwritten.
-        /// </remarks>
-        public static void CopyFiles(string sourcePath, string destinationPath){
-            string[] files = Directory.GetFiles(sourcePath);
-            try{
-                foreach(string file in files)
-                {
-                    File.Copy(sourcePath,destinationPath);  
-                }
-            }
-            catch(Exception e){
-                Console.WriteLine(e.ToString());
-                throw e;
-            }
-        }
-
         /// <summary>Copies a file from the source path to the destination path.</summary>
         /// <param name="sourcePath">The path of the file to be copied.</param>
         /// <param name="destinationPath">The path where the file will be copied to.</param>
