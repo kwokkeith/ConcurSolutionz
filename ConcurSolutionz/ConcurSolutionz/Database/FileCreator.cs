@@ -106,7 +106,10 @@ namespace ConcurSolutionz.Database
 
 
                 // Add receipt images into receipt folder directory
-                CopyFile(imgPath, receiptPath);
+                if (imgPath != receiptPath)
+                {
+                    CopyFile(imgPath, receiptPath);
+                }
 
                 // Update receipt image path to the new location
                 receipt.ImgPath = receiptPath;
