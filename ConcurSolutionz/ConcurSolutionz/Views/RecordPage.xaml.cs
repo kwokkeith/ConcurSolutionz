@@ -13,6 +13,10 @@ namespace ConcurSolutionz.Views
         private string imagePath;
         public Database.Entry entryFile { get; set; }
         private Receipt currentReceipt;
+        private List<View> boundingBoxes = new List<View>();
+        private double imgWidth = 1;
+        private double imgHeight = 1;
+        private Controllers.ReceiptOCR receiptData;
 
         public Receipt ExistingReceipt
         {
@@ -223,11 +227,47 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/tesseract/tesseract";
-                string tessdataPath = "./bin/Debug/net7.0-maccatalyst/maccatalyst-x64/tesseract/tessdata";
-                Controllers.ReceiptOCR receiptData = new(imagePath, tesseractPath, tessdataPath);
+                string tesseractPath = "./bin/tesseract/tesseract.exe";
+                string tessdataPath = "./bin/tesseract/tessdata";
+                receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
+                List<(Point[],string)> textBoxes = receiptData.textBoxes;
+                Grid receiptGrid = ReceiptGrid;
+                imgWidth = receiptData.imgWidth;
+                imgHeight = receiptData.imgHeight;
+
+                double scaleFactor = ReceiptImage.Width/imgWidth;
+
+                foreach (View v in this.boundingBoxes) {
+                    receiptGrid.Remove(v);
+                }
+
+                foreach ((PointCollection pc, string text) in textBoxes) {
+                    Microsoft.Maui.Controls.Shapes.Polygon rect = new Microsoft.Maui.Controls.Shapes.Polygon();
+                    rect.Points = pc;
+                    rect.Stroke = Brush.Red;
+                    rect.HorizontalOptions = LayoutOptions.Start;
+                    rect.IsVisible = true;
+                    rect.AnchorX = 0;
+                    rect.AnchorY = 0;
+                    rect.Scale = scaleFactor;
+                    var gestureRecognizer = new TapGestureRecognizer {
+                                NumberOfTapsRequired = 1,
+                    };
+                    gestureRecognizer.Tapped += (s, e) =>
+                    {
+                        Point coords = (PointF) e.GetPosition((View) s);
+                        receiptData.RefineOCR(coords.X, coords.Y);
+                        reqAmount.Text = receiptData.reqAmount.ToString();
+                        ReceiptNo.Text = receiptData.receiptNumber;
+                        //DisplayAlert("UPDATE",receiptData.reqAmount.ToString() + "\n" + receiptData.receiptNumber ,"OK");
+                    };
+                    rect.GestureRecognizers.Add(gestureRecognizer);
+                    receiptGrid.Add(rect,0,2);
+                    this.boundingBoxes.Add(rect);
+                }
+
 
                 ReceiptNo.Text = ReceiptNumber;
                 reqAmount.Text = ReqAmount;
@@ -291,23 +331,38 @@ namespace ConcurSolutionz.Views
         public void SpecifyCoords(object sender, TappedEventArgs e)
         {
             Point? coords = e.GetPosition((View)sender);
-            //DisplayAlert("DEBUG",coords.ToString(),"OK");
-            //DisplayAlert("DEBUG",ReceiptImage.Parent.Bounds.ToString(),"OK");
-            var overlay = ReceiptOverlay;
-            double rectWidth = 80.0;
-            double rectHeight = 50.0;
-            PointCollection pc = new PointCollection();
-            Point center = (Point) coords;
-            Point topLeft = new Point(center.X - rectWidth/2, center.Y - rectHeight/2);
-            Point topRight = new Point(topLeft.X + rectWidth, topLeft.Y);
-            Point bottomRight = new Point(topRight.X, topRight.Y + rectHeight);
-            Point bottomLeft = new Point(topLeft.X, topLeft.Y + rectHeight);
-            pc.Add(topLeft);
-            pc.Add(topRight);
-            pc.Add(bottomRight);
-            pc.Add(bottomLeft);
-            overlay.Points = pc;
-            overlay.IsVisible = true;
+            DisplayAlert("DEBUG",coords.ToString(),"OK");
+            //var overlay = ReceiptOverlay;
+            //double rectWidth = 80.0;
+            //double rectHeight = 50.0;
+            //PointCollection pc = new PointCollection();
+            //Point center = (Point) coords;
+            //Point topLeft = new Point(center.X - rectWidth/2, center.Y - rectHeight/2);
+            //Point topRight = new Point(topLeft.X + rectWidth, topLeft.Y);
+            //Point bottomRight = new Point(topRight.X, topRight.Y + rectHeight);
+            //Point bottomLeft = new Point(topLeft.X, topLeft.Y + rectHeight);
+            //pc.Add(topLeft);
+            //pc.Add(topRight);
+            //pc.Add(bottomRight);
+            //pc.Add(bottomLeft);
+            //overlay.Points = pc;
+            //overlay.IsVisible = true;
+        }
+        protected override void OnSizeAllocated(double width, double height)
+        {
+                base.OnSizeAllocated(width, height);
+                //DisplayAlert("RESIZED",width.ToString() + height.ToString(),);
+                Grid receiptGrid = ReceiptGrid;
+                if (this.boundingBoxes.Count > 0) {
+                    try {
+                        double scaleFactor = ReceiptImage.Width/imgWidth;
+                        foreach (View rect in this.boundingBoxes) {
+                            rect.Scale = scaleFactor;
+                        }
+                    } catch (Exception ex) {
+                        DisplayAlert("Error", ex.ToString(), "OK");
+                    }
+                }
         }
 
     }

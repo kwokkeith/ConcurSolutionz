@@ -7,14 +7,10 @@
         <VerticalStackLayout>
         <Grid ColumnDefinitions="*,*"
               ColumnSpacing="10">
-            <Grid RowDefinitions="50,50,2*" RowSpacing="10">
+            <Grid RowDefinitions="50,50,2*" RowSpacing="10" x:Name="ReceiptGrid">
                 <Image x:Name="ReceiptImage"
                     VerticalOptions="Start" 
                     Grid.Row="2">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="SpecifyCoords"
-                            NumberOfTapsRequired="1" />
-                    </Image.GestureRecognizers>
                 </Image>
                 <Polygon x:Name="ReceiptOverlay"
                     Stroke="Red"
