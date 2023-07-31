@@ -9,6 +9,10 @@ namespace ConcurSolutionz.Controllers
         public string receiptNumber;
         public Decimal reqAmount;
         public string imgPath;
+        public List<(Point[],string)> textBoxes = new List<(Point[],string)>();
+        public double imgWidth;
+        public double imgHeight;
+
         private string tesseractPath;
         private string tessdataPath;
 
@@ -27,6 +31,24 @@ namespace ConcurSolutionz.Controllers
             this.tesseractPath = tesseractPath;
             this.tessdataPath = tessdataPath;
             OCR();
+        }
+
+        public void RefineOCR(double x, double y) {
+            try {
+                foreach((Point[] pc, string text) in this.textBoxes) {
+                    Point topLeft = pc[0];
+                    Point bottomRight = pc[2];
+                    if (topLeft.X <= x && bottomRight.X >= x && topLeft.Y <= y && bottomRight.Y >= y) {
+                        if (y > this.imgHeight/2) {
+                            this.reqAmount = new Decimal(double.Parse(text));
+                        } else {
+                            this.receiptNumber = text;
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+            }
         }
 
         private void OCR() {
@@ -61,7 +83,8 @@ namespace ConcurSolutionz.Controllers
                 while (output != null) { 
                     string[] row = output.Split(delimiters);
                     float conf = float.Parse(row[colIndex["conf"]]);
-                    if (conf >= accuracyMinPercent) {
+                    string level = row[colIndex["level"]];
+                    if (conf >= accuracyMinPercent || level == "1") {
                         rows.Add(row);
                     }
                     output = reader.ReadLine();
@@ -70,11 +93,37 @@ namespace ConcurSolutionz.Controllers
                 i = 0;
 
                 foreach (string[] row in rows) {
-                    string top = row[colIndex["top"]];
-                    string left = row[colIndex["left"]];
-                    string width = row[colIndex["width"]];
-                    string height = row[colIndex["height"]];
+                    string level = row[colIndex["level"]];
+                    double height = double.Parse(row[colIndex["width"]]);
+                    double width = double.Parse(row[colIndex["height"]]);
+                    if (level == "1") {
+                        this.imgWidth = height;
+                        this.imgHeight = width;
+                    }
+                    double left = double.Parse(row[colIndex["top"]]);
+                    double top = double.Parse(row[colIndex["left"]]);
                     string text = row[colIndex["text"]];
+
+                    if (text != "") {
+                        //PointCollection pc = new PointCollection();
+                        Point[] pc = new Point[4];
+
+                        pc[0] = new Point(top, left);
+                        pc[1] = new Point(top, left+width);
+                        pc[2] = new Point(top+height, left+width);
+                        pc[3] = new Point(top+height, left);
+
+                        //Point topLeft = new Point(top, left);
+                        //Point topRight = new Point(top, left+width);
+                        //Point bottomRight = new Point(top+height, left+width);
+                        //Point bottomLeft = new Point(top+height, left);
+
+                        //pc.Add(topLeft);
+                        //pc.Add(topRight);
+                        //pc.Add(bottomRight);
+                        //pc.Add(bottomLeft);
+                        textBoxes.Add((pc,text));
+                    }
 
                     if (i > 1 && Array.Exists(reqAmountKeywords, element 
                                 => ((string[]) rows[i-1])[colIndex["text"]]
