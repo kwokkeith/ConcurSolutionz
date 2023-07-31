@@ -224,7 +224,7 @@ namespace ConcurSolutionz.Database
             MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
 
             // Update EntryName parameter of EntryMetaData.json file
-            EntryMetaData.EntryName = Path.GetFileName(filePath);
+            EntryMetaData.EntryName = Path.GetFileNameWithoutExtension(filePath);
 
             // Write EntryMetaData back to JSON
             File.WriteAllText(EntryMetaDataPath, JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(EntryMetaData)));
