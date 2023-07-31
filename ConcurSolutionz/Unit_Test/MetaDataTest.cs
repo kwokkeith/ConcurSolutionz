@@ -7,7 +7,7 @@ namespace Unit_Test
 {
     public class MetaDataTest
     {
-        [Fact]
+        [Fact(DisplayName = "4.1")]
         public void Build_MetaDataShouldBuildUsingBuilder()
         {
             // Arrange
@@ -51,7 +51,7 @@ namespace Unit_Test
             Assert.Equal(Expected7, MD.Policy);
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.2")]
         public void Build_ThrowErrorIfNullValue()
         {
             // Arrange
@@ -68,7 +68,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => builder.Build());
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.3")]
         public void SetClaimDate_ThrowErrorIfAhead()
         {
             // Arrange
@@ -80,7 +80,7 @@ namespace Unit_Test
                                     .SetClaimDate(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.4")]
         public void SetEntryBudget_ThrowErrorForNegValue()
         {
             // Arrange
@@ -90,7 +90,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => builder.SetEntryBudget(-232m));
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.5")]
         public void SetterForMetaData_ReturnCorrectSetValue()
         {
             // Arrange
@@ -131,7 +131,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.6")]
         public void SetterEntryBudget_ThrowErrorForNegValue()
         {
             // Arrange
@@ -153,7 +153,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => MD.EntryBudget = -25432.23m);
         }
 
-        [Fact]
+        [Fact(DisplayName = "4.7")]
         public void SetterClaimDate_ThrowErrorForDateTimeAhead()
         {
             // Arrange

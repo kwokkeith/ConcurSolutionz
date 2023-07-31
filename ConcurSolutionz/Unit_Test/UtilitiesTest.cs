@@ -6,7 +6,7 @@ namespace Unit_Test
 {
 	public class UtilitiesTest
 	{
-		[Fact]
+		[Fact(DisplayName = "1.1")]
         public void CheckNull_ShouldThrowErrorWhenNull()
         {
             // Arrange
@@ -16,7 +16,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => Utilities.CheckNull(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.2")]
         public void CheckNull_ShouldReturnNothing()
         {
             // Arrange
@@ -29,7 +29,7 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.3")]
         [InlineData(324)]
         [InlineData(232242)]
         public void CheckIsNumericType_TrueForInt(int Value)
@@ -37,7 +37,7 @@ namespace Unit_Test
             Assert.True(Utilities.IsNumericType(Value));
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.3")]
         [InlineData("324.43")]
         [InlineData("423532.42")]
         public void CheckIsNumericType_TrueForDecimal(string value)
@@ -49,7 +49,7 @@ namespace Unit_Test
             Assert.True(Utilities.IsNumericType(Value));
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.3")]
         [InlineData(324.43)]
         [InlineData(423532.42)]
         public void CheckIsNumericType_TrueForDouble(double Value)
@@ -58,7 +58,7 @@ namespace Unit_Test
             Assert.True(Utilities.IsNumericType(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.4")]
         public void CheckIsNumericType_FalseForString()
         {
             // Arrange
@@ -68,7 +68,7 @@ namespace Unit_Test
             Assert.False(Utilities.IsNumericType(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.4")]
         public void CheckIsNumericType_FalseForBoolean()
         {
             // Arrange
@@ -78,7 +78,7 @@ namespace Unit_Test
             Assert.False(Utilities.IsNumericType(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.4")]
         public void CheckIsNumericType_FalseForNull()
         {
             // Arrange
@@ -93,7 +93,7 @@ namespace Unit_Test
         }
 
 
-        [Fact]
+        [Fact(DisplayName = "1.6")]
         public void CheckIfNegative_ShouldThrowErrorWhenNegVal()
         {
             // Arrange
@@ -103,7 +103,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.CheckIfNegative(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.7")]
         public void CheckIfNegative_ShouldReturnNothing()
         {
             // Arrange
@@ -116,7 +116,7 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.8")]
         public void CheckIfEmptyString_ThrowErrorForEmptyString()
         {
             // Arrange
@@ -127,7 +127,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.CheckIfEmptyString(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.9")]
         public void CheckIfEmptyString_ShouldReturnNothing()
         {
             // Arrange
@@ -140,7 +140,7 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.10")]
         public void CheckDateTimeAheadOfNow_ThrowErrorForDateAhead()
         {
             // Arrange
@@ -150,7 +150,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.CheckDateTimeAheadOfNow(Value));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.11")]
         public void CheckDateTimeAheadOfNow_ShouldReturnNothing()
         {
             // Arrange
@@ -163,7 +163,7 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.12")]
         [InlineData("HiHongBeiTheConquerer")]
         [InlineData("HiHongJingTheOneAndOnly")]
         public void ConstEntryMetaDataPath_ShouldAppendString(string path)
@@ -175,7 +175,7 @@ namespace Unit_Test
             Assert.Equal(Expected, Utilities.ConstEntryMetaDataPath(path));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.13")]
         public void ConstEntryMetaDataPath_ThrowErrorForEmptyString()
         {
             // Arrange
@@ -185,7 +185,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(path));
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.14")]
         [InlineData("HiJonPeterson")]
         [InlineData("HiAkashJefferson")]
         public void ConstReceiptsFdrPath_ShouldAppendString(string path)
@@ -197,7 +197,7 @@ namespace Unit_Test
             Assert.Equal(Expected, Utilities.ConstReceiptsFdrPath(path));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.15")]
         public void ConstReceiptsFdrPath_ThrowErrorForEmptyString()
         {
             // Arrange
@@ -207,7 +207,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.ConstReceiptsFdrPath(path));
         }
 
-        [Theory]
+        [Theory(DisplayName = "1.16")]
         [InlineData("HiSidCamerson")]
         [InlineData("HiShaunTheJack")]
         public void ConstReceiptMetaDataPath_ShouldAppendString(string path)
@@ -219,7 +219,7 @@ namespace Unit_Test
             Assert.Equal(Expected, Utilities.ConstReceiptMetaDataPath(path));
         }
 
-        [Fact]
+        [Fact(DisplayName = "1.17")]
         public void ConstReceiptMetaDataPath_ThrowErrorForEmptyString()
         {
             // Arrange

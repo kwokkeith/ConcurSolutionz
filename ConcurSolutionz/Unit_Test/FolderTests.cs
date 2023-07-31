@@ -32,7 +32,7 @@ namespace Unit_Test
     {
         string foldertestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "FolderTest.fdr");
 
-        [Fact]
+        [Fact(DisplayName = "6.1")]
         public void BuildFolder_ShouldBuild_UsingBuilder()
         {
             // Arrange
@@ -64,7 +64,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.2")]
         public void BuildFolder_ShouldThrowException_ForEmptyFolder()
         {
             // Arrange
@@ -74,7 +74,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(""));
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.3")]
         public void BuildFolder_ShouldThrowException_ForNullFolder()
         {
             // Arrange
@@ -84,7 +84,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(null));
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.4")]
         public void BuildFolder_ShouldThrowException_ForSettingFilePathBeforeFileName()
         {
             // Arrange
@@ -95,7 +95,7 @@ namespace Unit_Test
             .SetFileName("Folder 1"));
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.5")]
         public void BuildFolder_ShouldThrowException_ForDateTimeAheadOfNow()
         {
             // Arrange
@@ -106,7 +106,7 @@ namespace Unit_Test
                 .SetCreationDate(DateTime.ParseExact("24/01/2099", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.x")]
         public void BuildFolder_ShouldThrowException_ForCreationDateAheadOfLastModifiedDate()
         {
             // Arrange
@@ -118,7 +118,7 @@ namespace Unit_Test
                                             .SetLastModifiedDate(DateTime.ParseExact("14/11/2020", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.6")]
         public void BuildFolder_ShouldBuildFolder_WithFolderSetToTrue()
         {
             Folder.FolderBuilder folderBuilder = new();
@@ -136,7 +136,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "6.7")]
         public void StepIntoFolder_ChangesWorkingDirectory_toFolderFilePath()
         {
             Database dbinstance = Database.Instance;
