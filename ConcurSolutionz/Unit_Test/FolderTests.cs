@@ -66,7 +66,7 @@ namespace Unit_Test
         }
 
         // Fuzzing the values of folder creation
-        [Fact(DiplayName = "6.2")]
+        [Fact(DisplayName = "6.2")]
         public void BuildFolder_ShouldBuild_UsingBuilder_Fuzz()
         {
             // Arrange
@@ -75,31 +75,39 @@ namespace Unit_Test
 
             // Fuzz values
             string fileName = Fuzzer.GenerateRandomString(10);
-            string creationDate = Fuzzer.GenerateRandomDateTime().ToString();
-            string modifiedDate = Fuzzer.GenerateRandomDateTime().ToString();
+            DateTime creationDate = Fuzzer.GenerateRandomDateTime();
+            DateTime modifiedDate = Fuzzer.GenerateRandomDateTime();
 
-            // Act
-            folder = folderBuilder.SetFileName(fileName)
-                .SetCreationDate(DateTime.ParseExact(creationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetLastModifiedDate(DateTime.ParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetFilePath(foldertestpath)
-                .Build();
-            FileCreator.CreateFile(folder);
+            // Assert for creation date and modified date
+            if (creationDate > modifiedDate || creationDate > DateTime.Now || modifiedDate > DateTime.Now)
+            {
+                Assert.Throws<ArgumentException>(() => folderBuilder.SetCreationDate(creationDate).SetLastModifiedDate(modifiedDate));
+            }
+            else
+            {
+                // Act
+                folder = folderBuilder.SetFileName(fileName)
+                    .SetCreationDate(creationDate)
+                    .SetLastModifiedDate(modifiedDate)
+                    .SetFilePath(foldertestpath)
+                    .Build();
+                FileCreator.CreateFile(folder);
 
-            // Assert
-            Assert.True(Directory.Exists(Path.Combine(folder.FileName, folder.FilePath)));
+                // Assert
+                Assert.True(Directory.Exists(Path.Combine(folder.FileName, folder.FilePath)));
 
-            string Expected1 = fileName + ".fdr";
-            Assert.Equal(Expected1, folder.FileName);
+                string Expected1 = fileName + ".fdr";
+                Assert.Equal(Expected1, folder.FileName);
 
-            DateTime Expected2 = DateTime.ParseExact(creationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            Assert.Equal(Expected2, folder.CreationDate);
+                DateTime Expected2 = creationDate;
+                Assert.Equal(Expected2, folder.CreationDate);
 
-            DateTime Expected3 = DateTime.ParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            Assert.Equal(Expected3, folder.LastModifiedDate);
+                DateTime Expected3 = modifiedDate;
+                Assert.Equal(Expected3, folder.LastModifiedDate);
 
-            string Expected4 = Path.Combine(foldertestpath, Expected1);
-            Assert.Equal(Expected4, folder.FilePath);
+                string Expected4 = Path.Combine(foldertestpath, Expected1);
+                Assert.Equal(Expected4, folder.FilePath);
+            }
         }
 
         [Fact(DisplayName = "6.3")]

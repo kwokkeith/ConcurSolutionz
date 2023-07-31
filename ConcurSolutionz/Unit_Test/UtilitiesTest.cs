@@ -191,10 +191,10 @@ namespace Unit_Test
         public void ConstReceiptsFdrPath_ShouldAppendString(string path)
         {
             // Arrange
-            string Expected = Path.Combine(path, "Receipts.fdr");
+            string Expected = Path.Combine(path, "Records.fdr");
 
             //Assert
-            Assert.Equal(Expected, Utilities.ConstReceiptsFdrPath(path));
+            Assert.Equal(Expected, Utilities.ConstRecordsFdrPath(path));
         }
 
         [Fact(DisplayName = "1.15")]
@@ -204,7 +204,7 @@ namespace Unit_Test
             string path = "";
 
             //Assert
-            Assert.Throws<ArgumentException>(() => Utilities.ConstReceiptsFdrPath(path));
+            Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsFdrPath(path));
         }
 
         [Theory(DisplayName = "1.16")]
@@ -213,10 +213,10 @@ namespace Unit_Test
         public void ConstReceiptMetaDataPath_ShouldAppendString(string path)
         {
             // Arrange
-            string Expected = Path.Combine(path, "Receipts.fdr", "ReceiptJSON.fdr");
+            string Expected = Path.Combine(path, "Records.fdr", "RecordJSON.fdr");
 
             //Assert
-            Assert.Equal(Expected, Utilities.ConstReceiptMetaDataPath(path));
+            Assert.Equal(Expected, Utilities.ConstRecordsMetaDataPath(path));
         }
 
         [Fact(DisplayName = "1.17")]

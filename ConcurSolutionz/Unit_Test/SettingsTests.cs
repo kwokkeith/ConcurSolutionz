@@ -21,7 +21,7 @@ namespace Unit_Test
                 Directory.Delete(Path.Combine(testdirectoryPath, "SettingsTest.fdr"), true);
             }
             Directory.CreateDirectory(Path.Combine(testdirectoryPath, "SettingsTest.fdr"));
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(150);
         }
 
         public void Dispose()

@@ -246,7 +246,7 @@ namespace Unit_Test
             FileCreator.PopulateReceiptFolder(entry, Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest"), Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "ReceiptJSON"));
            
             // Assert
-            Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "Receipt 0.png")));
+            Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "0.png")));
             Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "ReceiptJSON", "0.json")));
 
         }
@@ -298,7 +298,7 @@ namespace Unit_Test
             FileCreator.PopulateReceiptFolder(entry, Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest"), Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "ReceiptJSON"));
 
             // Assert
-            Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "Receipt 0.png")));
+            Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "0.png")));
             Assert.True(File.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest", "ReceiptJSON", "0.json")));
 
         }
