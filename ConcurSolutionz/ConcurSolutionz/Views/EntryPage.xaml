@@ -65,13 +65,13 @@
                 BackgroundColor="AliceBlue"
                 Padding="20,10"
                 StrokeThickness="3"
-                HeightRequest="600">
+                HeightRequest="500">
             <VerticalStackLayout>
 
               <Grid ColumnDefinitions="*,*"
-                    HeightRequest="500"
+                    HeightRequest="300"
                         ColumnSpacing="10">
-                    <Grid RowDefinitions="*,*,*,*,*"
+                    <Grid RowDefinitions="*,*,*"
                             ColumnDefinitions="*,2*"
                             ColumnSpacing="20">
 
@@ -84,7 +84,7 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged">
@@ -116,6 +116,7 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
                                 TextChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Claim Date:"
@@ -130,6 +131,7 @@
                                 Grid.Row="2"
                                 HeightRequest="50"
                                 StrokeShape="RoundRectangle 5,5,5,5"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
                                 StrokeThickness="1">
 
                             <DatePicker
@@ -139,11 +141,21 @@
                                     VerticalOptions="Center"
                                     DateSelected="OnEditorsTextChanged"/>
                         </Border>
-                    
+                   
+                    </Grid>
 
+                    <Grid Grid.Column="1"
+                          ColumnDefinitions="*, 2*"
+                          ColumnSpacing="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                       
                         <Label Text="Project/Club:"
                                 Grid.Column="0"
-                                Grid.Row="3"
+                                Grid.Row="0"
                                 FontSize="Body"
                                 VerticalOptions="Center"
                                 Margin="40,0,0,0"/>
@@ -151,15 +163,15 @@
                         <Picker x:Name="ProjectClubInp"
                                 Title="Project/Club"
                                 Grid.Column="1"
-                                Grid.Row="3"
+                                Grid.Row="0"
                                 FontSize="Body"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#d3d3d3}"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Team Name:"
                                 Grid.Column="0"
-                                Grid.Row="4"
+                                Grid.Row="1"
                                 VerticalOptions="Center"
                                 FontSize="Body"
                                 Margin="40,0,0,0"/>
@@ -167,120 +179,101 @@
                         <Entry  x:Name="TeamNameInp"
                                 Placeholder="Team Name"
                                 Grid.Column="1"
-                                Grid.Row="4"
+                                Grid.Row="1"
                                 VerticalOptions="Center"
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
                                 TextChanged="OnEditorsTextChanged"/>
 
-                    </Grid>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="2*" />
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" ColumnDefinitions="*,2*">
-                            <Label Text="Entry Budget:"
-                               FontSize="Body"
-                               VerticalOptions="Center"
-                               Margin="40,0,0,0"/>
-                            <HorizontalStackLayout Grid.Column="1">
-                                <Label Text="$"
-                                       VerticalOptions="Center"
-                                       FontSize="Body"/>
-                
-                                <Entry
-                                    x:Name="BudgetEditor"
-                                    Placeholder="Enter your budget"
-                                    HorizontalTextAlignment="Start"
-                                    VerticalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    FontSize="Body"
-                                    MaxLength="10"
-                                    TextChanged="OnBudgetCompleted"/>
-
-                                <Image Source="warning.png"
-                                       x:Name="budgetWarning"
-                                       Margin="10"
-                                       WidthRequest="25"
-                                       IsVisible="false"/>
-
-                            </HorizontalStackLayout>
-
-                        </Grid>
-
-                        <Grid Grid.Row="1" ColumnDefinitions="*,2*">
-                             <Label
-                                Text="Current Expenditure: "
-                                FontSize="Body"
-                                VerticalOptions="Center"
-                                Margin="40,0,0,0"/>
-
-                            <HorizontalStackLayout Grid.Column="1">
-                                <Label Text="$"
-                                VerticalOptions="Center"
-                                FontSize="Body"/> 
-                                <Label
-                                   x:Name="CurrentExpenseInput"
-                                   Text=""
-                                   FontSize="Body"
-                                   VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                        </Grid>
-
-                        <Grid Grid.Row="2" ColumnDefinitions="*,2*">
-                             <Label
-                               Text="Remaining Budget:"
-                               FontSize="Body"
-                               VerticalOptions="Center"
-                               Margin="40,0,0,0"/>
-
-
-                            <HorizontalStackLayout Grid.Column="1">
-                                <Label Text="$"
-                                VerticalOptions="Center"
-                                FontSize="Body"/> 
-
-                                <Label
-                                   x:Name="RemainingBudget"
-                                   Text=""
-                                   FontSize="Body"
-                                   VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                        </Grid>
-
-                        <Grid Grid.Row="3" ColumnDefinitions="*,2*">
-                             <Grid Grid.Column="0" RowDefinitions="*,*">
-                                <Label Text="Purpose:"
-                                   FontSize="Body"
-                                   Grid.Row="0"
-                                   VerticalOptions="Center"
-                                   Margin="40,0,0,0"/>
-
-
-                             </Grid>
+                        <Label Text="Purpose:"
+                            FontSize="Body"
+                            Grid.Row="2"
+                            VerticalOptions="Center"
+                            Margin="40,0,0,0"/>
                         
-                             <Border VerticalOptions="Center"
-                                    Grid.Column="1"
-                                    StrokeShape="RoundRectangle 5,5,5,5"
-                                    StrokeThickness="1"
-                                    HeightRequest="160"
-                                    Padding="5">
-                                 <Editor x:Name="Purpose"
-                                        Placeholder="Purpose"
-                                        Grid.Column="1"
-                                        FontSize="Body"
-                                        TextChanged="OnEditorsTextChanged"/>
-                             </Border>
-                        </Grid>
 
-                   
-
+                        <Entry x:Name="Purpose"
+                            Placeholder="Purpose"
+                            Grid.Column="1"
+                            Grid.Row="2"
+                            FontSize="Body"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                            TextChanged="OnEditorsTextChanged"/>
                     </Grid>
+
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*,*"
+                      HeightRequest="100">
+                    <HorizontalStackLayout Grid.Column="0">
+                    <Label Text="Entry Budget:  "
+                            FontSize="Body"
+                            VerticalOptions="Center"
+                            Margin="40,0,0,0"/>
+                        <Label Text="$"
+                                VerticalOptions="Center"
+                                FontSize="Body"/>
+                
+                        <Entry
+                            x:Name="BudgetEditor"
+                            Placeholder="Enter your budget"
+                            HorizontalTextAlignment="Start"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            FontSize="Body"
+                            MaxLength="10"
+                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                            TextChanged="OnBudgetCompleted"/>
+
+                        <Image Source="warning.png"
+                                x:Name="budgetWarning"
+                                Margin="10"
+                                WidthRequest="25"
+                                IsVisible="false"/>
+
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Grid.Column="1">
+                        <Label
+                            Text="Current Expenditure: "
+                            FontSize="Body"
+                            VerticalOptions="Center"
+                            Margin="40,0,0,0"/>
+
+                        <Label Text="$"
+                        VerticalOptions="Center"
+                        FontSize="Body"/> 
+                        <Label
+                            x:Name="CurrentExpenseInput"
+                            Text=""
+                            FontSize="Body"
+                            VerticalOptions="Center"/>
+
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Grid.Column="2">
+                        <Label
+                        Text="Remaining Budget:  "
+                        FontSize="Body"
+                        VerticalOptions="Center"
+                        Margin="40,0,0,0"/>
+
+
+                        <Label Text="$"
+                        VerticalOptions="Center"
+                        FontSize="Body"/> 
+
+                        <Label
+                            x:Name="RemainingBudget"
+                            Text=""
+                            FontSize="Body"
+                            VerticalOptions="Center"/>
+
+
+                    </HorizontalStackLayout>
+                   
 
                 </Grid>
 
