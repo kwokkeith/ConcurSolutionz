@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using ConcurSolutionz.Database;
+using Unit_Test;
 
 namespace Unit_Test
 {
@@ -64,7 +65,44 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "6.2")]
+        // Fuzzing the values of folder creation
+        [Fact(DiplayName = "6.2")]
+        public void BuildFolder_ShouldBuild_UsingBuilder_Fuzz()
+        {
+            // Arrange
+            Folder.FolderBuilder folderBuilder = new();
+            Folder folder;
+
+            // Fuzz values
+            string fileName = Fuzzer.GenerateRandomString(10);
+            string creationDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string modifiedDate = Fuzzer.GenerateRandomDateTime().ToString();
+
+            // Act
+            folder = folderBuilder.SetFileName(fileName)
+                .SetCreationDate(DateTime.ParseExact(creationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetLastModifiedDate(DateTime.ParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetFilePath(foldertestpath)
+                .Build();
+            FileCreator.CreateFile(folder);
+
+            // Assert
+            Assert.True(Directory.Exists(Path.Combine(folder.FileName, folder.FilePath)));
+
+            string Expected1 = fileName + ".fdr";
+            Assert.Equal(Expected1, folder.FileName);
+
+            DateTime Expected2 = DateTime.ParseExact(creationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            Assert.Equal(Expected2, folder.CreationDate);
+
+            DateTime Expected3 = DateTime.ParseExact(modifiedDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            Assert.Equal(Expected3, folder.LastModifiedDate);
+
+            string Expected4 = Path.Combine(foldertestpath, Expected1);
+            Assert.Equal(Expected4, folder.FilePath);
+        }
+
+        [Fact(DisplayName = "6.3")]
         public void BuildFolder_ShouldThrowException_ForEmptyFolder()
         {
             // Arrange
@@ -74,7 +112,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(""));
         }
 
-        [Fact(DisplayName = "6.3")]
+        [Fact(DisplayName = "6.4")]
         public void BuildFolder_ShouldThrowException_ForNullFolder()
         {
             // Arrange
@@ -84,7 +122,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(null));
         }
 
-        [Fact(DisplayName = "6.4")]
+        [Fact(DisplayName = "6.5")]
         public void BuildFolder_ShouldThrowException_ForSettingFilePathBeforeFileName()
         {
             // Arrange
@@ -95,7 +133,7 @@ namespace Unit_Test
             .SetFileName("Folder 1"));
         }
 
-        [Fact(DisplayName = "6.5")]
+        [Fact(DisplayName = "6.6")]
         public void BuildFolder_ShouldThrowException_ForDateTimeAheadOfNow()
         {
             // Arrange
@@ -118,7 +156,7 @@ namespace Unit_Test
                                             .SetLastModifiedDate(DateTime.ParseExact("14/11/2020", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
         }
 
-        [Fact(DisplayName = "6.6")]
+        [Fact(DisplayName = "6.7")]
         public void BuildFolder_ShouldBuildFolder_WithFolderSetToTrue()
         {
             Folder.FolderBuilder folderBuilder = new();
@@ -136,7 +174,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "6.7")]
+        [Fact(DisplayName = "6.8")]
         public void StepIntoFolder_ChangesWorkingDirectory_toFolderFilePath()
         {
             Database dbinstance = Database.Instance;

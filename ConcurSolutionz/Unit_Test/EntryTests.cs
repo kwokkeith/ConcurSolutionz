@@ -820,5 +820,72 @@ namespace Unit_Test
 
             Assert.Equal(null, entry.GetRecord(8));
         }
+
+        [Fact, TestPriority(19)]
+        public void BuildEntry_ShouldBuild_UsingBuilder_Fuzz()
+        {
+            string entryName = Fuzzer.GenerateRandomString(10);
+            decimal budget = Convert.ToDecimal(Fuzzer.GenerateRandomDouble(5, 2));
+            string claimName = Fuzzer.GenerateRandomString(10);
+            string claimDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string purpose = Fuzzer.GenerateRandomString(20);
+            string teamName = Fuzzer.GenerateRandomString(5);
+            string projectClub = Fuzzer.GenerateRandomString(10);
+
+
+            // Arrange
+            if (Directory.Exists(Path.Combine(entrytestpath + entryName + ".entry")))
+            {
+                Directory.Delete(Path.Combine(entrytestpath + entryName + ".entry"), true);
+            }
+
+            Entry.EntryBuilder entryBuilder = new();
+            Entry entry;
+
+            string transactionDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string description = Fuzzer.GenerateRandomString(20);
+            string supplierName = Fuzzer.GenerateRandomString(10);
+            decimal reqAmt = Convert.ToDecimal(Fuzzer.GenerateRandomDouble(5, 2));
+            string receiptNumber = Fuzzer.GenerateRandomString(30);
+            string receiptStatus = Fuzzer.GenerateRandomString(10);
+
+            // Act
+            receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription(description)
+                .SetSupplierName(supplierName)
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(reqAmt)
+                .SetReceiptNumber(receiptNumber)
+                .SetReceiptStatus(receiptStatus)
+                .SetImgPath(picturepath)
+                .Build();
+
+            records.Add(receipt1);
+
+
+
+            md = studentProjMDBuilder
+                .SetEntryName(entryName)
+                .SetEntryBudget(budget)
+                .SetClaimName(claimName)
+                .SetClaimDate(DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetPurpose(purpose)
+                .SetTeamName(teamName)
+                .SetProjectClub(projectClub)
+                .Build();
+
+            entry = entryBuilder.SetFileName(entryName)
+                .SetCreationDate(DateTime.Now)
+                .SetFilePath(entrytestpath)
+                .SetMetaData(md)
+                .SetRecords(records)
+                .Build();
+            Database.CreateFile(entry);
+
+            // Assert
+            Assert.True(Directory.Exists(entry.FilePath));
+
+        }
     }
 }
