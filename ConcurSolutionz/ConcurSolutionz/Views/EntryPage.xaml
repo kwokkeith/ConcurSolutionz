@@ -85,8 +85,7 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray}"
-                                
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2 }"
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged">
