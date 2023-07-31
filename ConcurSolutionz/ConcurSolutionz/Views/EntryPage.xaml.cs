@@ -9,6 +9,7 @@ using System.Text.Json;
 using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Models;
+using ConcurSolutionz.Models.CustomException;
 // using System.IO;  
 
 namespace ConcurSolutionz.Views;
@@ -21,7 +22,7 @@ public partial class EntryPage : ContentPage
     private StudentProjectClaimMetaData md;
     private List<Database.Receipt> receipts;
     private string fileName;
-    Database.Entry entry;
+    Database.Entry? entry;
     Database.Receipt selectedReceipt;
 
     // Calculate budget
@@ -542,31 +543,33 @@ public partial class EntryPage : ContentPage
     // Create entry from existing file
     private async void CreateExistingFile(string name)
     {
-        Tuple<MetaData, List<Database.Record>> fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
-
-        // Get existing metadata
         try
         {
-            md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
-        }
-        catch (Exception e)
-        {
-            await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {e}", "OK");
-        }
+            Tuple<MetaData, List<Database.Record>> fileDetail;
 
-        // Get List of existing Receipts
-        receipts.Clear(); // remove all receipts in existing receipts list
-        foreach(Database.Record record in fileDetail.Item2)
-        {
-            // Convert the record to receipt and add to list of receipts
-            try
+            fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
+
+            // Get existing metadata
+            md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
+
+            // Get List of existing Receipts
+            receipts.Clear(); // remove all receipts in existing receipts list
+            foreach (Database.Record record in fileDetail.Item2)
             {
                 receipts.Add(RecordAdaptor.ConvertRecord(record));
             }
-            catch (Exception e)
-            {
-                await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
-            }
+        }
+        catch (SynchronisationException ex)
+        {
+            throw ex;
+        }
+        catch (MetaDataConversionException ex)
+        {
+            throw ex;
+        }
+        catch (RecordConversionException ex)
+        {
+            throw ex;
         }
     }
 
@@ -657,7 +660,7 @@ public partial class EntryPage : ContentPage
     }
 
     //Handles initialization of entry and updating of variables md, entry, and receipts
-    private async void BuildEntry()
+    private void BuildEntry()
     {
         List<Database.Record> records = new();
         // construct an entry path

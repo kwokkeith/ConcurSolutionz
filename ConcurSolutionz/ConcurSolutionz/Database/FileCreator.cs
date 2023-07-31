@@ -54,10 +54,10 @@ namespace ConcurSolutionz.Database
                 try
                 {
                     // FolderPath for Receipt inside entry
-                    string receiptFolderPath = Utilities.ConstReceiptsFdrPath(entry.FilePath);
+                    string receiptFolderPath = Utilities.ConstRecordsFdrPath(entry.FilePath);
                 
                     // FolderPath for Receipt Json folder (Storing all other receipt jsons) inside entry
-                    string receiptJSONFolder = Utilities.ConstReceiptMetaDataPath(entry.FilePath);
+                    string receiptJSONFolder = Utilities.ConstRecordsMetaDataPath(entry.FilePath);
 
                     // Not necessary as Creating Receipt MetaData path creates Receipts folder as well
                     //Directory.CreateDirectory(receiptFolderPath);
@@ -89,7 +89,7 @@ namespace ConcurSolutionz.Database
         /// This method iterates through each receipt in the entry and performs the following steps:
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
-        public static void PopulateReceiptFolder(Entry entry, string receiptFolderPath, string receiptJSONFolder){
+        public static void PopulateReceiptFolder(Entry entry, string recordFolderPath, string receiptJSONFolder){
             List<string> writtenFiles = new List<string>();
 
             foreach ( Record record in entry.GetRecords())
@@ -101,7 +101,7 @@ namespace ConcurSolutionz.Database
                 // @@@@@@@@@@@@@@@@@@@@@@
                 // Store pictures
                 string imgPath = receipt.ImgPath;
-                string receiptPath = Path.Combine(receiptFolderPath, "Receipt " + receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
+                string receiptPath = Path.Combine(recordFolderPath, receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
 
 
                 // Add receipt images into receipt folder directory
@@ -132,7 +132,7 @@ namespace ConcurSolutionz.Database
             }
 
             // Delete any files that were not written to
-            foreach (string file in Directory.GetFiles(receiptFolderPath))
+            foreach (string file in Directory.GetFiles(recordFolderPath))
             {
                 if (!writtenFiles.Contains(file))
                 {

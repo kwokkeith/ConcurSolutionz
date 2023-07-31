@@ -73,8 +73,8 @@ namespace ConcurSolutionz.Database
             Records.Add(record);
 
             // Paths required as arguments to populate receipt folder (Update it with new receipt)
-            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
-            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            string receiptFolderPath = Utilities.ConstRecordsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstRecordsMetaDataPath(FilePath);
 
             FileCreator.PopulateReceiptFolder(this, receiptFolderPath, receiptJSONPath);
 
@@ -102,8 +102,8 @@ namespace ConcurSolutionz.Database
 
             // Remove paths associated to this record
             // Paths required as arguments to populate receipt folder (Update it with new receipt)
-            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
-            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            string receiptFolderPath = Utilities.ConstRecordsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstRecordsMetaDataPath(FilePath);
 
             Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
             Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
@@ -120,8 +120,8 @@ namespace ConcurSolutionz.Database
         public void DelRecordByID(int ID){
             // Remove paths associated to this record
             // Paths required as arguments to populate receipt folder (Update it with new receipt)
-            string receiptFolderPath = Utilities.ConstReceiptsFdrPath(FilePath);
-            string receiptJSONPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            string receiptFolderPath = Utilities.ConstRecordsFdrPath(FilePath);
+            string receiptJSONPath = Utilities.ConstRecordsMetaDataPath(FilePath);
             
             foreach (Record record in Records){
                 if (record.RecordID == ID){
@@ -169,15 +169,15 @@ namespace ConcurSolutionz.Database
         /// <summary>Returns a unique record ID for a receipt (Particular Entry).</summary>
         /// <returns>The assigned record ID.</returns>
         private int AssignRecordID(){
-            string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(FilePath);
+            string RecordMetaDataPath = Utilities.ConstRecordsMetaDataPath(FilePath);
 
             // Get all files with .json file extension in the ReceiptMetaData Folder.
-            string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(ReceiptMetaDataPath,""), "*.json");
+            string[] RecordMetaDatas = Directory.GetFiles(Path.Combine(RecordMetaDataPath, ""), "*.json");
             int assignedIndex = 0;
 
             // Increment assignedIndex and check for each iteration if number has been used
             // If "<assignedIndex>.json" exist in the list of receipt metadata files.
-            foreach (string path in ReceiptMetaDatas)
+            foreach (string path in RecordMetaDatas)
             {
                 if (Path.GetFileName(path) == $"{assignedIndex}.json")
                 {

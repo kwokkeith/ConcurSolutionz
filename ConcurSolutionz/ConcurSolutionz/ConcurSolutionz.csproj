@@ -81,6 +81,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\" />
+	  <Folder Include="Models\CustomException\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,6 +94,7 @@
 	  <None Remove="Resources\Images\icons8-edit-64.png" />
 	  <None Remove="Resources\Images\check-mark.png" />
 	  <None Remove="Resources\Images\warning.png" />
+	  <None Remove="Models\CustomException\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\ketty.jpeg" />

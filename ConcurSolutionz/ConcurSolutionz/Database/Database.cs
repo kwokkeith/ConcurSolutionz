@@ -1,5 +1,9 @@
 using System.Security.AccessControl;
 using System.Text.Json;
+using Microsoft.Maui.Storage;
+using ConcurSolutionz.Models.CustomException;
+using ConcurSolutionz.Models;
+using CoreGraphics;
 
 namespace ConcurSolutionz.Database
 {
@@ -153,20 +157,27 @@ namespace ConcurSolutionz.Database
             string filePath = Path.Combine(WorkingDirectory, fileName); // root of file (Entry)
             if (Path.Exists(filePath))
             {
+                // Synchronise the Entry to check if user changed any files in OS native directory
+                SynchroniseEntry(filePath);
+
                 // Entry metadata path
                 string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(filePath);
-                // Extract Entry MetaData from JSON
+
+                // Extract Entry MetaData 
                 MetaData EntryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
 
                 // Extract out receipt from receipt metadata and return a list
-                string ReceiptMetaDataPath = Utilities.ConstReceiptMetaDataPath(filePath);
+                string ReceiptMetaDataPath = Utilities.ConstRecordsMetaDataPath(filePath);
+
                 List<Record> records = ExtractRecords(ReceiptMetaDataPath);
 
                 return new Tuple<MetaData, List<Record>>(EntryMetaData, records);
             }
             else
             {
-                throw new ArgumentException("file with file name " + fileName + " does not exist!");
+                throw new ArgumentException("Failed to extract information of file with file name " + fileName + "!" +
+                    "\n" + "Deleting all files associated to " + fileName + " to ensure synchronisation!");
+                
             }
         }
 
@@ -278,7 +289,7 @@ namespace ConcurSolutionz.Database
             {
                 try
                 {
-                    List<Record> Receipts = new();
+                    List<Record> Records = new();
                     string[] ReceiptMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
                     foreach (string filePath in ReceiptMetaDatas)
                     {
@@ -289,10 +300,11 @@ namespace ConcurSolutionz.Database
 
 
                         Record record_MD = JSONAdaptor.GetRecordFromJSON(json, subType);
-                        Receipts.Add(record_MD);
+
+                        Records.Add(record_MD);
                     }
 
-                    return Receipts;
+                    return Records;
                 }
                 catch (Exception e)
                 {
@@ -305,6 +317,120 @@ namespace ConcurSolutionz.Database
                 Console.WriteLine("Entry MetaData Json does not exist.");
                 return null;
             }
+        }
+
+
+        private static void SynchroniseEntry(string entryFilePath)
+        {
+            // Get EntryMetaDataPath
+            string EntryMetaDataPath = Utilities.ConstEntryMetaDataPath(entryFilePath);
+
+            // If Entry MetaData missing in native OS File Directory
+            if (!Path.Exists(EntryMetaDataPath))
+            {
+                Directory.Delete(entryFilePath);
+                throw new ArgumentException("Failed to find metadata file of file with name" + entryFilePath + "!"
+                    + "\n" + "Deleting Entry File to ensure Database synchronisation...");
+            }
+
+            // Extract out Record from Record metadata and return a list
+            string RecordsMetaDataPath = Utilities.ConstRecordsMetaDataPath(entryFilePath);
+
+            // If the Record folder is missing in native OS File Directory
+            if (!Path.Exists(RecordsMetaDataPath))
+            {
+                Directory.Delete(entryFilePath);
+                throw new ArgumentException("Failed to find record folder of file with name" + entryFilePath + "!"
+                    + "\n" + "Deleting Entry File to ensure Database synchronisation...");
+            }
+
+            // Check between record metadata and record images
+            string[] RecordMetaDatas = Directory.GetFiles(Path.Combine(RecordsMetaDataPath, ""), "*.json");
+            for (int i = 0; i < RecordMetaDatas.Length; i++)
+            {
+                string filePath = RecordMetaDatas[i];
+                filePath = Path.GetFileNameWithoutExtension(filePath);
+                RecordMetaDatas[i] = filePath;
+            }
+
+            // Get Record Folder path
+            string RecordFolderPath = Utilities.ConstRecordsFdrPath(entryFilePath);
+
+            // Get all the file in Record Folder
+            string[] RecordImages = Directory.GetFiles(RecordFolderPath);
+            string[] RecordImagesWithoutFileExt = new string[RecordImages.Length];
+
+            // Remove extension of images
+            for (int i = 0; i < RecordImages.Length; i++)
+            {
+                string filePath = RecordImages[i];
+                RecordImagesWithoutFileExt[i] = Path.GetFileNameWithoutExtension(filePath);
+            }
+
+            // Find any conflicting files (Missing)
+            // Flag to check if there were missing files
+            bool missingRecordImage = false;
+            bool missingRecordMetaData = false;
+
+            // 1. Finding missing record metadata files
+            var diff = RecordImagesWithoutFileExt.Except(RecordMetaDatas);
+
+            // Construct backup path
+            string backupPath = Utilities.ConstImageBackupPath();
+
+            // Clear the backup folder
+            if (Directory.Exists(backupPath))
+            {
+                Directory.Delete(backupPath, true);
+            }
+
+            // Create backup folder
+            Directory.CreateDirectory(backupPath);
+
+            foreach(string fileName in diff)
+            {
+                // Delete record images missing a metadata
+                foreach (string fileNameWithExt in RecordImages)
+                {
+                    string fileNameWithoutext = Path.GetFileNameWithoutExtension(fileNameWithExt);
+                    if (fileNameWithoutext == fileName)
+                    {
+                        string imageBackupPath = Path.Combine(backupPath, Path.GetFileName(fileNameWithExt));
+                        File.Copy(fileNameWithExt, imageBackupPath);
+                        File.Delete(fileNameWithExt);
+                    }
+                }
+                missingRecordMetaData = true;
+            }
+
+            // 2. Finding missing record image 
+            diff = RecordMetaDatas.Except(RecordImagesWithoutFileExt);
+            foreach(string fileName in diff)
+            {
+                // Delete record metadatas that is missing record image
+                File.Delete(Path.Combine(RecordsMetaDataPath, fileName + ".json"));
+                missingRecordImage = true;
+            }
+
+            // Throw error if missing files
+            if (missingRecordImage && missingRecordMetaData)
+            {
+                throw new SynchronisationException("Record Image and Record MetaData desync, " +
+                    "database would do the required actions to synchronise...\n" +
+                    "Images removed can be found in <root_directory>/Image_Backup.");
+            }
+            else if (missingRecordMetaData)
+            {
+                throw new SynchronisationException("Record Metadata desync, " +
+                    "database would do the required actions to synchronise...");
+            }
+            else if (missingRecordImage)
+            {
+                throw new SynchronisationException("Record Image desync, " +
+                    "database would do the required actions to synchronise...\n" +
+                    "Images removed can be found in <root_directoy>/Image_Backup.");
+            }
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using ConcurSolutionz.Database;
+using ConcurSolutionz.Models.CustomException;
 
 namespace ConcurSolutionz.Views;
 
@@ -175,8 +176,26 @@ public partial class MainPage : ContentPage
         {
             // Call entry UI
             //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-            await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
-
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
+            }
+            catch (SynchronisationException ex)
+            {
+                await DisplayAlert("Database Synchronising", $"{ex}\n\nDatabase will sync... Please try again~", "OK");
+            }
+            catch (MetaDataConversionException ex)
+            {
+                await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {ex}", "OK");
+            }
+            catch (RecordConversionException ex)
+            {
+                await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Warning", $"{ex}", "OK");
+            }
         }
         // Delay the selection to avoid immediate reselection due to double-tap gesture
         await Task.Delay(200);

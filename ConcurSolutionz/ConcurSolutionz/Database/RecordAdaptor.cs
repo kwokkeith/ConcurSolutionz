@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ConcurSolutionz.Models.CustomException;
 
 namespace ConcurSolutionz.Database
 {
@@ -15,7 +16,7 @@ namespace ConcurSolutionz.Database
             }
             else
             { 
-                throw new ArgumentException("Invalid Record subtype detected, could not convert using RecordSocket!");
+                throw new RecordConversionException("Invalid Record subtype detected, could not convert using RecordSocket!");
             }
         }
     }
