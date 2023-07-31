@@ -34,7 +34,7 @@ namespace Unit_Test
 
     public class FileDBTests: IClassFixture<FileDBSetup>
     {
-        [Fact]
+        [Fact(DisplayName = "7.1")]
         public void CreationDate_FutureDate_ThrowsArgumentException()
         {
             FileDB fileDB = new MockFileDB();
@@ -43,7 +43,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => fileDB.CreationDate = futureDate);
         }
 
-        [Fact]
+        [Fact(DisplayName = "7.2")]
         public void LastModifiedDate_FutureDate_ThrowsArgumentException()
         {
             var fileDB = new MockFileDB();
@@ -52,7 +52,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => fileDB.LastModifiedDate = futureDate);
         }
 
-        [Fact]
+        [Fact(DisplayName = "7.3")]
         public void UpdateModifiedDate_SetsToCurrentDateTime()
         {
             var fileDB = new MockFileDB();

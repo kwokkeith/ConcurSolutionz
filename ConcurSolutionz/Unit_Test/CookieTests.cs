@@ -6,7 +6,7 @@ namespace Unit_Test
 {
     public class CookieTests
     {
-        [Fact]
+        [Fact(DisplayName = "8.1")]
         public void Build_CookieShouldBuildUsingBuilder()
         {
             // Arrange
@@ -51,7 +51,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "8.2")]
         public void Build_CookieWithNullValues_ThrowsArgumentNullException()
         {
             // Arrange

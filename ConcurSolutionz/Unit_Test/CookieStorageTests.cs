@@ -37,7 +37,7 @@ namespace Unit_Test
         string cookiestoragetestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "CookieStorageTest.fdr");
 
 
-        [Fact]
+        [Fact(DisplayName = "9.1")]
         public void StoreCookie_StoresValidCookie_AndCookieFileExists()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 1.entry");
@@ -69,7 +69,7 @@ namespace Unit_Test
             Assert.True(File.Exists(Path.Combine(path, "cookie.json")));
         }
 
-        [Fact]
+        [Fact(DisplayName = "9.3")]
         public void RetrieveCookie_RetrievesValidCookie()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 2.entry");
@@ -111,7 +111,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "9.4")]
         public void RetrieveCookie_ReturnsNull_IfCookieFolderDoesNotExist()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 3.entry");
@@ -133,7 +133,7 @@ namespace Unit_Test
             Assert.True(retrievedCookie == null);
         }
 
-        [Fact]
+        [Fact(DisplayName = "9.5")]
         public void RetrieveCookie_ReturnsNull_IfCookieExpired()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 4.entry");
@@ -166,7 +166,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "9.6")]
         public void RetrieveCookie_ReturnsNull_IfCookieFileDoesNotExist()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 3.entry");
@@ -188,7 +188,7 @@ namespace Unit_Test
             Assert.True(retrievedCookie == null);
         }
 
-        [Fact]
+        [Fact(DisplayName = "9.7")]
         public void Z_ClearCookies_DeletesCookieFile()
         {
             // Arrange

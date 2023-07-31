@@ -7,7 +7,7 @@ namespace Unit_Test
     public class ReceiptTests
     {
 
-        [Fact]
+        [Fact(DisplayName = "2.1")]
         public void Build_ReceiptShouldBuildUsingBuilder()
         {
             // Arrange
@@ -72,7 +72,7 @@ namespace Unit_Test
         }
 
 
-        [Theory]
+        [Theory(DisplayName = "2.2")]
         [InlineData("US, Dollar", "104.5", "1.38085", "144.3")]
         [InlineData("US, Dollar", "299.77", "1.38085", "413.94")]
         [InlineData("Ukraine, Hryvnia", "23499.14", "0.0466524385", "1096.29")]
@@ -101,7 +101,7 @@ namespace Unit_Test
         }
 
 
-        [Theory]
+        [Theory(DisplayName = "2.3")]
         [InlineData("-56.2")]
         public void SetReqAmount_ShouldThrowErrorFromNegative(string ReqAmount)
         {
@@ -115,7 +115,7 @@ namespace Unit_Test
         }
 
 
-        [Theory]
+        [Theory(DisplayName = "2.4")]
         [InlineData("-0.2344")]
         public void SetConversionRate_ShouldThrowErrorFromNegative(string ConversionRate)
         {
@@ -129,7 +129,7 @@ namespace Unit_Test
         }
 
 
-        [Fact]
+        [Fact(DisplayName = "2.5")]
         public void Build_ShouldThrowErrorConversionRateNotSet()
         {
             // Arrange
@@ -151,7 +151,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => receiptBuilder.Build());
         }
 
-        [Fact]
+        [Fact(DisplayName = "2.6")]
         public void Build_ShouldThrowErrorFromMissingField()
         {
             // Arrange
@@ -172,7 +172,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => receiptBuilder.Build());
         }
 
-        [Fact]
+        [Fact(DisplayName = "2.x")]
         public void ReceiptConstructor_ShouldThrowErrorFromEmptyCompulsoryValue()
         {
             // Arrange
@@ -192,7 +192,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => receiptBuilder.Build());
         }
 
-        [Theory]
+        [Theory(DisplayName = "2.7")]
         [InlineData("56.2")]
         [InlineData("120.34")]
         [InlineData("200.4")]
@@ -223,7 +223,7 @@ namespace Unit_Test
             Assert.Equal(reqAmount, receipt.ReqAmount);
         }
 
-        [Fact]
+        [Fact(DisplayName = "2.8")]
         public void ReceiptSetReqAmount_ShouldThrowErrorForNegValue()
         {
             // Arrange
@@ -248,7 +248,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => receipt.ReqAmount = -100m);
         }
 
-        [Theory]
+        [Theory(DisplayName = "2.9")]
         [InlineData("56.2")]
         [InlineData("120.34")]
         [InlineData("200.4")]
@@ -282,7 +282,7 @@ namespace Unit_Test
             Assert.Equal(conversionRate, receipt.ConversionRate);
         }
 
-        [Fact]
+        [Fact(DisplayName = "2.10")]
         public void ReceiptSetConversionRate_ShouldThrowErrorForNegValue()
         {
             // Arrange
@@ -308,7 +308,7 @@ namespace Unit_Test
         }
 
 
-        [Theory]
+        [Theory(DisplayName = "2.11")]
         [InlineData("US, Dollar", "1.38085", "144.3")]
         [InlineData("Ukraine, Hryvnia", "0.0466524385", "4.88")]
         [InlineData("China, Yuan Renminbi", "0.20892", "21.83")]
@@ -343,7 +343,7 @@ namespace Unit_Test
             Assert.InRange(receipt.CurrencyAmountSGD, expected - 0.005M, expected + 0.005M);
         }
 
-        [Theory]
+        [Theory(DisplayName = "2.12")]
         [InlineData("102.34")]
         [InlineData("6443.2")]
         [InlineData("20032.4")]
@@ -373,7 +373,7 @@ namespace Unit_Test
             Assert.Equal(currencyAmount, receipt.CurrencyAmountSGD);
         }
 
-        [Fact]
+        [Fact(DisplayName = "2.13")]
         public void ReceiptSetCurrencyAmountSGD_ShouldThrowErrorForNegValue()
         {
             // Arrange

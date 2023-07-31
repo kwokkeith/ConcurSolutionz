@@ -15,8 +15,8 @@ namespace Unit_Test
     {
         private string cookie = $"";
 
-        [Fact]
-        public void ValidClaim() 
+        [Fact(DisplayName = "12.1")]
+        public void ValidClaim()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
             Task<string> task = concur.Initialize();
@@ -68,7 +68,7 @@ namespace Unit_Test
             Assert.True(true);
         }
 
-        [Fact]
+        [Fact(DisplayName = "12.2")]
         public void InvalidClaimDate()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
@@ -99,7 +99,7 @@ namespace Unit_Test
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "12.5")]
         public void InvalidExpenseDate()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
@@ -150,7 +150,7 @@ namespace Unit_Test
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "12.3")]
         public void InvalidPolicy()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
@@ -180,19 +180,19 @@ namespace Unit_Test
                 Assert.True(true);
             }
         }
-        [Fact]
+        [Fact(DisplayName = "12.4")]
         public void FuzzerName()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
             Task<string> task = concur.Initialize();
             task.Wait();
             string init = task.Result;
-            if(!init.Equals("0")) Assert.True(false, "Failed to init");
+            if (!init.Equals("0")) Assert.True(false, "Failed to init");
 
 
             //Create new claim
             ConcurSolutionz.Models.Claim claim = new ConcurSolutionz.Models.Claim();
-            claim.Name = Fuzzer.GenerateRandomString(10,true);
+            claim.Name = Fuzzer.GenerateRandomString(10, true);
             claim.Date = "2023-06-15";
             claim.Policy = "5d5d08a511f98e4ab32f28ba68a86350"; //Policy codes can be obtained from concur.ClaimCreateDD();
             claim.TeamName = "Test Team";
@@ -215,7 +215,7 @@ namespace Unit_Test
             Expense expense = new Expense();
             expense.Date = "2099-06-21";
             expense.Cost = (decimal)69.00;
-            expense.Description = Fuzzer.GenerateRandomString(10, true); 
+            expense.Description = Fuzzer.GenerateRandomString(10, true);
             expense.Supplier = Fuzzer.GenerateRandomString(10, true);
             expense.ReceiptNo = Fuzzer.GenerateRandomString(10, true);
             expense.Comment = Fuzzer.GenerateRandomString(100, true); ;
@@ -232,7 +232,7 @@ namespace Unit_Test
             }
             Assert.True(true);
         }
-        [Fact]
+        [Fact(DisplayName = "12.6")]
         public void FuzzerAmount()
         {
             ConcurAPI concur = new ConcurAPI(cookie);
@@ -265,7 +265,7 @@ namespace Unit_Test
             //Create new expense
             Expense expense = new Expense();
             expense.Date = "2099-06-21";
-            expense.Cost = (decimal)Fuzzer.GenerateRandomDouble(5,2);
+            expense.Cost = (decimal)Fuzzer.GenerateRandomDouble(5, 2);
             expense.Description = "Test Description";
             expense.Supplier = "Test Supplier";
             expense.ReceiptNo = "Test Receipt";

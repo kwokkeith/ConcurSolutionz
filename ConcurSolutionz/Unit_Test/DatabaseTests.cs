@@ -49,7 +49,7 @@ namespace Unit_Test
         string dbtestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "DatabaseTest.fdr");
         string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1000.png");
 
-        [Fact]
+        [Fact(DisplayName = "11.1")]
         public void InstanceTest_ShouldReturnSameInstance()
         {
             // Arrange & Act
@@ -60,7 +60,7 @@ namespace Unit_Test
             Assert.Same(instance1, instance2);
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.2")]
         public void SetSettings_AndGetSettings_ReturnsSameDirectory()
         {
             // Arrange
@@ -80,7 +80,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void SetsWorkingDirectory_AndGetWorkingDirectory_ReturnsSameWorkingDirectory()
         {
             // Arrange
@@ -94,7 +94,7 @@ namespace Unit_Test
             Assert.Equal(path, dbinstance.Getwd());
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void CreateFile_ForEntryType_CreatesEntry()
         {
             // Arrange
@@ -158,7 +158,7 @@ namespace Unit_Test
             Assert.Contains(md.ProjectClub, fileContent);
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void CreateFile_ForFolderType_CreatesFolder()
         {
             // Arrange
@@ -198,7 +198,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void DeleteFile_RemovesFolderOrEntryFromSystem()
         {
             // Arrange
@@ -217,7 +217,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
 
         public void GetFilesFromWD_ReturnsBothFilesAndFolders()
         {
@@ -297,7 +297,7 @@ namespace Unit_Test
 
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
 
         public void GetFilesFromWD_ReturnsFolders()
         {
@@ -337,7 +337,7 @@ namespace Unit_Test
         }
 
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void GetFilesFromWD_ReturnsEntries()
         {
             // Arrange
@@ -408,7 +408,7 @@ namespace Unit_Test
 
 
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileSelectByFileName_SelectsFolderWithGivenName()
         {
 
@@ -432,7 +432,7 @@ namespace Unit_Test
             Assert.Equal(path1, dbinstance.Getwd());
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileSelectByFileName_SelectsNothingWithGivenEntryName()
         {
 
@@ -492,7 +492,7 @@ namespace Unit_Test
             Assert.Equal(Path.Combine(path1), dbinstance.Getwd());
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.") ]
         public void FileSelectByFilePath_SelectsFolderWithGivenPath()
         {
 
@@ -516,7 +516,7 @@ namespace Unit_Test
             Assert.Equal(path1, dbinstance.Getwd());
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileSelectByFilePath_SelectsNothingWithGivenEntryPath()
         {
 
@@ -566,7 +566,7 @@ namespace Unit_Test
         }
 
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileSelectByFileName_ThrowsException_IfFileNotExists()
         {
 
@@ -582,7 +582,7 @@ namespace Unit_Test
             });
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileGoBack_UpdatesWorkingDirectory()
         {
 
@@ -612,7 +612,7 @@ namespace Unit_Test
             Assert.Equal(path2, newWd);
         }
 
-        [Fact]
+        [Fact(DisplayName = "11.")]
         public void FileGoBack_ReturnsSameDirectory_WhenInRootDirectory()
         {
             // Arrange

@@ -44,7 +44,7 @@ namespace Unit_Test
         string entrytestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "EntryTest.fdr");
         string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1001.png");
 
-        [Fact, TestPriority(0)]
+        [Fact(DisplayName = "5.1"), TestPriority(0)]
         public void BuildEntry_ShouldBuild_UsingBuilder()
         {
             // Arrange
@@ -104,7 +104,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(1)]
+        [Fact(DisplayName = "5.2"), TestPriority(1)]
         public void BuildEntry_ShouldThrowException_ForMissingAttributes()
         {
             // Arrange
@@ -114,7 +114,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentNullException>(() => entryBuilder.Build());
         }
 
-        [Fact, TestPriority(2)]
+        [Fact(DisplayName = "5.3"), TestPriority(2)]
         public void BuildEntry_ShouldThrowException_ForSettingFilePathBeforeFileName()
         {
             // Arrange
@@ -138,7 +138,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact, TestPriority(3)]
+        [Fact(DisplayName = "5.4"), TestPriority(3)]
         public void BuildEntry_ShouldThrowException_ForDuplicateFileName()
         {
             // Arrange
@@ -169,7 +169,7 @@ namespace Unit_Test
         }
 
 
-        [Fact, TestPriority(4)]
+        [Fact(DisplayName = "5."), TestPriority(4)]
         public void BuildEntry_ShouldThrowException_ForNullFile()
         {
             // Arrange
@@ -179,7 +179,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => entryBuilder.SetFileName(null));
         }
 
-        [Fact, TestPriority(5)]
+        [Fact(DisplayName = "5."), TestPriority(5)]
         public void BuildEntry_ShouldThrowException_ForNullFilePath()
         {
             // Arrange
@@ -190,7 +190,7 @@ namespace Unit_Test
                 .SetFilePath(null));
         }
 
-        [Fact, TestPriority(6)]
+        [Fact(DisplayName = "5."), TestPriority(6)]
         public void BuildEntry_ShouldThrowException_ForInvalidFilePath()
         {
             // Arrange
@@ -201,7 +201,7 @@ namespace Unit_Test
                 .SetFilePath(Path.Combine(entrytestpath, "jasbnfjnjwn")));
         }
 
-        [Fact, TestPriority(7)]
+        [Fact(DisplayName = "5."), TestPriority(7)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureCreationDate()
         {
             // Arrange
@@ -225,7 +225,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact, TestPriority(8)]
+        [Fact(DisplayName = "5."), TestPriority(8)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureLastModifiedDate()
         {
             // Arrange
@@ -249,7 +249,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact, TestPriority(9)]
+        [Fact(DisplayName = "5."), TestPriority(9)]
         public void BuildEntry_ShouldReturnFalseFolderVariable()
         {
             // Arrange
@@ -297,7 +297,7 @@ namespace Unit_Test
             Assert.False(entry.Folder);
         }
 
-        [Fact, TestPriority(10)]
+        [Fact(DisplayName = "5.8"), TestPriority(10)]
         public void AssignRecordID_SetsAUniqueRecordID()
         {
             // Arrange
@@ -360,7 +360,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(11)]
+        [Fact(DisplayName = "5.9"), TestPriority(11)]
         public void AddRecord_AddsRecord_ToListOfRecords()
         {
             // Arrange
@@ -421,7 +421,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(12)]
+        [Fact(DisplayName = "5.10"), TestPriority(12)]
         public void DelRecord_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -481,7 +481,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords().Count);
         }
 
-        [Fact, TestPriority(13)]
+        [Fact(DisplayName = "5.11"), TestPriority(13)]
         public void DelRecord_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -540,7 +540,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(14)]
+        [Fact(DisplayName = "5.12"), TestPriority(14)]
         public void DelRecordByID_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -600,7 +600,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords()[0].RecordID);
         }
 
-        [Fact, TestPriority(15)]
+        [Fact(DisplayName = "5.13"), TestPriority(15)]
         public void DelRecordByID_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -661,7 +661,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(16)]
+        [Fact(DisplayName = "5.14"), TestPriority(16)]
         public void GetRecords_ReturnsListOfRecords()
         {
             // Arrange
@@ -725,7 +725,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(17)]
+        [Fact(DisplayName = "5.15"), TestPriority(17)]
         public void GetRecord_ReturnsRecord_WithSpecifiedRecordID()
         {
             // Arrange
@@ -786,7 +786,7 @@ namespace Unit_Test
             Assert.Equal(receipt2, entry.GetRecord(1));
         }
 
-        [Fact, TestPriority(18)]
+        [Fact(DisplayName = "5.16"), TestPriority(18)]
         public void GetRecord_ReturnsNull_WhenRetrievingNonExistingRecord()
         {
             // Arrange
@@ -819,6 +819,73 @@ namespace Unit_Test
             Database.CreateFile(entry);
 
             Assert.Equal(null, entry.GetRecord(8));
+        }
+
+        [Fact, TestPriority(19)]
+        public void BuildEntry_ShouldBuild_UsingBuilder_Fuzz()
+        {
+            string entryName = Fuzzer.GenerateRandomString(10);
+            decimal budget = Convert.ToDecimal(Fuzzer.GenerateRandomDouble(5, 2));
+            string claimName = Fuzzer.GenerateRandomString(10);
+            string claimDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string purpose = Fuzzer.GenerateRandomString(20);
+            string teamName = Fuzzer.GenerateRandomString(5);
+            string projectClub = Fuzzer.GenerateRandomString(10);
+
+
+            // Arrange
+            if (Directory.Exists(Path.Combine(entrytestpath + entryName + ".entry")))
+            {
+                Directory.Delete(Path.Combine(entrytestpath + entryName + ".entry"), true);
+            }
+
+            Entry.EntryBuilder entryBuilder = new();
+            Entry entry;
+
+            string transactionDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string description = Fuzzer.GenerateRandomString(20);
+            string supplierName = Fuzzer.GenerateRandomString(10);
+            decimal reqAmt = Convert.ToDecimal(Fuzzer.GenerateRandomDouble(5, 2));
+            string receiptNumber = Fuzzer.GenerateRandomString(30);
+            string receiptStatus = Fuzzer.GenerateRandomString(10);
+
+            // Act
+            receipt1 = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription(description)
+                .SetSupplierName(supplierName)
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(reqAmt)
+                .SetReceiptNumber(receiptNumber)
+                .SetReceiptStatus(receiptStatus)
+                .SetImgPath(picturepath)
+                .Build();
+
+            records.Add(receipt1);
+
+
+
+            md = studentProjMDBuilder
+                .SetEntryName(entryName)
+                .SetEntryBudget(budget)
+                .SetClaimName(claimName)
+                .SetClaimDate(DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetPurpose(purpose)
+                .SetTeamName(teamName)
+                .SetProjectClub(projectClub)
+                .Build();
+
+            entry = entryBuilder.SetFileName(entryName)
+                .SetCreationDate(DateTime.Now)
+                .SetFilePath(entrytestpath)
+                .SetMetaData(md)
+                .SetRecords(records)
+                .Build();
+            Database.CreateFile(entry);
+
+            // Assert
+            Assert.True(Directory.Exists(entry.FilePath));
+
         }
     }
 }

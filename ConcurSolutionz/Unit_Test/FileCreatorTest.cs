@@ -50,7 +50,7 @@ namespace Unit_Test
         string picturepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Pictures", "IMG_1000.png");
         string filecreatortestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "FileCreatorTest.fdr");
 
-        [Fact, TestPriority(0)]
+        [Fact(DisplayName = "12.1"), TestPriority(0)]
         public void CreateFile_ShouldCreateFolder_UsingFileCreator()
         {
             // Arrange
@@ -83,7 +83,7 @@ namespace Unit_Test
             Assert.Equal(Expected3, folder.LastModifiedDate);
         }
 
-        [Fact, TestPriority(1)]
+        [Fact(DisplayName = "12.2"), TestPriority(1)]
         public void CreateFile_ShouldCreateEntry_UsingFileCreator()
         {
             // Arrange
@@ -138,7 +138,7 @@ namespace Unit_Test
             Assert.True(Directory.Exists(Path.Combine(entry.FileName, entry.FilePath)));
         }
 
-        [Fact, TestPriority(2)]
+        [Fact(DisplayName = "12.3"), TestPriority(2)]
         public void CreateFile_ShouldThrowException_ForExistingFile()
         {
 
@@ -158,7 +158,7 @@ namespace Unit_Test
         }
 
 
-        [Fact, TestPriority(3)]
+        [Fact(DisplayName = "12.4"), TestPriority(3)]
         public void CopyFile_ShouldCopy_NonExistingFile()
         {
             // Arrange
@@ -175,7 +175,7 @@ namespace Unit_Test
             Assert.True(File.Exists(Path.Combine(filecreatortestpath, "CopyFileTest", "IMG_1000.png")));
         }
 
-        [Fact, TestPriority(4)]
+        [Fact(DisplayName = "12.5"), TestPriority(4)]
         public void CopyFile_ShouldOverwrite_ExistingFile()
         {
             // Act
@@ -185,7 +185,7 @@ namespace Unit_Test
             Assert.True(File.Exists(Path.Combine(filecreatortestpath, "CopyFileTest", "IMG_1000.png")));
         }
 
-        [Fact, TestPriority(5)]
+        [Fact(DisplayName = "12.6"), TestPriority(5)]
         public void CopyFile_ShouldThrowException_ForIncorrectFilePath()
         {
             // Assert
@@ -194,7 +194,7 @@ namespace Unit_Test
 
 
 
-        [Fact, TestPriority(6)]
+        [Fact(DisplayName = "12.7"), TestPriority(6)]
         public void PopulateReceiptFolder_ShouldPopulateFolder_ForNonExistingReceipts()
         {
             if (Directory.Exists(Path.Combine(filecreatortestpath, "PopulateReceiptFolderTest")))
@@ -251,7 +251,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(7)]
+        [Fact(DisplayName = "12.8"), TestPriority(7)]
         public void PopulateReceiptFolder_ShouldPopulateFolder_ForExistingReceipts()
         {
             // Arrange
@@ -303,7 +303,7 @@ namespace Unit_Test
 
         }
 
-        [Fact, TestPriority(8)]
+        [Fact(DisplayName = "12.9"), TestPriority(8)]
         public void PopulateReceiptFolder_ShouldThrowException_ForIncorrectFilePath()
         {
             // Arrange
