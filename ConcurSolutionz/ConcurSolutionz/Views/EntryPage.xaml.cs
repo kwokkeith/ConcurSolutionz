@@ -332,7 +332,14 @@ public partial class EntryPage : ContentPage
             RemainingBudget.TextColor = Colors.Red;
         } else
         {
-            RemainingBudget.TextColor = Colors.Black;
+            if(Application.Current.RequestedTheme == AppTheme.Light)
+            {
+                RemainingBudget.TextColor = Colors.Black;
+
+            } else
+            {
+                RemainingBudget.TextColor = Colors.White;
+            }
         }
     }
 

@@ -62,7 +62,7 @@
 
         <Border StrokeShape="RoundRectangle 10,10,10,10"
                 Stroke="#D3D3D3"
-                BackgroundColor="AliceBlue"
+                Background="{AppThemeBinding Light=AliceBlue, Dark=DarkSlateBlue}"
                 Padding="20,10"
                 StrokeThickness="3"
                 HeightRequest="500">
@@ -84,7 +84,8 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2 }"
+                                
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged">
