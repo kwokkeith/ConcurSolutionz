@@ -4,7 +4,7 @@ namespace ConcurSolutionz.Database
     public class Concur: Settings
     {
         public Concur(){
-            SubType = "Concur";
+            SubType = GetType().FullName;
         }
 
         private CookieStorage cookieStorage;
