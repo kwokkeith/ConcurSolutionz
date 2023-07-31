@@ -320,6 +320,11 @@ namespace ConcurSolutionz.Database
         }
 
 
+        // <summary> Synchronises Entry if modifications were made to receipt images or metadata in native file directory </summary>
+        // <remarks>
+        // This method handles the synchronisation of entries if user makes modifciations to the receipt folder or receipt metadata
+        // through the native file directory.
+        // </remarks>
         private static void SynchroniseEntry(string entryFilePath)
         {
             // Get EntryMetaDataPath
