@@ -80,7 +80,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.3")]
         public void SetsWorkingDirectory_AndGetWorkingDirectory_ReturnsSameWorkingDirectory()
         {
             // Arrange
@@ -94,7 +94,7 @@ namespace Unit_Test
             Assert.Equal(path, dbinstance.Getwd());
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.4")]
         public void CreateFile_ForEntryType_CreatesEntry()
         {
             // Arrange
@@ -158,7 +158,7 @@ namespace Unit_Test
             Assert.Contains(md.ProjectClub, fileContent);
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.4")]
         public void CreateFile_ForFolderType_CreatesFolder()
         {
             // Arrange
@@ -198,7 +198,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.6")]
         public void DeleteFile_RemovesFolderOrEntryFromSystem()
         {
             // Arrange
@@ -217,9 +217,9 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.7")]
 
-        public void GetFilesFromWD_ReturnsBothFilesAndFolders()
+        public void GetFilePathsFromWD_ReturnsBothFilesAndFolders()
         {
             // Arrange
             string path = Path.Combine(dbtestpath, "Folder 3.fdr");
@@ -297,9 +297,9 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.8")]
 
-        public void GetFilesFromWD_ReturnsFolders()
+        public void GetFilePathsFromWD_ReturnsFolders()
         {
             // Arrange
             string path = Path.Combine(dbtestpath, "Folder 4.fdr");
@@ -337,8 +337,8 @@ namespace Unit_Test
         }
 
 
-        [Fact(DisplayName = "11.")]
-        public void GetFilesFromWD_ReturnsEntries()
+        [Fact(DisplayName = "11.9")]
+        public void GetFilePathsFromWD_ReturnsEntries()
         {
             // Arrange
             string path = Path.Combine(dbtestpath, "Folder 5.fdr");
@@ -408,7 +408,7 @@ namespace Unit_Test
 
 
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.10")]
         public void FileSelectByFileName_SelectsFolderWithGivenName()
         {
 
@@ -432,7 +432,7 @@ namespace Unit_Test
             Assert.Equal(path1, dbinstance.Getwd());
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.11")]
         public void FileSelectByFileName_SelectsNothingWithGivenEntryName()
         {
 
@@ -492,7 +492,23 @@ namespace Unit_Test
             Assert.Equal(Path.Combine(path1), dbinstance.Getwd());
         }
 
-        [Fact(DisplayName = "11.") ]
+        [Fact(DisplayName = "11.12")]
+        public void FileSelectByFileName_ThrowsException_IfFileNotExists()
+        {
+
+            // Arrange
+            string fileName = "not_present.txt";
+            Database dbinstance = Database.Instance;
+
+            // Assert  
+            Assert.Throws<Exception>(() =>
+            {
+                // Act  
+                dbinstance.FileSelectByFileName(fileName);
+            });
+        }
+
+        [Fact(DisplayName = "11.13") ]
         public void FileSelectByFilePath_SelectsFolderWithGivenPath()
         {
 
@@ -516,7 +532,7 @@ namespace Unit_Test
             Assert.Equal(path1, dbinstance.Getwd());
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.14")]
         public void FileSelectByFilePath_SelectsNothingWithGivenEntryPath()
         {
 
@@ -566,29 +582,29 @@ namespace Unit_Test
         }
 
 
-        [Fact(DisplayName = "11.")]
-        public void FileSelectByFileName_ThrowsException_IfFileNotExists()
+        [Fact(DisplayName = "11.15")]
+        public void FileSelectByFilePath_ThrowsException_IfFileNotExists()
         {
 
             // Arrange
-            string fileName = "not_present.txt";
+            string filePath = Path.Combine(dbtestpath, "not_present.txt");
             Database dbinstance = Database.Instance;
 
             // Assert  
             Assert.Throws<Exception>(() =>
             {
                 // Act  
-                dbinstance.FileSelectByFileName(fileName);
+                dbinstance.FileSelectByFileName(filePath);
             });
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.16")]
         public void FileGoBack_UpdatesWorkingDirectory()
         {
 
             // Arrange
             Thread.Sleep(100);
-            string path1 = Path.Combine(dbtestpath, "Folder 9.fdr");
+            string path1 = Path.Combine(dbtestpath, "Folder 10.fdr");
             string path2 = dbtestpath;
 
             Database dbinstance = Database.Instance;
@@ -612,7 +628,7 @@ namespace Unit_Test
             Assert.Equal(path2, newWd);
         }
 
-        [Fact(DisplayName = "11.")]
+        [Fact(DisplayName = "11.17")]
         public void FileGoBack_ReturnsSameDirectory_WhenInRootDirectory()
         {
             // Arrange
@@ -632,6 +648,106 @@ namespace Unit_Test
             // Assert
             Assert.Equal(path, newWd);
 
+        }
+
+        [Fact(DisplayName = "11.18")]
+        public void GetFileDetailFromFileName_ReturnsFileDetail_WhenFileExists()
+        {
+            // Arrange
+            string path1 = Path.Combine(dbtestpath, "Folder 11.fdr");
+            string path2 = dbtestpath;
+            Database dbinstance = Database.Instance;
+            if (Directory.Exists(path1))
+            {
+                Directory.Delete(path1, true);
+            }
+            Directory.CreateDirectory(path1);
+            Entry.EntryBuilder entryBuilder = new();
+            Entry entry;
+            List<ConcurSolutionz.Database.Record> records = new List<ConcurSolutionz.Database.Record>();
+            StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
+            StudentProjectClaimMetaData md;
+
+            string fileName = "Entry 1";
+            dbinstance.Setwd(path1);
+
+            // Act 
+            md = studentProjMDBuilder
+                    .SetEntryName(fileName)
+                    .SetEntryBudget(100)
+                    .SetClaimName("Claim 1")
+                    .SetClaimDate(DateTime.ParseExact("10/02/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                    .SetPurpose("Purpose 1")
+                    .SetTeamName("Team 1")
+                    .SetProjectClub("Project Club 1")
+                    .Build();
+
+            entry = entryBuilder.SetFileName(fileName)
+                    .SetCreationDate(DateTime.Now)
+                    .SetFilePath(path1)
+                    .SetMetaData(md)
+                    .SetRecords(records)
+                    .Build();
+
+            Database.CreateFile(entry);
+            // Act 
+            Tuple<MetaData, List<ConcurSolutionz.Database.Record>> files = dbinstance.getFileDetailFromFileName("Entry 1.entry");
+
+            // Assert
+            StudentProjectClaimMetaData newMD = MDAdaptor.ConvertMetaData(files.Item1);
+            Assert.Equivalent(md, newMD);
+            Assert.Equivalent(records, (files.Item2));
+        }
+
+        [Fact(DisplayName = "11.19")]
+        public void RenameEntry_UpdatesEntryMetadata()
+        {
+            // Arrange
+            string path1 = Path.Combine(dbtestpath, "Folder 12.fdr");
+            string path2 = dbtestpath;
+            Database dbinstance = Database.Instance;
+            if (Directory.Exists(path1))
+            {
+                Directory.Delete(path1, true);
+            }
+            Directory.CreateDirectory(path1);
+            Entry.EntryBuilder entryBuilder = new();
+            Entry entry;
+            List<ConcurSolutionz.Database.Record> records = new List<ConcurSolutionz.Database.Record>();
+            StudentProjectClaimMDBuilder studentProjMDBuilder = new StudentProjectClaimMDBuilder();
+            StudentProjectClaimMetaData md;
+
+            string fileName = "Entry 1";
+            dbinstance.Setwd(path1);
+
+            // Act 
+            md = studentProjMDBuilder
+                    .SetEntryName(fileName)
+                    .SetEntryBudget(100)
+                    .SetClaimName("Claim 1")
+                    .SetClaimDate(DateTime.ParseExact("10/02/2023", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                    .SetPurpose("Purpose 1")
+                    .SetTeamName("Team 1")
+                    .SetProjectClub("Project Club 1")
+                    .Build();
+
+            entry = entryBuilder.SetFileName(fileName)
+                    .SetCreationDate(DateTime.Now)
+                    .SetFilePath(path1)
+                    .SetMetaData(md)
+                    .SetRecords(records)
+                    .Build();
+
+            Database.CreateFile(entry);
+
+            Directory.Move(entry.FilePath, Path.Combine(path1, "Entry 2.entry"));
+
+            // Act 
+            Database.RenameEntry(Path.Combine(path1, "Entry 2.entry"));
+
+            // Assert
+            string fileContent = File.ReadAllText(Path.Combine(path1, "Entry 2.entry", "EntryMetaData.json"));
+            Assert.Contains("Entry 2", fileContent);
         }
 
     }

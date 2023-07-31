@@ -36,8 +36,17 @@ namespace Unit_Test
         Cookie cookie;
         string cookiestoragetestpath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Documents", "ConcurTests", "CookieStorageTest.fdr");
 
-
         [Fact(DisplayName = "9.1")]
+        public void CookieStorage_SetsCookieStoragePath()
+        {
+            // Arrange & Act
+            CookieStorage storage = new CookieStorage { CookieStoragePath = cookiestoragetestpath };
+
+            // Assert
+            Assert.Equal(cookiestoragetestpath, storage.CookieStoragePath);
+        }
+
+        [Fact(DisplayName = "9.2")]
         public void StoreCookie_StoresValidCookie_AndCookieFileExists()
         {
             string path = Path.Combine(cookiestoragetestpath, "File 1.entry");
