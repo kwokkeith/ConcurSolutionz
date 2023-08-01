@@ -89,7 +89,7 @@
                            VerticalOptions="Center"
                            FontSize="Body"/>
                     <Entry  x:Name="DescriptionInp"
-                            Placeholder="Type"
+                            Placeholder="Description"
                             Grid.Column="1"
                             Grid.Row="2"
                             Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
