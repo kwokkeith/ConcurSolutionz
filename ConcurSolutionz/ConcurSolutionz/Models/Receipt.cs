@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace ConcurSolutionz.Models
 {
@@ -23,7 +22,6 @@ namespace ConcurSolutionz.Models
         private string imgPath;
         public int recordID { get; set; }
 
-
         // Property change event
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,6 +30,7 @@ namespace ConcurSolutionz.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
 
         public decimal ReqAmount
         {
@@ -46,6 +45,7 @@ namespace ConcurSolutionz.Models
             }
         }
 
+
         public string SupplierName
         {
             get => supplierName;
@@ -58,6 +58,7 @@ namespace ConcurSolutionz.Models
                 }
             }
         }
+
 
         public string PaymentType
         {
@@ -72,6 +73,7 @@ namespace ConcurSolutionz.Models
             }
         }
 
+
         public string ExpenseType
         {
             get => expenseType;
@@ -85,6 +87,7 @@ namespace ConcurSolutionz.Models
             }
         }
 
+
         public DateTime TransactionDate
         {
             get => transactionDate;
@@ -96,18 +99,19 @@ namespace ConcurSolutionz.Models
                     OnPropertyChanged(nameof(TransactionDate));
                 }
             }
-
-            // Implement the remaining properties similarly... 
         }
 
 
         //Id of the expense reflected on Concur (ExpenseId)
         private string Id;
+
         //ReportId of the claim that the expense is under
         private string ReportId;
+
         //Key assigned to expense upon creation used to identify the expense
         private string RPEKey;
-        //Id of the image that should be attached to the expense
+
+        //ID of the image that should be attached to the expense
 
         // Methods from Record interface
         public void AssignRecordId()
@@ -146,12 +150,9 @@ namespace ConcurSolutionz.Models
             comment = builder.Comment;
             imgPath = builder.ImgPath;
         }
-        // To create a new receipt instance:
-        //ReceiptBuilder builder = new ReceiptBuilder();
-        //builder.SetPaymentType("Cash").SetExpenseType("Food").SetTransactionDate(DateTime.Now).SetDescription("Dinner");
-
-        //Receipt receipt = builder.Build();  // This receipt now has all the properties set in the builder
     }
+
+
     public class ReceiptBuilder
     {
         public string PaymentType { get; set; }
@@ -170,11 +171,13 @@ namespace ConcurSolutionz.Models
         public string Comment { get; set; }
         public string ImgPath { get; set; }
 
+
         public ReceiptBuilder SetPaymentType(string paymentType)
         {
             PaymentType = paymentType;
             return this;
         }
+
 
         public ReceiptBuilder SetExpenseType(string expenseType)
         {
@@ -182,11 +185,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetTransactionDate(DateTime dateTime)
         {
             TransactionDate = dateTime;
             return this;
         }
+
 
         public ReceiptBuilder SetDescription(string description)
         {
@@ -194,11 +199,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetSupplierName(string supplierName)
         {
             SupplierName = supplierName;
             return this;
         }
+
 
         public ReceiptBuilder SetCityOfPurchase(string cityOfPurchase)
         {
@@ -206,11 +213,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetReqAmount(decimal reqAmount)
         {
             ReqAmount = reqAmount;
             return this;
         }
+
 
         public ReceiptBuilder SetConversionRate(decimal conversionRate)
         {
@@ -218,11 +227,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetCurrencyAmountSGD(decimal currencyAmountSGD)
         {
             CurrencyAmountSGD = currencyAmountSGD;
             return this;
         }
+
 
         public ReceiptBuilder SetReceiptNumber(string receiptNumber)
         {
@@ -237,11 +248,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetIsBillable(bool isBillable)
         {
             IsBillable = isBillable;
             return this;
         }
+
 
         public ReceiptBuilder SetIsPersonalExpense(bool isPersonalExpense)
         {
@@ -249,11 +262,13 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public ReceiptBuilder SetComment(string comment)
         {
             Comment = comment;
             return this;
         }
+
 
         public ReceiptBuilder SetImgPath(string imgPath)
         {
@@ -261,10 +276,10 @@ namespace ConcurSolutionz.Models
             return this;
         }
 
+
         public Receipt Build()
         {
             return new Receipt(this);
         }
     }
-
 }

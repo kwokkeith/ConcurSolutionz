@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConcurSolutionz.Models
+﻿namespace ConcurSolutionz.Models
 {
     public sealed class Cookie
     {
-        private static readonly Lazy<Cookie> lazy = new Lazy<Cookie>(() => new Cookie());
+        private static readonly Lazy<Cookie> lazy = new(() => new Cookie());
 
         public string RawCookie { get; set; }
         private string AWSALBTG = "";
@@ -23,7 +17,13 @@ namespace ConcurSolutionz.Models
         private string bm_sv = "";
         private string bm_sz = "";
 
-        public static Cookie Instance{get{return lazy.Value;}}
+        public static Cookie Instance{
+            get
+            {
+                return lazy.Value;
+            }
+        }
+
 
         public void SetCookie(string rawCookie)
         {
@@ -34,7 +34,7 @@ namespace ConcurSolutionz.Models
             {
                 string CurrentLine = CookieFields[i].Trim();
                 string temp = CurrentLine.Split('=')[0];
-                if (CurrentLine.Contains("AWSALBTG=")) { AWSALBTG = CurrentLine + ';';}
+                if (CurrentLine.Contains("AWSALBTG=")) { AWSALBTG = CurrentLine + ';'; }
                 else if (CurrentLine.Contains("AWSALBTGCORS=")) { AWSALBTGCORS = CurrentLine + ';'; }
                 else if (CurrentLine.Contains("JWT=")) { JWT = CurrentLine + ';'; }
                 else if (CurrentLine.Contains("OTSESSIONAABQRD=")) { OTSESSIONAABQRD = CurrentLine + ';'; }
@@ -47,6 +47,7 @@ namespace ConcurSolutionz.Models
                 else if (CurrentLine.Contains("bm_sz=")) { bm_sz = CurrentLine + ';'; }
             }
         }
+
 
         public void PrintAll()
         {

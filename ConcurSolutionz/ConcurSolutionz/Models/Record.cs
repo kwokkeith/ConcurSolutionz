@@ -1,5 +1,4 @@
-﻿using System;
-namespace ConcurSolutionz
+﻿namespace ConcurSolutionz
 {
     public interface Record
     {

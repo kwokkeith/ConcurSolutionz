@@ -1,5 +1,4 @@
-﻿using System;
-namespace ConcurSolutionz.Models
+﻿namespace ConcurSolutionz.Models
 {
 	public class Projects
 	{
@@ -106,6 +105,7 @@ namespace ConcurSolutionz.Models
             {"CAP21F002-NORGREN_BIG DATA ANALYSIS", "9003c78f89b8a74ea0e1171ce39aa9e7"},
             {"CAP21F003-CGH_PREVENTING FALLS", "5139a832ce1c9e429bb7c5b4ecc4b748"}
         };
+
 
         public IReadOnlyDictionary<string, string> GetProjects()
         {

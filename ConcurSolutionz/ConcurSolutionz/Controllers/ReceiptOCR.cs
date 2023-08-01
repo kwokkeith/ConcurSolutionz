@@ -7,7 +7,7 @@ namespace ConcurSolutionz.Controllers
     public class ReceiptOCR
     {
         public string receiptNumber;
-        public Decimal reqAmount;
+        public decimal reqAmount;
         public string imgPath;
         public List<(Point[],string)> textBoxes = new();
         public double imgWidth;
@@ -78,6 +78,7 @@ namespace ConcurSolutionz.Controllers
                 Console.WriteLine(ex.ToString());
             }
         }
+
 
         private void OCR()
         {
