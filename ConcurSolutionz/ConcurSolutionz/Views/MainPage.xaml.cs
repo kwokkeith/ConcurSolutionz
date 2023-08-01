@@ -50,7 +50,7 @@ public partial class MainPage : ContentPage
         Files = new ObservableCollection<FileItem>();
         CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
         BindingContext = this;
-        WorkingDirectory.Text = Database.Database.Instance.Getwd();
+        RefreshWorkingDirectoryLabel();
 
         // Get current working directory from database
         LoadFilesFromDB();
@@ -182,7 +182,6 @@ public partial class MainPage : ContentPage
         {
             // SELECT file
             Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-            WorkingDirectory.Text = Database.Database.Instance.Getwd();
 
             // Populate File Management View
             RefreshPage();
@@ -228,8 +227,8 @@ public partial class MainPage : ContentPage
     private void OnBackClicked(object sender, EventArgs e)
     {
         Database.Database.Instance.FileGoBack();
-        WorkingDirectory.Text = Database.Database.Instance.Getwd();
         SelectedFile = null;
+        RefreshWorkingDirectoryLabel();
         RefreshPage();
     }
 
@@ -256,7 +255,7 @@ public partial class MainPage : ContentPage
             }
             catch
             {
-                DisplayAlert("Failure!", "File failed to open!", "OK");
+                await DisplayAlert("Failure!", "File failed to open!", "OK");
             }
         }
     }
@@ -347,7 +346,7 @@ public partial class MainPage : ContentPage
                 }
                 catch (Exception ex)
                 {
-                    DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
+                    await DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
                 }
             }
 
@@ -400,6 +399,7 @@ public partial class MainPage : ContentPage
             OnPropertyChanged(nameof(Files));
         }
 
+    // <Summary> Functionality to sort the files in the file management page </Summary>
     private void SortFiles()
     {
         switch (CurrentSortOption)
@@ -413,12 +413,37 @@ public partial class MainPage : ContentPage
         }
     }
 
+
+    // <Summary>To refresh the file management page</Summary>
     private void RefreshPage()
     {
         Files.Clear(); // Remove all files in the Files list
         LoadFilesFromDB(); // Reload from current working directory
+        RefreshWorkingDirectoryLabel(); // Reload the current working path label
         SelectedFile = null; // deselect selected files
     }
+
+
+    // <Summary>Updates the working directory label with the current directory</Summary>
+    public void RefreshWorkingDirectoryLabel()
+    {
+        string workingDirectory = Database.Database.Instance.Getwd();
+        string rootDirectory = Database.Database.Instance.Settings.GetRootDirectory();
+
+        // to replace the specific text with blank
+        string printablePath = workingDirectory.Replace(rootDirectory, "");
+
+        // Drop the '\' or '/' at the front of the string
+        if (printablePath.Length > 0)
+        {
+            printablePath = printablePath.Substring(1);
+        }
+
+        printablePath = Path.Combine("..", printablePath);
+
+        WorkingDirectory.Text = printablePath;
+    }
+
 }
 // UTILITIES
 public class RemoveExtensionConverter : IValueConverter
@@ -434,7 +459,6 @@ public class RemoveExtensionConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
-
 
 public enum SortOption
 {
