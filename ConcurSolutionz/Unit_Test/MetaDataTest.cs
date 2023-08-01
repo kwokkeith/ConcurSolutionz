@@ -184,44 +184,52 @@ namespace Unit_Test
             MetaData metadata;
             string claimName = Fuzzer.GenerateRandomString(10);
             string purpose = Fuzzer.GenerateRandomString(20);
-            string claimDate = Fuzzer.GenerateRandomDateTime();
+            DateTime claimDate = Fuzzer.GenerateRandomDateTime();
             string teamName = Fuzzer.GenerateRandomString(10);
 
             // Act
-            metadata = builder.SetClaimName(claimName)
-                .SetClaimDate(DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
-                .SetPurpose(purpose)
-                .SetTeamName(teamName)
-                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
-                .Build();
+            if (claimDate > DateTime.Now)
+            {
+                Assert.Throws<ArgumentException>(() => builder.SetClaimDate(claimDate));
+            }
 
-            StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
+            else
+            {
+                metadata = builder.SetClaimName(claimName)
+                    .SetClaimDate(claimDate)
+                    .SetPurpose(purpose)
+                    .SetTeamName(teamName)
+                    .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
+                    .Build();
 
-            // Assert
-            string Expected1 = "(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES";
-            Assert.Equal(Expected1, MD.ProjectClub);
+                StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
 
-            DateTime Expected2 = DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-            Assert.Equal(Expected2, MD.ClaimDate);
+                // Assert
+                string Expected1 = "(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES";
+                Assert.Equal(Expected1, MD.ProjectClub);
 
-            string Expected3 = claimName;
-            Assert.Equal(Expected3, MD.ClaimName);
+                DateTime Expected2 = claimDate;
+                Assert.Equal(Expected2, MD.ClaimDate);
 
-            string Expected4 = purpose;
-            Assert.Equal(Expected4, MD.Purpose);
+                string Expected3 = claimName;
+                Assert.Equal(Expected3, MD.ClaimName);
 
-            string Expected5 = teamName;
-            Assert.Equal(Expected5, MD.TeamName);
+                string Expected4 = purpose;
+                Assert.Equal(Expected4, MD.Purpose);
 
-            string Expected6 = "ConcurSolutionz.Database.StudentProjectClaimMetaData";
-            Assert.Equal(Expected6, MD.SubType);
+                string Expected5 = teamName;
+                Assert.Equal(Expected5, MD.TeamName);
 
-            Assert.Equal(MDBuilder.DEFAULT_BUDGET, MD.EntryBudget);
+                string Expected6 = "ConcurSolutionz.Database.StudentProjectClaimMetaData";
+                Assert.Equal(Expected6, MD.SubType);
 
-            Assert.Equal(MDBuilder.DEFAULT_ENTRYNAME, MD.EntryName);
+                Assert.Equal(MDBuilder.DEFAULT_BUDGET, MD.EntryBudget);
 
-            string Expected7 = "Student Project Claim";
-            Assert.Equal(Expected7, MD.Policy);
+                Assert.Equal(MDBuilder.DEFAULT_ENTRYNAME, MD.EntryName);
+
+                string Expected7 = "Student Project Claim";
+                Assert.Equal(Expected7, MD.Policy);
+            }
         }
     }
 }
