@@ -332,8 +332,8 @@ namespace ConcurSolutionz.Database
             // If Entry MetaData missing in native OS File Directory
             if (!Path.Exists(EntryMetaDataPath))
             {
-                Directory.Delete(entryFilePath);
-                throw new ArgumentException("Failed to find metadata file of file with name" + entryFilePath + "!"
+                Directory.Delete(entryFilePath, true);
+                throw new MissingEntryFileException("Failed to find metadata file of file with name" + entryFilePath + "!"
                     + "\n" + "Deleting Entry File to ensure Database synchronisation...");
             }
 
@@ -343,8 +343,8 @@ namespace ConcurSolutionz.Database
             // If the Record folder is missing in native OS File Directory
             if (!Path.Exists(RecordsMetaDataPath))
             {
-                Directory.Delete(entryFilePath);
-                throw new ArgumentException("Failed to find record folder of file with name" + entryFilePath + "!"
+                Directory.Delete(entryFilePath, true);
+                throw new MissingEntryFileException("Failed to find record folder of file with name" + entryFilePath + "!"
                     + "\n" + "Deleting Entry File to ensure Database synchronisation...");
             }
 
