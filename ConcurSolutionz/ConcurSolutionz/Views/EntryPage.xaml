@@ -92,10 +92,6 @@
                             <Picker.ItemsSource>
                                 <x:Array Type="{x:Type x:String}">
                                     <x:String>Student Project Claim</x:String>
-                                    <x:String>Other Student Claim</x:String>
-                                    <x:String>Student Part-time Work Claim</x:String>
-                                    <x:String>Student Organisation Claim</x:String>
-                                    <x:String>Student Research Project Claim</x:String>
                                 </x:Array>
 
                             </Picker.ItemsSource>

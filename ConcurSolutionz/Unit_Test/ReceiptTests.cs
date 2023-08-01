@@ -398,6 +398,74 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => receipt.CurrencyAmountSGD = -1242.52m);
         }
 
+        [Fact(DisplayName = "2.14")]
+        public void Build_ReceiptShouldBuildUsingBuilder_Fuzz()
+        {
+            // Arrange
+            Receipt.ReceiptBuilder receiptBuilder = new();
+            Receipt receipt;
+            string transactionDate = Fuzzer.GenerateRandomDateTime().ToString();
+            string description = Fuzzer.GenerateRandomString(23);
+            string supplierName = Fuzzer.GenerateRandomString(20);
+            decimal reqAmt = Convert.ToDecimal(Fuzzer.GenerateRandomDouble(3, 2));
+            string receiptNumber = Fuzzer.GenerateRandomString(20);
+            string receiptStatus = Fuzzer.GenerateRandomString(10);
 
+            // Act
+            receipt = receiptBuilder.SetExpenseType("Student Event-Others")
+                .SetTransactionDate(DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetDescription(description)
+                .SetSupplierName(supplierName)
+                .SetCityOfPurchase("Singapore, SINGAPORE")
+                .SetReqAmount(reqAmt)
+                .SetReceiptNumber(receiptNumber)
+                .SetReceiptStatus(receiptStatus)
+                .SetImgPath("IMG_5669.JPG")
+                .Build();
+
+            // Assert
+            string Expected1 = "Student Event-Others";
+            Assert.Equal(Expected1, receipt.ExpenseType);
+
+            DateTime Expected2 = DateTime.ParseExact(transactionDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            Assert.Equal(Expected2, receipt.TransactionDate);
+
+            string Expected3 = description;
+            Assert.Equal(Expected3, receipt.Description);
+
+            string Expected4 = supplierName;
+            Assert.Equal(Expected4, receipt.SupplierName);
+
+            string Expected5 = "Singapore, SINGAPORE";
+            Assert.Equal(Expected5, receipt.CityOfPurchase);
+
+            string Expected6 = "Cash";
+            Assert.Equal(Expected6, receipt.PaymentType);
+
+            decimal Expected7 = reqAmt;
+            Assert.Equal(Expected7, receipt.ReqAmount);
+
+            string Expected8 = "Singapore, Dollar";
+            Assert.Equal(Expected8, receipt.Currency);
+
+            string Expected9 = receiptNumber;
+            Assert.Equal(Expected9, receipt.ReceiptNumber);
+
+            string Expected10 = receiptStatus;
+            Assert.Equal(Expected10, receipt.ReceiptStatus);
+
+            bool Expected11 = false;
+            Assert.Equal(Expected11, receipt.IsBillable);
+
+            bool Expected12 = false;
+            Assert.Equal(Expected12, receipt.IsPersonalExpense);
+
+            string Expected13 = "";
+            Assert.Equal(Expected13, receipt.Comment);
+
+            string Expected14 = "IMG_5669.JPG";
+            Assert.Equal(Expected14, receipt.ImgPath);
+
+        }
     }
 }

@@ -163,7 +163,7 @@ public partial class MainPage : ContentPage
     {
         // Handle file/folder double tap event
         var tappedFile = (sender as View)?.BindingContext as FileItem;
-        string filePath = Path.Combine(currentDirectoryPath,tappedFile.FileName);
+        string filePath = Path.Combine(Database.Database.Instance.Getwd(),tappedFile.FileName);
         if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
         {
             // SELECT file
@@ -316,7 +316,7 @@ public partial class MainPage : ContentPage
             {
                 try
                 {
-                    Database.Database.DeleteDirectoryByFilePath(Path.Combine(currentDirectoryPath, SelectedFile.FileName));
+                    Database.Database.DeleteDirectoryByFilePath(Path.Combine(Database.Database.Instance.Getwd(), SelectedFile.FileName));
                     SelectedFile = null;
                     RefreshPage();
                 }

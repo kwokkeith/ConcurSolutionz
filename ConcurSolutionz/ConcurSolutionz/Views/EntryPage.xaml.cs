@@ -151,8 +151,7 @@ public partial class EntryPage : ContentPage
         // Populate Metadata fields
         ClaimNameInp.Text = md.ClaimName;
         ClaimDateInp.Date = md.ClaimDate;
-        //TODO
-        //ProjectClubInp.SelectedItem = Clubmd.ProjectClub;
+        Policy.SelectedIndex = 0;
         ProjectClubInp.SelectedItem = ClubDict.FirstOrDefault(x => x.Value == md.ProjectClub).Key;
         TeamNameInp.Text = md.TeamName;
         Purpose.Text = md.Purpose;
@@ -161,8 +160,6 @@ public partial class EntryPage : ContentPage
         // Entry Budget
         entryBudget = md.EntryBudget;
         currentExpense = 0;
-        //decimal currentExpense = 0;
-        //decimal remainingBudget;
 
         // Clear ReceiptView Collection
         ReceiptView.Clear();
@@ -437,7 +434,7 @@ public partial class EntryPage : ContentPage
 
     // UTILITIES
     // Create entry from existing file
-    private async void CreateExistingFile(string name)
+    private void CreateExistingFile(string name)
     {
         try
         {
