@@ -439,7 +439,7 @@ public partial class MainPage : ContentPage
             printablePath = printablePath.Substring(1);
         }
 
-        printablePath = Path.Combine("..", printablePath);
+        printablePath = Path.Combine(".", printablePath);
 
         WorkingDirectory.Text = printablePath;
     }
