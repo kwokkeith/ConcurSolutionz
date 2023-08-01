@@ -10,7 +10,6 @@ namespace ConcurSolutionz
         public static HttpClient HttpClient { get; private set; }
         private static string UserID, EMPKey;
 
-
         public ConcurAPI(string cookieToken)
         {
             UserID = string.Empty;
