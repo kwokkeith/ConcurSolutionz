@@ -57,13 +57,13 @@
                     Grid.Column="1"
                     Margin="10"
                     Clicked="DeleteEntry_Clicked"
-                    BackgroundColor="{AppThemeBinding Light=IndianRed, Dark=Pink}"/>
+                    BackgroundColor="{AppThemeBinding Light=IndianRed, Dark=#CF6679}"/>
 
         </Grid>
 
         <Border StrokeShape="RoundRectangle 10,10,10,10"
                 Stroke="#D3D3D3"
-                Background="{AppThemeBinding Light=AliceBlue, Dark=DarkSlateBlue}"
+                Background="{AppThemeBinding Light=AliceBlue, Dark=#212121}"
                 Padding="20,10"
                 StrokeThickness="3"
                 HeightRequest="500">
@@ -85,8 +85,7 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray}"
-                                
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040}"                                
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged">
@@ -114,7 +113,6 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
                                 TextChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Claim Date:"
@@ -129,7 +127,7 @@
                                 Grid.Row="2"
                                 HeightRequest="50"
                                 StrokeShape="RoundRectangle 5,5,5,5"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
                                 StrokeThickness="1">
 
                             <DatePicker
@@ -163,7 +161,7 @@
                                 Grid.Column="1"
                                 Grid.Row="0"
                                 FontSize="Body"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged"/>
 
@@ -182,7 +180,6 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
                                 TextChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Purpose:"
@@ -199,7 +196,6 @@
                             FontSize="Body"
                             VerticalOptions="Center"
                             VerticalTextAlignment="Center"
-                            Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
                             TextChanged="OnEditorsTextChanged"/>
                     </Grid>
 
@@ -224,7 +220,6 @@
                             VerticalTextAlignment="Center"
                             FontSize="Body"
                             MaxLength="10"
-                            Background="{AppThemeBinding Light=#E5E4E2, Dark=SlateGray }"
                             TextChanged="OnBudgetCompleted"/>
 
                         <Image Source="warning.png"
@@ -299,7 +294,7 @@
                         Grid.Column="2"
                         Margin="10"
                         Clicked="DeleteRecord_Clicked"
-                        BackgroundColor="{AppThemeBinding Light=IndianRed, Dark=Pink}"
+                        BackgroundColor="{AppThemeBinding Light=IndianRed, Dark=#CF6679}"
                         x:Name="DeleteRecordButton"/>
             </Grid>
 

@@ -77,6 +77,7 @@ namespace ConcurSolutionz.Database
             }
         }
 
+
         private string GetCookiePath()
         {
             try
@@ -89,6 +90,7 @@ namespace ConcurSolutionz.Database
                 return null;
             }
         }
+
 
         /// <summary>Clears the cookies by deleting the cookie JSON file.</summary>
         /// <remarks>

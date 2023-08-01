@@ -1,5 +1,4 @@
-﻿
-using ConcurSolutionz.Database;
+﻿using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views;
 public partial class EmptyPage : ContentPage
@@ -24,7 +23,7 @@ public partial class EmptyPage : ContentPage
 		}
 		else
 		{
-			db.Setwd(rootDir);
+            Database.Database.Instance.Setwd(rootDir);
 			await Shell.Current.GoToAsync(nameof(MainPage));
 		}
 	}

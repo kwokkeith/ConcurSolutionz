@@ -214,7 +214,7 @@ public partial class EntryPage : ContentPage
         }
         else
         {
-            if (Application.Current.RequestedTheme == AppTheme.Light)
+            if(Application.Current.RequestedTheme == AppTheme.Light)
             {
                 RemainingBudget.TextColor = Colors.Black;
 
