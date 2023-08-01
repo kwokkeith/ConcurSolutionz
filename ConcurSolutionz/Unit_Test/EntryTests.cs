@@ -821,7 +821,7 @@ namespace Unit_Test
             Assert.Equal(null, entry.GetRecord(8));
         }
 
-        [Fact, TestPriority(19)]
+        [Fact(DisplayName = "5.17"), TestPriority(19)]
         public void BuildEntry_ShouldBuild_UsingBuilder_Fuzz()
         {
             string entryName = Fuzzer.GenerateRandomString(10);

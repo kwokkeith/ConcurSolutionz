@@ -175,5 +175,53 @@ namespace Unit_Test
             // Assert
             Assert.Throws<ArgumentException>(() => MD.ClaimDate = updatedDate);
         }
+
+        [Fact(DisplayName = "4.8")]
+        public void Build_MetaDataShouldBuildUsingBuilder_Fuzz()
+        {
+            // Arrange
+            StudentProjectClaimMDBuilder builder = new();
+            MetaData metadata;
+            string claimName = Fuzzer.GenerateRandomString(10);
+            string purpose = Fuzzer.GenerateRandomString(20);
+            string claimDate = Fuzzer.GenerateRandomDateTime();
+            string teamName = Fuzzer.GenerateRandomString(10);
+
+            // Act
+            metadata = builder.SetClaimName(claimName)
+                .SetClaimDate(DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                .SetPurpose(purpose)
+                .SetTeamName(teamName)
+                .SetProjectClub("(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES")
+                .Build();
+
+            StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)metadata;
+
+            // Assert
+            string Expected1 = "(PP-00074-E0901-E0901-002) COMPUTATION STRUCTURES";
+            Assert.Equal(Expected1, MD.ProjectClub);
+
+            DateTime Expected2 = DateTime.ParseExact(claimDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            Assert.Equal(Expected2, MD.ClaimDate);
+
+            string Expected3 = claimName;
+            Assert.Equal(Expected3, MD.ClaimName);
+
+            string Expected4 = purpose;
+            Assert.Equal(Expected4, MD.Purpose);
+
+            string Expected5 = teamName;
+            Assert.Equal(Expected5, MD.TeamName);
+
+            string Expected6 = "ConcurSolutionz.Database.StudentProjectClaimMetaData";
+            Assert.Equal(Expected6, MD.SubType);
+
+            Assert.Equal(MDBuilder.DEFAULT_BUDGET, MD.EntryBudget);
+
+            Assert.Equal(MDBuilder.DEFAULT_ENTRYNAME, MD.EntryName);
+
+            string Expected7 = "Student Project Claim";
+            Assert.Equal(Expected7, MD.Policy);
+        }
     }
 }
