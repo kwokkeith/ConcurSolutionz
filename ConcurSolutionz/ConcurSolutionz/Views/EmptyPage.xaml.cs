@@ -14,7 +14,7 @@ public partial class EmptyPage : ContentPage
 	private async void TogglePage()
 	{
         Concur concur = new();
-        Database db = Database.Instance;
+        Database.Database db = Database.Database.Instance;
         db.SetSetting(concur);
         string rootDir = db.GetSettings().GetRootDirectory();
 
