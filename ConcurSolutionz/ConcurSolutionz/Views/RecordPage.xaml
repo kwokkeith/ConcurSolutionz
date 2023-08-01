@@ -41,9 +41,15 @@
                 <VerticalStackLayout>
 
                 <Label Text="Edit receipt details below"
-                       FontSize="Large"
+                       FontSize="Title"
                        HorizontalOptions="CenterAndExpand"
                        Margin="0,30,0,0"/>
+                <Label Text="Tip: Click on boxes to edit incorrect OCR"
+                       x:Name="TipLabel"
+                       FontSize="Small"
+                       HorizontalOptions="CenterAndExpand"
+                       Margin="0,10,0,0"
+                       IsVisible="false"/>
                 <Grid RowDefinitions="100,100,100,100,100,100,100,100,100,100,100,100"
                       ColumnDefinitions=".3*,.7*"
                       ColumnSpacing="10"

@@ -271,6 +271,7 @@ namespace ConcurSolutionz.Views
 
                 ReceiptNo.Text = ReceiptNumber;
                 reqAmount.Text = ReqAmount;
+                TipLabel.IsVisible = true;
             }
             catch (Exception ex)
             {
