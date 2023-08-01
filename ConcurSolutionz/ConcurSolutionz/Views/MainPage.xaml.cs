@@ -41,7 +41,7 @@ public partial class MainPage : ContentPage
     public string SearchText;
 
     private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
-    public string currentDirectoryPath;
+    public string workingDirectoryPath;
 
     // On Page load
     public MainPage()
@@ -50,7 +50,7 @@ public partial class MainPage : ContentPage
         Files = new ObservableCollection<FileItem>();
         CurrentSortOption = SortOption.Alphabetical; // Set the default sorting option
         BindingContext = this;
-        currentDirectoryPath = rootDirectoryPath;
+        WorkingDirectory.Text = Database.Database.Instance.Getwd();
 
         // Get current working directory from database
         LoadFilesFromDB();
@@ -182,6 +182,7 @@ public partial class MainPage : ContentPage
         {
             // SELECT file
             Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
+            WorkingDirectory.Text = Database.Database.Instance.Getwd();
 
             // Populate File Management View
             RefreshPage();
@@ -218,6 +219,7 @@ public partial class MainPage : ContentPage
     private void OnBackClicked(object sender, EventArgs e)
     {
         Database.Database.Instance.FileGoBack();
+        WorkingDirectory.Text = Database.Database.Instance.Getwd();
         SelectedFile = null;
         RefreshPage();
     }
@@ -254,7 +256,7 @@ public partial class MainPage : ContentPage
     {
         // Prompt the user for the new entry name
         string newName = await DisplayPromptAsync("New Entry", "Enter a new entry name");
-        string filePath = Path.Combine(currentDirectoryPath, newName);
+        string filePath = Path.Combine(Database.Database.Instance.Getwd(), newName);
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
@@ -290,8 +292,8 @@ public partial class MainPage : ContentPage
         {
             try
             {
-                string filePath = Path.Combine(currentDirectoryPath, SelectedFile.FileName);
-                string newFilePath = Path.Combine(currentDirectoryPath, newName);
+                string filePath = Path.Combine(Database.Database.Instance.Getwd(), SelectedFile.FileName);
+                string newFilePath = Path.Combine(Database.Database.Instance.Getwd(), newName);
 
 
                 // Rename the selected file/folder in the target directory
