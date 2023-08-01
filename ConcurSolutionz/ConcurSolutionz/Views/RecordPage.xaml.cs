@@ -1,7 +1,4 @@
-﻿using ConcurSolutionz.Controllers;
-using System;
-using System.IO;
-using ConcurSolutionz.Database;
+﻿using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views
 {
@@ -59,6 +56,7 @@ namespace ConcurSolutionz.Views
             }
         }
 
+
         private void PopulateRecordPage(Receipt receipt)
         {
             ExpenseType.Text = receipt.ExpenseType;
@@ -74,6 +72,7 @@ namespace ConcurSolutionz.Views
             IsBillable.IsChecked = receipt.IsBillable;
             PersonalExpense.IsChecked = receipt.IsPersonalExpense;
         }
+
 
         private void CreateExistEntry(object file)
         {
@@ -101,26 +100,24 @@ namespace ConcurSolutionz.Views
             }
         }
 
+
         // Constructor
         public RecordPage()
         {
             // Initialize the XAML components
             InitializeComponent();
             BindingContext = this;
-
-            //// Load receipt image into UI
-            //LoadImage(ImagePath);
-
         }
+
 
         // Getting user input 
         // returns: a list of data <expenseType, transactionDate, description>
-		public List<string> getData() {
+		public List<string> GetData() {
             string expenseType = ExpenseType.Text;
             string transactionDate = TransactionDate.Date.ToString();
             string description = DescriptionInp.Text;
 
-            List<string> data = new List<string>
+            List<string> data = new()
             {
                 expenseType,
                 transactionDate,
@@ -135,17 +132,20 @@ namespace ConcurSolutionz.Views
         public async void OnFilePickerClicked(object sender, EventArgs e)
         {
             // Call the PickAndShow method with the options for picking an image file
-            await PickAndShow(new PickOptions
-            {
-                FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>> {
-                    { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
-                    { DevicePlatform.Android, new[] { "image/*" } },
-                    { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
-                }),
-                PickerTitle = "Select an image"
-            });
+            await PickAndShow(
+                new PickOptions
+                {
+                    FileTypes = new FilePickerFileType(
+                        new Dictionary<DevicePlatform, IEnumerable<string>>
+                        {
+                            { DevicePlatform.iOS, new[] { "jpg", "jpeg", "png" } },
+                            { DevicePlatform.macOS, new[] { "jpg", "jpeg", "png" } },
+                            { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
+                            { DevicePlatform.Android, new[] { "image/*" } },
+                            { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
+                        }),
+                    PickerTitle = "Select an image"
+                });
         }
 
 
@@ -161,7 +161,6 @@ namespace ConcurSolutionz.Views
                 if (result != null)
                 {
                     // If the picked file is a jpg or png
-                    
                     if (result.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("jpeg", StringComparison.OrdinalIgnoreCase) ||
                         result.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
@@ -186,12 +185,12 @@ namespace ConcurSolutionz.Views
 
                 // Change the image path from result of the user's selected option
                 ImagePath = result.FullPath;
-
                 if (ExistingReceipt != null) // If record exist before
                 {
-                      // Update the receipt image path
+                    // Update the receipt image path
                     ExistingReceipt.ImgPath = ImagePath;
                 }
+
                 return result;
             }
             catch (Exception ex)
@@ -203,6 +202,7 @@ namespace ConcurSolutionz.Views
                 return null;
             }
         }
+
 
         private Receipt BuildNewReceipt()
         {
@@ -223,6 +223,7 @@ namespace ConcurSolutionz.Views
             return builder.Build();
         }
 
+
         public async void OnOCRButton_Clicked(object sender, EventArgs e)
         {
             try
@@ -239,19 +240,24 @@ namespace ConcurSolutionz.Views
 
                 double scaleFactor = ReceiptImage.Width/imgWidth;
 
-                foreach (View v in this.boundingBoxes) {
+                foreach (View v in this.boundingBoxes)
+                {
                     receiptGrid.Remove(v);
                 }
 
-                foreach ((PointCollection pc, string text) in textBoxes) {
-                    Microsoft.Maui.Controls.Shapes.Polygon rect = new Microsoft.Maui.Controls.Shapes.Polygon();
-                    rect.Points = pc;
-                    rect.Stroke = Brush.Red;
-                    rect.HorizontalOptions = LayoutOptions.Start;
-                    rect.IsVisible = true;
-                    rect.AnchorX = 0;
-                    rect.AnchorY = 0;
-                    rect.Scale = scaleFactor;
+                foreach ((PointCollection pc, string text) in textBoxes)
+                {
+                    Microsoft.Maui.Controls.Shapes.Polygon rect = new()
+                    {
+                        Points = pc,
+                        Stroke = Brush.Red,
+                        HorizontalOptions = LayoutOptions.Start,
+                        IsVisible = true,
+                        AnchorX = 0,
+                        AnchorY = 0,
+                        Scale = scaleFactor
+                    };
+
                     var gestureRecognizer = new TapGestureRecognizer {
                                 NumberOfTapsRequired = 1,
                     };
@@ -263,11 +269,11 @@ namespace ConcurSolutionz.Views
                         ReceiptNo.Text = receiptData.receiptNumber;
                         //DisplayAlert("UPDATE",receiptData.reqAmount.ToString() + "\n" + receiptData.receiptNumber ,"OK");
                     };
+
                     rect.GestureRecognizers.Add(gestureRecognizer);
                     receiptGrid.Add(rect,0,2);
-                    this.boundingBoxes.Add(rect);
+                    boundingBoxes.Add(rect);
                 }
-
 
                 ReceiptNo.Text = ReceiptNumber;
                 reqAmount.Text = ReqAmount;
@@ -277,8 +283,7 @@ namespace ConcurSolutionz.Views
             {
                 await DisplayAlert("Error", "Falied to call OCR: " + ex, "OK");
                 return;
-            }
-            
+            }            
         }
 
 
@@ -286,12 +291,15 @@ namespace ConcurSolutionz.Views
         {
             Receipt receipt;
 
-            if (ExistingReceipt != null) // If record exist before
+            // If record exist before
+            if (ExistingReceipt != null) 
             {
                 string receiptFileName;
                 receiptFileName = Path.GetFileName(ExistingReceipt.ImgPath);
 
-                FileCreator.CopyFile(ExistingReceipt.ImgPath, Path.Combine(Path.GetTempPath(), receiptFileName));
+                FileCreator.CopyFile(
+                    ExistingReceipt.ImgPath,
+                    Path.Combine(Path.GetTempPath(), receiptFileName));
 
                 entryFile.DelRecordByID(ExistingReceipt.RecordID);
                 try
@@ -307,14 +315,12 @@ namespace ConcurSolutionz.Views
                 }
                 receipt.ImgPath = Path.Combine(Path.GetTempPath(), receiptFileName);
             }
-
             else // if receipt doesnt exist
             {
                 try
                 {
                     receipt = BuildNewReceipt();
                 }
-
                 catch (Exception ex)
                 {
                     // If error encountered while building receipt (missing fields, etc.)
@@ -329,42 +335,29 @@ namespace ConcurSolutionz.Views
             // go back to entry page
             await Shell.Current.GoToAsync($"..?fileName={entryFile.FileName}&existingFile={true}");
         }
+
+
         public void SpecifyCoords(object sender, TappedEventArgs e)
         {
             Point? coords = e.GetPosition((View)sender);
             DisplayAlert("DEBUG",coords.ToString(),"OK");
-            //var overlay = ReceiptOverlay;
-            //double rectWidth = 80.0;
-            //double rectHeight = 50.0;
-            //PointCollection pc = new PointCollection();
-            //Point center = (Point) coords;
-            //Point topLeft = new Point(center.X - rectWidth/2, center.Y - rectHeight/2);
-            //Point topRight = new Point(topLeft.X + rectWidth, topLeft.Y);
-            //Point bottomRight = new Point(topRight.X, topRight.Y + rectHeight);
-            //Point bottomLeft = new Point(topLeft.X, topLeft.Y + rectHeight);
-            //pc.Add(topLeft);
-            //pc.Add(topRight);
-            //pc.Add(bottomRight);
-            //pc.Add(bottomLeft);
-            //overlay.Points = pc;
-            //overlay.IsVisible = true;
-        }
-        protected override void OnSizeAllocated(double width, double height)
-        {
-                base.OnSizeAllocated(width, height);
-                //DisplayAlert("RESIZED",width.ToString() + height.ToString(),);
-                Grid receiptGrid = ReceiptGrid;
-                if (this.boundingBoxes.Count > 0) {
-                    try {
-                        double scaleFactor = ReceiptImage.Width/imgWidth;
-                        foreach (View rect in this.boundingBoxes) {
-                            rect.Scale = scaleFactor;
-                        }
-                    } catch (Exception ex) {
-                        DisplayAlert("Error", ex.ToString(), "OK");
-                    }
-                }
         }
 
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            Grid receiptGrid = ReceiptGrid;
+            if (boundingBoxes.Count > 0) {
+                try {
+                    double scaleFactor = ReceiptImage.Width/imgWidth;
+                    foreach (View rect in this.boundingBoxes) {
+                        rect.Scale = scaleFactor;
+                    }
+                } catch (Exception ex) {
+                    DisplayAlert("Error", ex.ToString(), "OK");
+                }
+            }
+        }
     }
 }

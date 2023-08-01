@@ -2,7 +2,6 @@
 using ConcurSolutionz.Database;
 
 namespace ConcurSolutionz.Views;
-
 public partial class ChooseRootPage : ContentPage
 {
 	public ChooseRootPage()

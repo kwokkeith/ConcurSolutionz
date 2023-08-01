@@ -1,19 +1,11 @@
 #nullable enable
 
-using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.Text.Json;
-using ConcurSolutionz.Controllers;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Models;
-using ConcurSolutionz.Models.CustomException;
-// using System.IO;  
 
 namespace ConcurSolutionz.Views;
-
 [QueryProperty(nameof(FileName), "fileName")]
 [QueryProperty(nameof(filePath), "filePath")]
 [QueryProperty(nameof(ExistingFile), "existingFile")]
@@ -72,9 +64,11 @@ public partial class EntryPage : ContentPage
 
     }
 
+
     private void LoadFile(string fileName)
     {
-        if (fileName.EndsWith(".entry")){
+        if (fileName.EndsWith(".entry"))
+        {
             string[] path = fileName.Split("/");
             fileName = path.Last().Substring(0, path.Last().Length - 6);
         }
@@ -94,9 +88,6 @@ public partial class EntryPage : ContentPage
 
     public EntryPage()
     {
-        // Set the working directory for the database instance
-        //Database.Database.Instance.Setwd("/Users/hongjing/Downloads")
-
         InitializeComponent();
 
         receipts = new();
@@ -104,21 +95,6 @@ public partial class EntryPage : ContentPage
         // Instantiate the Receipts collection
         ReceiptView = new ObservableCollection<Models.Receipt>();
 
-
-        // Check if there is an existing file
-        //      if (existingFile) // There exist a file passed
-        //        {
-        //            CreateExistingFile(FileName + ".entry");
-        //            PopulateEntry();
-        //        }
-        //        else // No existing file passed
-        //        {
-        //            // TODO: Disable record UI features until user creates a file
-        //            AddRecordButton.IsEnabled = false;
-        //            EditRecordButton.IsEnabled = false;
-        //            DeleteRecordButton.IsEnabled = false;
-
-        //        }
         AddRecordButton.IsVisible = false;
         EditRecordButton.IsVisible = false;
         DeleteRecordButton.IsVisible = false;
@@ -144,8 +120,7 @@ public partial class EntryPage : ContentPage
     }
 
 
-
-    // Populate Entry Page (If entry exists)
+    // <Summary>Populate Entry Page (If entry exists)</Summary>
     private void PopulateEntry()
     {
         // Populate Metadata fields
@@ -189,14 +164,15 @@ public partial class EntryPage : ContentPage
 
             ReceiptView.Add(modelReceipt);
         }
-
         CalculateBudget();
         BuildMDPopulate();
     }
 
+
     private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;
+
         // change entryBudgetString to decimal datatype
         if (!Decimal.TryParse(entryBudgetString, out decimal budget))
         {
@@ -205,9 +181,11 @@ public partial class EntryPage : ContentPage
         }
         budgetWarning.IsVisible = false;
         entryBudget = budget;
+
         CalculateBudget();
         OnEditorsTextChanged(sender, e);
     }
+
 
     private void CalculateBudget()
     {
@@ -224,8 +202,7 @@ public partial class EntryPage : ContentPage
                 {
                     RemainingBudget.TextColor = Colors.White;
                 }
-            }
-            
+            }  
         };
 
         remainingBudget = entryBudget - currentExpense;
@@ -234,13 +211,15 @@ public partial class EntryPage : ContentPage
         if (remainingBudget < 0)
         {
             RemainingBudget.TextColor = Colors.Red;
-        } else
+        }
+        else
         {
-            if(Application.Current.RequestedTheme == AppTheme.Light)
+            if (Application.Current.RequestedTheme == AppTheme.Light)
             {
                 RemainingBudget.TextColor = Colors.Black;
 
-            } else
+            }
+            else
             {
                 RemainingBudget.TextColor = Colors.White;
             }
@@ -250,7 +229,7 @@ public partial class EntryPage : ContentPage
     
     private void OnEditorsTextChanged(object sender, EventArgs e)
     {
-        if(SetMetadataButton.IsEnabled == false)
+        if (SetMetadataButton.IsEnabled == false)
         {
             SetMetadataButton.IsEnabled = true;
         }
@@ -292,6 +271,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+
     // Click event handler for editing record
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
@@ -299,26 +279,30 @@ public partial class EntryPage : ContentPage
         {
             await DisplayAlert("Error", "Please select a record!", "OK");
         }
+
         Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
         Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
 
         FileDB file = entry;
         var imagePath = receipt.ImgPath;
 
-
         var navigationParameter = new Dictionary<string, object>
-                {
-                    {"file", file },
-                    {"imagePath", imagePath },
-                    {"existingReceipt", receipt }
-                };
+        {
+            {"file", file },
+            {"imagePath", imagePath },
+            {"existingReceipt", receipt }
+        };
 
         await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
+
     private async void DeleteEntry_Clicked(object sender, EventArgs e)
     {
-        bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Entry {Path.GetFileNameWithoutExtension(entry.FileName)}?", "Yes", "No");
+        bool answer = await DisplayAlert(
+            "Confirm Deletion",
+            $"Are you sure you want to delete Entry {Path.GetFileNameWithoutExtension(entry.FileName)}?",
+            "Yes", "No");
 
         if (answer)
         {
@@ -330,9 +314,9 @@ public partial class EntryPage : ContentPage
 
     // Click event handler for adding new record
     private async void AddRecord_Clicked(object sender, EventArgs e)
-    {
-       
+    { 
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
+
         if (action == "Upload")
         {
             // Call the PickAndShow method with the options for picking an image file
@@ -344,12 +328,12 @@ public partial class EntryPage : ContentPage
                 { DevicePlatform.MacCatalyst, new[] { "jpg", "jpeg", "png" } },
                 { DevicePlatform.Android, new[] { "image/*" } },
                 { DevicePlatform.WinUI, new[] { "jpg", "jpeg", "png" } }
-            }),
+                }),
                 PickerTitle = "Select an image"
             });
         }
-
     }
+
 
     private async void DeleteRecord_Clicked(object sender, EventArgs e)
     {
@@ -357,9 +341,11 @@ public partial class EntryPage : ContentPage
         {
             await DisplayAlert("Error", "Please select a record!", "OK");
         }
+
         Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
         Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
         Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
         if (selectedReceipt != null)
         {
             bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Record {receipt.RecordID + 1}?", "Yes", "No");
@@ -374,7 +360,6 @@ public partial class EntryPage : ContentPage
                 // Update remaining budget and remove from entry
                 PopulateEntry();
             }
-
         }
     }
 
@@ -450,7 +435,10 @@ public partial class EntryPage : ContentPage
         }
     }
 
-    // UTILITIES
+    // *******************************
+    // @@@@@@@@@@ UTILITIES @@@@@@@@@@
+    // *******************************
+
     // Create entry from existing file
     private void CreateExistingFile(string name)
     {
@@ -469,12 +457,14 @@ public partial class EntryPage : ContentPage
         }
     }
 
+
     // change the selected record
     void OnRecordSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         int? previous = (e.PreviousSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
         int? current = (e.CurrentSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
     }
+
 
     // Click event handler for setting metadata of entry
     private void SetMetaData_Clicked(object sender, EventArgs e)
@@ -484,7 +474,6 @@ public partial class EntryPage : ContentPage
     }
 
 
-    // UTILITIES
     private async void BuildMDPopulate()
     {
         string entryName = EntryName.Text;
@@ -499,7 +488,6 @@ public partial class EntryPage : ContentPage
 
         }
         string teamName = TeamNameInp.Text;
-        //string policy = (string)Policy.ItemsSource[Policy.SelectedIndex];
 
         // Check if any field is left blank
         if (entryName == null || claimName == null || purpose == null || teamName == null || projectClub == null)
@@ -554,6 +542,7 @@ public partial class EntryPage : ContentPage
                 ex, "OK");
         }
     }
+
 
     //Handles initialization of entry and updating of variables md, entry, and receipts
     private void BuildEntry()
@@ -624,6 +613,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+
     // show success message after setting entry metadata
     private async void Show_Message()
     {
@@ -631,31 +621,53 @@ public partial class EntryPage : ContentPage
         await UpdateMessage.FadeTo(0, 4000);
     }
 
+
     private async void Concur_Clicked(object sender, EventArgs e)
     {
         Console.WriteLine("About to start selenium");
         string cookie = "";
-        Process process = new Process();
+        Process process = new();
+
         //Starting chrome driver
-        if (entry == null) {await DisplayAlert("Error", "Entry not saved/ is empty", "OK"); return; }
-        else if (receipts.Count == 0) {await DisplayAlert("Error", "No receipts added, please add one before sending to concur", "OK"); return; }
+        if (entry == null)
+        {
+            await DisplayAlert("Error", "Entry not saved/ is empty", "OK");
+            return;
+        }
+        else if (receipts.Count == 0) {
+            await DisplayAlert("Error",
+            "No receipts added, please add one before sending to concur",
+            "OK");
+            return;
+        }
 
         try
         {
-            if(DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "selenium", "SeleniumWrapperV2");
-            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "SeleniumWrapper\\SeleniumWrapper.exe";
-            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+            {
+                process.StartInfo.FileName = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "..", "..", "..", "selenium", "SeleniumWrapperV2"
+                    );
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                process.StartInfo.FileName =
+                    AppDomain.CurrentDomain.BaseDirectory +
+                    "SeleniumWrapper\\SeleniumWrapper.exe";
+            }
+              
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
             process.Start();
-
         }
         catch (Exception ex)
         {
             Console.WriteLine("Failed to start Selenium");
             return;
         }
+
         //Attempting to read from chrome reader
         try
         {
@@ -668,31 +680,44 @@ public partial class EntryPage : ContentPage
                 cookie += newline;
             }
             cookie = "JWT" + cookie.Split("JWT")[1];
-            await DisplayAlert("Progress", "Cookies Extracted! Please wait for the next prompt for completion", "OK");
+
+            await DisplayAlert(
+                "Progress",
+                "Cookies Extracted! Please wait for the next prompt for completion",
+                "OK"
+                );
+
             Console.WriteLine("cookie:" + cookie);
             PushToConcur(cookie, receipts, entry);
         }
         catch (Exception ex)
         {
-            await DisplayAlert("ERROR", "Error extracting cookies, please try again.", "OK");
+            await DisplayAlert(
+                "ERROR",
+                "Error extracting cookies, please try again.",
+                "OK"
+                );
             Console.WriteLine(ex.ToString());
             return;
         }
-        
     }
+
 
     public async void PushToConcur(string cookie, List<Database.Receipt> receipts, Database.Entry entry)
     {
         //Initialize API caller
-        ConcurAPI concur = new ConcurAPI(cookie);
-        string init = await concur.Initialize(); // Returns 0 is successful, 1-3 are errors
+        ConcurAPI concur = new(cookie);
+
+        // Returns 0 is successful, 1-3 are errors
+        string init = await concur.Initialize(); 
+
         Console.WriteLine("Init status: " + init);
         if (init != "0")
         {
             Console.WriteLine("Failed to init");
-            //return;
             throw new Exception("Failed to initialize API");
         }
+
         //Create new claim
         StudentProjectClaimMetaData MD = (StudentProjectClaimMetaData)entry.MetaData;
         Claim claim = new Claim();
@@ -710,15 +735,17 @@ public partial class EntryPage : ContentPage
 
         for (int i = 0; i < receipts.Count; i++)
         {
-            Expense expense = new Expense();
-            expense.Date = receipts[i].TransactionDate.ToString("yyyy-MM-dd");
-            expense.Cost = receipts[i].ReqAmount;
-            expense.Description = receipts[i].Description;
-            expense.Supplier = receipts[i].SupplierName;
-            expense.ReceiptNo = receipts[i].ReceiptNumber;
-            expense.Comment = receipts[i].Comment;
-            expense.ReportId = claim.Id;
-            expense.FilePath = receipts[i].ImgPath;
+            Expense expense = new()
+            {
+                Date = receipts[i].TransactionDate.ToString("yyyy-MM-dd"),
+                Cost = receipts[i].ReqAmount,
+                Description = receipts[i].Description,
+                Supplier = receipts[i].SupplierName,
+                ReceiptNo = receipts[i].ReceiptNumber,
+                Comment = receipts[i].Comment,
+                ReportId = claim.Id,
+                FilePath = receipts[i].ImgPath
+            };
             expense.RPEKey = await concur.CreateExpense(expense, claim);
 
             expenses.Add(expense);
@@ -740,40 +767,56 @@ public partial class EntryPage : ContentPage
                     await concur.LinkImageToRequest(expenses[i]);
                 }
             }
-
         }
+
         await DisplayAlert("Complete", "Claim has been made on Concur, please double check the contents and submit on the SAP Concur Portal", "OK");
+
         Process process = new Process();
         try
         {
             string[] CookieSplit = cookie.Split(";");
             string jwt = "", bqrn = "", bqrd = "";
-            foreach(string param in CookieSplit)
+
+            foreach (string param in CookieSplit)
             {
                 string[] temp = param.Split("=");
                 if (temp[0].Equals("JWT")) jwt = temp[1];
                 else if (temp[0].Equals("OTSESSIONAABQRD")) bqrn = temp[1];
                 else if (temp[0].Equals("OTSESSIONAABQRN")) bqrd = temp[1];
-
             }
+
             Debug.WriteLine("JWT: " + jwt);
             Debug.WriteLine("BQRN: " + bqrn);
             Debug.WriteLine("BQRD: " + bqrd);
-            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst) process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "publish", "SessionHijackBrowser");
-            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI) process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "CookieBrowser\\CookieBrowser.exe";
-            //process.StartInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..","..","..", "selenium", "SeleniumWrapperV2");
+
+            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+            {
+                process.StartInfo.FileName = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "..",
+                    "..",
+                    "..",
+                    "publish",
+                    "SessionHijackBrowser"
+                    );
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                process.StartInfo.FileName =
+                    AppDomain.CurrentDomain.BaseDirectory +
+                    "CookieBrowser\\CookieBrowser.exe";
+            }
+
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.Arguments = jwt + " " + bqrn + " " + bqrd;
             process.Start();
-
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Failed to start Cookie Browser");
             return;
         }
-        //Purpose.Text = await concur.LinkImageToRequest(expense);
     }
 }

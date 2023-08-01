@@ -4,8 +4,6 @@ using ConcurSolutionz.Database;
 using ConcurSolutionz.Models.CustomException;
 
 namespace ConcurSolutionz.Views;
-
-
 public class FileItem
 {
     public string FileName { get; set; }
@@ -13,7 +11,6 @@ public class FileItem
     public bool IsFolder { get; set; }
     public DateTime CreationDateTime { get; set; }
     public ObservableCollection<FileItem> Children { get; set; }
-
 
     public FileItem(string fileName, bool isFolder)
     {
@@ -54,9 +51,8 @@ public partial class MainPage : ContentPage
 
         // Get current working directory from database
         LoadFilesFromDB();
-
-
     }
+
 
     // Run code when the Main Page is navigated to
     protected override void OnAppearing()
@@ -92,23 +88,21 @@ public partial class MainPage : ContentPage
                 Files.Add(new FileItem(fileName, isFolder));
 
             }
-
         }
     }
+
 
     // update color of the selected grids
     private void UpdateColor(Grid Previous, Grid Current)
     {
-
         Application.Current.RequestedThemeChanged += (s, a) =>
         {
             Current.Background = Colors.Transparent;
         };
-            if (!(Previous is null))
+        if (!(Previous is null))
         {
             Previous.Background = Colors.Transparent;
         }
-
 
         if (Application.Current.RequestedTheme == AppTheme.Light)
         {
@@ -120,58 +114,39 @@ public partial class MainPage : ContentPage
         }
     }
 
+
     private void OnFileTapped(object sender, EventArgs e)
     {
         var tappedFile = (sender as View)?.BindingContext as FileItem;
+
         // set the color of selected grid
         var previousItem = SelectedItem;
         SelectedItem = (Grid)sender;
         UpdateColor(previousItem, SelectedItem);
-        //grid.Background = new SolidColorBrush(Colors.AliceBlue);
+
         if (tappedFile != null)
         {
-            if (tappedFile.IsFolder) // if file tapped is a folder
+            // if file tapped is a folder
+            if (tappedFile.IsFolder)
             {
                 // Modify selected file
                 SelectedFile = tappedFile;
-
-                // KEITH: If you wish to select file with single click
-                //// Open the tapped folder and display its contents
-                ////Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-
-                //// Populate File Management View
-                //RefreshPage();
             }
             else
             {
-                // Handle file selection logic
-                // You can implement your custom logic here
-                // LOGIC TO IMPLEMENT ACTION FOR OTHER FILES
-                //DisplayAlert("File Selected", $"You selected the file: {tappedFile.FileName}", "OK");
-
-                // Create Entry Object using the Entry metadata... (Ask Database to execute the jump to the other UI)
-                // ...
-                // TODO: CALL DATABASE (Database end still needs to do this creating the entry object using the metadatas and pass it to the Entry system
                 try
                 {
                     // Modify selected file
                     SelectedFile = tappedFile;
-
-                    // KEITH: If you wish to select file with single click
-
-                    //// Open the tapped folder and display its contents
-                    ////Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
-
-                    //// Populate File Management View
-                    //RefreshPage();
                 }
                 catch
                 {
                     DisplayAlert("Failure!", "File failed to open!", "OK");
                 }
-                }
             }
         }
+    }
+
 
     private async void OnFileDoubleTapped(object sender, EventArgs e)
     {
@@ -189,28 +164,47 @@ public partial class MainPage : ContentPage
         else
         {
             // Call entry UI
-            //Database.Database.Instance.FileSelectByFileName(tappedFile.FileName);
             try
             {
-                await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
+                await Shell.Current.GoToAsync(
+                    $"{nameof(EntryPage)}?" +
+                    $"fileName={tappedFile.FileName}&" +
+                    $"existingFile={true}&" +
+                    $"filePath={filePath}");
             }
             catch (Exception ex)
             {
                 if (ex.InnerException is SynchronisationException)
                 {
-                    await DisplayAlert("Database Synchronising", $"Don't worry :)\nDatabase is syncing...\nPlease try again~\n\n{ex.Message}", "OK");
+                    await DisplayAlert(
+                        "Database Synchronising",
+                        $"Don't worry :)\nDatabase is syncing...\nPlease try again~\n\n{ex.Message}",
+                        "OK"
+                        );
                 }
                 else if (ex.InnerException is MetaDataConversionException)
                 {
-                    await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {ex.Message}", "OK");
+                    await DisplayAlert(
+                        "Failure!",
+                        $"Failed to convert MetaData when loading from existing file! Error is: {ex.Message}",
+                        "OK"
+                        );
                 }
                 else if (ex.InnerException is RecordConversionException)
                 {
-                    await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
+                    await DisplayAlert(
+                        "Failure!",
+                        "Failed to convert record instance to receipt when loading existing file!",
+                        "OK"
+                        );
                 }
                 else if (ex.InnerException is MissingEntryFileException)
                 {
-                    await DisplayAlert("Database Synchronising!", $"Don't worry :)\nDatabase will syncing...\nPlease try again~\n\n{ex.Message}", "OK");
+                    await DisplayAlert(
+                        "Database Synchronising!",
+                        $"Don't worry :)\nDatabase will syncing...\nPlease try again~\n\n{ex.Message}",
+                        "OK"
+                        );
                 }
                 else
                 {
@@ -224,6 +218,7 @@ public partial class MainPage : ContentPage
         }
     }
 
+
     private void OnBackClicked(object sender, EventArgs e)
     {
         Database.Database.Instance.FileGoBack();
@@ -232,10 +227,14 @@ public partial class MainPage : ContentPage
         RefreshPage();
     }
 
+
     private async void OnNewFolderClicked(object sender, EventArgs e)
     {
         // Prompt the user for the new folder name
-        string newName = await DisplayPromptAsync("New Folder", "Enter a new folder name");
+        string newName = await DisplayPromptAsync(
+            "New Folder",
+            "Enter a new folder name"
+            );
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
@@ -259,7 +258,8 @@ public partial class MainPage : ContentPage
             }
         }
     }
-    
+
+
     private async void OnNewEntryClicked(object sender, EventArgs e)
     {
         // Prompt the user for the new entry name
@@ -281,6 +281,7 @@ public partial class MainPage : ContentPage
         }
     }
 
+
     private async void OnRenameClicked(object sender, EventArgs e)
     {
         // Handle Rename button click
@@ -291,10 +292,11 @@ public partial class MainPage : ContentPage
         }
     }
 
-        private async Task RenameSelectedFile(string initialValue, string promptMessage)
-        {
-            // Prompt the user for the new name
-            string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
+
+    private async Task RenameSelectedFile(string initialValue, string promptMessage)
+    {
+        // Prompt the user for the new name
+        string newName = await DisplayPromptAsync("Rename", promptMessage, initialValue: initialValue);
 
         if (!string.IsNullOrWhiteSpace(newName))
         {
@@ -308,8 +310,10 @@ public partial class MainPage : ContentPage
                 Directory.Move(filePath, newFilePath);
 
                 // Create a new FileItem with the updated file name and other properties
-                FileItem renamedFile = new FileItem(newName, SelectedFile.IsFolder);
-                renamedFile.CreationDateTime = DateTime.Now;
+                FileItem renamedFile = new(newName, SelectedFile.IsFolder)
+                {
+                    CreationDateTime = DateTime.Now
+                };
 
                 // Replace the selected file with the renamed file in the collection
                 int selectedIndex = Files.IndexOf(SelectedFile);
@@ -328,6 +332,7 @@ public partial class MainPage : ContentPage
             }
         }
     }
+
 
     private async void OnDeleteClicked(object sender, EventArgs e)
     {
@@ -349,9 +354,9 @@ public partial class MainPage : ContentPage
                     await DisplayAlert("Failure!", $"Failed to delete file! Error: {ex}", "OK");
                 }
             }
-
         }
     }
+
 
     private async void OnSortClicked(object sender, EventArgs e)
     {
@@ -376,28 +381,32 @@ public partial class MainPage : ContentPage
         // Sort the files based on the selected option
         SortFiles();
 
-            // Notify the UI that the Files collection has changed
-            OnPropertyChanged(nameof(Files));
-        }
+        // Notify the UI that the Files collection has changed
+        OnPropertyChanged(nameof(Files));
+    }
 
-        private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+
+    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+    {
+        SearchText = e.NewTextValue;
+        if (SearchText == null || SearchText == "" || SearchText == " ")
         {
-            SearchText = e.NewTextValue;
-            if (SearchText == null || SearchText == "" || SearchText == " ")
-            {
-                RefreshPage();
-            }
+            RefreshPage();
         }
+    }
 
-        private void OnSearchButtonClicked(object sender, EventArgs e)
-        {
-            // Filter the files based on the search text
-            Files = new ObservableCollection<FileItem>(
-              Files.Where(f => f.FileName.Contains(SearchText)));
 
-            // Refresh list view
-            OnPropertyChanged(nameof(Files));
-        }
+    private void OnSearchButtonClicked(object sender, EventArgs e)
+    {
+        // Filter the files based on the search text
+        Files = new ObservableCollection<FileItem>(
+            Files.Where(f => f.FileName.Contains(SearchText))
+            );
+
+        // Refresh list view
+        OnPropertyChanged(nameof(Files));
+    }
+
 
     // <Summary> Functionality to sort the files in the file management page </Summary>
     private void SortFiles()
@@ -443,8 +452,9 @@ public partial class MainPage : ContentPage
 
         WorkingDirectory.Text = printablePath;
     }
-
 }
+
+
 // UTILITIES
 public class RemoveExtensionConverter : IValueConverter
 {
