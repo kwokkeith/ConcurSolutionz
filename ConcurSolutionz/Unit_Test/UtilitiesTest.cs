@@ -20,7 +20,7 @@ namespace Unit_Test
         public void CheckNull_ShouldReturnNothing()
         {
             // Arrange
-            string? Value = "1231";
+            string? Value = "Hi!";
 
             // Act
             var exception = Xunit.Record.Exception(() => Utilities.CheckNull(Value));
@@ -128,6 +128,19 @@ namespace Unit_Test
         }
 
         [Fact(DisplayName = "1.9")]
+        public void CheckIfEmptyString_ThrowErrorForNullString()
+        {
+            // Arrange
+            string Value = null;
+
+            // Act
+            // Assert
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfEmptyString(Value));
+        }
+
+
+
+        [Fact(DisplayName = "1.10")]
         public void CheckIfEmptyString_ShouldReturnNothing()
         {
             // Arrange
@@ -140,18 +153,31 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Fact(DisplayName = "1.10")]
+        [Fact(DisplayName = "1.11")]
         public void CheckDateTimeAheadOfNow_ThrowErrorForDateAhead()
         {
             // Arrange
-            DateTime Value = DateTime.Now.AddDays(1);
+            DateTime Value = DateTime.Now.AddDays(365);
 
             // Assert
             Assert.Throws<ArgumentException>(() => Utilities.CheckDateTimeAheadOfNow(Value));
         }
 
-        [Fact(DisplayName = "1.11")]
-        public void CheckDateTimeAheadOfNow_ShouldReturnNothing()
+        [Fact(DisplayName = "1.12")]
+        public void CheckDateTimeAheadOfNow_ShouldReturnNothingForDateBefore()
+        {
+            // Arrange
+            DateTime Value = DateTime.Now.AddDays(-365);
+
+            // Act
+            var exception = Xunit.Record.Exception(() => Utilities.CheckDateTimeAheadOfNow(Value));
+
+            // Assert
+            Assert.Null(exception);
+        }
+
+        [Fact(DisplayName = "1.13")]
+        public void CheckDateTimeAheadOfNow_ShouldReturnNothingForCurrentDate()
         {
             // Arrange
             DateTime Value = DateTime.Now;
@@ -163,70 +189,111 @@ namespace Unit_Test
             Assert.Null(exception);
         }
 
-        [Theory(DisplayName = "1.12")]
-        [InlineData("HiHongBeiTheConquerer")]
+        [Fact(DisplayName = "1.14")]
+        public void CheckLastModifiedAheadOfCreation_ShouldThrowExceptionForLastModifiedAheadOfCreation()
+        {
+            // Arrange
+            DateTime lastModified = new(2023, 01, 23, 0, 0, 0);
+            DateTime creation = new(2022, 12, 23, 0, 0, 0);
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => Utilities.CheckLastModifiedAheadOfCreation(creation, lastModified));
+        }
+
+        [Fact(DisplayName = "1.15")]
+        public void CheckLastModifiedAheadOfCreation_ShouldReturnNothingForLastModifiedBeforeCreation()
+        {
+            // Arrange
+            DateTime lastModified = new(2022, 12, 23, 0, 0, 0);
+            DateTime creation = new(2023, 01, 23, 0, 0, 0);
+
+            // Act
+            var exception = Xunit.Record.Exception(() => Utilities.CheckLastModifiedAheadOfCreation(creation, lastModified));
+
+            // Assert
+            Assert.Null(exception);
+        }
+
+        [Fact(DisplayName = "1.16")]
+        public void CheckLastModifiedAheadOfCreation_ShouldReturnNothingForLastModifiedEqualCreation()
+        {
+            // Arrange
+            DateTime lastModified = new(2023, 01, 23, 0, 0, 0);
+            DateTime creation = new(2023, 01, 23, 0, 0, 0);
+
+            // Act
+            var exception = Xunit.Record.Exception(() => Utilities.CheckLastModifiedAheadOfCreation(lastModified, creation));
+
+            // Assert
+            Assert.Null(exception);
+        }
+
+
+
+        [Theory(DisplayName = "1.17")]
+        [InlineData("Capstone 2023")]
         [InlineData("HiHongJingTheOneAndOnly")]
         public void ConstEntryMetaDataPath_ShouldAppendString(string path)
         {
             // Arrange
-            string Expected = Path.Combine(path, "EntryMetaData.json");
+            string entryPath = Path.Combine(path, "EntryMetaData.json");
 
             //Assert
-            Assert.Equal(Expected, Utilities.ConstEntryMetaDataPath(path));
+            Assert.Equal(entryPath, Utilities.ConstEntryMetaDataPath(path));
         }
 
-        [Fact(DisplayName = "1.13")]
+        [Fact(DisplayName = "1.18")]
         public void ConstEntryMetaDataPath_ThrowErrorForEmptyString()
         {
             // Arrange
-            string path = "";
+            string entryPath = "";
 
             //Assert
-            Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(path));
+            Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(entryPath));
         }
 
-        [Theory(DisplayName = "1.14")]
-        [InlineData("HiJonPeterson")]
+        [Theory(DisplayName = "1.19")]
+        [InlineData("Capstone 2023")]
         [InlineData("HiAkashJefferson")]
         public void ConstReceiptsFdrPath_ShouldAppendString(string path)
         {
             // Arrange
-            string Expected = Path.Combine(path, "Records.fdr");
+            string entryPath = Path.Combine(path, "Records.fdr");
 
             //Assert
-            Assert.Equal(Expected, Utilities.ConstRecordsFdrPath(path));
+            Assert.Equal(entryPath, Utilities.ConstRecordsFdrPath(path));
         }
 
-        [Fact(DisplayName = "1.15")]
+        [Fact(DisplayName = "1.20")]
         public void ConstReceiptsFdrPath_ThrowErrorForEmptyString()
         {
             // Arrange
-            string path = "";
+            string entryPath = "";
 
             //Assert
-            Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsFdrPath(path));
+            Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsFdrPath(entryPath));
         }
 
-        [Theory(DisplayName = "1.16")]
-        [InlineData("HiSidCamerson")]
+        [Theory(DisplayName = "1.21")]
+        [InlineData("Capstone 2023")]
         [InlineData("HiShaunTheJack")]
         public void ConstReceiptMetaDataPath_ShouldAppendString(string path)
         {
             // Arrange
-            string Expected = Path.Combine(path, "Records.fdr", "RecordJSON.fdr");
+            string entryPath = Path.Combine(path, "Records.fdr", "RecordJSON.fdr");
 
             //Assert
-            Assert.Equal(Expected, Utilities.ConstRecordsMetaDataPath(path));
+            Assert.Equal(entryPath, Utilities.ConstRecordsMetaDataPath(path));
         }
 
-        [Fact(DisplayName = "1.17")]
+        [Fact(DisplayName = "1.22")]
         public void ConstReceiptMetaDataPath_ThrowErrorForEmptyString()
         {
             // Arrange
-            string path = "";
+            string entryPath = "";
 
             //Assert
-            Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(path));
+            Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(entryPath));
         }
 
 
