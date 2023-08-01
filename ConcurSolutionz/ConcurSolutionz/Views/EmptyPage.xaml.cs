@@ -23,7 +23,7 @@ public partial class EmptyPage : ContentPage
 		}
 		else
 		{
-			db.Setwd(rootDir);
+            Database.Database.Instance.Setwd(rootDir);
 			await Shell.Current.GoToAsync(nameof(MainPage));
 		}
 	}
