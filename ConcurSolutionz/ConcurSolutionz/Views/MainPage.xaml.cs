@@ -55,7 +55,8 @@ public partial class MainPage : ContentPage
         // Get current working directory from database
         LoadFilesFromDB();
 
-        }
+
+    }
 
     // Run code when the Main Page is navigated to
     protected override void OnAppearing()
@@ -98,12 +99,25 @@ public partial class MainPage : ContentPage
     // update color of the selected grids
     private void UpdateColor(Grid Previous, Grid Current)
     {
-        if (!(Previous is null))
-        {
-            Previous.Background = new SolidColorBrush(Colors.White);
 
+        Application.Current.RequestedThemeChanged += (s, a) =>
+        {
+            Current.Background = Colors.Transparent;
+        };
+            if (!(Previous is null))
+        {
+            Previous.Background = Colors.Transparent;
         }
-        Current.Background = new SolidColorBrush(Colors.LightSkyBlue);
+
+
+        if (Application.Current.RequestedTheme == AppTheme.Light)
+        {
+            Current.Background = Colors.LightSkyBlue;
+        }
+        else
+        {
+            Current.Background = Colors.SlateBlue;
+        }
     }
 
     private void OnFileTapped(object sender, EventArgs e)

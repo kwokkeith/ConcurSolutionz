@@ -211,6 +211,23 @@ public partial class EntryPage : ContentPage
 
     private void CalculateBudget()
     {
+        Application.Current.RequestedThemeChanged += (s, a) =>
+        {
+            if (RemainingBudget.TextColor != Colors.Red)
+            {
+                if (Application.Current.RequestedTheme == AppTheme.Light)
+                {
+                    RemainingBudget.TextColor = Colors.Black;
+
+                }
+                else
+                {
+                    RemainingBudget.TextColor = Colors.White;
+                }
+            }
+            
+        };
+
         remainingBudget = entryBudget - currentExpense;
         CurrentExpenseInput.Text = currentExpense.ToString();
         RemainingBudget.Text = remainingBudget.ToString();
@@ -230,6 +247,7 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    
     private void OnEditorsTextChanged(object sender, EventArgs e)
     {
         if(SetMetadataButton.IsEnabled == false)

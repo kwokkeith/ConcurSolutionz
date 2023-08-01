@@ -100,8 +100,6 @@
 	  <MauiImage Include="Resources\Images\ketty.jpeg" />
 	  <MauiImage Include="Resources\Images\receipt.jpeg" />
 	  <MauiImage Include="Resources\Images\receipt.jpeg" />
-	  <MauiImage Include="Resources\Images\edit_32.png" Resize="true" />
-	  <MauiImage Include="Resources\Images\edit_64.png" />
 	  <MauiImage Include="Resources\Images\delete.png" Resize="false" />
 	  <MauiImage Include="Resources\Images\entry.png" Resize="false" />
 	  <MauiImage Include="Resources\Images\folder.png" Resize="false" />
@@ -110,5 +108,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\warning.png" />
+	  <BundleResource Include="Resources\Images\edit.png" />
 	</ItemGroup>
 </Project>

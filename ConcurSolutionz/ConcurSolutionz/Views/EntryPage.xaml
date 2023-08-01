@@ -17,7 +17,7 @@
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
                                 <Setter Property="BackgroundColor"
-                                        Value="LightSkyBlue" />
+                                        Value="{AppThemeBinding Light=LightSkyBlue, Dark=SlateBlue}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -35,7 +35,8 @@
                 Text="Elements of Software Construction"
                 VerticalOptions="Center"/>
             <ImageButton
-                Source="edit_32.png"
+                Source="edit.png"
+                HeightRequest="10"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
              <!--<Button x:Name="UpdateMetadataButton" Text="Update Entry Metadata" Clicked="SetMetaData_Clicked"/>-->
@@ -84,7 +85,7 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2 }"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                                 
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
@@ -113,7 +114,7 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                                 TextChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Claim Date:"
@@ -128,7 +129,7 @@
                                 Grid.Row="2"
                                 HeightRequest="50"
                                 StrokeShape="RoundRectangle 5,5,5,5"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                                 StrokeThickness="1">
 
                             <DatePicker
@@ -162,7 +163,7 @@
                                 Grid.Column="1"
                                 Grid.Row="0"
                                 FontSize="Body"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged"/>
 
@@ -181,7 +182,7 @@
                                 VerticalTextAlignment="Center"
                                 FontSize="Body"
                                 HeightRequest="50"
-                                Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                                 TextChanged="OnEditorsTextChanged"/>
 
                         <Label Text="Purpose:"
@@ -198,7 +199,7 @@
                             FontSize="Body"
                             VerticalOptions="Center"
                             VerticalTextAlignment="Center"
-                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                            Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                             TextChanged="OnEditorsTextChanged"/>
                     </Grid>
 
@@ -223,7 +224,7 @@
                             VerticalTextAlignment="Center"
                             FontSize="Body"
                             MaxLength="10"
-                            Background="{OnPlatform AliceBlue, MacCatalyst=AliceBlue, WinUI=#E5E4E2}"
+                            Background="{AppThemeBinding Light=#E5E4E2, Dark=#A9A9A9 }"
                             TextChanged="OnBudgetCompleted"/>
 
                         <Image Source="warning.png"
