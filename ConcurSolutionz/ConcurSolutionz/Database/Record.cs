@@ -1,4 +1,3 @@
-
 namespace ConcurSolutionz.Database
 {
     public abstract class Record
@@ -6,6 +5,5 @@ namespace ConcurSolutionz.Database
         public int RecordID {get; set; }
 
         public string SubType {get; set;}
-
     }
 }

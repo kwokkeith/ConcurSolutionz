@@ -3,9 +3,11 @@ namespace ConcurSolutionz.Database
 {
     public class MetaData
     {
-        public string EntryName {get; set;}
+        public string EntryName { get; set; }
         private decimal entryBudget;
-        public decimal EntryBudget { get
+        public decimal EntryBudget
+        {
+            get
             {
                 return entryBudget;
             }

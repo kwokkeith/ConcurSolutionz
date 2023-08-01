@@ -1,38 +1,41 @@
-using System.Dynamic;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
 {
     public class CookieStorage
     {
-
         public string CookieStoragePath { get; set; }
 
         /// <summary>Stores a cookie object as JSON in a file.</summary>
         /// <param name="cookie">The cookie object to be stored.</param>
         /// <exception cref="Exception">Thrown when an error occurs during the serialization process.</exception>
-        public void StoreCookie(Cookie cookie){
-            try{
+        public void StoreCookie(Cookie cookie)
+        {
+            try
+            {
                 // Check if CookieStorage folder exist, if not the create
                 if (!Directory.Exists(CookieStoragePath))
                 {
-                    // Create CookieStorage directory if it does not exist.
+                    // Create CookieStorage directory if it does not exist
                     Directory.CreateDirectory(CookieStoragePath);
                 }
 
-                string CookiePath = GetCookiePath(); // <CookieStoragePath> + "\\cookie.json" 
+                string CookiePath = GetCookiePath(); 
                 string json = JsonSerializer.Serialize(cookie);
                 File.WriteAllText(CookiePath, json);
             }
-            catch (Exception e){
+            catch (Exception e)
+            {
                 Console.WriteLine("Error: " + e);
             }
         }
 
+
         /// <summary>Retrieves a cookie from the cookie storage.</summary>
         /// <returns>The retrieved cookie, or null if the cookie doesn't exist or has expired.</returns>
         /// <exception cref="Exception">Thrown when an error occurs during the retrieval process.</exception>
-        public Cookie RetrieveCookie(){
+        public Cookie RetrieveCookie()
+        {
             if (Directory.Exists(CookieStoragePath))
             {
                 try
@@ -74,11 +77,14 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        private string GetCookiePath(){
-            try{
+        private string GetCookiePath()
+        {
+            try
+            {
                 return Path.Combine(CookieStoragePath, "cookie.json");
             }
-            catch{
+            catch
+            {
                 Console.WriteLine("Failed to write to " + CookieStoragePath + "cookie.json");
                 return null;
             }

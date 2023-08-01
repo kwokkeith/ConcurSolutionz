@@ -1,12 +1,11 @@
-using System.Diagnostics;
-using System.Linq.Expressions;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
 {
     public static class FileCreator
     {
-        public static void CreateFile(FileDB file){
+        public static void CreateFile(FileDB file)
+        {
             // Is File == Folder?
             if (Directory.Exists(file.FilePath))
             {
@@ -24,19 +23,21 @@ namespace ConcurSolutionz.Database
                     CreateEntry(file as Entry);
                 }
             }
-
         }
 
 
         /// <summary>Creates a folder in the specified file directory.</summary>
         /// <param name="folder">The FileDB object representing the folder to be created.</param>
         /// <exception cref="Exception">Thrown when the folder could not be created.</exception>
-        private static void CreateFolder(FileDB folder){
-            if (!Directory.Exists(folder.FilePath)){
+        private static void CreateFolder(FileDB folder)
+        {
+            if (!Directory.Exists(folder.FilePath))
+            {
                 Directory.CreateDirectory(folder.FilePath);
                 Console.WriteLine(folder.FileName + " Folder Created");
             }
-            else{
+            else
+            {
                 throw new Exception("Could not create folder " + folder.FileName + " at " + folder.FilePath);
             }
         }
@@ -47,8 +48,10 @@ namespace ConcurSolutionz.Database
         /// <remarks>
         /// If the directory specified in the file database entry does not exist, it will be created.
         /// </remarks>
-        private static void CreateEntry(Entry entry){
-            if (!Directory.Exists(entry.FilePath)){
+        private static void CreateEntry(Entry entry)
+        {
+            if (!Directory.Exists(entry.FilePath))
+            {
                 // Create base entry folder
                 Directory.CreateDirectory(entry.FilePath);
                 try
@@ -74,7 +77,8 @@ namespace ConcurSolutionz.Database
 
                     Console.WriteLine(entry.FileName + " Folder Created");
                 }
-                catch (Exception e){
+                catch (Exception e)
+                {
                     Console.WriteLine("Error: " + e);
                 }
             }
@@ -89,20 +93,18 @@ namespace ConcurSolutionz.Database
         /// This method iterates through each receipt in the entry and performs the following steps:
         /// 1. Copies the receipt image to the specified receipt folder path.
         /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
-        public static void PopulateReceiptFolder(Entry entry, string recordFolderPath, string receiptJSONFolder){
+        public static void PopulateReceiptFolder(Entry entry, string recordFolderPath, string receiptJSONFolder)
+        {
             List<string> writtenFiles = new List<string>();
 
-            foreach ( Record record in entry.GetRecords())
+            foreach (Record record in entry.GetRecords())
             {
-
                 // Convert record into receipt (throw an error if any of the records is not of the Receipt SubType)
                 Receipt receipt = RecordAdaptor.ConvertRecord(record);
 
-                // @@@@@@@@@@@@@@@@@@@@@@
                 // Store pictures
                 string imgPath = receipt.ImgPath;
                 string receiptPath = Path.Combine(recordFolderPath, receipt.RecordID.ToString() + Path.GetExtension(imgPath));   
-
 
                 // Add receipt images into receipt folder directory
                 if (imgPath != receiptPath)
@@ -114,9 +116,9 @@ namespace ConcurSolutionz.Database
                 receipt.ImgPath = receiptPath;
                 writtenFiles.Add(receiptPath); 
 
-                // @@@@@@@@@@@@@@@@@@@@@@
                 // Store Receipt Metadata
-                try{
+                try
+                {
                     // Generate unique metaData filepath name
                     string receiptMetaDataPath = Path.Combine(receiptJSONFolder, receipt.RecordID + ".json");
                     writtenFiles.Add(receiptMetaDataPath);
@@ -125,7 +127,8 @@ namespace ConcurSolutionz.Database
                     string json = JsonSerializer.Serialize(receipt);
                     File.WriteAllText(receiptMetaDataPath, json);
                 }
-                catch (Exception e){
+                catch (Exception e)
+                {
                     Console.WriteLine("Error: " + e);
                     throw e;
                 }
@@ -149,19 +152,23 @@ namespace ConcurSolutionz.Database
             }
         }
 
+
         /// <summary>Copies a file from the source path to the destination path.</summary>
         /// <param name="sourcePath">The path of the file to be copied.</param>
         /// <param name="destinationPath">The path where the file will be copied to.</param>
         /// <remarks>If a file with the same name already exists at the destination path, it will be overwritten.</remarks>
-        public static void CopyFile(string sourcePath, string destinationPath){
-            try{
+        public static void CopyFile(string sourcePath, string destinationPath)
+        {
+            try
+            {
                 if (!File.Exists(destinationPath))
                 {
                     File.Create(destinationPath).Close();
                 }
                 File.Copy(sourcePath, destinationPath, true);
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 Console.WriteLine(e.ToString());
                 throw e;
             }

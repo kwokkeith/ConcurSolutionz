@@ -8,7 +8,10 @@ namespace ConcurSolutionz.Database
         public string FileType { get; set; }
         public DateTime CreationDate
         {
-            get { return creationDate; }
+            get
+            {
+                return creationDate;
+            }
             set
             {
                 Utilities.CheckDateTimeAheadOfNow(value);
@@ -18,7 +21,10 @@ namespace ConcurSolutionz.Database
         private DateTime lastModifiedDate;
         public DateTime LastModifiedDate
         {
-            get { return lastModifiedDate; }
+            get
+            {
+                return lastModifiedDate;
+            }
             set
             {
                 Utilities.CheckDateTimeAheadOfNow(value);
@@ -28,16 +34,21 @@ namespace ConcurSolutionz.Database
         public string FilePath { get; set; }
         public bool Folder;
 
+
         protected abstract void SetFolder();
 
-        public bool IsFolder(){
+
+        public bool IsFolder()
+        {
             Utilities.CheckNull(Folder); // Check if folder has been set
             return Folder;  
         }
 
+
         public abstract void SelectedAction();
 
-        public void UpdateModifiedDate(){
+        public void UpdateModifiedDate()
+        {
             LastModifiedDate = DateTime.Now;
         }
     }

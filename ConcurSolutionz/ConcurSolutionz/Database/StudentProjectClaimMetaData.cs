@@ -1,4 +1,3 @@
-
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
@@ -9,9 +8,14 @@ namespace ConcurSolutionz.Database
         public string Policy { get; set; } 
         public string ClaimName { get; set; }
         private DateTime claimDate;
-        public DateTime ClaimDate {
-            get{ return claimDate; }
-            set {
+        public DateTime ClaimDate
+        {
+            get
+            {
+                return claimDate;
+            }
+            set
+            {
                 Utilities.CheckDateTimeAheadOfNow(value);
                 claimDate = value;
             }
@@ -20,7 +24,8 @@ namespace ConcurSolutionz.Database
         public string TeamName { get; set; }
         public string ProjectClub { get; set; }
 
-        public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder){
+        public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder)
+        {
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(claimMDBuilder.EntryName);
             Utilities.CheckNull(claimMDBuilder.EntryBudget);
@@ -32,16 +37,17 @@ namespace ConcurSolutionz.Database
             Utilities.CheckNull(claimMDBuilder.ProjectClub);
 
             // If all variables are declared then create ClaimMetaData
-            this.EntryName = claimMDBuilder.EntryName;
-            this.EntryBudget = claimMDBuilder.EntryBudget;
-            this.Policy = claimMDBuilder.Policy;
-            this.ClaimName = claimMDBuilder.ClaimName;
-            this.ClaimDate = claimMDBuilder.ClaimDate;
-            this.Purpose = claimMDBuilder.Purpose;
-            this.TeamName = claimMDBuilder.TeamName;
-            this.ProjectClub = claimMDBuilder.ProjectClub;
-            this.SubType = GetType().FullName;
+            EntryName = claimMDBuilder.EntryName;
+            EntryBudget = claimMDBuilder.EntryBudget;
+            Policy = claimMDBuilder.Policy;
+            ClaimName = claimMDBuilder.ClaimName;
+            ClaimDate = claimMDBuilder.ClaimDate;
+            Purpose = claimMDBuilder.Purpose;
+            TeamName = claimMDBuilder.TeamName;
+            ProjectClub = claimMDBuilder.ProjectClub;
+            SubType = GetType().FullName;
         }
+
 
         public class StudentProjectClaimMetaDataConverter : JsonConverter<StudentProjectClaimMetaData>
         {
@@ -49,6 +55,7 @@ namespace ConcurSolutionz.Database
             {
                 // Write JSON
             }
+
 
             public override StudentProjectClaimMetaData Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
@@ -64,17 +71,17 @@ namespace ConcurSolutionz.Database
                 string projectClub = doc.RootElement.GetProperty("ProjectClub").GetString();
                 string subType = doc.RootElement.GetProperty("SubType").GetString();
 
+                StudentProjectClaimMDBuilder builder = new();
 
-                StudentProjectClaimMDBuilder builder = new StudentProjectClaimMDBuilder();
-
-                StudentProjectClaimMetaData md = builder.SetClaimName(claimName)
-                                                        .SetClaimDate(claimDate)
-                                                        .SetPurpose(purpose)
-                                                        .SetTeamName(teamName)
-                                                        .SetProjectClub(projectClub)
-                                                        .SetEntryName(entryName)
-                                                        .SetEntryBudget(entryBudget)
-                                                        .Build();
+                StudentProjectClaimMetaData md = builder
+                    .SetClaimName(claimName)
+                    .SetClaimDate(claimDate)
+                    .SetPurpose(purpose)
+                    .SetTeamName(teamName)
+                    .SetProjectClub(projectClub)
+                    .SetEntryName(entryName)
+                    .SetEntryBudget(entryBudget)
+                    .Build();
 
                 return md;
             }

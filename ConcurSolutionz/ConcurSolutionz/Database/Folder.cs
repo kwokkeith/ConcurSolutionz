@@ -3,7 +3,8 @@ namespace ConcurSolutionz.Database
 {
     public class Folder: FileDB
     {
-        private Folder(FolderBuilder builder){
+        private Folder(FolderBuilder builder)
+        {
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(builder.FileName);
             Utilities.CheckNull(builder.CreationDate);
@@ -19,22 +20,29 @@ namespace ConcurSolutionz.Database
             SetFolder();
         }
 
+
         // Set mandatory boolean of File Instance
-        protected override void SetFolder(){
-            this.Folder = true;
+        protected override void SetFolder()
+        {
+            Folder = true;
         }
 
-        public override void SelectedAction(){
+
+        public override void SelectedAction()
+        {
             StepIntoFolder();
             return;
         }
 
-        private void StepIntoFolder(){
-            try{
+
+        private void StepIntoFolder()
+        {
+            try
+            {
                 Database.Instance.Setwd(FilePath);
 
             }
-            catch(Exception ex){
+            catch (Exception ex){
                 Console.WriteLine(ex.ToString());
             }
         }
@@ -48,28 +56,37 @@ namespace ConcurSolutionz.Database
             public DateTime LastModifiedDate { get; private set; }
             public string FilePath { get; private set; }
 
-            public FolderBuilder(){
+
+            public FolderBuilder()
+            {
                 // Set Default Values
             }
 
-            public FolderBuilder SetFileName(string FileName){
+
+            public FolderBuilder SetFileName(string FileName)
+            {
                 Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".fdr";
                 return this;
             }
 
-            public FolderBuilder SetCreationDate(DateTime CreationDate){
+
+            public FolderBuilder SetCreationDate(DateTime CreationDate)
+            {
                 Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.CreationDate = CreationDate;
                 return this;
             }
 
-            public FolderBuilder SetLastModifiedDate(DateTime LastModifiedDate){
+
+            public FolderBuilder SetLastModifiedDate(DateTime LastModifiedDate)
+            {
                 Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
                 Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
+
 
             /// <summary>Sets the file path for the folder being built.</summary>
             /// <param name="FilePath">The file path to set (working directory).</param>
@@ -82,8 +99,10 @@ namespace ConcurSolutionz.Database
 
                 return this;
             }
-        
-            public Folder Build(){
+
+
+            public Folder Build()
+            {
                 return new Folder(this);
             }
         }

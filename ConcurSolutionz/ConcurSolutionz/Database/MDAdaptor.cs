@@ -7,7 +7,8 @@ namespace ConcurSolutionz.Database
 {
     public class MDAdaptor
     {
-        public static dynamic ConvertMetaData(MetaData metaData) {
+        public static dynamic ConvertMetaData(MetaData metaData)
+        {
             if (metaData.SubType == typeof(StudentProjectClaimMetaData).FullName)
             { 
               return (StudentProjectClaimMetaData) metaData;

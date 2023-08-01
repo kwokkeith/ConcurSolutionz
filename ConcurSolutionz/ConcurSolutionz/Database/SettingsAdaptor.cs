@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace ConcurSolutionz.Database
 {
     public static class SettingsAdaptor
@@ -15,7 +10,9 @@ namespace ConcurSolutionz.Database
             }
             else
             {
-                throw new ArgumentException("Invalid Settings subtype detected, could not convert using SettingsSocket!");
+                throw new ArgumentException(
+                    "Invalid Settings subtype detected, " +
+                    "could not convert using SettingsSocket!");
             }
         }
     }

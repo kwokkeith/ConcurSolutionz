@@ -1,10 +1,3 @@
-
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.Specialized;
-using System.Text;
-using System;
-
 namespace ConcurSolutionz.Database
 {
     public static class Utilities
@@ -30,6 +23,7 @@ namespace ConcurSolutionz.Database
                 throw new ArgumentException(value + " cannot be negative!");
             }
         }
+
 
         public static bool IsNumericType(this object o)
         {
@@ -57,13 +51,17 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        public static void CheckIfEmptyString(string value){
+
+        public static void CheckIfEmptyString(string value)
+        {
             if (string.IsNullOrEmpty(value)){
                 throw new ArgumentException("Empty string passed!");
             }
         }
 
-        public static void CheckDateTimeAheadOfNow(DateTime date){
+
+        public static void CheckDateTimeAheadOfNow(DateTime date)
+        {
             CheckNull(date);
             int res = DateTime.Compare(date, DateTime.Now);
             if (res > 0) // Date passed is more than current date
@@ -71,6 +69,7 @@ namespace ConcurSolutionz.Database
                 throw new ArgumentException("Date passed is ahead of current date!");
             }
         }
+
 
         public static void CheckLastModifiedAheadOfCreation(DateTime lastModified, DateTime creation)
         {
@@ -83,18 +82,23 @@ namespace ConcurSolutionz.Database
             }
         }
 
-        public static string ConstEntryMetaDataPath(string entryPath){
+
+        public static string ConstEntryMetaDataPath(string entryPath)
+        {
             CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "EntryMetaData.json");
         }
 
+
         // Creating Record MetaData path creates Records folder as well
-        public static string ConstRecordsFdrPath(string entryPath){
+        public static string ConstRecordsFdrPath(string entryPath)
+        {
             CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Records.fdr");
         }
 
-        public static string ConstRecordsMetaDataPath(string entryPath){
+        public static string ConstRecordsMetaDataPath(string entryPath)
+        {
             CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Records.fdr", "RecordJSON.fdr");
         }

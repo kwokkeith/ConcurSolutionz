@@ -1,31 +1,31 @@
-using System.Security.Cryptography;
-using System.Globalization;
 using System.Text.Json;
-using System.Diagnostics;
 
 namespace ConcurSolutionz.Database
 {
     public class Entry: FileDB
     {
         private MetaData metaData;
-        public MetaData MetaData { 
-            get{
+        public MetaData MetaData
+        { 
+            get
+            {
                 return metaData;
             } 
-            set{
-                if (File.Exists(Utilities.ConstEntryMetaDataPath(this.FilePath)))
+            set
+            {
+                if (File.Exists(Utilities.ConstEntryMetaDataPath(FilePath)))
                 {
                     metaData = value ?? null;
 
                     // Create Entry MetaData
                     string json;
+
                     // Write over the current existing metaData JSON file
-                    string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(this.FilePath);
+                    string entryMetaDataPath = Utilities.ConstEntryMetaDataPath(FilePath);
                     json = JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(metaData));
 
                     File.WriteAllText(entryMetaDataPath, json);
                 }
-
                 else
                 {
                     metaData = value;
@@ -35,7 +35,8 @@ namespace ConcurSolutionz.Database
         public List<Record> Records { get; set; }
 
 
-        private Entry(EntryBuilder builder){
+        private Entry(EntryBuilder builder)
+        {
             // Check if attributes have been declared (Mandatory)
             Utilities.CheckNull(builder.FileName);
             Utilities.CheckNull(builder.CreationDate);
@@ -58,13 +59,16 @@ namespace ConcurSolutionz.Database
 
 
         // Set mandatory boolean of File Instance
-        protected override void SetFolder(){
-            this.Folder = false;
+        protected override void SetFolder()
+        {
+            Folder = false;
         }
 
+        
         /// <summary>Adds a record to the list of Records.</summary>
         /// <param name="record">The record to be added.</param>
-        public void AddRecord(Record record){
+        public void AddRecord(Record record)
+        {
             // Update the RecordID
             int nextID = AssignRecordID();
             record.RecordID = nextID;
@@ -89,7 +93,8 @@ namespace ConcurSolutionz.Database
         /// This method removes the specified record from the database. It also deletes the corresponding JSON file
         /// containing the record's metadata and the folder containing the record's receipt.
         /// </remarks>
-        public void DelRecord(Record record){
+        public void DelRecord(Record record)
+        {
             // Check if record exist in Records List of Entry
             if (!Records.Contains(record))
             {
@@ -109,7 +114,6 @@ namespace ConcurSolutionz.Database
             Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
             Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
 
-
             // Update last modified date of Entry
             UpdateModifiedDate();
         }
@@ -117,14 +121,17 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Deletes a record from the list of Records by its ID.</summary>
         /// <param name="ID">The ID of the record to be deleted.</param>
-        public void DelRecordByID(int ID){
+        public void DelRecordByID(int ID)
+        {
             // Remove paths associated to this record
             // Paths required as arguments to populate receipt folder (Update it with new receipt)
             string receiptFolderPath = Utilities.ConstRecordsFdrPath(FilePath);
             string receiptJSONPath = Utilities.ConstRecordsMetaDataPath(FilePath);
             
-            foreach (Record record in Records){
-                if (record.RecordID == ID){
+            foreach (Record record in Records)
+            {
+                if (record.RecordID == ID)
+                {
                     Records.Remove(record);
                     Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
                     Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
@@ -136,14 +143,17 @@ namespace ConcurSolutionz.Database
                     return; // Assume there is only one instance UNIQUE RecordID 
                 }
             }
+
             // If method reaches here, means we have not found any record of ID passed
             throw new ArgumentException("While attempting to delete record from Entry using an ID," +
                     "the record (Based on RecordID) does not exist in the Records List!");
         }
 
+
         /// <summary>Returns a list of Records.</summary>
         /// <returns>A list of Records.</returns>
-        public List<Record> GetRecords(){
+        public List<Record> GetRecords()
+        {
             return Records;
         }
 
@@ -151,16 +161,20 @@ namespace ConcurSolutionz.Database
         /// <summary>Retrieves a record with the specified ID.</summary>
         /// <param name="ID">The ID of the record to retrieve.</param>
         /// <returns>The record with the specified ID. (Null if no record found in Entry Instance)</returns>
-        public Record GetRecord(int ID){
-            foreach (Record record in Records){
-                if (record.RecordID == ID){
+        public Record GetRecord(int ID)
+        {
+            foreach (Record record in Records)
+            {
+                if (record.RecordID == ID)
+                {
                     return record;
                 }
             }
             return null;
         }
 
-        public override void SelectedAction(){
+        public override void SelectedAction()
+        {
             // Selection is handled by UI
             return;
         }
@@ -168,7 +182,8 @@ namespace ConcurSolutionz.Database
 
         /// <summary>Returns a unique record ID for a receipt (Particular Entry).</summary>
         /// <returns>The assigned record ID.</returns>
-        private int AssignRecordID(){
+        private int AssignRecordID()
+        {
             string RecordMetaDataPath = Utilities.ConstRecordsMetaDataPath(FilePath);
 
             // Get all files with .json file extension in the ReceiptMetaData Folder.
@@ -198,35 +213,45 @@ namespace ConcurSolutionz.Database
             public MetaData MetaData { get; private set; }
             public List<Record> Records { get; private set; }    
 
-            public EntryBuilder(){
+
+            public EntryBuilder()
+            {
                 // Set Default Values
                 Records = new List<Record>();
             }
 
-            public EntryBuilder SetFileName(string FileName){
+
+            public EntryBuilder SetFileName(string FileName)
+            {
                 Utilities.CheckIfEmptyString(FileName);
                 this.FileName = FileName + ".entry";
                 return this;
             }
 
-            public EntryBuilder SetCreationDate(DateTime CreationDate){
+
+            public EntryBuilder SetCreationDate(DateTime CreationDate)
+            {
                 Utilities.CheckDateTimeAheadOfNow(CreationDate);
                 this.CreationDate = CreationDate;
                 return this;
             }
 
-            public EntryBuilder SetLastModifiedDate(DateTime LastModifiedDate){
+
+            public EntryBuilder SetLastModifiedDate(DateTime LastModifiedDate)
+            {
                 Utilities.CheckDateTimeAheadOfNow(LastModifiedDate);
                 Utilities.CheckLastModifiedAheadOfCreation(LastModifiedDate, CreationDate);
                 this.LastModifiedDate = LastModifiedDate;
                 return this;
             }
 
+
             /// <summary>Sets the file path for the entry being built.</summary>
             /// <param name="FilePath">The file path to set (working directory).</param>
             /// <returns>The updated EntryBuilder instance.</returns>
             /// <exception cref="ArgumentNullException">Thrown when the FileName is null.</exception>
-            public EntryBuilder SetFilePath(string FilePath){
+            public EntryBuilder SetFilePath(string FilePath)
+            {
                 // Makes use of working directory of database to create a file
                 Utilities.CheckNull(FileName);
                 if (!Directory.Exists(FilePath))
@@ -239,17 +264,23 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
-            public EntryBuilder SetMetaData(MetaData MetaData){
+
+            public EntryBuilder SetMetaData(MetaData MetaData)
+            {
                 this.MetaData = MetaData;
                 return this;
             }
 
-            public EntryBuilder SetRecords(List<Record> Records){
+
+            public EntryBuilder SetRecords(List<Record> Records)
+            {
                 this.Records = Records;
                 return this;
             }
 
-            public Entry Build(){
+
+            public Entry Build()
+            {
                 return new Entry(this);
             }
         }

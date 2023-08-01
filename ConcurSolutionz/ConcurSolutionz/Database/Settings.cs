@@ -1,6 +1,3 @@
-
-using System.Dynamic;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace ConcurSolutionz.Database
@@ -25,6 +22,7 @@ namespace ConcurSolutionz.Database
                 File.Create(settingsfilePath).Close();
             }
         }
+
 
         /// <summary>Fetches the JSON file from settings path containing the root directory
         /// Returns the root directory of the application.</summary>
@@ -77,9 +75,11 @@ namespace ConcurSolutionz.Database
             {
                 RootDirectory = path
             };
+
             string json = JsonSerializer.Serialize(rootDirectory);
             File.WriteAllText(settingsfilePath, json);
         }
+
 
         // Wrapper class for JSON
         class RootDirectoryData
@@ -87,6 +87,7 @@ namespace ConcurSolutionz.Database
             public string RootDirectory { get; set; }
 
         }
+
 
         private void SetSettingsPath()
         {

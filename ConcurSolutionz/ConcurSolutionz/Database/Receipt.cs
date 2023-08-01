@@ -16,7 +16,10 @@ namespace ConcurSolutionz.Database
         public decimal reqAmount;
         public decimal ReqAmount
         {
-            get { return reqAmount; }
+            get
+            {
+                return reqAmount;
+            }
             set
             {
                 Utilities.CheckNull(value);
@@ -63,6 +66,7 @@ namespace ConcurSolutionz.Database
         public string Comment { get; set; }
         public string ImgPath { get; set; }
 
+
         public Receipt(ReceiptBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
@@ -103,12 +107,14 @@ namespace ConcurSolutionz.Database
             SubType = GetType().FullName;
         }
 
+
         public class ReceiptConverter : JsonConverter<Receipt>
         {
             public override void Write(Utf8JsonWriter writer, Receipt value, JsonSerializerOptions options)
             {
                 // Write JSON
             }
+
 
             public override Receipt Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
@@ -132,7 +138,6 @@ namespace ConcurSolutionz.Database
                 string imgPath = doc.RootElement.GetProperty("ImgPath").GetString();
                 string subType = doc.RootElement.GetProperty("SubType").GetString();
                 int recordID = doc.RootElement.GetProperty("RecordID").GetInt32();
-
 
                 ReceiptBuilder builder = new ReceiptBuilder();
 
@@ -183,6 +188,7 @@ namespace ConcurSolutionz.Database
             public const string DEFAULT_PAYMENT = "Cash";
             public const string DEFAULT_RECEIPT_STATUS = "Tax Receipt";
 
+
             public ReceiptBuilder()
             {
                 // Input any default values (Non-compulsory fields)
@@ -194,6 +200,7 @@ namespace ConcurSolutionz.Database
                 CityOfPurchase = SINGAPORE_CITY;
                 Currency = SINGAPORE_CURRENCY;
                 ReceiptStatus = DEFAULT_RECEIPT_STATUS;
+
                 // Default Value (Only matters when City of Purchase
                 // is not Singapore)
                 ReqAmount = 0m;
@@ -201,11 +208,13 @@ namespace ConcurSolutionz.Database
                 ConversionRate = 0m;
             }
 
+
             public ReceiptBuilder SetPaymentType(string PaymentType)
             {
                 this.PaymentType = PaymentType;
                 return this;
             }
+
 
             public ReceiptBuilder SetExpenseType(string ExpenseType)
             {
@@ -213,11 +222,13 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
+
             public ReceiptBuilder SetTransactionDate(DateTime TransactionDate)
             {
                 this.TransactionDate = TransactionDate;
                 return this;
             }
+
 
             public ReceiptBuilder SetDescription(string Description)
             {
@@ -225,17 +236,20 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
+
             public ReceiptBuilder SetSupplierName(string SupplierName)
             {
                 this.SupplierName = SupplierName;
                 return this;
             }
 
+
             public ReceiptBuilder SetCityOfPurchase(string CityOfPurchase)
             {
                 this.CityOfPurchase = CityOfPurchase;
                 return this;
             }
+
 
             public ReceiptBuilder SetReqAmount(decimal ReqAmount)
             {
@@ -244,12 +258,14 @@ namespace ConcurSolutionz.Database
                 return SetCurrencyAmountSGD();
             }
 
+
             public ReceiptBuilder SetConversionRate(decimal ConversionRate)
             {
                 Utilities.CheckIfNegative(ConversionRate);
                 this.ConversionRate = ConversionRate;
                 return SetCurrencyAmountSGD();
             }
+
 
             private ReceiptBuilder SetCurrencyAmountSGD()
             {
@@ -260,11 +276,13 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
-            public ReceiptBuilder SetCurrency(string currency)
+
+            public ReceiptBuilder SetCurrency(string Currency)
             {
-                this.Currency = currency;
+                this.Currency = Currency;
                 return this;
             }
+
 
             public ReceiptBuilder SetReceiptNumber(string ReceiptNumber)
             {
@@ -272,31 +290,41 @@ namespace ConcurSolutionz.Database
                 return this;
             }
 
+
             public ReceiptBuilder SetReceiptStatus(string ReceiptStatus)
             {
                 this.ReceiptStatus = ReceiptStatus;
                 return this;
             }
+
+
             public ReceiptBuilder SetIsBillable(bool IsBillable)
             {
                 this.IsBillable = IsBillable;
                 return this;
             }
+
+
             public ReceiptBuilder SetIsPersonalExpense(bool IsPersonalExpense)
             {
                 this.IsPersonalExpense = IsPersonalExpense;
                 return this;
             }
+
+
             public ReceiptBuilder SetComment(string Comment)
             {
                 this.Comment = Comment;
                 return this;
             }
+
+
             public ReceiptBuilder SetImgPath(string ImgPath)
             {
                 this.ImgPath = ImgPath;
                 return this;
             }
+
 
             public Receipt Build()
             {

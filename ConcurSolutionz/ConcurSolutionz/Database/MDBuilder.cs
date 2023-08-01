@@ -8,8 +8,7 @@ namespace ConcurSolutionz.Database
         public const string DEFAULT_ENTRYNAME = "Unnamed";
         public const decimal DEFAULT_BUDGET = 0m;
 
-        public MDBuilder(){}
-
+        public MDBuilder() { }
 
         public abstract MDBuilder SetEntryName(string entryName);
         public abstract MDBuilder SetEntryBudget(decimal entryBudget);

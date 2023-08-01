@@ -10,6 +10,7 @@ namespace ConcurSolutionz
         public static HttpClient HttpClient { get; private set; }
         private static string UserID, EMPKey;
 
+
         public ConcurAPI(string cookieToken)
         {
             UserID = string.Empty;
@@ -20,6 +21,7 @@ namespace ConcurSolutionz
             HttpClient.DefaultRequestHeaders.Accept.Clear();
             HttpClient.DefaultRequestHeaders.Add("cookie", cookieToken);
         }
+
 
         /// <summary>
         /// Method <c>Initialize</c> retrieves the UserID and EMPKey to run the rest of the API calls
@@ -72,6 +74,8 @@ namespace ConcurSolutionz
             if (string.IsNullOrEmpty(UserID) || string.IsNullOrEmpty(EMPKey)) { return "3"; }
             else return "0";
         }
+
+
         /// <summary>
         /// Method <c>CreateRequest</c> is a helper method for Initialize() to make an API call for making a request to retrieve the userId
         /// </summary>
@@ -103,6 +107,8 @@ namespace ConcurSolutionz
             var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
+
+
         /// <summary>
         /// Method <c>GetUserID</c> is a helper method for Initialize() to retrieve the UserID and EMPKey from the request made
         /// </summary>
@@ -124,6 +130,8 @@ namespace ConcurSolutionz
             var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
+
+
         /// <summary>
         /// Method <c>DeleteRequest</c> is a helper method for Initialize() to clean up the request made earlier
         /// </summary>
@@ -142,6 +150,8 @@ namespace ConcurSolutionz
             var response = await HttpClient.PostAsync(requestURL, HttpContent);
             return await response.Content.ReadAsStringAsync();
         }
+
+
         /// <summary>
         /// Method <c>GetAllClaims</c> retrieves all of the current user's claims and returns it as a list of Models.Claim
         /// </summary>
@@ -193,6 +203,8 @@ namespace ConcurSolutionz
                 return new List<Models.Claim>();
             }
         }
+
+
         /// <summary>
         /// Method <c>ClaimCreateDD</c> retrieves all possible claim policies for the user to select when creating a new claim
         /// </summary>
@@ -232,6 +244,8 @@ namespace ConcurSolutionz
                 throw new Exception("Failed to retrieve policy claims");
             }
         }
+
+
         /// <summary>
         /// Method <c>CreateClaim</c> creates a claim using the object Models.CLaim
         /// </summary>
@@ -331,6 +345,8 @@ namespace ConcurSolutionz
             }
             else throw new Exception("Failed to create claim");
         }
+
+
         /// <summary>
         /// Method <c>CreateExpense</c> create an expense under a claim, taking in a expense and a claim that the expense belongs under as arguments
         /// </summary>
@@ -348,8 +364,9 @@ namespace ConcurSolutionz
                 return jsonObject!["data"]!["saveExpense"]!["expense"]!["rpeKey"]!.ToString();
             }
             else throw new Exception("Failed to create new expense");
-
         }
+
+
         /// <summary>
         /// Method <c>GetReportKey</c> retrieves the key value for a claim
         /// </summary>
@@ -363,8 +380,11 @@ namespace ConcurSolutionz
             string jsonString = await response.Content.ReadAsStringAsync();
             if (!jsonString.Contains("data")) throw new Exception("Unable to retrieve report key");
             JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
+
             return jsonObject!["data"]!["employee"]!["expenseReport"]!["rptKey"]!.ToString();
         }
+
+
         /// <summary>
         /// Method <c>UploadImage</c> uploads an image under the user's account
         /// </summary>
@@ -379,10 +399,11 @@ namespace ConcurSolutionz
             string jsonString = await response.Content.ReadAsStringAsync();
             if (!jsonString.Contains("SUCCESS")) throw new Exception("Fail to upload image");
             string imageId = jsonString.Split(',')[1].Split('\'')[1];
+
             return imageId;
-            //JsonNode jsonObject = JsonSerializer.Deserialize<JsonNode>(jsonString)!;
-            //return jsonObject!["imageId"]!.ToString();
         }
+
+
         /// <summary>
         /// Method <c>GetAllExpenses</c> Gets all the expenses under a claim, also used to retrieve the expense IDs for the expense
         /// </summary>
@@ -418,6 +439,7 @@ namespace ConcurSolutionz
                     expense.RPEKey = jsonArr[i]!["summary"]!["rpeKey"]!.ToString();
                     Expenses.Add(expense);
                 }
+
                 return Expenses;
             }
             catch (Exception ex)
@@ -425,6 +447,8 @@ namespace ConcurSolutionz
                 throw new Exception("Failed to retrieve expenses");
             }
         }
+
+
         /// <summary>
         /// Method <c>LinkImageToRequest</c> Links the uploaded image to the expense it is assigned under
         /// </summary>
@@ -435,9 +459,8 @@ namespace ConcurSolutionz
             .Replace("<userId>", UserID).Replace("<reportId>", expense.ReportId).Replace("<expenseId>", expense.Id).Replace("<imageId>", expense.ImageId);
             StringContent HttpContent = new StringContent(content, Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync(requestURL, HttpContent);
+
             return await response.Content.ReadAsStringAsync();
         }
-
-
     }
 }

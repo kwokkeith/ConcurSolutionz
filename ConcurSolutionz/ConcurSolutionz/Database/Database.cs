@@ -1,8 +1,5 @@
-using System.Security.AccessControl;
 using System.Text.Json;
-using Microsoft.Maui.Storage;
 using ConcurSolutionz.Models.CustomException;
-using ConcurSolutionz.Models;
 
 namespace ConcurSolutionz.Database
 {
@@ -16,9 +13,7 @@ namespace ConcurSolutionz.Database
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit
-        private Database()
-        {
-        }
+        private Database() { }
 
         public static Database Instance
         {
@@ -32,25 +27,30 @@ namespace ConcurSolutionz.Database
             }
         }
 
+
         public Settings GetSettings()
         {
             return Settings;
         }
 
+
         public void SetSetting(Settings settings)
         {
-            this.Settings = settings;
+            Settings = settings;
         }
+
 
         public string Getwd()
         {
             return WorkingDirectory;
         }
 
+
         public void Setwd(string wd)
         {
             WorkingDirectory = wd;
         }
+
 
         public List<string> GetFilePathsFromWD()
         {
@@ -95,6 +95,7 @@ namespace ConcurSolutionz.Database
             return files;
         }
 
+
         public List<string> GetFileNamesFromWD()
         {
             List<string> files = GetFilePathsFromWD();
@@ -105,6 +106,7 @@ namespace ConcurSolutionz.Database
             }
             return fileNames;
         }
+
 
         /// <summary>Method handles selection of a file by its file name.</summary>
         /// <param name="fileName">The name of the file to select.</param>
@@ -140,8 +142,8 @@ namespace ConcurSolutionz.Database
 
             else if (filePath.EndsWith(".entry"))
             {
-                // If Entry then:
-                // Do Nothing as it is implemented in UI
+                // If Entry then, Do Nothing as it is implemented
+                return;
             }
 
             else
@@ -149,6 +151,7 @@ namespace ConcurSolutionz.Database
                 throw new Exception(filePath + " found in Files<List> but of invalid extension!");
             }
         }
+
 
         // Uses a fileName to find a file and return a tuple of (Metadata, List<Record>) 
         public Tuple<MetaData, List<Record>> getFileDetailFromFileName(string fileName)
@@ -176,7 +179,6 @@ namespace ConcurSolutionz.Database
             {
                 throw new ArgumentException("Failed to extract information of file with file name " + fileName + "!" +
                     "\n" + "Deleting all files associated to " + fileName + " to ensure synchronisation!");
-                
             }
         }
 
@@ -200,6 +202,7 @@ namespace ConcurSolutionz.Database
             // Delete a file using Directory (Physical file management system)
             File.Delete(filePath);
         }
+
 
         /// <summary>Deletes a file from the specified file path.</summary>
         /// <param name="filePath">The path of the file to be deleted.</param>
@@ -229,6 +232,7 @@ namespace ConcurSolutionz.Database
             File.WriteAllText(EntryMetaDataPath, JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(EntryMetaData)));
         }
 
+
         /// <summary>Navigates back to the previous directory.</summary>
         /// <remarks>
         /// This method updates the working directory by removing the last directory from the path.
@@ -251,9 +255,9 @@ namespace ConcurSolutionz.Database
         }
 
 
-        // @@@@@@@@@@@@@@@@@@@@@@@@@
-        // DATABASE UTILITY METHODS
-        // @@@@@@@@@@@@@@@@@@@@@@@@@
+        // **********************************************
+        // @@@@@@@@@@ DATABASE UTILITY METHODS @@@@@@@@@@
+        // **********************************************
         private static MetaData ExtractEntryMetaData(string MetaDataPath)
         {
             if (Path.Exists(MetaDataPath))
@@ -281,6 +285,7 @@ namespace ConcurSolutionz.Database
                 return null;
             }
         }
+
 
         private static List<Record> ExtractRecords(string RecordsMetaDataPath)
         {
@@ -391,7 +396,7 @@ namespace ConcurSolutionz.Database
             // Create backup folder
             Directory.CreateDirectory(backupPath);
 
-            foreach(string fileName in diff)
+            foreach (string fileName in diff)
             {
                 // Delete record images missing a metadata
                 foreach (string fileNameWithExt in RecordImages)
@@ -409,7 +414,7 @@ namespace ConcurSolutionz.Database
 
             // 2. Finding missing record image 
             diff = RecordMetaDatas.Except(RecordImagesWithoutFileExt);
-            foreach(string fileName in diff)
+            foreach (string fileName in diff)
             {
                 // Delete record metadatas that is missing record image
                 File.Delete(Path.Combine(RecordsMetaDataPath, fileName + ".json"));
@@ -434,7 +439,6 @@ namespace ConcurSolutionz.Database
                     "database would do the required actions to synchronise...\n" +
                     "Images removed can be found in <root_directoy>/Image_Backup.");
             }
-
         }
     }
 }
