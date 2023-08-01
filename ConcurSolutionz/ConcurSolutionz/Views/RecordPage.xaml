@@ -10,13 +10,10 @@
             <Grid RowDefinitions="50,50,2*" RowSpacing="10" x:Name="ReceiptGrid">
                 <Image x:Name="ReceiptImage"
                     VerticalOptions="Start" 
+                    HorizontalOptions="Start" 
+                    Aspect="AspectFit"
                     Grid.Row="2">
                 </Image>
-                <Polygon x:Name="ReceiptOverlay"
-                    Stroke="Red"
-                    HorizontalOptions="Start" 
-                    IsVisible="False"
-                    Grid.Row="2"/>
 
                 <Button x:Name="FilePickerBtn"
                         Text="Upload receipt"
