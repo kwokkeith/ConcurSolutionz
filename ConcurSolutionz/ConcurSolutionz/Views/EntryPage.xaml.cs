@@ -454,33 +454,18 @@ public partial class EntryPage : ContentPage
     // Create entry from existing file
     private void CreateExistingFile(string name)
     {
-        try
-        {
-            Tuple<MetaData, List<Database.Record>> fileDetail;
+        Tuple<MetaData, List<Database.Record>> fileDetail;
 
-            fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
+        fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
 
-            // Get existing metadata
-            md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
+        // Get existing metadata
+        md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
 
-            // Get List of existing Receipts
-            receipts.Clear(); // remove all receipts in existing receipts list
-            foreach (Database.Record record in fileDetail.Item2)
-            {
-                receipts.Add(RecordAdaptor.ConvertRecord(record));
-            }
-        }
-        catch (SynchronisationException ex)
+        // Get List of existing Receipts
+        receipts.Clear(); // remove all receipts in existing receipts list
+        foreach (Database.Record record in fileDetail.Item2)
         {
-            throw ex;
-        }
-        catch (MetaDataConversionException ex)
-        {
-            throw ex;
-        }
-        catch (RecordConversionException ex)
-        {
-            throw ex;
+            receipts.Add(RecordAdaptor.ConvertRecord(record));
         }
     }
 

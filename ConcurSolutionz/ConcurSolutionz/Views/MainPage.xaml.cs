@@ -177,7 +177,7 @@ public partial class MainPage : ContentPage
     {
         // Handle file/folder double tap event
         var tappedFile = (sender as View)?.BindingContext as FileItem;
-        string filePath = Path.Combine(Database.Database.Instance.Getwd(),tappedFile.FileName);
+        string filePath = Path.Combine(Database.Database.Instance.Getwd(), tappedFile.FileName);
         if (tappedFile != null && tappedFile.IsFolder && tappedFile.Equals(SelectedFile))
         {
             // SELECT file
@@ -195,25 +195,34 @@ public partial class MainPage : ContentPage
             {
                 await Shell.Current.GoToAsync($"{nameof(EntryPage)}?fileName={tappedFile.FileName}&existingFile={true}&filePath={filePath}");
             }
-            catch (SynchronisationException ex)
-            {
-                await DisplayAlert("Database Synchronising", $"{ex}\n\nDatabase will sync... Please try again~", "OK");
-            }
-            catch (MetaDataConversionException ex)
-            {
-                await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {ex}", "OK");
-            }
-            catch (RecordConversionException ex)
-            {
-                await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
-            }
             catch (Exception ex)
             {
-                await DisplayAlert("Warning", $"{ex}", "OK");
+                if (ex.InnerException is SynchronisationException)
+                {
+                    await DisplayAlert("Database Synchronising", $"Don't worry :)\nDatabase is syncing...\nPlease try again~\n\n{ex.Message}", "OK");
+                }
+                else if (ex.InnerException is MetaDataConversionException)
+                {
+                    await DisplayAlert("Failure!", $"Failed to convert MetaData when loading from existing file! Error is: {ex.Message}", "OK");
+                }
+                else if (ex.InnerException is RecordConversionException)
+                {
+                    await DisplayAlert("Failure!", "Failed to convert record instance to receipt when loading existing file!", "OK");
+                }
+                else if (ex.InnerException is MissingEntryFileException)
+                {
+                    await DisplayAlert("Database Synchronising!", $"Don't worry :)\nDatabase will syncing...\nPlease try again~\n\n{ex.Message}", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Warning", $"{ex.Message}", "OK");
+                }
+                // Refresh page to show valid changes
+                RefreshPage();
             }
+            // Delay the selection to avoid immediate reselection due to double-tap gesture
+            await Task.Delay(200);
         }
-        // Delay the selection to avoid immediate reselection due to double-tap gesture
-        await Task.Delay(200);
     }
 
     private void OnBackClicked(object sender, EventArgs e)
