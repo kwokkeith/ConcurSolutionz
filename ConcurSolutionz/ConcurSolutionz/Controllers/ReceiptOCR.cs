@@ -8,6 +8,7 @@ namespace ConcurSolutionz.Controllers
     {
         public string receiptNumber;
         public decimal reqAmount;
+        public string customRequestText;
         public string imgPath;
         public List<(Point[],string)> textBoxes = new();
         public double imgWidth;
@@ -62,14 +63,15 @@ namespace ConcurSolutionz.Controllers
                     Point bottomRight = pc[2];
                     if (topLeft.X <= x && bottomRight.X >= x && topLeft.Y <= y && bottomRight.Y >= y)
                     {
-                        if (y > imgHeight/2)
-                        {
-                            reqAmount = new decimal(double.Parse(text));
-                        }
-                        else
-                        {
-                            receiptNumber = text;
-                        }
+                        //if (y > imgHeight/2)
+                        //{
+                        //    reqAmount = new decimal(double.Parse(text));
+                        //}
+                        //else
+                        //{
+                        //    receiptNumber = text;
+                        //}
+                        customRequestText = text;
                     }
                 }
             }
