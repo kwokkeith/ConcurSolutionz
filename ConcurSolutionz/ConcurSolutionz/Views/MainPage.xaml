@@ -37,7 +37,8 @@
             <!-- File list placeholder -->
             <ListView ItemsSource="{Binding Files}"
                       SelectedItem="{Binding SelectedFile}"
-                      x:Name="fileListView">
+                      x:Name="fileListView"
+                      IsPullToRefreshEnabled="True">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

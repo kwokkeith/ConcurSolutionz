@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows.Input;
 using ConcurSolutionz.Database;
 using ConcurSolutionz.Models.CustomException;
 
@@ -35,7 +36,10 @@ public partial class MainPage : ContentPage
     public FileItem SelectedFile { get; set; }
     public SortOption CurrentSortOption { get; set; }
     public Grid SelectedItem { get; set; }
+    public ICommand RefreshCommand { get; set; }
+
     public string SearchText;
+    public bool IsRefreshing;
 
     private string rootDirectoryPath = Database.Database.Instance.GetSettings().GetRootDirectory();
     public string workingDirectoryPath;
@@ -51,6 +55,13 @@ public partial class MainPage : ContentPage
 
         // Get current working directory from database
         LoadFilesFromDB();
+
+        fileListView.RefreshCommand = new Command(() =>
+        {
+            fileListView.IsRefreshing = true;
+            RefreshPage();
+            fileListView.IsRefreshing = false;
+        });
     }
 
 
@@ -292,7 +303,6 @@ public partial class MainPage : ContentPage
         }
     }
 
-
     private async Task RenameSelectedFile(string initialValue, string promptMessage)
     {
         // Prompt the user for the new name
@@ -422,9 +432,8 @@ public partial class MainPage : ContentPage
         }
     }
 
-
     // <Summary>To refresh the file management page</Summary>
-    private void RefreshPage()
+    public void RefreshPage()
     {
         Files.Clear(); // Remove all files in the Files list
         LoadFilesFromDB(); // Reload from current working directory
