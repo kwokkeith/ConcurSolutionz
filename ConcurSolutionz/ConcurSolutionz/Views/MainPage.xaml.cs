@@ -288,7 +288,7 @@ public partial class MainPage : ContentPage
         if (SelectedFile != null)
         {
             // Prompt for renaming the selected file/folder
-            await RenameSelectedFile(SelectedFile.FileName, "Enter a new name");
+            await RenameSelectedFile(Path.GetFileNameWithoutExtension(SelectedFile.FileName), "Enter a new name");
         }
     }
 

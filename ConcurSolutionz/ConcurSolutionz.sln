@@ -1,15 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurSolutionz", "ConcurSolutionz\ConcurSolutionz.csproj", "{CC17F8E5-D926-4030-96D8-F6B4E7DB9D58}"
 EndProject
-<<<<<<< HEAD
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit_Test", "Unit_Test\Unit_Test.csproj", "{A9DFB2F7-6FE1-4D87-A47A-33958E5236E7}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit_Test", "Unit_Test\Unit_Test.csproj", "{FCA9F834-B5E0-43FF-8A6B-16A97438A07D}"
->>>>>>> f4d65aa (feat: fuzzers in unit tests)
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Unit_Test", "Unit_Test\Unit_Test.csproj", "{A9DFB2F7-6FE1-4D87-A47A-33958E5236E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

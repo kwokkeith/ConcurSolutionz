@@ -184,11 +184,7 @@ namespace Unit_Test
             MetaData metadata;
             string claimName = Fuzzer.GenerateRandomString(10);
             string purpose = Fuzzer.GenerateRandomString(20);
-<<<<<<< HEAD
             DateTime claimDate = Fuzzer.GenerateRandomDateTime();
-=======
-            string claimDate = Fuzzer.GenerateRandomDateTime().ToString();
->>>>>>> 954a28e (feat: dark mode updated)
             string teamName = Fuzzer.GenerateRandomString(10);
 
             // Act
