@@ -66,7 +66,7 @@ namespace Unit_Test
         }
 
         // Fuzzing the values of folder creation
-        [Fact(DisplayName = "6.2")]
+        [Fact(DisplayName = "6.9")]
         public void BuildFolder_ShouldBuild_UsingBuilder_Fuzz()
         {
             // Arrange
@@ -110,7 +110,7 @@ namespace Unit_Test
             }
         }
 
-        [Fact(DisplayName = "6.3")]
+        [Fact(DisplayName = "6.2")]
         public void BuildFolder_ShouldThrowException_ForEmptyFolder()
         {
             // Arrange
@@ -120,7 +120,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(""));
         }
 
-        [Fact(DisplayName = "6.4")]
+        [Fact(DisplayName = "6.3")]
         public void BuildFolder_ShouldThrowException_ForNullFolder()
         {
             // Arrange
@@ -130,7 +130,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => folderBuilder.SetFileName(null));
         }
 
-        [Fact(DisplayName = "6.5")]
+        [Fact(DisplayName = "6.4")]
         public void BuildFolder_ShouldThrowException_ForSettingFilePathBeforeFileName()
         {
             // Arrange
@@ -141,7 +141,7 @@ namespace Unit_Test
             .SetFileName("Folder 1"));
         }
 
-        [Fact(DisplayName = "6.6")]
+        [Fact(DisplayName = "6.5")]
         public void BuildFolder_ShouldThrowException_ForDateTimeAheadOfNow()
         {
             // Arrange
@@ -152,7 +152,7 @@ namespace Unit_Test
                 .SetCreationDate(DateTime.ParseExact("24/01/2099", "dd/MM/yyyy", CultureInfo.InvariantCulture)));
         }
 
-        [Fact(DisplayName = "6.x")]
+        [Fact(DisplayName = "6.6")]
         public void BuildFolder_ShouldThrowException_ForCreationDateAheadOfLastModifiedDate()
         {
             // Arrange
