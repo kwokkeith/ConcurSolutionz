@@ -63,7 +63,8 @@
                             Grid.Column="1"
                             Grid.Row="0"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body"
+                        Focused="LastClicked"/>
 
                     <Label
                            Text="Date"
@@ -89,7 +90,8 @@
                             Grid.Column="1"
                             Grid.Row="2"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body"
+                            Focused="LastClicked"/>
 
                     <Label Text="Supplier Name"
                            Grid.Row="3"
@@ -103,7 +105,9 @@
                             Grid.Row="3"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                        FontSize="Body"
+                        Focused="LastClicked"/>
+
 
                     <Label Text="Amount"
                            Grid.Row="4"
@@ -116,7 +120,8 @@
                             Grid.Row="4"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body"
+                            Focused="LastClicked"/>
 
                     <Label Text="Receipt no."
                            Grid.Row="5"
@@ -129,7 +134,8 @@
                             Grid.Row="5"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body"
+                            Focused="LastClicked"/>
 
                  <Label Text="City of Purchase"
                            Grid.Row="6"
@@ -189,7 +195,8 @@
                             Grid.Row="8"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                            FontSize="Body"
+                            Focused="LastClicked"/>
 
                     <Label Text="Comment"
                            Grid.Row="9"
@@ -204,7 +211,9 @@
                             Grid.Row="9"
                             Grid.Column="1"
                            HeightRequest="50"
-                           FontSize="Body"/>
+                           FontSize="Body"
+                            Focused="LastClicked"/>
+
 
                     <CheckBox
                         x:Name="IsBillable"

@@ -13,6 +13,7 @@ namespace ConcurSolutionz.Views
         private List<View> boundingBoxes = new List<View>();
         private double imgWidth = 1;
         private double imgHeight = 1;
+        private Microsoft.Maui.Controls.Entry lastClicked;
         private Controllers.ReceiptOCR receiptData;
 
         public Receipt ExistingReceipt
@@ -228,8 +229,8 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
-                string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
+                string tesseractPath = "./bin/tesseract/tesseract";
+                string tessdataPath = "./bin/tesseract/tessdata/";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
@@ -265,8 +266,9 @@ namespace ConcurSolutionz.Views
                     {
                         Point coords = (PointF) e.GetPosition((View) s);
                         receiptData.RefineOCR(coords.X, coords.Y);
-                        reqAmount.Text = receiptData.reqAmount.ToString();
-                        ReceiptNo.Text = receiptData.receiptNumber;
+                        this.lastClicked.Text = receiptData.customRequestText;
+                        //reqAmount.Text = receiptData.reqAmount.ToString();
+                        //ReceiptNo.Text = receiptData.receiptNumber;
                         //DisplayAlert("UPDATE",receiptData.reqAmount.ToString() + "\n" + receiptData.receiptNumber ,"OK");
                     };
 
@@ -358,6 +360,12 @@ namespace ConcurSolutionz.Views
                     DisplayAlert("Error", ex.ToString(), "OK");
                 }
             }
+        }
+
+        void LastClicked(object sender, EventArgs args)
+        {
+            Microsoft.Maui.Controls.Entry e = (Microsoft.Maui.Controls.Entry) sender;
+            this.lastClicked = e;
         }
     }
 }
