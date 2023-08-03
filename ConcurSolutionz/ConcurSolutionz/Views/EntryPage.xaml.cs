@@ -173,6 +173,13 @@ public partial class EntryPage : ContentPage
         base.OnBackButtonPressed();
         return false;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        BuildMDPopulate();
+    }
     private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;
@@ -189,6 +196,7 @@ public partial class EntryPage : ContentPage
         CalculateBudget();
         OnEditorsTextChanged(sender, e);
     }
+
 
 
     private void CalculateBudget()
