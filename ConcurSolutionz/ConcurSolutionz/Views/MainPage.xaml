@@ -38,9 +38,7 @@
                    TextDecorations="Underline">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="BackToChooseRoot"/>
-
                 </Label.GestureRecognizers>
-
             </Label>
 
 

@@ -4,10 +4,15 @@
              x:Class="ConcurSolutionz.Views.EntryPage"
              xmlns:models="clr-namespace:ConcurSolutionz.Models"
              Title="Entry">
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <models:Entry/>
 
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False"/>
+
+    </Shell.BackButtonBehavior>
+
     <ContentPage.Resources>
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -40,7 +45,8 @@
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
              <!--<Button x:Name="UpdateMetadataButton" Text="Update Entry Metadata" Clicked="SetMetaData_Clicked"/>-->
-            <Label x:Name="UpdateMessage" Text="Updated successfully!" VerticalOptions="Center" Margin=" 10" Opacity="0"/>
+            <ActivityIndicator x:Name="ConcurLoading"/>
+
         </HorizontalStackLayout>
 
         <Grid ColumnDefinitions="*, *"
@@ -85,7 +91,7 @@
                                 x:Name="Policy"
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040}"                                
+                                Background="{AppThemeBinding Light=#ededed, Dark=#404040}"                                
                                 FontSize="Body"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged">
@@ -127,7 +133,7 @@
                                 Grid.Row="2"
                                 HeightRequest="50"
                                 StrokeShape="RoundRectangle 5,5,5,5"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
+                                Background="{AppThemeBinding Light=#ededed, Dark=#404040 }"
                                 StrokeThickness="1">
 
                             <DatePicker
@@ -161,7 +167,7 @@
                                 Grid.Column="1"
                                 Grid.Row="0"
                                 FontSize="Body"
-                                Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
+                                Background="{AppThemeBinding Light=#ededed, Dark=#404040 }"
                                 HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}"
                                 SelectedIndexChanged="OnEditorsTextChanged"/>
 

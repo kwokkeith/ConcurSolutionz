@@ -168,7 +168,11 @@ public partial class EntryPage : ContentPage
         BuildMDPopulate();
     }
 
-
+    protected override bool OnBackButtonPressed()
+    {
+        base.OnBackButtonPressed();
+        return false;
+    }
     private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;
@@ -527,7 +531,6 @@ public partial class EntryPage : ContentPage
             EditEntryNameButton.IsVisible = true;
             AllRecords.IsVisible = true;
 
-            Show_Message();
             SetMetadataButton.IsEnabled = false;
             
             //Build entry
@@ -613,15 +616,6 @@ public partial class EntryPage : ContentPage
         }
     }
 
-
-    // show success message after setting entry metadata
-    private async void Show_Message()
-    {
-        await UpdateMessage.FadeTo(1, 500);
-        await UpdateMessage.FadeTo(0, 4000);
-    }
-
-
     private async void Concur_Clicked(object sender, EventArgs e)
     {
         Console.WriteLine("About to start selenium");
@@ -661,10 +655,13 @@ public partial class EntryPage : ContentPage
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardInput = true;
             process.Start();
+            PageEnabled(false);
+
         }
         catch (Exception ex)
         {
             Console.WriteLine("Failed to start Selenium");
+            await DisplayAlert("Error", "Failed to start Selenium!", "OK");
             return;
         }
 
@@ -700,6 +697,7 @@ public partial class EntryPage : ContentPage
             Console.WriteLine(ex.ToString());
             return;
         }
+
     }
 
 
@@ -818,5 +816,27 @@ public partial class EntryPage : ContentPage
             Debug.WriteLine("Failed to start Cookie Browser");
             return;
         }
+        finally
+        {
+            PageEnabled(true);
+        }
+    }
+
+    private void PageEnabled(bool enable)
+    {
+        EditEntryNameButton.IsEnabled = enable;
+        TransferButton.IsEnabled = enable;
+        DeleteEntryButton.IsEnabled = enable;
+        Policy.IsEnabled = enable;
+        ProjectClubInp.IsEnabled = enable;
+        ClaimNameInp.IsEnabled = enable;
+        TeamNameInp.IsEnabled = enable;
+        ClaimDateInp.IsEnabled = enable;
+        Purpose.IsEnabled = enable;
+        BudgetEditor.IsEnabled = enable;
+        AddRecordButton.IsEnabled = enable;
+        EditRecordButton.IsEnabled = enable;
+        DeleteRecordButton.IsEnabled = enable;
+        ConcurLoading.IsRunning = !enable;
     }
 }

@@ -147,7 +147,7 @@
                             Title="City"
                             Grid.Row="6"
                             Grid.Column="1"
-                            Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
+                            Background="{AppThemeBinding Light=#ededed, Dark=#404040 }"
                             FontSize="Body"
                             HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
 
@@ -171,7 +171,7 @@
                             Title="Currency"
                             Grid.Row="7"
                             Grid.Column="1"
-                            Background="{AppThemeBinding Light=#E5E4E2, Dark=#404040 }"
+                            Background="{AppThemeBinding Light=#ededed, Dark=#404040 }"
                             FontSize="Body"
                             HeightRequest="{OnPlatform 50, MacCatalyst=50, WinUI=60}">
                                 <Picker.ItemsSource>
