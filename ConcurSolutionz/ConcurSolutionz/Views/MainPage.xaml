@@ -33,6 +33,16 @@
                    FontSize="Large"
                    HorizontalOptions="CenterAndExpand"
                    Margin="10"/>
+            <Label Text="Change root directory"
+                   HorizontalOptions="Center"
+                   TextDecorations="Underline">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="BackToChooseRoot"/>
+
+                </Label.GestureRecognizers>
+
+            </Label>
+
 
             <!-- File list placeholder -->
             <ListView ItemsSource="{Binding Files}"

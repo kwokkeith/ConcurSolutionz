@@ -37,6 +37,7 @@ public partial class MainPage : ContentPage
     public SortOption CurrentSortOption { get; set; }
     public Grid SelectedItem { get; set; }
     public ICommand RefreshCommand { get; set; }
+    public ICommand SetRootCommand { get; set; }
 
     public string SearchText;
     public bool IsRefreshing;
@@ -62,6 +63,7 @@ public partial class MainPage : ContentPage
             RefreshPage();
             fileListView.IsRefreshing = false;
         });
+
     }
 
 
@@ -72,6 +74,11 @@ public partial class MainPage : ContentPage
 
         // Populate File Management View
         RefreshPage();
+    }
+
+    private async void BackToChooseRoot(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(ChooseRootPage));
     }
 
 
