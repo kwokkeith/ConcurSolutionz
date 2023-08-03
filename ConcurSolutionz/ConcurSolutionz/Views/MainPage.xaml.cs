@@ -319,6 +319,17 @@ public partial class MainPage : ContentPage
         {
             try
             {
+                if (newName.Substring(Math.Max(0,newName.Length - 4)) != ".fdr" || newName.Substring(Math.Max(0, newName.Length - 6)) != ".entry")
+                {
+                    if (SelectedFile.IsFolder)
+                    {
+                        newName = newName + ".fdr";
+                    }
+                    else
+                    {
+                        newName = newName + ".entry";
+                    }
+                }
                 string filePath = Path.Combine(Database.Database.Instance.Getwd(), SelectedFile.FileName);
                 string newFilePath = Path.Combine(Database.Database.Instance.Getwd(), newName);
 
