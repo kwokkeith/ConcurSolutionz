@@ -168,18 +168,19 @@ public partial class EntryPage : ContentPage
         BuildMDPopulate();
     }
 
-    protected override bool OnBackButtonPressed()
-    {
-        base.OnBackButtonPressed();
-        return false;
-    }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        BuildMDPopulate();
+        if (existingFile)
+        {
+            CreateExistingFile(FileName + ".entry");
+            PopulateEntry();
+        }
     }
+
+
     private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;

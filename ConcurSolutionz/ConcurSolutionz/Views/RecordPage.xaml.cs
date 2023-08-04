@@ -229,8 +229,8 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                string tesseractPath = "./bin/tesseract/tesseract";
-                string tessdataPath = "./bin/tesseract/tessdata/";
+                string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
+                string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
