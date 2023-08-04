@@ -111,8 +111,9 @@ namespace ConcurSolutionz.Database
             string receiptJSONPath = Utilities.ConstRecordsMetaDataPath(FilePath);
 
             Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
-            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,"Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath,record.RecordID.ToString() + ".png")); // Del Receipt Image
+            Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, record.RecordID.ToString() + ".jpeg")); // Del Receipt Image
 
             // Update last modified date of Entry
             UpdateModifiedDate();
@@ -134,8 +135,9 @@ namespace ConcurSolutionz.Database
                 {
                     Records.Remove(record);
                     Database.DeleteFileByFilePath(Path.Combine(receiptJSONPath, record.RecordID + ".json")); // Del Metadata
-                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".jpg")); // Del Receipt Image
-                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, "Receipt " + record.RecordID.ToString() + ".png")); // Del Receipt Image
+                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, record.RecordID.ToString() + ".jpg")); // Del Receipt Image
+                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, record.RecordID.ToString() + ".png")); // Del Receipt Image
+                    Database.DeleteFileByFilePath(Path.Combine(receiptFolderPath, record.RecordID.ToString() + ".jpeg")); // Del Receipt Image
 
                     // Update last modified date of Entry
                     UpdateModifiedDate();
