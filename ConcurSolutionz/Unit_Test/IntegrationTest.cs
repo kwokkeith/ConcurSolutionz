@@ -394,7 +394,7 @@ namespace Unit_Test
         }
 
         [Fact, TestPriority(10)]
-        public void AddRecordToExistingEntry_TestsDatabase_Receipt_MDAdaptor_Entry()
+        public void AddRecordToExistingEntry_TestsMDBuilder_Receipt_Entry()
         {
             Receipt.ReceiptBuilder receiptBuilder = new();
             Receipt receipt1;
@@ -463,7 +463,7 @@ namespace Unit_Test
         }
 
         [Fact, TestPriority(11)]
-        public void ModifyMetadataOfExistingEntry_TestsDatabase_Receipt_MDAdaptor()
+        public void ModifyMetadataOfExistingEntry_TestsMDBuilder_Receipt_Entry()
         {
             Receipt.ReceiptBuilder receiptBuilder = new();
             Receipt receipt1;
@@ -531,7 +531,7 @@ namespace Unit_Test
         }
 
         [Fact, TestPriority(12)]
-        public void DeleteRecordFromExistingEntry_TestsDatabase_Entry()
+        public void DeleteRecordFromExistingEntry_TestsMDBuilder_Receipt_Entry()
         {
             Receipt.ReceiptBuilder receiptBuilder = new();
             Receipt receipt1;
