@@ -78,7 +78,7 @@ namespace Unit_Test
             Assert.False(Utilities.IsNumericType(Value));
         }
 
-        [Fact(DisplayName = "1.4")]
+        [Fact(DisplayName = "1.5")]
         public void CheckIsNumericType_FalseForNull()
         {
             // Arrange
@@ -293,7 +293,7 @@ namespace Unit_Test
             string entryPath = "";
 
             //Assert
-            Assert.Throws<ArgumentException>(() => Utilities.ConstEntryMetaDataPath(entryPath));
+            Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsMetaDataPath(entryPath));
         }
 
 

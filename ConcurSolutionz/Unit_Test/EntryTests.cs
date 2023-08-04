@@ -169,8 +169,8 @@ namespace Unit_Test
         }
 
 
-        [Fact(DisplayName = "5."), TestPriority(4)]
-        public void BuildEntry_ShouldThrowException_ForNullFile()
+        [Fact(DisplayName = "5.5"), TestPriority(4)]
+        public void BuildEntry_ShouldThrowException_ForNullFileName()
         {
             // Arrange
             Entry.EntryBuilder entryBuilder = new();
@@ -179,7 +179,7 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => entryBuilder.SetFileName(null));
         }
 
-        [Fact(DisplayName = "5."), TestPriority(5)]
+        [Fact(DisplayName = "5.6"), TestPriority(5)]
         public void BuildEntry_ShouldThrowException_ForNullFilePath()
         {
             // Arrange
@@ -190,7 +190,7 @@ namespace Unit_Test
                 .SetFilePath(null));
         }
 
-        [Fact(DisplayName = "5."), TestPriority(6)]
+        [Fact(DisplayName = "5.7"), TestPriority(6)]
         public void BuildEntry_ShouldThrowException_ForInvalidFilePath()
         {
             // Arrange
@@ -201,7 +201,7 @@ namespace Unit_Test
                 .SetFilePath(Path.Combine(entrytestpath, "jasbnfjnjwn")));
         }
 
-        [Fact(DisplayName = "5."), TestPriority(7)]
+        [Fact(DisplayName = "5.8"), TestPriority(7)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureCreationDate()
         {
             // Arrange
@@ -225,7 +225,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact(DisplayName = "5."), TestPriority(8)]
+        [Fact(DisplayName = "5.9"), TestPriority(8)]
         public void BuildEntry_ShouldThrowException_ForSettingFutureLastModifiedDate()
         {
             // Arrange
@@ -249,7 +249,7 @@ namespace Unit_Test
                 .Build());
         }
 
-        [Fact(DisplayName = "5."), TestPriority(9)]
+        [Fact(DisplayName = "5.10"), TestPriority(9)]
         public void BuildEntry_ShouldReturnFalseFolderVariable()
         {
             // Arrange
@@ -297,7 +297,7 @@ namespace Unit_Test
             Assert.False(entry.Folder);
         }
 
-        [Fact(DisplayName = "5.8"), TestPriority(10)]
+        [Fact(DisplayName = "5.11"), TestPriority(10)]
         public void AssignRecordID_SetsAUniqueRecordID()
         {
             // Arrange
@@ -360,7 +360,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "5.9"), TestPriority(11)]
+        [Fact(DisplayName = "5.12"), TestPriority(11)]
         public void AddRecord_AddsRecord_ToListOfRecords()
         {
             // Arrange
@@ -421,7 +421,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "5.10"), TestPriority(12)]
+        [Fact(DisplayName = "5.13"), TestPriority(12)]
         public void DelRecord_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -481,7 +481,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords().Count);
         }
 
-        [Fact(DisplayName = "5.11"), TestPriority(13)]
+        [Fact(DisplayName = "5.14"), TestPriority(13)]
         public void DelRecord_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -540,7 +540,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "5.12"), TestPriority(14)]
+        [Fact(DisplayName = "5.15"), TestPriority(14)]
         public void DelRecordByID_DeletesRecord_FromListOfRecords()
         {
             // Arrange
@@ -600,7 +600,7 @@ namespace Unit_Test
             Assert.Equal(1, entry.GetRecords()[0].RecordID);
         }
 
-        [Fact(DisplayName = "5.13"), TestPriority(15)]
+        [Fact(DisplayName = "5.16"), TestPriority(15)]
         public void DelRecordByID_ThrowsExceptionWhen_DeletingNonExistingRecord()
         {
             // Arrange
@@ -661,7 +661,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "5.14"), TestPriority(16)]
+        [Fact(DisplayName = "5.17"), TestPriority(16)]
         public void GetRecords_ReturnsListOfRecords()
         {
             // Arrange
@@ -725,7 +725,7 @@ namespace Unit_Test
 
         }
 
-        [Fact(DisplayName = "5.15"), TestPriority(17)]
+        [Fact(DisplayName = "5.18"), TestPriority(17)]
         public void GetRecord_ReturnsRecord_WithSpecifiedRecordID()
         {
             // Arrange
@@ -786,7 +786,7 @@ namespace Unit_Test
             Assert.Equal(receipt2, entry.GetRecord(1));
         }
 
-        [Fact(DisplayName = "5.16"), TestPriority(18)]
+        [Fact(DisplayName = "5.19"), TestPriority(18)]
         public void GetRecord_ReturnsNull_WhenRetrievingNonExistingRecord()
         {
             // Arrange
@@ -821,7 +821,7 @@ namespace Unit_Test
             Assert.Equal(null, entry.GetRecord(8));
         }
 
-        [Fact(DisplayName = "5.17"), TestPriority(19)]
+        [Fact(DisplayName = "5.20"), TestPriority(19)]
         public void BuildEntry_ShouldBuild_UsingBuilder_Fuzz()
         {
             string entryName = Fuzzer.GenerateRandomString(10);
