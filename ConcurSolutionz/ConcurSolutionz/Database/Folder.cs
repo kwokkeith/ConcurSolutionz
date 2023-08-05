@@ -6,7 +6,7 @@ namespace ConcurSolutionz.Database
         private Folder(FolderBuilder builder)
         {
             // Check if attributes have been declared (Mandatory)
-            Utilities.CheckNull(builder.FileName);
+            Utilities.CheckIfValidName(builder.FileName);
             Utilities.CheckNull(builder.CreationDate);
             Utilities.CheckNull(builder.LastModifiedDate);
             Utilities.CheckNull(builder.FilePath);

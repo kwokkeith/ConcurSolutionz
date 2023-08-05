@@ -27,7 +27,7 @@ namespace ConcurSolutionz.Database
         public StudentProjectClaimMetaData(StudentProjectClaimMDBuilder claimMDBuilder)
         {
             // Check if attributes have been declared (Mandatory)
-            Utilities.CheckNull(claimMDBuilder.EntryName);
+            Utilities.CheckIfValidName(claimMDBuilder.EntryName);
             Utilities.CheckNull(claimMDBuilder.EntryBudget);
             Utilities.CheckNull(claimMDBuilder.Policy);
             Utilities.CheckNull(claimMDBuilder.ClaimName);
