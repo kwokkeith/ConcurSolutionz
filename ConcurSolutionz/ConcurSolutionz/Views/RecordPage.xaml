@@ -7,7 +7,7 @@
         <VerticalStackLayout>
         <Grid ColumnDefinitions="*,*"
               ColumnSpacing="10">
-            <Grid RowDefinitions="50,50,20,2*" RowSpacing="10" x:Name="ReceiptGrid">
+            <Grid RowDefinitions="50,50,50,2*" RowSpacing="10" x:Name="ReceiptGrid">
                 <Image x:Name="ReceiptImage"
                     VerticalOptions="Start" 
                     HorizontalOptions="Start" 

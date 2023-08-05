@@ -8,10 +8,6 @@
         <models:Entry/>
 
     </ContentPage.BindingContext>-->
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsEnabled="False"/>
-
-    </Shell.BackButtonBehavior>
 
     <ContentPage.Resources>
         <Style TargetType="Grid">
