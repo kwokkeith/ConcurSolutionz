@@ -296,7 +296,52 @@ namespace Unit_Test
             Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsMetaDataPath(entryPath));
         }
 
+        [Fact(DisplayName = "1.23")]
+        public void CheckIfValidName_ThrowErrorForEmptyString()
+        {
+            // Arrange
+            string Value = "";
 
+            // Assert
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(Value));
+        }
+
+        [Fact(DisplayName = "1.24")]
+        public void CheckIfValidName_ThrowErrorForNullString()
+        {
+            // Arrange
+            string Value = null;
+
+            // Assert
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(Value));
+        }
+
+        [Theory(DisplayName = "1.24")]
+        [InlineData("Capstone 2023/")]
+        [InlineData(@"Capstone\ 2023")]
+        [InlineData("Capstone 2023.")]
+        [InlineData("Capstone\" 2023")]
+        [InlineData("Capstone\' 2023")]
+        [InlineData("Capstone; 2023")]
+        [InlineData("Capstone: 2023")]
+        [InlineData("Capstone, 2023")]
+        public void CheckIfValidName_ThrowErrorForIllegalCharacters(string Value)
+        {
+            // Assert
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(Value));
+        }
+
+        [Theory(DisplayName = "1.25")]
+        [InlineData("Capstone 2023")]
+        [InlineData("HiHongJingTheOneAndOnly")]
+        public void CheckIfValidName_ShouldReturnNothing(string Value)
+        {
+            // Act
+            var exception = Xunit.Record.Exception(() => Utilities.CheckIfValidName(Value));
+
+            // Assert
+            Assert.Null(exception);
+        }
     }
 }
 

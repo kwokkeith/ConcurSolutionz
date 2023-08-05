@@ -1,3 +1,6 @@
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+
 namespace ConcurSolutionz.Database
 {
     public static class Utilities
@@ -59,7 +62,15 @@ namespace ConcurSolutionz.Database
             }
         }
 
-
+        public static void CheckIfValidName(string value)
+        {
+            CheckIfEmptyString(value);
+            if (Regex.IsMatch(value, @"[""'/\\.��.:;,]"))
+            {
+                throw new ArgumentException("Name contains illegal characters");
+            }
+        }
+        
         public static void CheckDateTimeAheadOfNow(DateTime date)
         {
             CheckNull(date);

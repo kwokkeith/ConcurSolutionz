@@ -191,6 +191,31 @@ namespace Unit_Test
             // 1.22
             entryPath = "";
             Assert.Throws<ArgumentException>(() => Utilities.ConstRecordsMetaDataPath(entryPath));
+
+            // 1.23
+            string Value = "";
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(Value));
+
+            // 1.24
+            Value = null;
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(Value));
+
+            // 1.25
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone 2023/"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(@"Capstone\ 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone 2023."));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone\" 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone\' 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone; 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone: 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone, 2023"));
+
+            // 1.26
+            exception = Xunit.Record.Exception(() => Utilities.CheckIfValidName("Capstone 2023"));
+            Assert.Null(exception);
+
+            exception = Xunit.Record.Exception(() => Utilities.CheckIfValidName("HiHongJingTheOneAndOnly"));
+            Assert.Null(exception);
         }
 
 
