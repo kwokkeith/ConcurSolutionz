@@ -262,14 +262,20 @@ namespace ConcurSolutionz.Views
                     var gestureRecognizer = new TapGestureRecognizer {
                                 NumberOfTapsRequired = 1,
                     };
-                    gestureRecognizer.Tapped += (s, e) =>
+                    gestureRecognizer.Tapped += async (s, e) =>
                     {
-                        Point coords = (PointF) e.GetPosition((View) s);
-                        receiptData.RefineOCR(coords.X, coords.Y);
-                        this.lastClicked.Text = receiptData.customRequestText;
-                        //reqAmount.Text = receiptData.reqAmount.ToString();
-                        //ReceiptNo.Text = receiptData.receiptNumber;
-                        //DisplayAlert("UPDATE",receiptData.reqAmount.ToString() + "\n" + receiptData.receiptNumber ,"OK");
+                        // If user has yet to select an input field before clicking an ocr scan box
+                        if (lastClicked is null)
+                        {
+                            // Display alert to let user know to select an input field first
+                            await DisplayAlert("Select", "Please select an input field first", "OK");
+                        }
+                        else
+                        {
+                            Point coords = (PointF)e.GetPosition((View)s);
+                            receiptData.RefineOCR(coords.X, coords.Y);
+                            lastClicked.Text = receiptData.customRequestText;
+                        }
                     };
 
                     rect.GestureRecognizers.Add(gestureRecognizer);
