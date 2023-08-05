@@ -321,11 +321,16 @@ namespace ConcurSolutionz.Views
                 {
                     receipt = BuildNewReceipt();
                 }
+                catch (FormatException ex)
+                {
+                    await DisplayAlert("Invalid Format", ex.Message, "OK");
+                    return;
 
+                }
                 catch (Exception ex)
                 {
                     // If error encountered while building receipt (missing fields, etc.)
-                    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+                    await DisplayAlert("Error", "Failed to build receipt.\nError msg: " + ex.Message, "OK");
                     return;
                 }
                 receipt.ImgPath = Path.Combine(Path.GetTempPath(), receiptFileName);
@@ -339,7 +344,7 @@ namespace ConcurSolutionz.Views
                 catch (Exception ex)
                 {
                     // If error encountered while building receipt (missing fields, etc.)
-                    await DisplayAlert("Error", "Failed to build receipt, Error msg: " + ex, "OK");
+                    await DisplayAlert("Error", "Failed to build receipt.\nError msg: " + ex.Message, "OK");
                     return;
                 }
             }
