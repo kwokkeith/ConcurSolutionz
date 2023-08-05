@@ -44,7 +44,6 @@
                 HeightRequest="10"
                 x:Name="EditEntryNameButton"
                 Clicked="EditEntryName_Clicked"/>
-             <!--<Button x:Name="UpdateMetadataButton" Text="Update Entry Metadata" Clicked="SetMetaData_Clicked"/>-->
             <ActivityIndicator x:Name="ConcurLoading"/>
 
         </HorizontalStackLayout>

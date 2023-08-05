@@ -229,6 +229,8 @@ namespace ConcurSolutionz.Views
         {
             try
             {
+                OCRButton.IsEnabled = false;
+                TesseractRunning.IsRunning = true;
                 string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
                 string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
@@ -291,7 +293,12 @@ namespace ConcurSolutionz.Views
             {
                 await DisplayAlert("Error", "Falied to call OCR: " + ex, "OK");
                 return;
-            }            
+            }
+            finally
+            {
+                OCRButton.IsEnabled = true;
+                TesseractRunning.IsRunning = false;
+            }
         }
 
 
