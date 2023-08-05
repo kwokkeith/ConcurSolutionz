@@ -26,7 +26,8 @@ public class FileItem
             Icon = "entry.png";
         }
         FileName = fileName;
-        CreationDateTime = DateTime.Now;
+        string filePath = Path.Combine(Database.Database.Instance.Getwd(), fileName);
+        CreationDateTime = Directory.GetCreationTime(filePath);
     }
 }
 
