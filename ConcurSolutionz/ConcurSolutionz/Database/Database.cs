@@ -177,7 +177,7 @@ namespace ConcurSolutionz.Database
             }
             else
             {
-                throw new ArgumentException("Failed to extract information of file with file name " + fileName + "!" +
+                throw new MissingEntryFileException("Failed to extract information of file with file name " + fileName + "!" +
                     "\n" + "Deleting all files associated to " + fileName + " to ensure synchronisation!");
             }
         }
@@ -362,6 +362,44 @@ namespace ConcurSolutionz.Database
                 RecordMetaDatas[i] = filePath;
             }
 
+            // 1. Check if entry name in metadata corresponds with the current filename
+            MetaData entryMetaData = ExtractEntryMetaData(EntryMetaDataPath);
+            if (Path.GetFileNameWithoutExtension(entryFilePath) != entryMetaData.EntryName)
+            {
+                // 1.1 Rename the entry name in metadata
+                entryMetaData.EntryName = Path.GetFileNameWithoutExtension(entryFilePath);
+
+                // Write EntryMetaData back to JSON
+                File.WriteAllText(EntryMetaDataPath, JsonSerializer.Serialize(MDAdaptor.ConvertMetaData(entryMetaData)));
+
+                // 1.2 Change all record metadata's img path
+                List<Record> records = ExtractRecords(RecordsMetaDataPath);
+
+                foreach (Record record in records)
+                {
+                    // List out those record types with image paths
+                    // Then change each of their image path with the updated entry name
+                    if (record.SubType == typeof(Receipt).FullName) {
+                        Receipt receipt = RecordAdaptor.ConvertRecord(record);
+
+                        // Get img extension
+                        string imgExtension = Path.GetExtension(receipt.ImgPath);
+
+                        receipt.ImgPath = Path.Combine(
+                            Utilities.ConstRecordsFdrPath(entryFilePath),
+                            receipt.RecordID.ToString() + imgExtension
+                            );
+
+                        // Write back to the record metadata
+                        File.WriteAllText(Path.Combine(
+                            Utilities.ConstRecordsMetaDataPath(entryFilePath),
+                            receipt.RecordID.ToString() + ".json"),
+                            JsonSerializer.Serialize(receipt));
+                    }
+                }
+            }
+
+
             // Get Record Folder path
             string RecordFolderPath = Utilities.ConstRecordsFdrPath(entryFilePath);
 
@@ -381,7 +419,7 @@ namespace ConcurSolutionz.Database
             bool missingRecordImage = false;
             bool missingRecordMetaData = false;
 
-            // 1. Finding missing record metadata files
+            // 2. Finding missing record metadata files
             var diff = RecordImagesWithoutFileExt.Except(RecordMetaDatas);
 
             // Construct backup path
@@ -412,7 +450,7 @@ namespace ConcurSolutionz.Database
                 missingRecordMetaData = true;
             }
 
-            // 2. Finding missing record image 
+            // 3. Finding missing record image 
             diff = RecordMetaDatas.Except(RecordImagesWithoutFileExt);
             foreach (string fileName in diff)
             {

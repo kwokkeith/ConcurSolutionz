@@ -458,7 +458,6 @@ public partial class EntryPage : ContentPage
         Tuple<MetaData, List<Database.Record>> fileDetail;
 
         fileDetail = Database.Database.Instance.getFileDetailFromFileName(name);
-
         // Get existing metadata
         md = MDAdaptor.ConvertMetaData(fileDetail.Item1);
 
@@ -551,7 +550,7 @@ public partial class EntryPage : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Error", "Unable to create metadata\n" +
-                ex, "OK");
+                ex.Message, "OK");
         }
     }
 
