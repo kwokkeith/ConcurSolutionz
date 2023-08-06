@@ -230,7 +230,7 @@ namespace ConcurSolutionz.Views
             try
             {
                 OCRButton.IsEnabled = false;
-                TesseractRunning.IsRunning = true;
+                //TesseractRunning.IsRunning = true;
                 string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
                 string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
@@ -297,7 +297,7 @@ namespace ConcurSolutionz.Views
             finally
             {
                 OCRButton.IsEnabled = true;
-                TesseractRunning.IsRunning = false;
+                //TesseractRunning.IsRunning = false;
             }
         }
 
