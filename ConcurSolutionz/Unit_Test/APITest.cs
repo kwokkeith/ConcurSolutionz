@@ -13,6 +13,7 @@ namespace Unit_Test
     [Collection("APITest")]
     public class APITest
     {
+        //Insert session cookie from Concur Login
         private string cookie = $"";
 
         [Fact(DisplayName = "12.1")]

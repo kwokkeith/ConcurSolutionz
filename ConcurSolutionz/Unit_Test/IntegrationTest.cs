@@ -627,6 +627,7 @@ namespace Unit_Test
         [Fact, TestPriority(13)]
         public void TransferToConcur_TestsConcurAPI_SeleniumWrapper_CookieBrowser()
         {
+            // Insert session cookie from Concur Login
             // TODO
         }
 
