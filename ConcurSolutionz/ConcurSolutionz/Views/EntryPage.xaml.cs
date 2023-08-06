@@ -11,6 +11,8 @@ namespace ConcurSolutionz.Views;
 [QueryProperty(nameof(ExistingFile), "existingFile")]
 public partial class EntryPage : ContentPage
 {
+    private string seleniumPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).ToString(), "bin", "Selenium", "SeleniumWrapperV2");
+
     private StudentProjectClaimMetaData md;
     private List<Database.Receipt> receipts;
     private string fileName;
@@ -630,6 +632,9 @@ public partial class EntryPage : ContentPage
         string cookie = "";
         Process process = new();
 
+        // Build entry
+        BuildEntry();
+
         //Starting chrome driver
         if (entry == null)
         {
@@ -647,10 +652,7 @@ public partial class EntryPage : ContentPage
         {
             if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
             {
-                process.StartInfo.FileName = Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "..", "..", "..", "selenium", "SeleniumWrapperV2"
-                    );
+                process.StartInfo.FileName = seleniumPath;
             }
             else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {

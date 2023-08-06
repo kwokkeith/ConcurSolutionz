@@ -16,6 +16,9 @@ namespace ConcurSolutionz.Views
         private Microsoft.Maui.Controls.Entry lastClicked;
         private Controllers.ReceiptOCR receiptData;
 
+        private string tesseractPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).ToString(), "bin", "tesseract", "tesseract");
+        private string tessdataPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).ToString(), "bin", "tesseract", "tessdata");
+
         public Receipt ExistingReceipt
         {
             set
@@ -231,8 +234,6 @@ namespace ConcurSolutionz.Views
             {
                 OCRButton.IsEnabled = false;
                 //TesseractRunning.IsRunning = true;
-                string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
-                string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
