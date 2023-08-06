@@ -65,7 +65,7 @@ namespace ConcurSolutionz.Database
         public static void CheckIfValidName(string value)
         {
             CheckIfEmptyString(value);
-            if (Regex.IsMatch(value, @"[""'/\\.��.:;,]"))
+            if (Regex.IsMatch(value, @"[\\/:*?""<>|]"))
             {
                 throw new ArgumentException("Name contains illegal characters");
             }
