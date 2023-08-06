@@ -203,12 +203,13 @@ namespace Unit_Test
             // 1.25
             Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone 2023/"));
             Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName(@"Capstone\ 2023"));
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone 2023."));
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone\" 2023"));
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone\' 2023"));
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone; 2023"));
             Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone: 2023"));
-            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone, 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone* 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone? 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone\" 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone< 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone> 2023"));
+            Assert.Throws<ArgumentException>(() => Utilities.CheckIfValidName("Capstone| 2023"));
 
             // 1.26
             exception = Xunit.Record.Exception(() => Utilities.CheckIfValidName("Capstone 2023"));

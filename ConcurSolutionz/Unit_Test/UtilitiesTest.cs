@@ -319,12 +319,13 @@ namespace Unit_Test
         [Theory(DisplayName = "1.24")]
         [InlineData("Capstone 2023/")]
         [InlineData(@"Capstone\ 2023")]
-        [InlineData("Capstone 2023.")]
-        [InlineData("Capstone\" 2023")]
-        [InlineData("Capstone\' 2023")]
-        [InlineData("Capstone; 2023")]
         [InlineData("Capstone: 2023")]
-        [InlineData("Capstone, 2023")]
+        [InlineData("Capstone* 2023")]
+        [InlineData("Capstone? 2023")]
+        [InlineData("Capstone\" 2023")]
+        [InlineData("Capstone< 2023")]
+        [InlineData("Capstone> 2023")]
+        [InlineData("Capstone| 2023")]
         public void CheckIfValidName_ThrowErrorForIllegalCharacters(string Value)
         {
             // Assert

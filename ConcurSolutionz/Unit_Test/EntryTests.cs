@@ -111,7 +111,7 @@ namespace Unit_Test
             Entry.EntryBuilder entryBuilder = new();
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => entryBuilder.Build());
+            Assert.Throws<ArgumentException>(() => entryBuilder.Build());
         }
 
         [Fact(DisplayName = "5.3"), TestPriority(2)]
