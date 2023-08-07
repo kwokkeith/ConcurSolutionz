@@ -16,6 +16,10 @@ namespace ConcurSolutionz.Views
         private Microsoft.Maui.Controls.Entry lastClicked;
         private Controllers.ReceiptOCR receiptData;
 
+        private string tesseractPath;
+        private string tessdataPath;
+
+
         public Receipt ExistingReceipt
         {
             set
@@ -110,6 +114,17 @@ namespace ConcurSolutionz.Views
         // Constructor
         public RecordPage()
         {
+
+            if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
+            {
+                this.tesseractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"bin","tesseract","tesseract");
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            {
+                this.tesseractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"bin","tesseract","tesseract.exe");
+            }
+            this.tessdataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"bin","tesseract","tessdata");
+
             // Initialize the XAML components
             InitializeComponent();
             BindingContext = this;
@@ -242,8 +257,6 @@ namespace ConcurSolutionz.Views
             try
             {
                 OCRButton.IsEnabled = false;
-                string tesseractPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tesseract";
-                string tessdataPath = "/Users/pe3nu7/Documents/tesseract/tesseract/tessdata";
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);

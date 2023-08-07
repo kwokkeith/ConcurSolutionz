@@ -395,6 +395,7 @@ public partial class MainPage : ContentPage
 
                 // Handle updating of Metadata
                 Database.Database.RenameEntry(newFilePath);
+                Database.Database.DeepRenameEntry(newFilePath);
             }
             catch (Exception ex)
             {

@@ -338,25 +338,29 @@ public partial class EntryPage : ContentPage
     /// <param name="e"></param>
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
-        if (recordCollection.SelectedItem == null)
-        {
-            await DisplayAlert("Error", "Please select a record!", "OK");
+        try {
+            if (recordCollection.SelectedItem == null)
+            {
+                await DisplayAlert("Error", "Please select a record!", "OK");
+            }
+
+            Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+            Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
+            FileDB file = entry;
+            var imagePath = receipt.ImgPath;
+
+            var navigationParameter = new Dictionary<string, object>
+            {
+                {"file", file },
+                {"imagePath", imagePath },
+                {"existingReceipt", receipt }
+            };
+
+            await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
+        } catch (Exception ex) {
+            Console.WriteLine(ex.ToString());
         }
-
-        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
-        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
-
-        FileDB file = entry;
-        var imagePath = receipt.ImgPath;
-
-        var navigationParameter = new Dictionary<string, object>
-        {
-            {"file", file },
-            {"imagePath", imagePath },
-            {"existingReceipt", receipt }
-        };
-
-        await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
     
@@ -710,9 +714,12 @@ public partial class EntryPage : ContentPage
             }
             else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
-                process.StartInfo.FileName =
-                    AppDomain.CurrentDomain.BaseDirectory +
-                    "SeleniumWrapper\\SeleniumWrapper.exe";
+                process.StartInfo.FileName = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "bin",
+                    "SeleniumWrapper",
+                    "SeleniumWrapper.exe"
+                    );
             }
               
             process.StartInfo.UseShellExecute = false;
@@ -864,9 +871,12 @@ public partial class EntryPage : ContentPage
             }
             else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
-                process.StartInfo.FileName =
-                    AppDomain.CurrentDomain.BaseDirectory +
-                    "CookieBrowser\\CookieBrowser.exe";
+                process.StartInfo.FileName = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "bin",
+                    "CookieBrowser",
+                    "CookieBrowser.exe"
+                    );
             }
 
             process.StartInfo.UseShellExecute = false;
