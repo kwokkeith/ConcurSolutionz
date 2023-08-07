@@ -67,7 +67,8 @@ namespace ConcurSolutionz.Database
             }
         }
 
-
+        /// <summary>Sets the Root Directory of the application.</summary>
+        /// <param name="path">Path to be new Root Directory.</param> 
         public void SetRootDirectory(string path)
         {
             // Create RootDirectoryObject to be converted to Json
@@ -89,6 +90,10 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>
+        /// Sets the current Settings Path of the application.
+        /// Creates the json as well as the folder required to store the Settings.
+        /// </summary>
         private void SetSettingsPath()
         {
             string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

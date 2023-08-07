@@ -18,6 +18,10 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Checks if an argument is negative.</summary>
+        /// <typeparam name="T">The type of the argument.</typeparam>
+        /// <param name="value">The argument to check.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the argument is Negative.</exception>
         public static void CheckIfNegative<T>(T value)
             where T : struct, IComparable<T>
         {
@@ -28,6 +32,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Checks if an argument is numeric.</summary>
+        /// <param name="o">An object to be checked.</param>
+        /// <return>true if object is a valid numeric type, else false.</return> 
         public static bool IsNumericType(this object o)
         {
             if (o == null)
@@ -55,6 +62,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Checks if an argument is an empty string.</summary>
+        /// <param name="value">A string to be checked.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the argument is an empty string.</exception>
         public static void CheckIfEmptyString(string value)
         {
             if (string.IsNullOrEmpty(value)){
@@ -62,6 +72,10 @@ namespace ConcurSolutionz.Database
             }
         }
 
+
+        /// <summary>Checks if a string is an valid file name.</summary>
+        /// <param name="value">A name to be checked.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the argument is an invalid filename.</exception>
         public static void CheckIfValidName(string value)
         {
             CheckIfEmptyString(value);
@@ -70,7 +84,11 @@ namespace ConcurSolutionz.Database
                 throw new ArgumentException("Name contains illegal characters");
             }
         }
-        
+
+
+        /// <summary>Checks if a date is an valid file name.</summary>
+        /// <param name="date">A DateTime instance to be checked.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the date is ahead of the current date/time.</exception>
         public static void CheckDateTimeAheadOfNow(DateTime date)
         {
             CheckNull(date);
@@ -82,6 +100,10 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Checks if a date is ahead of another date.</summary>
+        /// <param name="lastModified">A DateTime instance to be checked.</param>
+        /// <param name="creation">A DateTime instance to be checked against (cannot pass this date).</param>
+        /// <exception cref="ArgumentNullException">Thrown when the `lastmodified` date is ahead of the `creation` date</exception>
         public static void CheckLastModifiedAheadOfCreation(DateTime lastModified, DateTime creation)
         {
             CheckNull(lastModified);
@@ -94,6 +116,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Constructs the path to the Entry MetaData folder.</summary>
+        /// <param name="entryPath">Path to the Entry Folder.</param>
+        /// <return>Path to the Entry MetaData folder.</return> 
         public static string ConstEntryMetaDataPath(string entryPath)
         {
             CheckIfEmptyString(entryPath);
@@ -101,19 +126,28 @@ namespace ConcurSolutionz.Database
         }
 
 
-        // Creating Record MetaData path creates Records folder as well
+        /// <summary>Constructs the path to the Records folder.</summary>
+        /// <param name="entryPath">Path to the Entry Folder.</param>
+        /// <return>Path to the Records folder.</return> 
         public static string ConstRecordsFdrPath(string entryPath)
         {
             CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Records.fdr");
         }
 
+
+        /// <summary>Constructs the path to the Records MetaData folder.</summary>
+        /// <param name="entryPath">Path to the Entry Folder.</param>
+        /// <return>Path to the Records MetaData folder.</return> 
         public static string ConstRecordsMetaDataPath(string entryPath)
         {
             CheckIfEmptyString(entryPath);
             return Path.Combine(entryPath, "Records.fdr", "RecordJSON.fdr");
         }
 
+
+        /// <summary>Constructs the path to the Image Backup folder (Exist in Root Directory).</summary>
+        /// <return>Path to the Image Backup folder.</return> 
         public static string ConstImageBackupPath()
         {
             return Path.Combine(Database.Instance.Settings.GetRootDirectory(), "Image_Backup");
