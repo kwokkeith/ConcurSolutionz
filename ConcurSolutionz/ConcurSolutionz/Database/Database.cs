@@ -224,6 +224,7 @@ namespace ConcurSolutionz.Database
 
 
         /// <summary>Renames EntryMetadata when Entry is renamed.</summary>
+        /// <param name="filePath">The path of the file to be renamed.</param>
         /// <remarks>
         /// This method updates the EntryName parameter of the EntryMetaData.json file if the Entry is renamed.
         /// </remarks>
