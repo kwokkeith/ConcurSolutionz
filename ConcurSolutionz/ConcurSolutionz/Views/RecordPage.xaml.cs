@@ -79,7 +79,7 @@ namespace ConcurSolutionz.Views
         {
             try
             {
-                FileDB fileDb = (FileDB) file;
+                FileDB fileDb = (FileDB)file;
                 entryFile = FileAdaptor.ConvertFileType(fileDb);
             }
             catch (Exception ex)
@@ -113,7 +113,8 @@ namespace ConcurSolutionz.Views
 
         // Getting user input 
         // returns: a list of data <expenseType, transactionDate, description>
-		public List<string> GetData() {
+        public List<string> GetData()
+        {
             string expenseType = ExpenseType.Text;
             string transactionDate = TransactionDate.Date.ToString();
             string description = DescriptionInp.Text;
@@ -235,12 +236,12 @@ namespace ConcurSolutionz.Views
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
-                List<(Point[],string)> textBoxes = receiptData.textBoxes;
+                List<(Point[], string)> textBoxes = receiptData.textBoxes;
                 Grid receiptGrid = ReceiptGrid;
                 imgWidth = receiptData.imgWidth;
                 imgHeight = receiptData.imgHeight;
 
-                double scaleFactor = ReceiptImage.Width/imgWidth;
+                double scaleFactor = ReceiptImage.Width / imgWidth;
 
                 foreach (View v in this.boundingBoxes)
                 {
@@ -260,8 +261,9 @@ namespace ConcurSolutionz.Views
                         Scale = scaleFactor
                     };
 
-                    var gestureRecognizer = new TapGestureRecognizer {
-                                NumberOfTapsRequired = 1,
+                    var gestureRecognizer = new TapGestureRecognizer
+                    {
+                        NumberOfTapsRequired = 1,
                     };
                     gestureRecognizer.Tapped += async (s, e) =>
                     {
@@ -280,7 +282,7 @@ namespace ConcurSolutionz.Views
                     };
 
                     rect.GestureRecognizers.Add(gestureRecognizer);
-                    receiptGrid.Add(rect,0,2);
+                    receiptGrid.Add(rect, 0, 2);
                     boundingBoxes.Add(rect);
                 }
 
@@ -305,7 +307,7 @@ namespace ConcurSolutionz.Views
             Receipt receipt;
 
             // If record exist before
-            if (ExistingReceipt != null) 
+            if (ExistingReceipt != null)
             {
                 string receiptFileName;
                 receiptFileName = Path.GetFileName(ExistingReceipt.ImgPath);
@@ -358,7 +360,7 @@ namespace ConcurSolutionz.Views
         public void SpecifyCoords(object sender, TappedEventArgs e)
         {
             Point? coords = e.GetPosition((View)sender);
-            DisplayAlert("DEBUG",coords.ToString(),"OK");
+            DisplayAlert("DEBUG", coords.ToString(), "OK");
         }
 
 
@@ -366,13 +368,18 @@ namespace ConcurSolutionz.Views
         {
             base.OnSizeAllocated(width, height);
             Grid receiptGrid = ReceiptGrid;
-            if (boundingBoxes.Count > 0) {
-                try {
-                    double scaleFactor = ReceiptImage.Width/imgWidth;
-                    foreach (View rect in this.boundingBoxes) {
+            if (boundingBoxes.Count > 0)
+            {
+                try
+                {
+                    double scaleFactor = ReceiptImage.Width / imgWidth;
+                    foreach (View rect in this.boundingBoxes)
+                    {
                         rect.Scale = scaleFactor;
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     DisplayAlert("Error", ex.ToString(), "OK");
                 }
             }
@@ -380,7 +387,7 @@ namespace ConcurSolutionz.Views
 
         void LastClicked(object sender, EventArgs args)
         {
-            Microsoft.Maui.Controls.Entry e = (Microsoft.Maui.Controls.Entry) sender;
+            Microsoft.Maui.Controls.Entry e = (Microsoft.Maui.Controls.Entry)sender;
             this.lastClicked = e;
         }
     }
