@@ -495,5 +495,33 @@ namespace ConcurSolutionz.Database
                     "Images removed can be found in <root_directoy>/Image_Backup.");
             }
         }
+
+        public static void DeepRenameEntry (string entryFilePath)
+        {
+            string RecordsMetaDataPath = Utilities.ConstRecordsMetaDataPath(entryFilePath);
+            List<Record> records = ExtractRecords(RecordsMetaDataPath);
+            foreach (Record record in records)
+            {
+                // List out those record types with image paths
+                // Then change each of their image path with the updated entry name
+                if (record.SubType == typeof(Receipt).FullName) {
+                    Receipt receipt = RecordAdaptor.ConvertRecord(record);
+
+                    // Get img extension
+                    string imgExtension = Path.GetExtension(receipt.ImgPath);
+
+                    receipt.ImgPath = Path.Combine(
+                            Utilities.ConstRecordsFdrPath(entryFilePath),
+                            receipt.RecordID.ToString() + imgExtension
+                            );
+
+                    // Write back to the record metadata
+                    File.WriteAllText(Path.Combine(
+                                Utilities.ConstRecordsMetaDataPath(entryFilePath),
+                                receipt.RecordID.ToString() + ".json"),
+                            JsonSerializer.Serialize(receipt));
+                }
+            }
+        }
     }
 }
