@@ -402,29 +402,33 @@ public partial class EntryPage : ContentPage
     /// <param name="e"></param>
     private async void DeleteRecord_Clicked(object sender, EventArgs e)
     {
-        if (recordCollection.SelectedItem == null)
-        {
-            await DisplayAlert("Error", "Please select a record!", "OK");
-        }
-
-        Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
-        Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
-        Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
-
-        if (selectedReceipt != null)
-        {
-            bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Record {receipt.RecordID + 1}?", "Yes", "No");
-
-            if (answer)
+        try {
+            if (recordCollection.SelectedItem == null)
             {
-                // Remove receipt from collection
-                ReceiptView.Remove(selectedReceipt);
-                receipts.Remove(receipt);
-                entry.DelRecord(rec);
-
-                // Update remaining budget and remove from entry
-                PopulateEntry();
+                await DisplayAlert("Error", "Please select a record!", "OK");
             }
+
+            Models.Receipt selectedReceipt = recordCollection.SelectedItem as Models.Receipt;
+            Database.Record rec = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+            Database.Receipt receipt = receipts.FirstOrDefault(r => r.RecordID == selectedReceipt.recordID - 1);
+
+            if (selectedReceipt != null)
+            {
+                bool answer = await DisplayAlert("Confirm Deletion", $"Are you sure you want to delete Record {receipt.RecordID + 1}?", "Yes", "No");
+
+                if (answer)
+                {
+                    // Remove receipt from collection
+                    ReceiptView.Remove(selectedReceipt);
+                    receipts.Remove(receipt);
+                    entry.DelRecord(rec);
+
+                    // Update remaining budget and remove from entry
+                    PopulateEntry();
+                }
+            }
+        } catch (Exception ex) {
+            Console.WriteLine(ex.ToString());
         }
     }
 
