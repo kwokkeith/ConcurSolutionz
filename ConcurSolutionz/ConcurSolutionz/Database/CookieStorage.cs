@@ -78,6 +78,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Retrieves a path to the cookie from the cookie storage.</summary>
+        /// <returns>The path to the cookie json file.</returns>
+        /// <exception cref="Exception">Thrown when an error occurs during the retrieval process.</exception>
         private string GetCookiePath()
         {
             try
@@ -86,7 +89,7 @@ namespace ConcurSolutionz.Database
             }
             catch
             {
-                Console.WriteLine("Failed to write to " + CookieStoragePath + "cookie.json");
+                Console.WriteLine("Failed to retrieve " + CookieStoragePath + "cookie.json");
                 return null;
             }
         }

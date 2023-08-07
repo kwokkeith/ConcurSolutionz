@@ -28,6 +28,8 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Retrieves the Settings instance attached for this application.</summary>
+        /// <returns>A Settings instance</returns>
         public Settings GetSettings()
         {
             return Settings;
@@ -40,18 +42,23 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Retrieves the current working directory of the application.</summary>
+        /// <returns>Path of current working directory</returns>
         public string Getwd()
         {
             return WorkingDirectory;
         }
 
 
+        /// <summary>Sets the current working directory of the application.</summary>
         public void Setwd(string wd)
         {
             WorkingDirectory = wd;
         }
 
 
+        /// <summary>Retrieves all file paths, Entry and Folder, residing in the current working directory of the application.</summary>
+        /// <returns>List of `Strings` containing the file paths (Entry and Folder) of the current working directory.</returns>
         public List<string> GetFilePathsFromWD()
         {
             // Make use of working directory to retrieve files
@@ -96,6 +103,8 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Retrieves all file names, Entry and Folder, residing in the current working directory of the application.</summary>
+        /// <returns>List of `Strings` containing the file names (Entry and Folder) of the current working directory.</returns>
         public List<string> GetFileNamesFromWD()
         {
             List<string> files = GetFilePathsFromWD();
@@ -153,7 +162,8 @@ namespace ConcurSolutionz.Database
         }
 
 
-        // Uses a fileName to find a file and return a tuple of (Metadata, List<Record>) 
+        /// <summary>Retrieves the Metadata instance and list of Records of the current Entry instance.</summary>
+        /// <returns>Tuple of (Metadata, List<Record>)</returns>
         public Tuple<MetaData, List<Record>> getFileDetailFromFileName(string fileName)
         {
             string filePath = Path.Combine(WorkingDirectory, fileName); // root of file (Entry)
@@ -258,6 +268,9 @@ namespace ConcurSolutionz.Database
         // **********************************************
         // @@@@@@@@@@ DATABASE UTILITY METHODS @@@@@@@@@@
         // **********************************************
+        /// <summary>Extracts the MetaData details of using a path to the Entry MetaData.</summary>
+        /// <param name="MetaDataPath">The path of the Entry MetaData</param>
+        /// <returns>MetaData Instance</returns>
         private static MetaData ExtractEntryMetaData(string MetaDataPath)
         {
             if (Path.Exists(MetaDataPath))
@@ -287,6 +300,9 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Extracts the details of the Records using a path to the Record MetaData.</summary>
+        /// <param name="RecordsMetaDataPath">The path of the Record MetaData</param>
+        /// <returns>List of Record Instance</returns>
         private static List<Record> ExtractRecords(string RecordsMetaDataPath)
         {
             if (Directory.Exists(RecordsMetaDataPath))
