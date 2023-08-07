@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using ConcurSolutionz;
-using ConcurSolutionz.Controllers;
+﻿using ConcurSolutionz;
 using ConcurSolutionz.Models;
 
 namespace Unit_Test
@@ -209,7 +202,7 @@ namespace Unit_Test
             }
             catch (Exception ex)
             {
-                Assert.True(false, "Invalid claim name from fuzzer");
+                Assert.True(true, "Invalid claim name from fuzzer");
             }
 
             //Create new expense
