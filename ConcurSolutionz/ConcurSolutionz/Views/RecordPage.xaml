@@ -27,6 +27,10 @@
                         Clicked="OnOCRButton_Clicked"
                         HeightRequest="50"
                         Margin="10"/>
+                <ActivityIndicator x:Name="OCRLoading" 
+                    Grid.Row="1"
+                    IsVisible="false"
+                    IsRunning="false"/>
             </Grid>
 
             <Border Grid.Column="1"

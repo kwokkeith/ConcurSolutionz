@@ -114,7 +114,6 @@ namespace ConcurSolutionz.Views
         // Constructor
         public RecordPage()
         {
-
             if (DeviceInfo.Current.Platform == DevicePlatform.MacCatalyst)
             {
                 this.tesseractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"bin","tesseract","tesseract");
@@ -169,6 +168,12 @@ namespace ConcurSolutionz.Views
                         }),
                     PickerTitle = "Select an image"
                 });
+
+            Grid receiptGrid = ReceiptGrid;
+            foreach (View v in this.boundingBoxes)
+            {
+                receiptGrid.Remove(v);
+            }
         }
 
         /// <summary>
@@ -257,6 +262,10 @@ namespace ConcurSolutionz.Views
             try
             {
                 OCRButton.IsEnabled = false;
+                OCRLoading.IsRunning = true;
+                OCRLoading.IsVisible = true;
+                OCRButton.Text = "";
+                await Task.Delay(100);
                 receiptData = new(imagePath, tesseractPath, tessdataPath);
                 string ReceiptNumber = receiptData.receiptNumber;
                 string ReqAmount = Convert.ToString(receiptData.reqAmount);
@@ -295,7 +304,7 @@ namespace ConcurSolutionz.Views
                         if (lastClicked is null)
                         {
                             // Display alert to let user know to select an input field first
-                            await DisplayAlert("Select", "Please select an input field first", "OK");
+                            DisplayAlert("Select", "Please select an input field first", "OK");
                         }
                         else
                         {
@@ -316,12 +325,15 @@ namespace ConcurSolutionz.Views
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", "Falied to call OCR: " + ex, "OK");
+                DisplayAlert("Error", "Falied to call OCR: " + ex, "OK");
                 return;
             }
             finally
             {
                 OCRButton.IsEnabled = true;
+                OCRButton.Text = "OCR Scan";
+                OCRLoading.IsRunning = false;
+                OCRLoading.IsVisible = false;
             }
         }
 
