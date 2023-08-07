@@ -77,20 +77,27 @@ public partial class MainPage : ContentPage
         RefreshPage();
     }
 
+    /// <summary>
+    /// When user clicks on change root directory, ui switches back to allow user to choose root directory
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void BackToChooseRoot(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(ChooseRootPage));
     }
 
 
-    // Loads the files using the database's current working directory
+    /// <summary>
+    /// Loads the files using the database's current working directory
+    /// </summary>
     private void LoadFilesFromDB()
     {
         List<string> fileNames = Database.Database.Instance.GetFileNamesFromWD();
 
         foreach (string fileName in fileNames)
         {
-            // Check if file is boolean
+            // Check if file is a folder or an entry
             bool isFolder;
 
             if (fileName.EndsWith(".fdr"))
@@ -108,32 +115,14 @@ public partial class MainPage : ContentPage
 
             }
         }
-    }
+    }    
 
-
-    // update color of the selected grids
-    private void UpdateColor(Grid Previous, Grid Current)
-    {
-        Application.Current.RequestedThemeChanged += (s, a) =>
-        {
-            Current.Background = Colors.Transparent;
-        };
-        if (!(Previous is null))
-        {
-            Previous.Background = Colors.Transparent;
-        }
-
-        if (Application.Current.RequestedTheme == AppTheme.Light)
-        {
-            Current.Background = Colors.LightSkyBlue;
-        }
-        else
-        {
-            Current.Background = Colors.SlateBlue;
-        }
-    }
-
-
+    /// <summary>
+    /// A click will select a file, without navigating into it.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="UpdateColor"/>
     private void OnFileTapped(object sender, EventArgs e)
     {
         var tappedFile = (sender as View)?.BindingContext as FileItem;
@@ -166,7 +155,40 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// Update the color of the selected row
+    /// </summary>
+    /// <param name="Previous"></param>
+    /// <param name="Current"></param>
+    private void UpdateColor(Grid Previous, Grid Current)
+    {
+        Application.Current.RequestedThemeChanged += (s, a) =>
+        {
+            Current.Background = Colors.Transparent;
+        };
+        if (!(Previous is null))
+        {
+            Previous.Background = Colors.Transparent;
+        }
 
+        if (Application.Current.RequestedTheme == AppTheme.Light)
+        {
+            Current.Background = Colors.LightSkyBlue;
+        }
+        else
+        {
+            Current.Background = Colors.SlateBlue;
+        }
+    }
+
+    /// <summary>
+    /// A double tap will allow users to navigate into the file
+    /// Folder: will repopulate the system with folder's children
+    /// Entry: will redirect to entry system 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="RefreshPage"/>
     private async void OnFileDoubleTapped(object sender, EventArgs e)
     {
         // Handle file/folder double tap event
@@ -237,7 +259,11 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered on back button press, allow user to navigate through the file management system
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnBackClicked(object sender, EventArgs e)
     {
         Database.Database.Instance.FileGoBack();
@@ -246,7 +272,12 @@ public partial class MainPage : ContentPage
         RefreshPage();
     }
 
-
+    /// <summary>
+    /// Triggered on new folder button press, prompting user to key in the name of new folder,
+    /// and create a new folder with that name
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void OnNewFolderClicked(object sender, EventArgs e)
     {
         // Prompt the user for the new folder name
@@ -278,7 +309,12 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered on new entry button press, prompting user to key in the name of new entry,
+    /// and redirect user to the entry page to fill in the rest of the details
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void OnNewEntryClicked(object sender, EventArgs e)
     {
         // Prompt the user for the new entry name
@@ -300,7 +336,13 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered on rename button press, prompting user to key in the new name of the selected file,
+    /// and change the name of the selected file to that new name
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="RenameSelectedFile"/>
     private async void OnRenameClicked(object sender, EventArgs e)
     {
         // Handle Rename button click
@@ -362,7 +404,12 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered on delete button press, confirm with the user if they want to delete the selected file,
+    /// and delete the file upon confirmation
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void OnDeleteClicked(object sender, EventArgs e)
     {
         // Handle Delete button click
@@ -386,7 +433,12 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered on sort button press, prompt user if they want to sort files by alphabetical or creation date order
+    /// and sort them in order with no distinction between folders and entries
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void OnSortClicked(object sender, EventArgs e)
     {
         // Display a dialog box to choose the sorting option
@@ -414,7 +466,13 @@ public partial class MainPage : ContentPage
         OnPropertyChanged(nameof(Files));
     }
 
-
+    /// <summary>
+    /// Triggered when the text is search bar is changed
+    /// When an empty string is provided, refresh the page to show all files again
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="OnSearchButtonClicked"/>
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
     {
         SearchText = e.NewTextValue;
@@ -424,7 +482,13 @@ public partial class MainPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered when user presses enter after typing in search bar, and show the files with file names
+    /// that has the word in the search bar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="OnSearchTextChanged"/>
     private void OnSearchButtonClicked(object sender, EventArgs e)
     {
         // Filter the files based on the search text

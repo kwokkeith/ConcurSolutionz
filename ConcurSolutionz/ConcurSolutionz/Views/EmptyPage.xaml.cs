@@ -9,7 +9,10 @@ public partial class EmptyPage : ContentPage
 		TogglePage();
 	}
 
-
+	/// <summary>
+	/// If root directory for our system is not yet initialised, allow the user to choose a root directory
+	/// else, show the user the file management page immediately
+	/// </summary>
 	private async void TogglePage()
 	{
         Concur concur = new();

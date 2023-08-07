@@ -30,6 +30,11 @@ public partial class EntryPage : ContentPage
 
     public string filePath { get; set; }
     private bool existingFile; // To determine if an existing entry boolean passed
+
+    /// <summary>
+    /// Check if this is an existing entry.
+    /// If yes, populate the entry metadata accordingly
+    /// </summary>
     public bool ExistingFile
     {
         set
@@ -51,6 +56,10 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// Pass the file name of the selected file
+    /// </summary>
+    /// <seealso cref="LoadFile"/>
     public string FileName
     {
         set
@@ -64,7 +73,10 @@ public partial class EntryPage : ContentPage
 
     }
 
-
+    /// <summary>
+    /// Populate the entry's title with it's name
+    /// </summary>
+    /// <param name="fileName"></param>
     private void LoadFile(string fileName)
     {
         if (fileName.EndsWith(".entry"))
@@ -77,15 +89,6 @@ public partial class EntryPage : ContentPage
         this.fileName = fileName;
     }
 
-
-    public string InitName
-    {
-        set
-        {
-            EntryName.Text = value;
-        }
-    }
-
     public EntryPage()
     {
         InitializeComponent();
@@ -95,6 +98,8 @@ public partial class EntryPage : ContentPage
         // Instantiate the Receipts collection
         ReceiptView = new ObservableCollection<Models.Receipt>();
 
+
+        // Initialise buttons to be invisible, so if it is not an existing entry, users can only fill in all details first
         AddRecordButton.IsVisible = false;
         EditRecordButton.IsVisible = false;
         DeleteRecordButton.IsVisible = false;
@@ -120,7 +125,10 @@ public partial class EntryPage : ContentPage
     }
 
 
-    // <Summary>Populate Entry Page (If entry exists)</Summary>
+    /// <summary>
+    /// Populate entry page (if entry exists)
+    /// </summary>
+    /// <seealso cref="BuildMDPopulate"/>
     private void PopulateEntry()
     {
         // Populate Metadata fields
@@ -180,7 +188,13 @@ public partial class EntryPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// Triggered as user types in the budget editor, displays error if input is not a decimal,
+    /// and calulate the remaining amount users have for their project
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="CalculateBudget"/>
     private void OnBudgetCompleted(object sender, EventArgs e)
     {
         string entryBudgetString = BudgetEditor.Text;
@@ -198,8 +212,10 @@ public partial class EntryPage : ContentPage
         OnEditorsTextChanged(sender, e);
     }
 
-
-
+    /// <summary>
+    /// Calulate the remaining budget of the user's entry, using their specified budget, and the expenditure from the receipts
+    /// If user overshoots their budget, remaining budget will be shown as red
+    /// </summary>
     private void CalculateBudget()
     {
         Application.Current.RequestedThemeChanged += (s, a) =>
@@ -239,7 +255,11 @@ public partial class EntryPage : ContentPage
         }
     }
 
-    
+    /// <summary>
+    ///  Everytime the editors are changed, give users the option to save metadata again
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnEditorsTextChanged(object sender, EventArgs e)
     {
         if (SetMetadataButton.IsEnabled == false)
@@ -249,7 +269,12 @@ public partial class EntryPage : ContentPage
     }
 
 
-    // Click event handler for editing entry name
+    /// <summary>
+    /// When users click on the rename entry button, prompt them to key in a new name,
+    /// and change the entry's name to that new name
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void EditEntryName_Clicked(object sender, EventArgs e)
     {
         string prevName = EntryName.Text + ".entry";
@@ -284,8 +309,33 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// When users click on delete entry button, the system will confirm with user their intention of
+    /// deleting the entry and delete when confirmation is given, redirecting them to the file management
+    /// system
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void DeleteEntry_Clicked(object sender, EventArgs e)
+    {
+        bool answer = await DisplayAlert(
+            "Confirm Deletion",
+            $"Are you sure you want to delete Entry {Path.GetFileNameWithoutExtension(entry.FileName)}?",
+            "Yes", "No");
 
-    // Click event handler for editing record
+        if (answer)
+        {
+            Database.Database.DeleteDirectoryByFilePath(filePath);
+            await Shell.Current.GoToAsync(nameof(MainPage));
+        }
+    }
+
+    /// <summary>
+    /// When users select a record and click on edit record, they will be redirected to record page,
+    /// with all the relevant details filled up and for users to change
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void EditRecord_Clicked(object sender, EventArgs e)
     {
         if (recordCollection.SelectedItem == null)
@@ -309,23 +359,16 @@ public partial class EntryPage : ContentPage
         await Shell.Current.GoToAsync(nameof(RecordPage), navigationParameter);
     }
 
-
-    private async void DeleteEntry_Clicked(object sender, EventArgs e)
-    {
-        bool answer = await DisplayAlert(
-            "Confirm Deletion",
-            $"Are you sure you want to delete Entry {Path.GetFileNameWithoutExtension(entry.FileName)}?",
-            "Yes", "No");
-
-        if (answer)
-        {
-            Database.Database.DeleteDirectoryByFilePath(filePath);
-            await Shell.Current.GoToAsync(nameof(MainPage));
-        }
-    }
+    
 
 
-    // Click event handler for adding new record
+    /// <summary>
+    /// When users click on add record button, they are prompted to select an image of a receipt,
+    /// and are redirected to the record system ui, with the image of receipt already populated
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="PickAndShow"/>
     private async void AddRecord_Clicked(object sender, EventArgs e)
     { 
         string action = await DisplayActionSheet("Upload an image of your receipt", "Cancel", null, "Upload");
@@ -347,7 +390,12 @@ public partial class EntryPage : ContentPage
         }
     }
 
-
+    /// <summary>
+    /// When users select a record and click on delete record button, the system will confirm with user first,
+    /// before deleting the record 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void DeleteRecord_Clicked(object sender, EventArgs e)
     {
         if (recordCollection.SelectedItem == null)
@@ -377,7 +425,11 @@ public partial class EntryPage : ContentPage
     }
 
 
-    // Method to pick and show image file
+    /// <summary>
+    /// Show user the image file picker
+    /// </summary>
+    /// <param name="options"></param>
+    /// <returns></returns>
     public async Task<FileResult> PickAndShow(PickOptions options)
     {
         try
@@ -452,7 +504,10 @@ public partial class EntryPage : ContentPage
     // @@@@@@@@@@ UTILITIES @@@@@@@@@@
     // *******************************
 
-    // Create entry from existing file
+    /// <summary>
+    /// If entry already exists, read from json file to populate metadata for entry processes
+    /// </summary>
+    /// <param name="name"></param>
     private void CreateExistingFile(string name)
     {
         Tuple<MetaData, List<Database.Record>> fileDetail;
@@ -469,23 +524,22 @@ public partial class EntryPage : ContentPage
         }
     }
 
-
-    // change the selected record
-    void OnRecordSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        int? previous = (e.PreviousSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
-        int? current = (e.CurrentSelection.FirstOrDefault() as Database.Receipt)?.RecordID;
-    }
-
-
-    // Click event handler for setting metadata of entry
+    /// <summary>
+    /// Update/Create the metadata when set metadata button is clicked
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <seealso cref="BuildMDPopulate"/>
     private void SetMetaData_Clicked(object sender, EventArgs e)
     {
         BuildMDPopulate();
         
     }
 
-
+    /// <summary>
+    /// Update the entry's metadata with the filled in metadata fields
+    /// </summary>
+    /// <seealso cref="BuildEntry"/>
     private async void BuildMDPopulate()
     {
         string entryName = EntryName.Text;
@@ -555,7 +609,9 @@ public partial class EntryPage : ContentPage
     }
 
 
-    //Handles initialization of entry and updating of variables md, entry, and receipts
+    /// <summary>
+    /// Handles initialization of entry and updating of variables md, entry, and receipts
+    /// </summary>
     private void BuildEntry()
     {
         List<Database.Record> records = new();
@@ -830,6 +886,10 @@ public partial class EntryPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// Method to disable/enable the page during long processes
+    /// </summary>
+    /// <param name="enable"></param>
     private void PageEnabled(bool enable)
     {
         EditEntryNameButton.IsEnabled = enable;

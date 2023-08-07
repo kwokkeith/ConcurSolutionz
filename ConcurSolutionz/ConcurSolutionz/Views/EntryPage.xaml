@@ -323,7 +323,7 @@
                     <Label Text="Requested Amount" Grid.Column="5" HorizontalOptions="Center" FontAttributes="Bold" FontSize="Subtitle"/> 
                 </Grid>
                 <!--Record List here-->
-                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available" SelectionMode="Single" SelectionChanged="OnRecordSelectionChanged" VerticalOptions="FillAndExpand">
+                <CollectionView Grid.Row="1" x:Name="recordCollection" EmptyView="No data available" SelectionMode="Single" VerticalOptions="FillAndExpand">
                     <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Vertical"
                                                 ItemSpacing="5"/>
