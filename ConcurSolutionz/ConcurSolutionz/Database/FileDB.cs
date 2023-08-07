@@ -38,6 +38,8 @@ namespace ConcurSolutionz.Database
         protected abstract void SetFolder();
 
 
+        /// <summary>Checks if a file is a folder in the database.</summary>
+        /// <return>true if file is a folder, else false.</return>
         public bool IsFolder()
         {
             Utilities.CheckNull(Folder); // Check if folder has been set

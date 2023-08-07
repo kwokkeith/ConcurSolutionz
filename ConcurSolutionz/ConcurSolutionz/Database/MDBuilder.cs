@@ -1,4 +1,3 @@
-
 namespace ConcurSolutionz.Database
 {
     public abstract class MDBuilder

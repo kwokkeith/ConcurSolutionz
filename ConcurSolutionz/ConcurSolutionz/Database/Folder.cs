@@ -1,4 +1,3 @@
-
 namespace ConcurSolutionz.Database
 {
     public class Folder: FileDB
@@ -21,13 +20,14 @@ namespace ConcurSolutionz.Database
         }
 
 
-        // Set mandatory boolean of File Instance
+        ///<summary>Set mandatory boolean of File Instance</summary>
         protected override void SetFolder()
         {
             Folder = true;
         }
 
 
+        /// <summary>Action to be called when file is selected</summary>
         public override void SelectedAction()
         {
             StepIntoFolder();
@@ -35,6 +35,8 @@ namespace ConcurSolutionz.Database
         }
 
 
+        /// <summary>Action called to step into a folder.</summary>
+        /// <remarks>Updates the current working directory to the folder's directory.</remarks>
         private void StepIntoFolder()
         {
             try

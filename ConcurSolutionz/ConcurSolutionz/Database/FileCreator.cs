@@ -4,6 +4,8 @@ namespace ConcurSolutionz.Database
 {
     public static class FileCreator
     {
+        /// <summary>Creates the file (Entry or Folder) in the database, including the creation of the files in the OS Directory</summary>
+        /// <param name="file">FileDB instance to be created</param>
         public static void CreateFile(FileDB file)
         {
             // Is File == Folder?
@@ -92,7 +94,7 @@ namespace ConcurSolutionz.Database
         /// <remarks>
         /// This method iterates through each receipt in the entry and performs the following steps:
         /// 1. Copies the receipt image to the specified receipt folder path.
-        /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.
+        /// 2. Serializes the receipt object to JSON and saves it as a file in the specified receipt JSON folder path.</remarks>
         public static void PopulateReceiptFolder(Entry entry, string recordFolderPath, string receiptJSONFolder)
         {
             List<string> writtenFiles = new List<string>();
