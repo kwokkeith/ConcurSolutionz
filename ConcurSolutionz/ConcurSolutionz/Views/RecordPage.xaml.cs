@@ -57,7 +57,9 @@ namespace ConcurSolutionz.Views
             }
         }
 
-
+        /// <summary>
+        /// Method <c>PopulateRecordPage</c> Populates the page with information from the provided Receipt object.
+        /// </summary>
         private void PopulateRecordPage(Receipt receipt)
         {
             ExpenseType.Text = receipt.ExpenseType;
@@ -74,7 +76,9 @@ namespace ConcurSolutionz.Views
             PersonalExpense.IsChecked = receipt.IsPersonalExpense;
         }
 
-
+        /// <summary>
+        /// Method <c>CreateExistEntry</c> Converts the provided object into an Entry and assigns it to entryFile.
+        /// </summary>
         private void CreateExistEntry(object file)
         {
             try
@@ -88,7 +92,9 @@ namespace ConcurSolutionz.Views
             }
         }
 
-
+        /// <summary>
+        /// Method <c>LoadImage</c> Loads an image from the given path and assigns it as the ReceiptImage's source.
+        /// </summary>
         private async void LoadImage(string imagePath)
         {
             try
@@ -101,7 +107,6 @@ namespace ConcurSolutionz.Views
             }
         }
 
-
         // Constructor
         public RecordPage()
         {
@@ -110,9 +115,9 @@ namespace ConcurSolutionz.Views
             BindingContext = this;
         }
 
-
-        // Getting user input 
-        // returns: a list of data <expenseType, transactionDate, description>
+        /// <summary>
+        /// Method <c>GetData</c> Retrieves the user's entered data and returns it as a list of data <expenseType, transactionDate, description>
+        /// </summary>
         public List<string> GetData()
         {
             string expenseType = ExpenseType.Text;
@@ -129,8 +134,9 @@ namespace ConcurSolutionz.Views
             return data;
         }
 
-
-        // Event handler for the FilePicker button click event
+        /// <summary>
+        /// Method <c>OnFilePickerClicked</c> Event handler for the FilePicker button click event. Opens a file picker to allow the user to select an image file.
+        /// </summary>
         public async void OnFilePickerClicked(object sender, EventArgs e)
         {
             // Call the PickAndShow method with the options for picking an image file
@@ -150,8 +156,9 @@ namespace ConcurSolutionz.Views
                 });
         }
 
-
-        // Method to pick and show image file
+        /// <summary>
+        /// Method <c>PickAndShow</c> Picks and shows an image file based on the provided PickOptions.
+        /// </summary>
         public async Task<FileResult> PickAndShow(PickOptions options)
         {
             try
@@ -205,7 +212,9 @@ namespace ConcurSolutionz.Views
             }
         }
 
-
+        /// <summary>
+        /// Method <c>BuildNewReceipt</c> Builds and returns a Receipt object using the builder pattern, taking information from the user input.
+        /// </summary>
         private Receipt BuildNewReceipt()
         {
             Receipt.ReceiptBuilder builder = new();
@@ -225,7 +234,9 @@ namespace ConcurSolutionz.Views
             return builder.Build();
         }
 
-
+        /// <summary>
+        /// Method <c>OnOCRButton_Clicked</c> Event handler for the OCR button click event. Uses OCR to extract information from the receipt image and populates the respective fields.
+        /// </summary>
         public async void OnOCRButton_Clicked(object sender, EventArgs e)
         {
             try
@@ -301,7 +312,9 @@ namespace ConcurSolutionz.Views
             }
         }
 
-
+        /// <summary>
+        /// Method <c>OnSaveDetails_Clicked</c> Event handler for the save details button click event. Saves the current record to the database and navigates back to the entry page.
+        /// </summary>
         public async void OnSaveDetails_Clicked(object sender, EventArgs e)
         {
             Receipt receipt;
@@ -349,6 +362,7 @@ namespace ConcurSolutionz.Views
                 }
             }
 
+
             // Add new record/receipt to the entry object
             entryFile.AddRecord(receipt);
 
@@ -356,14 +370,18 @@ namespace ConcurSolutionz.Views
             await Shell.Current.GoToAsync($"..?fileName={entryFile.FileName}&existingFile={true}");
         }
 
-
+        /// <summary>
+        /// Method <c>SpecifyCoords</c> Displays the coordinates of the clicked area in a box
+        /// </summary>
         public void SpecifyCoords(object sender, TappedEventArgs e)
         {
             Point? coords = e.GetPosition((View)sender);
             DisplayAlert("DEBUG", coords.ToString(), "OK");
         }
 
-
+        /// <summary>
+        /// Method <c>OnSizeAllocated</c> To handle the event of changing the size of the page. Resizes the bounding boxes of OCR results if present.
+        /// </summary>
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
@@ -385,6 +403,9 @@ namespace ConcurSolutionz.Views
             }
         }
 
+        /// <summary>
+        /// Method <c>LastClicked</c> Event handler that sets the last clicked entry field in the form. This is used for populating the field with OCR result on user interaction.
+        /// </summary>
         void LastClicked(object sender, EventArgs args)
         {
             Microsoft.Maui.Controls.Entry e = (Microsoft.Maui.Controls.Entry)sender;
