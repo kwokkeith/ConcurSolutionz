@@ -4,17 +4,28 @@ using ConcurSolutionz.Database;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    private static string appGuid = "6da3476b-d5ad-4b27-bdfc-37c30ab440f5";
+    private static Mutex mutex = new Mutex(true, appGuid);
 
-		MainPage = new AppShell();
+    public App()
+    {
 
-		Concur concur = new Concur();
-		Database.Database db = Database.Database.Instance;
-		db.SetSetting(concur);
-		var result = db.GetSettings().GetRootDirectory();
-		
+        if (mutex.WaitOne(TimeSpan.Zero, true))
+        {
+            InitializeComponent();
+            MainPage = new AppShell();
+            Concur concur = new Concur();
+            Database.Database db = Database.Database.Instance;
+            db.SetSetting(concur);
+            var result = db.GetSettings().GetRootDirectory();
 
-	}
+        } else {
+
+            InitializeComponent();
+            MainPage = new Views.ExitPage();
+
+        }
+
+
+    }
 }

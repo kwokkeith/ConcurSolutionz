@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             x:Class="ConcurSolutionz.Views.ExitPage"
+             xmlns:local="clr-namespace:ConcurSolutionz.Views"
+             Title="">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
+
+    </Shell.BackButtonBehavior>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Image
+                Source="warning.png"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Another Instance of ConcurSolutionz App is running!"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Only one instance of ConcurSolutionz may be active at any given time"
+                FontSize="18"
+                HorizontalOptions="Center" />
+            <Label
+                Text="Please quit all other instances before starting a new one"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button
+                Text="I'll be careful next time"
+                Clicked="CloseApp"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</ContentPage>
