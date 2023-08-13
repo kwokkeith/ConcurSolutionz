@@ -1,14 +1,19 @@
 # Concur Solutionz
 ## Folder Structure
 
-### Views
-Contains any front end visual .xaml and their corresponding .cs files
+### ConcurSolutionz
+Contains the main code for the application
+  ### Database
+  Code for the database system
+  ### Views
+  Contains any front end visual .xaml and their corresponding .cs files
+  ### Models
+  Contains any object templates to be used by controllers
+  ### Controllers
+  Any backend code
 
-__MainPage.xaml__: Initial front end page to be deleted.
+### CookieBrowser
+Selenium code to automate transferring to Concur (Automatically Login to the Web browser using stored cookie)
 
-
-### Models
-Contains any object templates to be used by controllers
-
-### Controllers
-Any backend code
+### SeleniumWrapper
+Selenium code to automate transferring to Concur (Obtain cookie and submit claim onto Concur)
