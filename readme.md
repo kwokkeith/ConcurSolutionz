@@ -1,5 +1,4 @@
 # Concur Solutionz
-For any merges to main, please update this file with a brief description of them.
 ## Folder Structure
 
 ### Views
